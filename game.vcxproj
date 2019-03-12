@@ -293,7 +293,7 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">UnitTest/</ObjectFileName>
       <ProgramDataBaseFileName Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">UnitTest/</ProgramDataBaseFileName>
     </ClCompile>
-    <ClCompile Include="Source\mygame.cpp">
+    <ClCompile Include="Source\brawlhalla.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -308,7 +308,7 @@
     <ClInclude Include="Source\Resource.h" />
     <ClInclude Include="Source\StdAfx.h" />
     <ClInclude Include="Source\gamelib.h" />
-    <ClInclude Include="Source\mygame.h" />
+    <ClInclude Include="Source\brawlhalla.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\game.rc">
@@ -316,6 +316,9 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\bitmap3.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -11,7 +11,7 @@
     <Filter Include="GameLibrary">
       <UniqueIdentifier>{df7aa532-3fdf-46a0-b3fc-8f5922e8d9e4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyGame">
+    <Filter Include="Brawlhalla">
       <UniqueIdentifier>{0c798913-b7d2-4e26-8241-0f83266cd626}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -117,8 +117,8 @@
     <ClCompile Include="Source\StdAfx.cpp">
       <Filter>MFC</Filter>
     </ClCompile>
-    <ClCompile Include="Source\mygame.cpp">
-      <Filter>MyGame</Filter>
+    <ClCompile Include="Source\brawlhalla.cpp">
+      <Filter>Brawlhalla</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,13 +146,18 @@
     <ClInclude Include="Source\StdAfx.h">
       <Filter>MFC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\mygame.h">
-      <Filter>MyGame</Filter>
+    <ClInclude Include="Source\brawlhalla.h">
+      <Filter>Brawlhalla</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\game.rc">
       <Filter>MFC</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\bitmap3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

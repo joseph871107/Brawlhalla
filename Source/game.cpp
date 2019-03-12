@@ -35,7 +35,7 @@
 #include <direct.h>
 #include <string.h>
 #include "gamelib.h"
-#include "mygame.h"
+#include "brawlhalla.h"
 #include "gameView.h"
 
 #ifdef _DEBUG

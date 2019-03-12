@@ -123,7 +123,7 @@
 #include <string.h>
 #include "audio.h"
 #include "gamelib.h"
-#include "mygame.h"
+#include "brawlhalla.h"
 
 namespace game_framework {
 
