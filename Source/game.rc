@@ -88,6 +88,12 @@ IDB_LOADING             BITMAP                  "..\\res\\loading.bmp"
 
 IDB_CONTINUE            BITMAP                  "..\\res\\continue.bmp"
 
+IDB_GROUND              BITMAP                  "..\\res\\background\\ground1.bmp"
+
+IDB_PLAYER              BITMAP                  "..\\res\\player\\player1.bmp"
+
+IDB_PLAYER_B            BITMAP                  "..\\res\\player\\player1B.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -95,6 +101,16 @@ IDB_CONTINUE            BITMAP                  "..\\res\\continue.bmp"
 //
 
 IDC_GAMECURSOR          CURSOR                  "..\\res\\gamecurs.cur"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_PNG1                PNG                     "C:\\Users\\Joseph\\Desktop\\Legends\\BôDVAR_base_Classic_Colors.png"
+
+IDB_PNG2                PNG                     "D:\\Google Drive(t106590011@ntut.org.tw)\\Class\\107-2\\OOP\\Brawlhalla\\RES\\player\\BôDVAR_base_Classic_Colors.png"
 
 #endif    // §§§Â (¡c≈È°A•x∆W) resources
 /////////////////////////////////////////////////////////////////////////////

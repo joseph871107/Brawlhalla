@@ -38,6 +38,9 @@
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
 
+//#include "ground.h"
+#include "player.h"
+
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 	// Constants
@@ -105,6 +108,8 @@ namespace game_framework {
 		CInteger		hits_left;	// ³Ñ¤Uªº¼²À»¼Æ
 		CPoint mousePoint;
 		UINT currentKeydown;
+		Ground ground;
+		Player player;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

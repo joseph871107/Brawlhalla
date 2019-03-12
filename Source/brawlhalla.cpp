@@ -204,10 +204,15 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
+	player.OnMove(&ground);
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
+	ground.LoadBitmap();
+	ground.SetXY(0,200);
+	ground.SetLen(3);
+	player.LoadBitmap();
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -217,6 +222,14 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	const char KEY_RIGHT = 0x27; // keyboard右箭頭
 	const char KEY_DOWN  = 0x28; // keyboard下箭頭
 	currentKeydown = nChar;
+	if (nChar == KEY_LEFT)
+		player.SetMovingLeft(true);
+	if (nChar == KEY_RIGHT)
+		player.SetMovingRight(true);
+	if (nChar == KEY_UP)
+		player.SetMovingUp(true);
+	//if (nChar == KEY_DOWN)
+		//player.SetMovingDown(true);
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -228,6 +241,14 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	const char KEY_ESC = 27;
 	if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
 		GotoGameState(GAME_STATE_OVER);	// 關閉遊戲
+	if (nChar == KEY_LEFT)
+		player.SetMovingLeft(false);
+	if (nChar == KEY_RIGHT)
+		player.SetMovingRight(false);
+	if (nChar == KEY_UP)
+		player.SetMovingUp(false);
+	//if (nChar == KEY_DOWN)
+		//player.SetMovingDown(false);
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
@@ -260,6 +281,8 @@ void CGameStateRun::OnShow()
 	func.OnShowText(str, 0, 0);
 	sprintf(str, "%d", currentKeydown);
 	func.OnShowText(str, 0, 20);
+	ground.OnShow();
+	player.OnShow();
 }
 
 }
