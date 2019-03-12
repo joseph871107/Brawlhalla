@@ -122,7 +122,7 @@ IDR_MAINFRAME           BITMAP                  "..\\res\\Toolbar.bmp"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "..\\res\\game.ico"
+IDR_MAINFRAME           ICON                    "..\\res\\brawlhalla.ico"
 
 IDR_GAMETYPE            ICON                    "..\\res\\gameDoc.ico"
 

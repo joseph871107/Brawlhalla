@@ -319,6 +319,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\bitmap3.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\brawlhalla.ico" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

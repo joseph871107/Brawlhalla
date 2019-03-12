@@ -159,5 +159,11 @@
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\bitmap3.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\brawlhalla.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
