@@ -230,31 +230,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="res\player11.bin" />
-    <None Include="Res\ball.bmp" />
-    <None Include="RES\bmp0.bmp" />
-    <None Include="RES\bmp1.bmp" />
-    <None Include="RES\bmp10.bmp" />
-    <None Include="RES\bmp2.bmp" />
-    <None Include="RES\bmp3.bmp" />
-    <None Include="RES\bmp4.bmp" />
-    <None Include="RES\bmp5.bmp" />
-    <None Include="RES\bmp6.bmp" />
-    <None Include="RES\bmp7.bmp" />
-    <None Include="RES\bmp8.bmp" />
-    <None Include="RES\bmp9.bmp" />
-    <None Include="RES\center.bmp" />
     <None Include="RES\continue.bmp" />
     <None Include="Res\corner.bmp" />
-    <None Include="RES\eraser1.bmp" />
-    <None Include="RES\eraser2.bmp" />
-    <None Include="RES\eraser3.bmp" />
     <None Include="res\game.ico" />
     <None Include="res\game.rc2" />
     <None Include="RES\gamecurs.cur" />
     <None Include="res\gameDoc.ico" />
-    <None Include="RES\help.bmp" />
     <None Include="RES\loading.bmp" />
-    <None Include="RES\ntutcsie.bmp" />
     <None Include="res\Toolbar.bmp" />
   </ItemGroup>
   <ItemGroup>
@@ -331,9 +313,7 @@
   <ItemGroup>
     <Image Include="RES\background\forest.bmp" />
     <Image Include="res\background\ground1.bmp" />
-    <Image Include="res\bitmap3.bmp" />
     <Image Include="res\brawlhalla.ico" />
-    <Image Include="res\icon1.ico" />
     <Image Include="RES\player1\adventurer-jump-00%28Mirrored%29.bmp" />
     <Image Include="RES\player1\adventurer-jump-00.bmp" />
     <Image Include="RES\player1\adventurer-jump-01%28Mirrored%29.bmp" />
@@ -355,8 +335,6 @@
     <Image Include="RES\player1\adventurer-run-05%28Mirrored%29.bmp" />
     <Image Include="RES\player1\adventurer-run-05.bmp" />
     <Image Include="res\player\player.bmp" />
-    <Image Include="res\player\player1.bmp" />
-    <Image Include="res\player\player1B.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

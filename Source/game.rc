@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文 (繁體，台灣) resources
+// Chinese (Traditional, Taiwan) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
@@ -61,28 +61,6 @@ END
 //
 // Bitmap
 //
-
-IDB_0                   BITMAP                  "..\\res\\bmp0.bmp"
-
-IDB_1                   BITMAP                  "..\\res\\bmp1.bmp"
-
-IDB_2                   BITMAP                  "..\\res\\bmp2.bmp"
-
-IDB_3                   BITMAP                  "..\\res\\bmp3.bmp"
-
-IDB_4                   BITMAP                  "..\\res\\bmp4.bmp"
-
-IDB_5                   BITMAP                  "..\\res\\bmp5.bmp"
-
-IDB_6                   BITMAP                  "..\\res\\bmp6.bmp"
-
-IDB_7                   BITMAP                  "..\\res\\bmp7.bmp"
-
-IDB_8                   BITMAP                  "..\\res\\bmp8.bmp"
-
-IDB_9                   BITMAP                  "..\\res\\bmp9.bmp"
-
-IDB_MINUS               BITMAP                  "..\\res\\bmp10.bmp"
 
 IDB_LOADING             BITMAP                  "..\\res\\loading.bmp"
 
@@ -140,12 +118,12 @@ IDB_P1_JUMP3M           BITMAP                  "..\\RES\\player1\\adventurer-ju
 
 IDC_GAMECURSOR          CURSOR                  "..\\res\\gamecurs.cur"
 
-#endif    // 中文 (繁體，台灣) resources
+#endif    // Chinese (Traditional, Taiwan) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// 英文 (美國) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -443,7 +421,7 @@ BEGIN
     ID_BUTTON_UNITTEST      "Perform Unit Test"
 END
 
-#endif    // 英文 (美國) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

@@ -49,58 +49,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\ball.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp0.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp1.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp10.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp2.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp3.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp4.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp5.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp6.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp7.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp8.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\bmp9.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\center.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="RES\continue.bmp">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Res\corner.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\eraser1.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\eraser2.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\eraser3.bmp">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\game.ico">
@@ -115,13 +67,7 @@
     <None Include="res\gameDoc.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="RES\help.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="RES\loading.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="RES\ntutcsie.bmp">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\Toolbar.bmp">
@@ -222,8 +168,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="C:\Users\Joseph\Desktop\Legends\B%EE%A7%94VAR_base_Classic_Colors.png" />
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player\B%EE%A7%94VAR_base_Classic_Colors.png" />
     <Image Include="RES\player1\adventurer-jump-00.bmp">
       <Filter>Animation\Player1\jump</Filter>
     </Image>
@@ -284,9 +228,6 @@
     <Image Include="RES\player1\adventurer-jump-03%28Mirrored%29.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\bitmap3.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\brawlhalla.ico">
       <Filter>Resource Files</Filter>
     </Image>
@@ -296,16 +237,7 @@
     <Image Include="res\background\ground1.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\icon1.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\player\player.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\player\player1.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\player\player1B.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
