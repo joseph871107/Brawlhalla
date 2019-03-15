@@ -137,9 +137,24 @@ namespace game_framework {
 
 CAnimation::CAnimation(int count)
 {
+	size = 1.0;
+	pause = false;
+	repeat = true;
 	delay_count = count;
 	delay_counter = delay_count;
 	x = y = bmp_counter = 0;
+	times = 1;
+}
+
+CAnimation::CAnimation(bool rt, int ts, int count)
+{
+	size = 1.0;
+	pause = false;
+	repeat = rt;
+	delay_count = count;
+	delay_counter = delay_count;
+	x = y = bmp_counter = 0;
+	times = ts;
 }
 
 void CAnimation::AddBitmap(int IDB_BITMAP, COLORREF colorkey) 
@@ -166,7 +181,7 @@ int CAnimation::GetCurrentBitmapNumber()
 int CAnimation::Height()
 {
 	GAME_ASSERT(bmp.size() != 0,"CAnimation: Bitmaps must be loaded first.");
-	return bmp_iter->Height();
+	return (int)(bmp_iter->Height() * size);
 }
 
 bool CAnimation::IsFinalBitmap()
@@ -186,11 +201,16 @@ void CAnimation::OnMove()
 	GAME_ASSERT(bmp.size() != 0,"CAnimation: Bitmaps must be loaded first.");
 	if (--delay_counter <= 0)  {
 		delay_counter = delay_count;
-		bmp_iter++;
-		bmp_counter++;
-		if (bmp_iter == bmp.end()) {
+		if (!pause && times>0)
+		{
+			bmp_iter++;
+			bmp_counter++;
+		}
+		if (bmp_iter == bmp.end() && times>0) {
 			bmp_iter = bmp.begin();
 			bmp_counter = 0;
+			if(!repeat)
+				times -= 1;
 		}
 	}
 }
@@ -201,6 +221,7 @@ void CAnimation::Reset()
 	delay_counter = delay_count;
 	bmp_iter = bmp.begin();
 	bmp_counter = 0;
+	times = 1;
 }
 
 void CAnimation::SetDelayCount(int dc)
@@ -219,7 +240,7 @@ void CAnimation::OnShow()
 {
 	GAME_ASSERT(bmp.size() != 0,"CAnimation: Bitmaps must be loaded before they are shown.");
 	bmp_iter->SetTopLeft(x,y);
-	bmp_iter->ShowBitmap();
+	bmp_iter->ShowBitmap(size);
 }
 
 int CAnimation::Top()
@@ -231,7 +252,22 @@ int CAnimation::Top()
 int CAnimation::Width()
 {
 	GAME_ASSERT(bmp.size() != 0,"CAnimation: Bitmaps must be loaded first.");
-	return bmp_iter->Width();
+	return (int)(bmp_iter->Width() * size);
+}
+
+void CAnimation::SetSize(double s)
+{
+	size = s;
+}
+
+void CAnimation::SetPause(bool ps)
+{
+	pause = ps;
+}
+
+void CAnimation::SetRepeat(bool rt)
+{
+	repeat = rt;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -38,8 +38,9 @@
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
 
-//#include "ground.h"
+#include "ground.h"
 #include "player.h"
+#include "battleSystem.h"
 
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
@@ -52,14 +53,6 @@ namespace game_framework {
 		AUDIO_NTUT				// 2
 	};
 
-	/////////////////////////////////////////////////////////////////////////////
-	// 這個class為遊戲的常用副程式
-	/////////////////////////////////////////////////////////////////////////////
-
-	class CGameComFunc {
-	public:
-		void OnShowText(string, int, int, int, LPCTSTR, COLORREF);
-	};
 
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
@@ -73,6 +66,7 @@ namespace game_framework {
 		void OnBeginState();							// 設定每次重玩所需的變數
 		void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
 		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+		//GameComFunc func;								// 自訂函式
 	protected:
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
@@ -97,19 +91,12 @@ namespace game_framework {
 		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+		//GameComFunc func;								// 自訂函式
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
-		const int		NUMBALLS;	// 球的總數
-		CMovingBitmap	background;	// 背景圖
-		CMovingBitmap	help;		// 說明圖
-		CMovingBitmap	corner;		// 角落圖
-		CInteger		hits_left;	// 剩下的撞擊數
-		CPoint mousePoint;
-		UINT currentKeydown;
-		Ground ground;
-		Player player;
+		BattleSystem *battleSystem;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -121,7 +108,8 @@ namespace game_framework {
 	public:
 		CGameStateOver(CGame *g);
 		void OnBeginState();							// 設定每次重玩所需的變數
-		void OnInit();
+		void OnInit();									// 遊戲的初值及圖形設定
+		//GameComFunc func;								// 自訂函式
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面

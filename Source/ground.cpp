@@ -14,46 +14,31 @@ namespace game_framework {
 	Ground::Ground()
 	{
 		length = 1;
+		size = 1.0;
 		x = y =width = height = 0;
+		osX1 = osY1 = osX2 = osY2 = (int)(10 * size);
 	}
 
-	/*bool Ground::HitPlayer(Player player)
+	int Ground::GetCor(int index)
 	{
-		int x1=player.GetX1(), y1=player.GetY1(), x2=player.GetX2(), y2=player.GetY2();
-		// 檢測玩家所構成的矩形是否碰到地面
-		return HitRectangle(x1,y1,x2,y2);
-	}*/
+		switch (index) {
+		case 0:
+			return x + (int)(osX1 * size);
+		case 1:
+			return y + (int)(osY1 * size);
+		case 2:
+			return x + (int)((width + (length - 2) * 100 - osX2) * size);
+		case 3:
+			return y + (int)((height - osY2) * size);
+		default:
+			return 0;
+		}
+	}
 
 	bool Ground::HitRectangle(int tx1, int ty1, int tx2, int ty2)
 	{
-		int x1 = x;				// 球的左上角x座標
-		int y1 = y;				// 球的左上角y座標
-		int x2 = x + width;	// 球的右下角x座標
-		int y2 = y + height;	// 球的右下角y座標
-									//
-									// 檢測球的矩形與參數矩形是否有交集
-									//
+		int x1 = GetCor(0), y1 = GetCor(1), x2 = GetCor(2), y2 = GetCor(3);
 		return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
-	}
-
-	int Ground::GetX1()
-	{
-		return x;
-	}
-
-	int Ground::GetY1()
-	{
-		return y;
-	}
-
-	int Ground::GetX2()
-	{
-		return x + (length - 1) * 100 + bmp.Width();
-	}
-
-	int Ground::GetY2()
-	{
-		return y + bmp.Height();
 	}
 
 	void Ground::LoadBitmap()
@@ -61,16 +46,12 @@ namespace game_framework {
 		bmp.LoadBitmap(IDB_GROUND, RGB(0, 0, 0));			// 載入地圖的圖形
 		width = bmp.Width();
 		height = bmp.Height();
-
+		array = GetCArray(IDB_GROUND);
 	}
 
-	void Ground::OnMove()
+	void Ground::SetSize(double s)
 	{
-	}
-
-	void Ground::SetXY(int nx, int ny)
-	{
-		x = nx; y = ny;
+		size = s;
 	}
 
 	void Ground::SetLen(int len)
@@ -82,8 +63,47 @@ namespace game_framework {
 	{
 		for (int i = 0; i < length; i++)
 		{
-			bmp.SetTopLeft(x + i * 100, y);
-			bmp.ShowBitmap();
+			bmp.SetTopLeft(x + (int)(i * 100 * size), y);
+			bmp.ShowBitmap(size);
 		}
+	}
+
+	void Ground::OnMove()
+	{
+	}
+	
+	bool Ground::Collision(CArray* other, int tx, int ty, int ox, int oy) {
+		/*
+		CArray *min, *max;
+		if (array.width*array.height < other->width*other->height) {
+			min = &array;
+			max = other;
+		}
+		else {
+			min = other;
+			max = &array;
+		}*/
+		
+		int offsetX = (int)((ox - tx) / 4), offsetY = (int)((oy - ty) / 4);
+		if ((tx + (int)(array.pixel.size() * 4) < ox)         // This checks if the sprites
+			|| ty + (int)(array.pixel[0].size() * 4) < oy // aren't close to each other.
+			|| ox + (int)(other->pixel.size() * 4) < tx
+			|| oy + (int)(other->pixel[0].size() * 4) < ty)
+			return false;
+		/*
+		if (offsetX > 0 && offsetY > 0) {
+			if (offsetX < offsetY) {
+				for (int i = 0; i < (int)(offsetX/2); i++) {
+					for (int j = 0; j < offsetX; j++) {
+						if (array.pixel[i+offsetX][j + offsetX] && other->pixel[i][j - offsetX + offsetY])
+							return true;
+					}
+				}
+			}
+			else {
+
+			}
+		}*/
+		return false;
 	}
 }

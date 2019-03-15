@@ -229,6 +229,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\player11.bin" />
     <None Include="Res\ball.bmp" />
     <None Include="RES\bmp0.bmp" />
     <None Include="RES\bmp1.bmp" />
@@ -257,7 +258,10 @@
     <None Include="res\Toolbar.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\battleSystem.cpp" />
+    <ClCompile Include="Source\gameComFunc.cpp" />
     <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\ground.cpp" />
+    <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\object.cpp" />
     <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\player.cpp" />
     <ClCompile Include="Source\audio.cpp" />
     <ClCompile Include="Source\game.cpp">
@@ -302,7 +306,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\battleSystem.h" />
+    <ClInclude Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\gameComFunc.h" />
     <ClInclude Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\ground.h" />
+    <ClInclude Include="Source\object.h" />
     <ClInclude Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\player.h" />
     <ClInclude Include="Source\audio.h" />
     <ClInclude Include="Source\game.h" />
@@ -322,10 +329,31 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\background\forest.bmp" />
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\background\ground1.bmp" />
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\bitmap3.bmp" />
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\brawlhalla.ico" />
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\icon1.ico" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-00(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-00.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-01(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-01.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-02(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-02.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-03(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-03.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-00(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-00.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-01(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-01.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-02(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-02.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-03(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-03.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-04(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-04.bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-05(Mirrored).bmp" />
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-05.bmp" />
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player\B%EE%A7%94VAR_base_Classic_Colors.png" />
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\player\player.bmp" />
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\player\player1.bmp" />

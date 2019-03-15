@@ -1,17 +1,11 @@
-ï»¿//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ ç”¢ç”Ÿçš„ Include æª”æ¡ˆã€‚
-// ç”± game.rc ä½¿ç”¨
+//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ ²£¥Íªº Include ÀÉ®×¡C
+// ¥Ñ game.rc ¨Ï¥Î
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_SOCKETS_INIT_FAILED         104
 #define IDR_MAINFRAME                   128
 #define IDR_GAMETYPE                    129
-#define IDB_RACKET                      131
-#define IDB_BITMAP1                     132
-#define IDB_BALL1                       134
-#define IDB_BALL2                       135
-#define IDB_BALL3                       136
-#define IDB_BALL4                       137
 #define IDB_0                           138
 #define IDB_1                           139
 #define IDB_2                           140
@@ -24,15 +18,30 @@
 #define IDB_9                           147
 #define IDB_MINUS                       148
 #define IDC_GAMECURSOR                  153
-#define IDB_BITMAP2                     156
 #define IDB_LOADING                     156
 #define IDB_CONTINUE                    158
 #define IDB_GROUND                      162
-#define IDB_PNG1                        164
-#define IDB_PNG2                        165
-#define IDB_PLAYER                      166
-#define IDB_BITMAP3                     167
-#define IDB_PLAYER_B                    167
+#define IDB_BACKGROUND                  168
+#define IDB_P1_RUN0                     279
+#define IDB_P1_RUN1                     280
+#define IDB_P1_RUN2                     281
+#define IDB_P1_RUN3                     282
+#define IDB_P1_RUN4                     283
+#define IDB_P1_RUN5                     284
+#define IDB_P1_RUN0M                    285
+#define IDB_P1_RUN1M                    286
+#define IDB_P1_RUN2M                    287
+#define IDB_P1_RUN3M                    288
+#define IDB_P1_RUN4M                    289
+#define IDB_P1_RUN5M                    290
+#define IDB_P1_JUMP0                    291
+#define IDB_P1_JUMP1                    292
+#define IDB_P1_JUMP2                    293
+#define IDB_P1_JUMP3                    294
+#define IDB_P1_JUMP0M                   295
+#define IDB_P1_JUMP1M                   296
+#define IDB_P1_JUMP2M                   297
+#define IDB_P1_JUMP3M                   298
 #define IDC_README                      1001
 #define ID_FILE_PAUSE                   32771
 #define ID_TOGGLE_FULLSCREEN            32772
@@ -45,7 +54,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        168
+#define _APS_NEXT_RESOURCE_VALUE        299
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

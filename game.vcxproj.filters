@@ -14,11 +14,38 @@
     <Filter Include="Brawlhalla">
       <UniqueIdentifier>{0c798913-b7d2-4e26-8241-0f83266cd626}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\ground">
-      <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Player test">
       <UniqueIdentifier>{eedfae59-751c-4f3c-9e55-9614b166dac8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem">
+      <UniqueIdentifier>{dc6cbd24-8642-41e1-8a14-8122c6ce5015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Ground">
+      <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Object">
+      <UniqueIdentifier>{d45bce58-2fb6-4d4b-abd5-1dbe4d1fadde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{fc9b157f-9907-4561-81f4-5f88255d1b29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation\Player1">
+      <UniqueIdentifier>{f39a9c85-c6d2-473b-9b60-5909d486e712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation\Player1\run">
+      <UniqueIdentifier>{d0ad53c6-cb0b-42d3-a4b9-af4091841338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation\Player1\runM">
+      <UniqueIdentifier>{5e88158c-d684-4f5a-b3ff-f43a8a02ab28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation\Player1\jump">
+      <UniqueIdentifier>{32877933-3b0f-4013-a5ce-77a58c01365d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation\Player1\jumpM">
+      <UniqueIdentifier>{8790d827-3de7-4b78-ba4f-aa98b676a320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\GameComFunc">
+      <UniqueIdentifier>{95e22aca-2741-44d0-8213-e4a98de43e1e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +127,9 @@
     <None Include="res\Toolbar.bmp">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\player11.bin">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\audio.cpp">
@@ -127,10 +157,19 @@
       <Filter>Brawlhalla</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\ground.cpp">
-      <Filter>Brawlhalla\ground</Filter>
+      <Filter>Brawlhalla\Ground</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\player.cpp">
       <Filter>Brawlhalla\Player test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\battleSystem.cpp">
+      <Filter>Brawlhalla\BattleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\object.cpp">
+      <Filter>Brawlhalla\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gameComFunc.cpp">
+      <Filter>Brawlhalla\GameComFunc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,10 +201,19 @@
       <Filter>Brawlhalla</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\ground.h">
-      <Filter>Brawlhalla\ground</Filter>
+      <Filter>Brawlhalla\Ground</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\player.h">
       <Filter>Brawlhalla\Player test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\battleSystem.h">
+      <Filter>Brawlhalla\BattleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\object.h">
+      <Filter>Brawlhalla\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\gameComFunc.h">
+      <Filter>Brawlhalla\GameComFunc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +243,69 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\player\player1B.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\background\forest.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-00(Mirrored).bmp">
+      <Filter>Animation\Player1\runM</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-01(Mirrored).bmp">
+      <Filter>Animation\Player1\runM</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-02(Mirrored).bmp">
+      <Filter>Animation\Player1\runM</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-03(Mirrored).bmp">
+      <Filter>Animation\Player1\runM</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-04(Mirrored).bmp">
+      <Filter>Animation\Player1\runM</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-05(Mirrored).bmp">
+      <Filter>Animation\Player1\runM</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-00.bmp">
+      <Filter>Animation\Player1\run</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-01.bmp">
+      <Filter>Animation\Player1\run</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-02.bmp">
+      <Filter>Animation\Player1\run</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-03.bmp">
+      <Filter>Animation\Player1\run</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-04.bmp">
+      <Filter>Animation\Player1\run</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-run-05.bmp">
+      <Filter>Animation\Player1\run</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-00.bmp">
+      <Filter>Animation\Player1\jump</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-01.bmp">
+      <Filter>Animation\Player1\jump</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-02.bmp">
+      <Filter>Animation\Player1\jump</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-03.bmp">
+      <Filter>Animation\Player1\jump</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-00(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-01(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-02(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-jump-03(Mirrored).bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

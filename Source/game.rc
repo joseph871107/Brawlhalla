@@ -90,9 +90,47 @@ IDB_CONTINUE            BITMAP                  "..\\res\\continue.bmp"
 
 IDB_GROUND              BITMAP                  "..\\res\\background\\ground1.bmp"
 
-IDB_PLAYER              BITMAP                  "..\\res\\player\\player1.bmp"
+IDB_BACKGROUND          BITMAP                  "..\\RES\\background\\forest.bmp"
 
-IDB_PLAYER_B            BITMAP                  "..\\res\\player\\player1B.bmp"
+IDB_P1_RUN0             BITMAP                  "..\\RES\\player1\\adventurer-run-00.bmp"
+
+IDB_P1_RUN1             BITMAP                  "..\\RES\\player1\\adventurer-run-01.bmp"
+
+IDB_P1_RUN2             BITMAP                  "..\\RES\\player1\\adventurer-run-02.bmp"
+
+IDB_P1_RUN3             BITMAP                  "..\\RES\\player1\\adventurer-run-03.bmp"
+
+IDB_P1_RUN4             BITMAP                  "..\\RES\\player1\\adventurer-run-04.bmp"
+
+IDB_P1_RUN5             BITMAP                  "..\\RES\\player1\\adventurer-run-05.bmp"
+
+IDB_P1_RUN0M            BITMAP                  "..\\RES\\player1\\adventurer-run-00(Mirrored).bmp"
+
+IDB_P1_RUN1M            BITMAP                  "..\\RES\\player1\\adventurer-run-01(Mirrored).bmp"
+
+IDB_P1_RUN2M            BITMAP                  "..\\RES\\player1\\adventurer-run-02(Mirrored).bmp"
+
+IDB_P1_RUN3M            BITMAP                  "..\\RES\\player1\\adventurer-run-03(Mirrored).bmp"
+
+IDB_P1_RUN4M            BITMAP                  "..\\RES\\player1\\adventurer-run-04(Mirrored).bmp"
+
+IDB_P1_RUN5M            BITMAP                  "..\\RES\\player1\\adventurer-run-05(Mirrored).bmp"
+
+IDB_P1_JUMP0            BITMAP                  "..\\RES\\player1\\adventurer-jump-00.bmp"
+
+IDB_P1_JUMP1            BITMAP                  "..\\RES\\player1\\adventurer-jump-01.bmp"
+
+IDB_P1_JUMP2            BITMAP                  "..\\RES\\player1\\adventurer-jump-02.bmp"
+
+IDB_P1_JUMP3            BITMAP                  "..\\RES\\player1\\adventurer-jump-03.bmp"
+
+IDB_P1_JUMP0M           BITMAP                  "..\\RES\\player1\\adventurer-jump-00(Mirrored).bmp"
+
+IDB_P1_JUMP1M           BITMAP                  "..\\RES\\player1\\adventurer-jump-01(Mirrored).bmp"
+
+IDB_P1_JUMP2M           BITMAP                  "..\\RES\\player1\\adventurer-jump-02(Mirrored).bmp"
+
+IDB_P1_JUMP3M           BITMAP                  "..\\RES\\player1\\adventurer-jump-03(Mirrored).bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -101,16 +139,6 @@ IDB_PLAYER_B            BITMAP                  "..\\res\\player\\player1B.bmp"
 //
 
 IDC_GAMECURSOR          CURSOR                  "..\\res\\gamecurs.cur"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// PNG
-//
-
-IDB_PNG1                PNG                     "C:\\Users\\Joseph\\Desktop\\Legends\\BôDVAR_base_Classic_Colors.png"
-
-IDB_PNG2                PNG                     "D:\\Google Drive(t106590011@ntut.org.tw)\\Class\\107-2\\OOP\\Brawlhalla\\RES\\player\\BôDVAR_base_Classic_Colors.png"
 
 #endif    // §§§Â (¡c≈È°A•x∆W) resources
 /////////////////////////////////////////////////////////////////////////////
@@ -249,11 +277,11 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "game MFC Application"
+            VALUE "FileDescription", "Brawlhalla Application"
             VALUE "FileVersion", "1, 0, 0, 1"
-            VALUE "InternalName", "game"
+            VALUE "InternalName", "Brawlhalla"
             VALUE "LegalCopyright", "Copyright (C) 1999"
-            VALUE "OriginalFilename", "game.EXE"
+            VALUE "OriginalFilename", "Brawlhalla.exe"
             VALUE "ProductName", "game Application"
             VALUE "ProductVersion", "1, 0, 0, 1"
         END
