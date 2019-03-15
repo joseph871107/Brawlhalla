@@ -156,20 +156,20 @@
     <ClCompile Include="Source\brawlhalla.cpp">
       <Filter>Brawlhalla</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\ground.cpp">
-      <Filter>Brawlhalla\Ground</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\player.cpp">
-      <Filter>Brawlhalla\Player test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\battleSystem.cpp">
-      <Filter>Brawlhalla\BattleSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\object.cpp">
-      <Filter>Brawlhalla\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Source\gameComFunc.cpp">
       <Filter>Brawlhalla\GameComFunc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\object.cpp">
+      <Filter>Brawlhalla\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\player.cpp">
+      <Filter>Brawlhalla\Player test</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ground.cpp">
+      <Filter>Brawlhalla\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\battleSystem.cpp">
+      <Filter>Brawlhalla\BattleSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
