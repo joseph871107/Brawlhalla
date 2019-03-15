@@ -5,36 +5,36 @@
 
 namespace game_framework
 {
-	/////////////////////////////////////////////////////////////////////////////
-	// 回合 class
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+// 回合 class
+/////////////////////////////////////////////////////////////////////////////
 
-	extern map<string, int> idbList;
-	extern map<int, string> fileList;
-	extern map<int, CArray> cArray;
+extern map<string, int> idbList;
+extern map<int, string> fileList;
+extern map<int, CArray> cArray;
 
-	class BattleSystem : public CGameState
-	{
-	public:
-		BattleSystem(CGame *g) ;
-		~BattleSystem();
-		void OnBeginState();							// 設定每次重玩所需的變數
-		void OnInit();  								// 遊戲的初值及圖形設定
-		void OnKeyDown(UINT, UINT, UINT);				// 鍵盤按下
-		void OnKeyUp(UINT, UINT, UINT);					// 鍵盤釋放
-		void OnMouseMove(UINT , CPoint);				// 滑鼠移動
-		void OnMove();									// 移動遊戲元素
-		void OnShow();									// 顯示這個狀態的遊戲畫面
-		//GameComFunc func;
-	private:
-		//CMovingBitmap	background;	// 背景圖
-		CMovingBitmap	help;		// 說明圖
-		CPoint mousePoint;
-		UINT currentKeydown;
-		Ground ground;
-		Player player = Player(&ground);
-		Object background;
-	};
+class BattleSystem : public CGameState
+{
+    public:
+        BattleSystem(CGame* g) ;
+        ~BattleSystem();
+        void OnBeginState();							// 設定每次重玩所需的變數
+        void OnInit();  								// 遊戲的初值及圖形設定
+        void OnKeyDown(UINT, UINT, UINT);				// 鍵盤按下
+        void OnKeyUp(UINT, UINT, UINT);					// 鍵盤釋放
+        void OnMouseMove(UINT, CPoint);				// 滑鼠移動
+        void OnMove();									// 移動遊戲元素
+        void OnShow();									// 顯示這個狀態的遊戲畫面
+        //GameComFunc func;
+    private:
+        //CMovingBitmap	background;	// 背景圖
+        CMovingBitmap	help;		// 說明圖
+        CPoint mousePoint;
+        UINT currentKeydown;
+        Ground ground;
+        Player player = Player(&ground);
+        Object background;
+};
 }
 
 #endif //define BATTLESYSTEM_H

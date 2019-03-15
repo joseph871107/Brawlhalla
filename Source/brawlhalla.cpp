@@ -46,7 +46,7 @@
  *   2008-02-15 V4.4
  *      1. Add namespace game_framework.
  *      2. Replace the demonstration of animation as a new bouncing ball.
- *      3. Use ShowInitProgress(percent) to display loading progress. 
+ *      3. Use ShowInitProgress(percent) to display loading progress.
  *   2010-03-23 V4.6
  *      1. Demo MP3 support: use lake.mp3 to replace lake.wav.
 */
@@ -60,19 +60,20 @@
 #include "gamelib.h"
 #include "brawlhalla.h"
 
-namespace game_framework {
+namespace game_framework
+{
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲開頭畫面物件
 /////////////////////////////////////////////////////////////////////////////
 
-CGameStateInit::CGameStateInit(CGame *g)
-: CGameState(g)
+CGameStateInit::CGameStateInit(CGame* g)
+    : CGameState(g)
 {
 }
 
 void CGameStateInit::OnInit()
 {
-	ShowInitProgress(0);
+    ShowInitProgress(0);
 }
 
 void CGameStateInit::OnBeginState()
@@ -81,69 +82,73 @@ void CGameStateInit::OnBeginState()
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	const char KEY_ESC = 27;
-	const char KEY_SPACE = ' ';
-	if (nChar == KEY_SPACE)
-		GotoGameState(GAME_STATE_RUN);						// 切換至GAME_STATE_RUN
-	else if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
-		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE,0,0);	// 關閉遊戲
+    const char KEY_ESC = 27;
+    const char KEY_SPACE = ' ';
+
+    if (nChar == KEY_SPACE)
+        GotoGameState(GAME_STATE_RUN);						// 切換至GAME_STATE_RUN
+    else if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
+        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
+    GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
 }
 
 void CGameStateInit::OnShow()
 {
-	OnShowText("Please click mouse or press SPACE to begin.", 120, 220);
-	OnShowText("Press Ctrl-F to switch in between window mode and full screen mode.", 5, 395);
-	if (ENABLE_GAME_PAUSE)
-		OnShowText("Press Ctrl-Q to pause the Game.", 5, 425);
-	OnShowText("Press Alt-F4 or ESC to Quit.", 5, 455);
-}								
+    OnShowText("Please click mouse or press SPACE to begin.", 120, 220);
+    OnShowText("Press Ctrl-F to switch in between window mode and full screen mode.", 5, 395);
+
+    if (ENABLE_GAME_PAUSE)
+        OnShowText("Press Ctrl-Q to pause the Game.", 5, 425);
+
+    OnShowText("Press Alt-F4 or ESC to Quit.", 5, 455);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的結束狀態(Game Over)
 /////////////////////////////////////////////////////////////////////////////
 
-CGameStateOver::CGameStateOver(CGame *g)
-: CGameState(g)
+CGameStateOver::CGameStateOver(CGame* g)
+    : CGameState(g)
 {
 }
 
 void CGameStateOver::OnMove()
 {
-	counter--;
-	if (counter < 0)
-		GotoGameState(GAME_STATE_INIT);
+    counter--;
+
+    if (counter < 0)
+        GotoGameState(GAME_STATE_INIT);
 }
 
 void CGameStateOver::OnBeginState()
 {
-	counter = (int)(30 * 0.5); // 0.5 seconds
+    counter = (int)(30 * 0.5); // 0.5 seconds
 }
 
 void CGameStateOver::OnInit()
 {
-	ShowInitProgress(100);
+    ShowInitProgress(100);
 }
 
 void CGameStateOver::OnShow()
 {
-	char str[80];								// Demo 數字對字串的轉換
-	sprintf(str, "Game Over ! (%d)", counter / 30);
-	OnShowText(str, 240, 210);
+    char str[80];								// Demo 數字對字串的轉換
+    sprintf(str, "Game Over ! (%d)", counter / 30);
+    OnShowText(str, 240, 210);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
 
-CGameStateRun::CGameStateRun(CGame *g)
-: CGameState(g)
+CGameStateRun::CGameStateRun(CGame* g)
+    : CGameState(g)
 {
-	battleSystem = new BattleSystem(g);
+    battleSystem = new BattleSystem(g);
 }
 
 CGameStateRun::~CGameStateRun()
@@ -152,27 +157,27 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-	battleSystem->OnBeginState();
+    battleSystem->OnBeginState();
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	battleSystem->OnMove();
+    battleSystem->OnMove();
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-	battleSystem->OnInit();
+    battleSystem->OnInit();
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	battleSystem->OnKeyDown(nChar, nRepCnt, nFlags);
+    battleSystem->OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	battleSystem->OnKeyUp(nChar, nRepCnt, nFlags);
+    battleSystem->OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
@@ -185,7 +190,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
-	battleSystem->OnMouseMove(nFlags, point);
+    battleSystem->OnMouseMove(nFlags, point);
 }
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
@@ -198,7 +203,7 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnShow()
 {
-	battleSystem->OnShow();
+    battleSystem->OnShow();
 }
 
 }
