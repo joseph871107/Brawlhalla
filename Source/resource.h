@@ -1,22 +1,11 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 產生的 Include 檔案。
-// 由 game.rc 使用
+// Microsoft Visual C++ generated include file.
+// Used by game.rc
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_SOCKETS_INIT_FAILED         104
 #define IDR_MAINFRAME                   128
 #define IDR_GAMETYPE                    129
-#define IDB_0                           138
-#define IDB_1                           139
-#define IDB_2                           140
-#define IDB_3                           141
-#define IDB_4                           142
-#define IDB_5                           143
-#define IDB_6                           144
-#define IDB_7                           145
-#define IDB_8                           146
-#define IDB_9                           147
-#define IDB_MINUS                       148
 #define IDC_GAMECURSOR                  153
 #define IDB_LOADING                     156
 #define IDB_CONTINUE                    158

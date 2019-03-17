@@ -7,7 +7,6 @@
 #include "brawlhalla.h"
 #include "gameComFunc.h"
 
-//using namespace std;
 namespace game_framework {
 
 	map<string, int> idbList;

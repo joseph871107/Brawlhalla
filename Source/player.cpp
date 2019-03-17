@@ -97,7 +97,7 @@ namespace game_framework {
 		CAnimation temp;
 		for (int i = 0;i < 6;i++)
 			temp.AddBitmap(rl[i], RGB(0, 0, 0));
-		temp.SetSize(1.0);
+		temp.SetSize(2.5);
 		temp.SetDelayCount(5);
 		temp.Reset();
 		ani.insert(ani.end(),temp);
@@ -211,8 +211,7 @@ namespace game_framework {
 	void Player::OnShow()
 	{
 		ani_iter = ani.begin();
-		//ani_iter->Reset();
-		//ani_iter->SetTopLeft(x,y);
+		ani_iter->SetTopLeft(x,y);
 		ani_iter->OnShow();
 		/*
 		if (!isMovingUp && !isMovingDown)
