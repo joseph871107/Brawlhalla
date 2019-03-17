@@ -219,13 +219,6 @@ void CAnimation::OnMove()
 	GAME_ASSERT(bmp.size() != 0, "CAnimation: Bitmaps must be loaded first.");
 	if (--delay_counter <= 0) {
 		delay_counter = delay_count;
-		bool flag = false;
-		for (auto i = bmp.begin();i != bmp.end();i++) {
-			if (i == bmp_iter)
-				flag = true;
-		}
-		if (!flag)
-			TRACE("false\n\n\n\n");
 		bmp_iter++;
 		bmp_counter++;
 		if (bmp_iter == bmp.end()) {
