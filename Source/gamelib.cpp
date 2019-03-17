@@ -134,7 +134,7 @@ namespace game_framework {
 // 3. 如果需要修改或擴充CAnimation的功能時，請用繼承或直接拷貝的方式，最好
 //    不要直接改CAnimation。
 /////////////////////////////////////////////////////////////////////////////
-
+	
 CAnimation::CAnimation(int count)
 {
 	size = 1.0;
@@ -198,7 +198,7 @@ int CAnimation::Left()
 
 void CAnimation::OnMove()
 {
-	GAME_ASSERT(bmp.size() != 0,"CAnimation: Bitmaps must be loaded first.");
+	/*GAME_ASSERT(bmp.size() != 0,"CAnimation: Bitmaps must be loaded first.");
 	if (--delay_counter <= 0)  {
 		delay_counter = delay_count;
 		if (!pause && times>0)
@@ -206,11 +206,31 @@ void CAnimation::OnMove()
 			bmp_iter++;
 			bmp_counter++;
 		}
-		if (bmp_iter == bmp.end() && times>0) {
+		if (bmp_iter == bmp.end()){
+			//if (times > 0) {
+				bmp_iter = bmp.begin();
+				bmp_counter = 0;
+				//if (!repeat)
+					//times -= 1;
+			//}
+		}
+	}*/
+
+	GAME_ASSERT(bmp.size() != 0, "CAnimation: Bitmaps must be loaded first.");
+	if (--delay_counter <= 0) {
+		delay_counter = delay_count;
+		bool flag = false;
+		for (auto i = bmp.begin();i != bmp.end();i++) {
+			if (i == bmp_iter)
+				flag = true;
+		}
+		if (!flag)
+			TRACE("false\n\n\n\n");
+		bmp_iter++;
+		bmp_counter++;
+		if (bmp_iter == bmp.end()) {
 			bmp_iter = bmp.begin();
 			bmp_counter = 0;
-			if(!repeat)
-				times -= 1;
 		}
 	}
 }
@@ -600,7 +620,7 @@ bool CGame::OnIdle()  // 修改功能不要修改OnIdle()，而應修改OnMove()及OnShow()
 	// 以下是遊戲的主迴圈
 	//
 	CDDraw::BltBackColor(DEFAULT_BG_COLOR);	// 將 Back Plain 塗上預設的顏色
-	gameState->OnCycle();
+ 	gameState->OnCycle();
 	CDDraw::BltBackToPrimary();				// 將 Back Plain 貼到螢幕
 	//
 	// 以下的程式控制遊戲進行的速度，注意事項：

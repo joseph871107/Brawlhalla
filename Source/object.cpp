@@ -8,7 +8,7 @@
 
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
-	// CGround : ground class
+	// Basic object class
 	/////////////////////////////////////////////////////////////////////////////
 
 	Object::Object()
@@ -57,10 +57,7 @@ namespace game_framework {
 
 	void Object::LoadBitmap(int resource, COLORREF color)
 	{
-		bmp.LoadBitmap(resource, color);		// 載入圖形
-		width = bmp.Width();					// 載入寬度
-		height = bmp.Height();					// 載入高度
-		array = GetCArray(resource);
+		bmp.LoadBitmap(resource, color);		// ????
 	}
 
 	void Object::SetXY(int nx, int ny)
@@ -73,8 +70,9 @@ namespace game_framework {
 		size = s;
 	}
 
-	void Object::OnShow()
+	void Object::OnShow(int file)
 	{
+		TRACE("%d\n\n\n", file);
 		bmp.SetTopLeft(x - osX1, y - osY1);
 		bmp.ShowBitmap(size);
 	}
@@ -83,15 +81,15 @@ namespace game_framework {
 	{
 	}
 
-	bool Object::Collision(CArray other, int tx, int ty, int ox, int oy) {
-		double s=1.0;
+	bool Object::Collision(int file, int tx, int ty, int ox, int oy) {
+		/*double s=1.0;
+		ColArray other = cArray.find(file)->second;
 		vector<vector<bool>> otherMask = other.pixel;
 		if ((tx + ti(height,s) < ox)         // This checks if the sprites
 			|| ty + ti(width, s) < oy // aren't close to each other.
 			|| ox + ti(other.height,s) < tx
 			|| oy + ti(other.width,s) < ty)
 			return false;
-
 		//This stuff isn't working.
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
@@ -105,7 +103,11 @@ namespace game_framework {
 					}
 				}
 			}
-		}
+		}*/
 		return false;
+	}
+	int Object::ShowAnimationState()
+	{
+		return 0;
 	}
 }

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Resource.h"
 #include <mmsystem.h>
 #include <ddraw.h>
@@ -8,12 +8,10 @@
 #include "battleSystem.h"
 
 namespace game_framework 
-{	
+{
 	/////////////////////////////////////////////////////////////////////////////
 	// CGround : ground class
 	/////////////////////////////////////////////////////////////////////////////
-
-	//static GameComFunc func;// = GameComFunc(0);					// ¦Û­q¨ç¦¡
 
 	BattleSystem::BattleSystem(CGame *g) : CGameState(g)
 	{
@@ -25,57 +23,56 @@ namespace game_framework
 
 	void BattleSystem::OnBeginState()
 	{
-		//CAudio::Instance()->Play(AUDIO_LAKE, true);			// ¼·©ñ WAVE
+		//CAudio::Instance()->Play(AUDIO_LAKE, true);			// æ’¥æ”¾ WAVE
 	}
 
-	void BattleSystem::OnMove()							// ²¾°Ê¹CÀ¸¤¸¯À
+	void BattleSystem::OnMove()							// ç§»å‹•éŠæˆ²å…ƒç´ 
 	{
 		player.OnMove();
 		background.SetXY((int)(-player.GetX1() * 0.5), (int)(-player.GetY1() * 0.5));
-		ground.SetXY((int)(-player.GetX1() * 0.5 + (background.GetCor(2) - background.GetCor(0) -ground.GetCor(2) + ground.GetCor(0))/2), (int)(-player.GetY1() * 0.5)+600);
-		if (player.IsOnGround())
+		ground.SetXY((int)(-player.GetX1() * 0.5 + (background.GetCor(2) - background.GetCor(0) -ground.GetCor(2) + ground.GetCor(0))/2 + 0.5), (int)(-player.GetY1() * 0.5 + 0.5)+600);
+		/*
+		if (player.HitObject())
 		{
 			player.SetMovingUp(false);
 			player.SetMovingDown(false);
-		}
+		}*/
 	}
 
-	void BattleSystem::OnInit()  								// ¹CÀ¸ªºªì­È¤Î¹Ï§Î³]©w
+	void BattleSystem::OnInit()  								// éŠæˆ²çš„åˆå€¼åŠåœ–å½¢è¨­å®š
 	{
-		InitializeAllBMP();
+		//InitializeAllBMP();								// åˆå§‹åŒ–é»žé™£åœ–é‹ç®—è³‡æº
+		Cbackground.AddBitmap(IDB_BACKGROUND, RGB(0, 0, 0));
+		InitializeIDB();									// åˆå§‹åŒ–"resource.h"ä¸­é»žé™£åœ–çš„è³‡æºç·¨è™Ÿ
 		TRACE("idbList size : %d\n", idbList.size());
+		ShowInitProgress(13);
+		InitializeFile();									// åˆå§‹åŒ–"game.rc"ä¸­é»žé™£åœ–çš„è·¯å¾‘
 		TRACE("fileList size : %d\n", fileList.size());
+		ShowInitProgress(25);
+		InitializeCollideArray();							// åˆå§‹åŒ–æ‰€æœ‰é»žé™£åœ–çš„å¸ƒæž—ç¢°æ’žçŸ©é™£
 		TRACE("cArray size : %d\n", cArray.size());
-		//CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// ¸ü¤J½s¸¹1ªºÁn­µlake.mp3
 		ShowInitProgress(50);
-		Sleep(300);
+
+		//CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// è¼‰å…¥ç·¨è™Ÿ1çš„è²éŸ³lake.mp3
 		ground.LoadBitmap();
+
 		ground.SetSize(0.65);
 		background.SetSize(0.8);
 		background.LoadBitmap(IDB_BACKGROUND,RGB(0,0,0));
 		ShowInitProgress(75);
-		Sleep(300);
 		ground.SetXY(150, 400);
 		ground.SetLen(30);
 		player.LoadBitmap();
-		player.SetXY((int)(-player.GetX1() * 0.5 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2), 400);
+		player.SetXY((int)(2000 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2), 400);
 		ShowInitProgress(100);
-
-		/*
-		func.collide("RES\\player1\\adventurer-run-00.bmp");
-		func.collide("RES\\player1\\adventurer-run-01.bmp");
-		func.collide("RES\\player1\\adventurer-run-02.bmp");
-		func.collide("RES\\player1\\adventurer-run-03.bmp");
-		func.collide("RES\\player1\\adventurer-run-04.bmp");
-		*/
 	}
 
 	void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
-		const char KEY_LEFT = 0x25; // keyboard¥ª½bÀY
-		const char KEY_UP = 0x26; // keyboard¤W½bÀY
-		const char KEY_RIGHT = 0x27; // keyboard¥k½bÀY
-		const char KEY_DOWN = 0x28; // keyboard¤U½bÀY
+		const char KEY_LEFT = 0x25; // keyboardå·¦ç®­é ­
+		const char KEY_UP = 0x26; // keyboardä¸Šç®­é ­
+		const char KEY_RIGHT = 0x27; // keyboardå³ç®­é ­
+		const char KEY_DOWN = 0x28; // keyboardä¸‹ç®­é ­
 		currentKeydown = nChar;
 		if (nChar == KEY_LEFT)
 			player.SetMovingLeft(true);
@@ -86,47 +83,53 @@ namespace game_framework
 			player.Jump(20);
 			player.SetMovingUp(true);
 		}
-		//player.SetMovingUp(true);
-	//if (nChar == KEY_DOWN)
-		//player.SetMovingDown(true);
+		/*//player.SetMovingUp(true);
+		if (nChar == KEY_DOWN)
+			player.SetMovingDown(true);*/
 	}
 
 	void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
-		const char KEY_LEFT = 0x25; // keyboard¥ª½bÀY
-		const char KEY_UP = 0x26; // keyboard¤W½bÀY
-		const char KEY_RIGHT = 0x27; // keyboard¥k½bÀY
-		const char KEY_DOWN = 0x28; // keyboard¤U½bÀY
+		const char KEY_LEFT = 0x25; // keyboardå·¦ç®­é ­
+		const char KEY_UP = 0x26; // keyboardä¸Šç®­é ­
+		const char KEY_RIGHT = 0x27; // keyboardå³ç®­é ­
+		const char KEY_DOWN = 0x28; // keyboardä¸‹ç®­é ­
 		const char KEY_ESC = 27;
-		if (nChar == KEY_ESC)								// Demo Ãö³¬¹CÀ¸ªº¤èªk
-			GotoGameState(GAME_STATE_OVER);	// Ãö³¬¹CÀ¸
+		if (nChar == KEY_ESC)								// Demo é—œé–‰éŠæˆ²çš„æ–¹æ³•
+			GotoGameState(GAME_STATE_OVER);	// é—œé–‰éŠæˆ²
 		if (nChar == KEY_LEFT)
 			player.SetMovingLeft(false);
 		if (nChar == KEY_RIGHT)
 			player.SetMovingRight(false);
-		//if (nChar == KEY_UP)
-			//player.SetMovingUp(false);
-		//if (nChar == KEY_DOWN)
-			//player.SetMovingDown(false);
+		/*if (nChar == KEY_UP)
+			player.SetMovingUp(false);
+		if (nChar == KEY_DOWN)
+			player.SetMovingDown(false);*/
 	}
 
-	void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// ³B²z·Æ¹«ªº°Ê§@
+	void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// è™•ç†æ»‘é¼ çš„å‹•ä½œ
 	{
 		mousePoint = point;
-		// ¨S¨Æ¡C¦pªG»Ý­n³B²z·Æ¹«²¾°Êªº¸Ü¡A¼gcode¦b³o¸Ì
+		// æ²’äº‹ã€‚å¦‚æžœéœ€è¦è™•ç†æ»‘é¼ ç§»å‹•çš„è©±ï¼Œå¯«codeåœ¨é€™è£¡
 	}
 
 	void BattleSystem::OnShow()
 	{
-		background.OnShow();
+		Cbackground.OnShow();
+		background.OnShow(IDB_BACKGROUND);
 		char str[80];
 		sprintf(str, "(%d, %d) KeyDown:%d", mousePoint.x, mousePoint.y,currentKeydown);
-		OnShowText(str, 0, 0);
-		sprintf(str, "Hit ground:%d, Player (x1:%d, y1:%d, x2:%d, y2:%d)", ground.Collision(&player.array,ground.GetCor(0),ground.GetCor(1),player.GetX1(),player.GetY1()), player.GetX1(), player.GetY1(), player.GetX2(), player.GetY2());
-		OnShowText(str, 0, 20);
-		sprintf(str, "                     , Ground (x1:%d, y1:%d, x2:%d, y2:%d)", ground.GetCor(0), ground.GetCor(1), ground.GetCor(2), ground.GetCor(3));
-		OnShowText(str, 0, 40);
+		OnShowText(str, 0, 0,10);
+		int idb = player.ShowAnimationState();
+		sprintf(str, "Hit ground:%d, Player (x1:%d, y1:%d, x2:%d, y2:%d)", ground.Collision(&cArray.find(idb)->second, 1.0, ground.GetCor(0), ground.GetCor(1), player.GetX1(), player.GetY1()), player.GetX1(), player.GetY1(), player.GetX2(), player.GetY2());
+		OnShowText(str, 0, 12,10);
+		sprintf(str, "                      , Ground (x1:%d, y1:%d, x2:%d, y2:%d)", ground.GetCor(0), ground.GetCor(1), ground.GetCor(2), ground.GetCor(3));
+		OnShowText(str, 0, 24,10);
+		sprintf(str, "%s", GetNameFromIDB(idb).c_str());
+		OnShowText(str, 0, 36,10);
+
 		ground.OnShow();
+		player.ani_iter = player.ani.begin();
 		player.OnShow();
 	}
 }

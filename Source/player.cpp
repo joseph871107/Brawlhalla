@@ -13,9 +13,14 @@ namespace game_framework {
 
 	Player::Player(Ground *grd)
 	{
+		int rr[6] = { IDB_P1_RUN0, IDB_P1_RUN1, IDB_P1_RUN2, IDB_P1_RUN3, IDB_P1_RUN4, IDB_P1_RUN5 };
+		int rl[6] = { IDB_P1_RUN0M, IDB_P1_RUN1M, IDB_P1_RUN2M, IDB_P1_RUN3M, IDB_P1_RUN4M, IDB_P1_RUN5M };
+		int jr[6] = { IDB_P1_JUMP0, IDB_P1_JUMP1, IDB_P1_JUMP2, IDB_P1_JUMP3 };
+		int jl[6] = { IDB_P1_JUMP0M, IDB_P1_JUMP1M, IDB_P1_JUMP2M, IDB_P1_JUMP3M };
 		jumpL.SetRepeat(false);
 		jumpR.SetRepeat(false);
 		x = y = width = height = 0;
+		jumpCount = 2;
 		velocity = 0.0;
 		isMovingLeft = isMovingRight = isMovingUp = dir = onGround = false;
 		isMovingDown = true;
@@ -25,13 +30,11 @@ namespace game_framework {
 	bool Player::HitObject()
 	{
 		int x1 = ground->GetCor(0), y1 = ground->GetCor(1), x2 = ground->GetCor(2), y2 = ground->GetCor(3);
-		// 檢測玩家所構成的矩形是否碰到地面
-		bool* flag;
-		flag = HitRectangle(x1, y1, x2, y2);
-		bool Aflag = flag[0] && flag[1] && flag[2] && flag[3];
-		if (Aflag)
+		// 檢測玩家所構成的矩形是否碰到地
+		bool flag = HitRectangle(x1, y1, x2, y2);
+		if (flag)
 			velocity = 0;
-		return (Aflag);
+		return (flag);
 	}
 
 	bool Player::IsOnGround()
@@ -39,27 +42,34 @@ namespace game_framework {
 		return ground->GetCor(1) <= GetY2();
 	}
 
-	bool* Player::HitRectangle(int tx1, int ty1, int tx2, int ty2)
+	bool Player::HitRectangle(int tx1, int ty1, int tx2, int ty2)
 	{
-		int x1 = x,y1 = y,x2 = x + width,y2 = y + height;	// 玩家的座標
-		bool flag[4] = { false };
-		if (tx2 >= x1)			// 玩家碰到物體左邊
-			flag[0] = true;
-		if (tx1 <= x2)			// 玩家碰到物體右邊
-			flag[1] = true;
-		if (ty2 >= y1)			// 玩家碰到物體上面
-			flag[2] = true;
-		if (ty1 <= y2)			// 玩家碰到物體下面
-			flag[3] = true;
-		return &(*flag);
+		int x1 = GetX1(), y1 = GetY1(), x2 = GetX2(), y2 = GetY2();
+		return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
 	}
 
 	void Player::Jump(double acc)
 	{
-		velocity = -acc;
-		y -= (int)acc;
-		jumpL.Reset();
-		jumpR.Reset();
+		if (jumpCount > 0) {
+			velocity = -acc;
+			y -= (int)acc;
+			jumpL.Reset();
+			jumpR.Reset();
+			jumpCount--;
+		}
+	}
+
+	int Player::ShowAnimationState()
+	{
+		if (!isMovingUp && !isMovingDown)
+		{
+			if (dir) return rr[right.GetCurrentBitmapNumber()];
+			else return rl[left.GetCurrentBitmapNumber()];
+		}
+		else {
+			if (dir) return jr[jumpR.GetCurrentBitmapNumber()];
+			else return jl[jumpL.GetCurrentBitmapNumber()];
+		}
 	}
 
 	int Player::GetX1()
@@ -84,37 +94,31 @@ namespace game_framework {
 
 	void Player::LoadBitmap()
 	{
-		array = GetCArray(IDB_P1_RUN0M);
+		CAnimation temp;
+		for (int i = 0;i < 6;i++)
+			temp.AddBitmap(rl[i], RGB(0, 0, 0));
+		temp.SetSize(1.0);
+		temp.SetDelayCount(5);
+		temp.Reset();
+		ani.insert(ani.end(),temp);
 
-		left.AddBitmap(IDB_P1_RUN0M, RGB(0, 0, 0));
-		left.AddBitmap(IDB_P1_RUN1M, RGB(0, 0, 0));
-		left.AddBitmap(IDB_P1_RUN2M, RGB(0, 0, 0));
-		left.AddBitmap(IDB_P1_RUN3M, RGB(0, 0, 0));
-		left.AddBitmap(IDB_P1_RUN4M, RGB(0, 0, 0));
-		left.AddBitmap(IDB_P1_RUN5M, RGB(0, 0, 0));
+		for (int i = 0;i < 6;i++)
+			left.AddBitmap(rl[i], RGB(0, 0, 0));
 		left.SetSize(2.5);
 		left.SetDelayCount(5);
 
-		right.AddBitmap(IDB_P1_RUN0, RGB(0, 0, 0));
-		right.AddBitmap(IDB_P1_RUN1, RGB(0, 0, 0));
-		right.AddBitmap(IDB_P1_RUN2, RGB(0, 0, 0));
-		right.AddBitmap(IDB_P1_RUN3, RGB(0, 0, 0));
-		right.AddBitmap(IDB_P1_RUN4, RGB(0, 0, 0));
-		right.AddBitmap(IDB_P1_RUN5, RGB(0, 0, 0));
+		for (int i = 0;i < 6;i++)
+			right.AddBitmap(rr[i], RGB(0, 0, 0));
 		right.SetSize(2.5);
 		right.SetDelayCount(5);
 
-		jumpL.AddBitmap(IDB_P1_JUMP0M, RGB(0, 0, 0));
-		jumpL.AddBitmap(IDB_P1_JUMP1M, RGB(0, 0, 0));
-		jumpL.AddBitmap(IDB_P1_JUMP2M, RGB(0, 0, 0));
-		jumpL.AddBitmap(IDB_P1_JUMP3M, RGB(0, 0, 0));
+		for (int i = 0;i < 4;i++)
+			jumpL.AddBitmap(jl[i], RGB(0, 0, 0));
 		jumpL.SetSize(2.5);
 		jumpL.SetDelayCount(5);
 
-		jumpR.AddBitmap(IDB_P1_JUMP0, RGB(0, 0, 0));
-		jumpR.AddBitmap(IDB_P1_JUMP1, RGB(0, 0, 0));
-		jumpR.AddBitmap(IDB_P1_JUMP2, RGB(0, 0, 0));
-		jumpR.AddBitmap(IDB_P1_JUMP3, RGB(0, 0, 0));
+		for (int i = 0;i < 4;i++)
+			jumpR.AddBitmap(jr[i], RGB(0, 0, 0));
 		jumpR.SetSize(2.5);
 		jumpR.SetDelayCount(5);
 
@@ -125,6 +129,8 @@ namespace game_framework {
 
 	void Player::OnMove()
 	{
+		ani_iter = ani.begin();
+		ani_iter->OnMove();
 		right.OnMove();
 		left.OnMove();
 		jumpL.OnMove();
@@ -133,6 +139,11 @@ namespace game_framework {
 			x -= 8;
 		if (isMovingRight)
 			x += 8;
+		/*if (isMovingUp)
+			y -= 8;
+		if (isMovingDown)
+			y += 8;
+		*/
 		if (!HitObject())
 		{
 			velocity += 2;
@@ -144,6 +155,7 @@ namespace game_framework {
 				y = ground->GetCor(1) - height;
 			if (ground->GetCor(3) >= GetY1() && ground->GetCor(1) < GetY2())
 				y = ground->GetCor(1) + height - 10;
+			jumpCount = 2;
 			//if (ground->GetX1() <= GetX2() && ground->GetX2() > GetX1())
 				//x = ground->GetX1() + width - 10;
 			//if (ground->GetX2() >= GetX1() && ground->GetX1() < GetX2())
@@ -154,6 +166,7 @@ namespace game_framework {
 			y = -height;
 			velocity = 0.0;
 		}
+		ani_iter = ani.begin();
 	}
 
 	void Player::SetMovingDown(bool flag)
@@ -197,18 +210,25 @@ namespace game_framework {
 
 	void Player::OnShow()
 	{
-		if (dir && !isMovingUp && !isMovingDown)
+		ani_iter = ani.begin();
+		//ani_iter->Reset();
+		//ani_iter->SetTopLeft(x,y);
+		ani_iter->OnShow();
+		/*
+		if (!isMovingUp && !isMovingDown)
 		{
-			right.SetTopLeft(x, y);
-			right.OnShow();
+			if (dir)
+			{
+				right.SetTopLeft(x, y);
+				right.OnShow();
+			}
+			else
+			{
+				left.SetTopLeft(x, y);
+				left.OnShow();
+			}
 		}
-		else if(!dir && !isMovingUp && !isMovingDown)
-		{
-			left.SetTopLeft(x, y);
-			left.OnShow();
-		}
-		if (isMovingUp || isMovingDown)
-		{
+		else {
 			if (dir)
 			{
 				jumpR.SetTopLeft(x, y);
@@ -219,6 +239,6 @@ namespace game_framework {
 				jumpL.SetTopLeft(x, y);
 				jumpL.OnShow();
 			}
-		}
+		}*/
 	}
 }

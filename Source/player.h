@@ -27,12 +27,19 @@ namespace game_framework {
 		void SetMovingRight(bool flag); // 設定是否正在往右移動
 		void SetMovingUp(bool flag);	// 設定是否正在往上移動
 		void Jump(double acc);
-		CArray array;					// 碰撞矩陣
+		ColArray array;					// 碰撞矩陣
+		int ShowAnimationState();
+		list<CAnimation> ani;			// list of CMovingBitmap
+		list<CAnimation>::iterator	ani_iter;
 	protected:
 		CAnimation left;			// 玩家向左走
 		CAnimation right;			// 玩家向右走
 		CAnimation jumpL;			// 玩家跳躍
 		CAnimation jumpR;			// 玩家跳躍
+		int rr[6] = { IDB_P1_RUN0, IDB_P1_RUN1, IDB_P1_RUN2, IDB_P1_RUN3, IDB_P1_RUN4, IDB_P1_RUN5 };
+		int rl[6] = { IDB_P1_RUN0M, IDB_P1_RUN1M, IDB_P1_RUN2M, IDB_P1_RUN3M, IDB_P1_RUN4M, IDB_P1_RUN5M };
+		int jr[6] = { IDB_P1_JUMP0, IDB_P1_JUMP1, IDB_P1_JUMP2, IDB_P1_JUMP3 };
+		int jl[6] = { IDB_P1_JUMP0M, IDB_P1_JUMP1M, IDB_P1_JUMP2M, IDB_P1_JUMP3M };
 		int x, y;					// 玩家的座標
 		int width, height;			// 玩家的長寬
 		double velocity;			// 在空中停留時間
@@ -43,7 +50,8 @@ namespace game_framework {
 		bool isMovingRight;			// 是否正在往右移動
 		bool isMovingUp;			// 是否正在往上移動
 	private:
-		bool* HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
+		int jumpCount;
+		bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 		Ground *ground;
 	};
 }

@@ -11,7 +11,7 @@ namespace game_framework
 
 	extern map<string, int> idbList;
 	extern map<int, string> fileList;
-	extern map<int, CArray> cArray;
+	extern map<int, ColArray> cArray;
 
 	class BattleSystem : public CGameState
 	{
@@ -25,9 +25,8 @@ namespace game_framework
 		void OnMouseMove(UINT , CPoint);				// 滑鼠移動
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
-		//GameComFunc func;
 	private:
-		//CMovingBitmap	background;	// 背景圖
+		CAnimation	Cbackground;	// 背景圖
 		CMovingBitmap	help;		// 說明圖
 		CPoint mousePoint;
 		UINT currentKeydown;

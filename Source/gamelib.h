@@ -67,7 +67,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #define SIZE_X				 1280		// 設定遊戲畫面的解析度為640x480
-#define SIZE_Y				 960		// 註：若不使用標準的解析度，則不能切換到全螢幕
+#define SIZE_Y				 800		// 註：若不使用標準的解析度，則不能切換到全螢幕
 #define OPEN_AS_FULLSCREEN	 false		// 是否以全螢幕方式開啟遊戲
 #define SHOW_LOAD_PROGRESS   true		// 是否顯示loading(OnInit)的進度
 #define DEFAULT_BG_COLOR	 RGB(0,0,0)	// 遊戲畫面預設的背景顏色(黑色)
@@ -141,6 +141,7 @@ private:
 
 class CDDraw {
 	friend class CMovingBitmap;
+	friend class CBmp;
 public:
 	~CDDraw();
 	static void  BltBackColor(DWORD);		// 將Back plain全部著上指定的顏色
@@ -168,16 +169,16 @@ private:
 	static void  ReleaseSurface();
 	static void  RestoreSurface();
 	static void  SetColorKey(unsigned SurfaceID, COLORREF color);
-    static HDC					hdc;
+	static HDC					hdc;
 	static CDC					cdc;
 	static CView				*pCView;
-    static LPDIRECTDRAW2		lpDD;
-	static LPDIRECTDRAWCLIPPER	lpClipperPrimary;   
-	static LPDIRECTDRAWCLIPPER	lpClipperBack;   
+	static LPDIRECTDRAW2		lpDD;
+	static LPDIRECTDRAWCLIPPER	lpClipperPrimary;
+	static LPDIRECTDRAWCLIPPER	lpClipperBack;
 	static LPDIRECTDRAWSURFACE	lpDDSPrimary;
 	static LPDIRECTDRAWSURFACE	lpDDSBack;
 	static vector<LPDIRECTDRAWSURFACE>	lpDDS;
-    static HRESULT				ddrval;
+	static HRESULT				ddrval;
 	static vector<int>			BitmapID;
 	static vector<string>		BitmapName;
 	static vector<CRect>		BitmapRect;

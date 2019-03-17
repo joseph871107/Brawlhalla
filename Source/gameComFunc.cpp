@@ -9,21 +9,17 @@
 
 //using namespace std;
 namespace game_framework {
-	void InitializeAllBMP(string file1, string file2)
-	{
-		idbList = InitializeIDB(file1);
-		fileList = InitializeFile(file2);
-		cArray = InitializeCollideArray(true);
-	}
-
-	CArray GetCArray(int resource) {
-		return cArray.find(resource)->second;
-	}
 
 	map<string, int> idbList;
 	map<int, string> fileList;
-	map<int, CArray> cArray;
+	map<int, ColArray> cArray;
 
+	void InitializeAllBMP(bool trace, string file1, string file2)
+	{
+		InitializeIDB();
+		InitializeFile();
+		InitializeCollideArray(trace);
+	}
 	void OnShowText(string msg, int x, int y, int size, LPCTSTR font, COLORREF color)
 	{
 		CDC *pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC 
@@ -37,23 +33,21 @@ namespace game_framework {
 		CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 	}
 
-	string BoolToString(bool b)
-	{
-		return b ? "1" : "0";
-	}
-
 	int ti(int i, double j){
 		return (int)(i*j);
 	}
 
-	void TraceCollideArray(CArray cArray, bool trace) {
-		if (trace)
-			TRACE("%s\n", cArray.fileName.c_str());
+	void TraceCollideArray(int file, bool trace) {
+		ColArray Ctemp = cArray.find(file)->second;
+		if (trace){
+			TRACE("%s\n", Ctemp.fileName.c_str());
+			TRACE("width : %d height : %d\n", Ctemp.width, Ctemp.height);
+		}
 		vector<string> stri;
-		for (auto i = cArray.pixel.begin(); i != cArray.pixel.end(); i++) {
+		for (auto i = Ctemp.pixel.begin(); i != Ctemp.pixel.end(); i++) {
 			string st = "";
 			for (auto j = i->begin(); j != i->end(); j++)
-				st += BoolToString(*j) + " ";
+				st += (string)(*j ? "1" : "0") + " ";
 			stri.push_back(st);
 		}
 		for (unsigned int i = 0; i < stri.size(); i++) {
@@ -64,26 +58,25 @@ namespace game_framework {
 			TRACE("\n");
 	}
 
-	CArray GetCollideArray(string file) {
-		Bmp bmp = readBMP(GetPathFromIDB(file));
-		CArray carray;
+	void GetCollideArray(int file, ColBmp *bmp) {
+		ColArray Ctemp;
 		vector <vector<bool>> trans;
-		for (auto i = bmp.pixel.begin(); i != bmp.pixel.end(); i++) {
+		for (auto i = bmp->pixel.begin(); i != bmp->pixel.end(); i++) {
 			vector<bool> temp;
 			for (auto j = i->begin(); j != i->end(); j++)
 				temp.push_back(*j == RGB(0, 0, 0) ? false : true);
-			trans.push_back(temp);
+			Ctemp.pixel.push_back(temp);
 		}
-		carray.pixel = trans; carray.width = bmp.width; carray.height = bmp.height; carray.fileName = file;
-		return carray;
+		Ctemp.width = bmp->width; Ctemp.height = bmp->height; Ctemp.fileName = GetNameFromIDB(file);
+		cArray.insert(pair<int,ColArray>(file,Ctemp));
 	}
 
 
-	map<string, int> InitializeIDB(string file)
+	void InitializeIDB(string file)
 	{
 		TRACE("Initializing map IDB...\n");
 		ifstream myfile;
-		map<string, int> idblist;
+		map<string, int>* idblist = (map<string, int>*)malloc(sizeof(map<string, int>));
 		myfile.open(file.c_str());
 		string line;
 		while (getline(myfile, line))
@@ -101,17 +94,14 @@ namespace game_framework {
 				}
 			}
 			if (flag)
-				idblist.insert(pair<string, int>(s_n, stoi(s)));
+				idbList.insert(pair<string, int>(s_n, stoi(s)));
 		}
 		myfile.close();
-		return idblist;
 	}
-	map<int, string> InitializeFile(string file)
+	void InitializeFile(string file)
 	{
 		TRACE("Initializing map file...\n");
-		ifstream myfile;
-		map<int, string> filelist;
-		myfile.open(file.c_str());
+		ifstream myfile(file.c_str());
 		string line;
 		while (getline(myfile, line))
 		{
@@ -129,70 +119,57 @@ namespace game_framework {
 			}
 			if (flag) {
 				s = s.substr(5, s.size() - 6);
-				filelist.insert(pair<int,string>(it->second,s));
+				fileList.insert(pair<int,string>(it->second,s));
 			}
 		}
 		myfile.close();
-		return filelist;
 	}
 
-	map<int, CArray> InitializeCollideArray(bool trace)
+	void InitializeCollideArray(bool trace)
 	{
 		TRACE("Initializing collide array...\n");
-		map<int, CArray> Mtemp;
 		for (auto i = idbList.begin(); i != idbList.end(); i++) {
 			TRACE("---Generating %s collide array...\n",i->first.c_str());
-			CArray temp = GetCollideArray(i->first);
-			TraceCollideArray(temp,trace);
-			Mtemp.insert(pair<int, CArray>(i->second, temp));
+			ColBmp tt = readBMP(i->second);
+			GetCollideArray(i->second, &tt);
+			TraceCollideArray(i->second,trace);
 		}
-		return Mtemp;
 	}
 
-	string GetPathFromIDB(string file)
+	string GetPathFromIDB(int file)
 	{
-		return fileList.find(GetNumFromIDB(file))->second;
+		return fileList.find(file)->second;
 	}
 
-	int GetNumFromIDB(string file)
+	string GetNameFromIDB(int file)
 	{
-		return idbList.find(file)->second;
+		for (auto it = idbList.begin(); it != idbList.end(); ++it)
+			if (it->second == file)
+				return it->first;
+		return "";
 	}
 
-	Bmp readBMP(string file, int x_max, int y_max)
+	ColBmp readBMP(int file, int x_max, int y_max)
 	{
-		Bmp tBmp;
-		vector<vector<COLORREF>> pixels;
-		HBITMAP hBmp = (HBITMAP)LoadImage(NULL, (LPCSTR)file.c_str(), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_DEFAULTSIZE | LR_LOADFROMFILE);
-		if (hBmp == NULL)
-			return tBmp;
+		ColBmp tBmp;
+		HBITMAP hBmp = (HBITMAP)LoadImage(NULL, (LPCSTR) GetPathFromIDB(file).c_str(), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_DEFAULTSIZE | LR_LOADFROMFILE);
+		if (hBmp == NULL) return tBmp;
 		BITMAP bmp;
 		HDC hdc = CreateCompatibleDC(NULL);
 		GetObject(hBmp, sizeof(bmp), &bmp);
+		if (bmp.bmWidth > x_max || bmp.bmHeight > y_max) return tBmp;
 		tBmp.width = bmp.bmWidth;
 		tBmp.height = bmp.bmHeight;
-		if (tBmp.width > x_max || tBmp.height > y_max)
-			return tBmp;
 		BitBlt(hdc, 0, 0, bmp.bmWidth, bmp.bmHeight, hdc, 0, 0, SRCCOPY);
 		SelectObject(hdc, hBmp);
-
 		for (int y = 0; y < bmp.bmHeight; y++)
 		{
 			vector<COLORREF> temp;
-			for (int x = 0; x < bmp.bmWidth; x++)
-			{
-				COLORREF clr;
-				clr = GetPixel(hdc, x, y);
-
-				if (clr != CLR_INVALID)
-					temp.push_back(clr);
-			}
-			pixels.push_back(temp);
+			for (int x = 0; x < bmp.bmWidth; x++) temp.push_back(GetPixel(hdc, x, y));
+			tBmp.pixel.push_back(temp);
 		}
-
 		DeleteDC(hdc);
 		DeleteObject(hBmp);
-		tBmp.pixel = pixels;
 		return tBmp;
 	}
 }
