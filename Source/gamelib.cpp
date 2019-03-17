@@ -139,7 +139,7 @@ namespace game_framework
 CAnimation::CAnimation(const CAnimation& objectValue) :
     bmp(objectValue.bmp), bmp_counter(objectValue.bmp_counter), delay_counter(objectValue.delay_counter), delay_count(objectValue.delay_count),
     x(objectValue.x), y(objectValue.y), size(objectValue.size), pause(objectValue.pause),
-    repeat(objectValue.repeat), times(objectValue.times)
+    repeat(objectValue.repeat), times(objectValue.times), times_orig(objectValue.times_orig)
 {
     bmp_iter = bmp.begin();
 }
@@ -159,6 +159,7 @@ CAnimation& CAnimation::operator=(const CAnimation& rightObject)
         pause = rightObject.pause;
         repeat = rightObject.repeat;
         times = rightObject.times;
+        times_orig = rightObject.times_orig;
     }
 
     return (*this);
@@ -172,7 +173,7 @@ CAnimation::CAnimation(int count)
     delay_count = count;
     delay_counter = delay_count;
     x = y = bmp_counter = 0;
-    times = 1;
+    times = times_orig = 1;
 }
 
 CAnimation::CAnimation(bool rt, int ts, int count)
@@ -183,7 +184,7 @@ CAnimation::CAnimation(bool rt, int ts, int count)
     delay_count = count;
     delay_counter = delay_count;
     x = y = bmp_counter = 0;
-    times = ts;
+    times = times_orig = ts;
 }
 
 void CAnimation::AddBitmap(int IDB_BITMAP, COLORREF colorkey)
@@ -227,34 +228,27 @@ int CAnimation::Left()
 
 void CAnimation::OnMove()
 {
-	GAME_ASSERT(bmp.size() != 0,"CAnimation: Bitmaps must be loaded first.");
-	if (--delay_counter <= 0)  {
-		delay_counter = delay_count;
-		if (!pause && times>0)
-		{
-			bmp_iter++;
-			bmp_counter++;
-		}
-		if (bmp_iter == bmp.end()){
-			if (times > 0) {
-				bmp_iter = bmp.begin();
-				bmp_counter = 0;
-				if (!repeat)
-					times -= 1;
-			}
-		}
-	}
+    GAME_ASSERT(bmp.size() != 0, "CAnimation: Bitmaps must be loaded first.");
 
-	GAME_ASSERT(bmp.size() != 0, "CAnimation: Bitmaps must be loaded first.");
-	if (--delay_counter <= 0) {
-		delay_counter = delay_count;
-		bmp_iter++;
-		bmp_counter++;
-		if (bmp_iter == bmp.end()) {
-			bmp_iter = bmp.begin();
-			bmp_counter = 0;
-		}
-	}
+    if (--delay_counter <= 0)
+    {
+        delay_counter = delay_count;
+
+        if (!pause && times > 0)
+        {
+            bmp_iter++;
+            bmp_counter++;
+        }
+
+        if (bmp_iter == bmp.end() && times > 0)
+        {
+            bmp_iter = bmp.begin();
+            bmp_counter = 0;
+
+            if (!repeat)
+                times -= 1;
+        }
+    }
 }
 
 void CAnimation::Reset()
@@ -263,7 +257,7 @@ void CAnimation::Reset()
     delay_counter = delay_count;
     bmp_iter = bmp.begin();
     bmp_counter = 0;
-    times = 1;
+    times = times_orig;
 }
 
 void CAnimation::SetDelayCount(int dc)

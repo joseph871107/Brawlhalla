@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Chinese (Traditional, Taiwan) resources
+// 中文 (繁體，台灣) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
@@ -62,11 +62,11 @@ END
 // Bitmap
 //
 
-IDB_LOADING             BITMAP                  "..\\res\\loading.bmp"
+IDB_LOADING             BITMAP                  "..\\RES\\loading.bmp"
 
-IDB_CONTINUE            BITMAP                  "..\\res\\continue.bmp"
+IDB_CONTINUE            BITMAP                  "..\\RES\\continue.bmp"
 
-IDB_GROUND              BITMAP                  "..\\res\\background\\ground1.bmp"
+IDB_GROUND              BITMAP                  "..\\RES\\background\\ground1.bmp"
 
 IDB_BACKGROUND          BITMAP                  "..\\RES\\background\\forest.bmp"
 
@@ -110,6 +110,18 @@ IDB_P1_JUMP2M           BITMAP                  "..\\RES\\player1\\adventurer-ju
 
 IDB_P1_JUMP3M           BITMAP                  "..\\RES\\player1\\adventurer-jump-03(Mirrored).bmp"
 
+IDB_P1_IDLE0            BITMAP                  "..\\RES\\player1\\adventurer-idle-00.bmp"
+
+IDB_P1_IDLE1            BITMAP                  "..\\RES\\player1\\adventurer-idle-01.bmp"
+
+IDB_P1_IDLE2            BITMAP                  "..\\RES\\player1\\adventurer-idle-02.bmp"
+
+IDB_P1_IDLE0M           BITMAP                  "..\\RES\\player1\\adventurer-idle-00(Mirrored).bmp"
+
+IDB_P1_IDLE1M           BITMAP                  "..\\RES\\player1\\adventurer-idle-01(Mirrored).bmp"
+
+IDB_P1_IDLE2M           BITMAP                  "..\\RES\\player1\\adventurer-idle-02(Mirrored).bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -118,12 +130,12 @@ IDB_P1_JUMP3M           BITMAP                  "..\\RES\\player1\\adventurer-ju
 
 IDC_GAMECURSOR          CURSOR                  "..\\res\\gamecurs.cur"
 
-#endif    // Chinese (Traditional, Taiwan) resources
+#endif    // 中文 (繁體，台灣) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (United States) resources
+// 英文 (美國) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -421,7 +433,7 @@ BEGIN
     ID_BUTTON_UNITTEST      "Perform Unit Test"
 END
 
-#endif    // English (United States) resources
+#endif    // 英文 (美國) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

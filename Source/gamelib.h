@@ -261,6 +261,7 @@ class CAnimation
         bool							pause;			// 暫停
         bool							repeat;			// 重複
         int								times;			// 重複次數
+        int								times_orig;		// 原始重複次數
 };
 
 /////////////////////////////////////////////////////////////////////////////
