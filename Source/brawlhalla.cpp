@@ -146,9 +146,8 @@ void CGameStateOver::OnShow()
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateRun::CGameStateRun(CGame* g)
-    : CGameState(g)
+    : CGameState(g), battleSystem(BattleSystem(g))
 {
-    battleSystem = new BattleSystem(g);
 }
 
 CGameStateRun::~CGameStateRun()
@@ -157,27 +156,27 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-    battleSystem->OnBeginState();
+    battleSystem.OnBeginState();
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-    battleSystem->OnMove();
+    battleSystem.OnMove();
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-    battleSystem->OnInit();
+    battleSystem.OnInit();
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    battleSystem->OnKeyDown(nChar, nRepCnt, nFlags);
+    battleSystem.OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    battleSystem->OnKeyUp(nChar, nRepCnt, nFlags);
+    battleSystem.OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
@@ -190,7 +189,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
-    battleSystem->OnMouseMove(nFlags, point);
+    battleSystem.OnMouseMove(nFlags, point);
 }
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
@@ -203,7 +202,7 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnShow()
 {
-    battleSystem->OnShow();
+    battleSystem.OnShow();
 }
 
 }

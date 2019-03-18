@@ -13,7 +13,7 @@ namespace game_framework
 // CGround : ground class
 /////////////////////////////////////////////////////////////////////////////
 
-BattleSystem::BattleSystem(CGame* g) : CGameState(g)
+BattleSystem::BattleSystem(CGame* g) : CGameState(g), player(Player(&ground))
 {
 }
 
@@ -31,16 +31,11 @@ void BattleSystem::OnMove()							// 移動遊戲元素
     player.OnMove();
     background.SetXY((int)(-player.GetX1() * 0.3), (int)(-player.GetY1() * 0.2));
     ground.SetXY((int)(-player.GetX1() * 0.5 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2 + 0.5) + 400, (int)(-player.GetY1() * 0.5 + 0.5) + 600);
-    /*
-    if (player.HitObject())
-    {
-    	player.SetMovingUp(false);
-    	player.SetMovingDown(false);
-    }*/
 }
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
+	start = chrono::high_resolution_clock::now();
     //InitializeAllBMP();								// 初始化點陣圖運算資源
     InitializeIDB();									// 初始化"resource.h"中點陣圖的資源編號
     TRACE("idbList size : %d\n", idbList.size());
@@ -83,10 +78,6 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
         player.Jump();
         player.SetMovingUp(true);
     }
-
-    /*//player.SetMovingUp(true);
-    if (nChar == KEY_DOWN)
-    	player.SetMovingDown(true);*/
 }
 
 void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -105,11 +96,6 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
     if (nChar == KEY_RIGHT)
         player.SetMovingRight(false);
-
-    /*if (nChar == KEY_UP)
-    	player.SetMovingUp(false);
-    if (nChar == KEY_DOWN)
-    	player.SetMovingDown(false);*/
 }
 
 void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -128,8 +114,13 @@ void BattleSystem::OnShow()
     OnShowText(str, 0, 12, 10);
     sprintf(str, "                      , Ground (x1:%d, y1:%d, x2:%d, y2:%d)", ground.GetCor(0), ground.GetCor(1), ground.GetCor(2), ground.GetCor(3));
     OnShowText(str, 0, 24, 10);
-    sprintf(str, "%s", GetNameFromIDB(player.ShowAnimationState()).c_str());
-    OnShowText(str, 0, 36, 10);
+	sprintf(str, "%s", GetNameFromIDB(player.ShowAnimationState()).c_str());
+	OnShowText(str, 0, 36, 10);
+	auto end = chrono::high_resolution_clock::now();
+	auto dur = end - start;
+	auto ms = chrono::duration_cast<chrono::milliseconds>(dur).count();
+	sprintf(str, "Current run time : %f\n", ms/1000.0);
+	OnShowText(str, 0, 48, 20);
     ground.OnShow();
     player.OnShow();
 }

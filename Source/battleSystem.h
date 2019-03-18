@@ -2,6 +2,7 @@
 #ifndef BATTLESYSTEM_H
 #define BATTLESYSTEM_H
 #include "player.h"
+#include <chrono>
 
 namespace game_framework
 {
@@ -29,8 +30,9 @@ class BattleSystem : public CGameState
         CMovingBitmap	help;		// »¡©ú¹Ï
         CPoint mousePoint;
         UINT currentKeydown;
+		chrono::time_point<chrono::steady_clock> start;
         Ground ground;
-        Player player = Player(&ground);
+        Player player;
         Object background;
 };
 

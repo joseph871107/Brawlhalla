@@ -34,6 +34,12 @@ Object::Object(int x1, int y1, int x2, int y2)
     osY2 = y2;
 }
 
+Object::~Object()
+{
+	for (auto i = bmp_iter.begin();i != bmp_iter.end();i++)
+		*i = NULL;
+}
+
 bool Object::HitRectangle(int tx1, int ty1, int tx2, int ty2)
 {
     int x1 = GetCor(0), y1 = GetCor(1), x2 = GetCor(2), y2 = GetCor(3);

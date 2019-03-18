@@ -15,6 +15,7 @@ class Object
         Object();
         Object(double);
         Object(int, int, int, int);
+		~Object();
         void OnShow();										// 將圖形貼到畫面
         void SetXY(int nx, int ny);								// 設定物件的座標
         void SetSize(double s);									// 設定物件大小

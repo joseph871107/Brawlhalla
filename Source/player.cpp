@@ -22,6 +22,11 @@ Player::Player(Ground* grd)
     ground = grd;
 }
 
+Player::~Player()
+{
+    ground = NULL;
+}
+
 bool Player::HitObject()
 {
     int x1 = ground->GetCor(0), y1 = ground->GetCor(1), x2 = ground->GetCor(2), y2 = ground->GetCor(3);
@@ -97,12 +102,12 @@ void Player::AddCAnimation(vector<int>* list, double size, int delay, bool repea
 
 void Player::LoadBitmap()
 {
-    AddCAnimation(&rl, 2.5, 5);
-    AddCAnimation(&rr, 2.5, 5);
-    AddCAnimation(&jl, 2.5, 5, false);
-    AddCAnimation(&jr, 2.5, 5, false);
-    AddCAnimation(&sl, 2.5, 7);
-    AddCAnimation(&sr, 2.5, 7);
+    AddCAnimation(&rl, 2.5, 7);
+    AddCAnimation(&rr, 2.5, 7);
+    AddCAnimation(&jl, 2.5, 7, false);
+    AddCAnimation(&jr, 2.5, 7, false);
+    AddCAnimation(&sl, 2.5);
+    AddCAnimation(&sr, 2.5);
     int sizeOfWhich = 0;
     width = ani[sizeOfWhich].Width();
     height = ani[sizeOfWhich].Height();
@@ -121,7 +126,7 @@ void Player::OnMove()
 
     if (!HitObject())
     {
-        velocity += 2;
+        velocity += 1.5;
         y += (int)velocity;
     }
 

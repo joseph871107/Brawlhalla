@@ -46,7 +46,7 @@ void Ground::LoadBitmap()
     bmp.LoadBitmap(bmpID, RGB(0, 0, 0));			// 載入地圖的圖形
     width = bmp.Width();
     height = bmp.Height();
-    array = cArray.find(IDB_GROUND)->second;
+    //array = cArray.find(IDB_GROUND)->second;
 }
 
 void Ground::SetLen(int len)

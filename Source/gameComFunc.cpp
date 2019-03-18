@@ -124,6 +124,7 @@ void InitializeIDB(string file)
             idbList.insert(pair<string, int>(s_n, stoi(s)));
     }
 
+    free(idblist);
     myfile.close();
 }
 void InitializeFile(string file)

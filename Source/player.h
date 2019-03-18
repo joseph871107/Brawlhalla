@@ -13,6 +13,7 @@ class Player
 {
     public:
         Player(Ground* grd);			// Constructor
+        ~Player();						// Deconstructor
         bool HitObject();				// 是否碰到地圖
         bool IsOnGround();				//
         void LoadBitmap();				// 載入圖形
@@ -32,7 +33,7 @@ class Player
         int ShowAnimationState();		// Return which CAnimation is playing
         void SetAnimationState(int);	// Set which CAnimation is going to play
         void ShowAnimation();			// Show CAnimation by currentAni
-        void AddCAnimation(vector<int>*, double = 1.0, int = 5, bool = true, int = 1);	// Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
+        void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1);	// Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
     private:
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
@@ -42,7 +43,7 @@ class Player
         vector<int> jl{ IDB_P1_JUMP0M, IDB_P1_JUMP1M, IDB_P1_JUMP2M, IDB_P1_JUMP3M };							// bmps of jumping left
         vector<int> sr{ IDB_P1_IDLE0, IDB_P1_IDLE1, IDB_P1_IDLE2};												// bmps of standing right
         vector<int> sl{ IDB_P1_IDLE0M, IDB_P1_IDLE1M, IDB_P1_IDLE2M};											// bmps of standing left
-		vector<vector<int>*> bmp_iter;
+        vector<vector<int>*> bmp_iter;
         int x, y;					// 玩家的座標
         int width, height;			// 玩家的長寬
         double velocity;			// 在空中停留時間
