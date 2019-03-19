@@ -122,6 +122,14 @@ IDB_P1_IDLE1M           BITMAP                  "..\\RES\\player1\\adventurer-id
 
 IDB_P1_IDLE2M           BITMAP                  "..\\RES\\player1\\adventurer-idle-02(Mirrored).bmp"
 
+IDB_P1_WALL0            BITMAP                  "..\\RES\\player1\\adventurer-wall-slide-00(Mirrored).bmp"
+
+IDB_P1_WALL1            BITMAP                  "..\\RES\\player1\\adventurer-wall-slide-01(Mirrored).bmp"
+
+IDB_P1_WALL0M           BITMAP                  "..\\RES\\player1\\adventurer-wall-slide-00.bmp"
+
+IDB_P1_WALL1M           BITMAP                  "..\\RES\\player1\\adventurer-wall-slide-01.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
