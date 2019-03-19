@@ -325,12 +325,6 @@
     <Image Include="RES\background\forest.bmp" />
     <Image Include="res\background\ground1.bmp" />
     <Image Include="res\brawlhalla.ico" />
-    <Image Include="RES\player1\adventurer-idle-00(Mirrored).bmp" />
-    <Image Include="RES\player1\adventurer-idle-00.bmp" />
-    <Image Include="RES\player1\adventurer-idle-01(Mirrored).bmp" />
-    <Image Include="RES\player1\adventurer-idle-01.bmp" />
-    <Image Include="RES\player1\adventurer-idle-02(Mirrored).bmp" />
-    <Image Include="RES\player1\adventurer-idle-02.bmp" />
     <Image Include="RES\player1\adventurer-jump-00%28Mirrored%29.bmp" />
     <Image Include="RES\player1\adventurer-jump-00.bmp" />
     <Image Include="RES\player1\adventurer-jump-01%28Mirrored%29.bmp" />
@@ -352,8 +346,6 @@
     <Image Include="RES\player1\adventurer-run-05%28Mirrored%29.bmp" />
     <Image Include="RES\player1\adventurer-run-05.bmp" />
     <Image Include="res\player\player.bmp" />
-    <Image Include="RES\tests\lean_left.bmp" />
-    <Image Include="RES\tests\lean_right.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
