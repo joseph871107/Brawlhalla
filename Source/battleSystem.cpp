@@ -9,9 +9,10 @@
 
 namespace game_framework
 {
-/////////////////////////////////////////////////////////////////////////////
-// CGround : ground class
-/////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////////////
+	// CGround : ground class
+	/////////////////////////////////////////////////////////////////////////////
 
 BattleSystem::BattleSystem(CGame* g) : CGameState(g)
 {
@@ -24,6 +25,13 @@ BattleSystem::~BattleSystem()
 void BattleSystem::OnBeginState()
 {
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
+	/*------------------------------INIT PROGRESS STAGE 1------------------------------*/
+	start = chrono::high_resolution_clock::now();
+	_secPerRound = 180;
+	ground.SetXY(300, 400);
+	player.Initialize(&ground, 1);
+	enemy.Initialize(&ground, 2);
+
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
@@ -36,8 +44,6 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
-    /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
-    start = chrono::high_resolution_clock::now();
     //InitializeAllBMP();								// 初始化點陣圖運算資源
     InitializeIDB();									// 初始化"resource.h"中點陣圖的資源編號
     TRACE("idbList size : %d\n", idbList.size());
@@ -56,14 +62,13 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     //CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
     ground.LoadBitmap();
     ground.SetSize(1);
+	ground.SetLen(5);
     background.SetSize(0.8);
     background.LoadBitmap(&vector<int> { IDB_BACKGROUND }, RGB(0, 0, 0));
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
-	ground.SetLen(5);
-	ground.SetXY(300, 400);
-    player.Initialize(&ground,1);
-	enemy.Initialize(&ground,2);
+	player.Initialize(&ground, 1);
+	enemy.Initialize(&ground, 2);
     player.LoadBitmap();
 	enemy.LoadBitmap();
 	//player.SetXY((int)(2000 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2), 400);
@@ -96,8 +101,9 @@ void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動�
 
 void BattleSystem::OnShow()
 {
-    background.OnShow();
-    char str[80];
+	background.OnShow();
+	//------------------Test Text------------------//
+    char str[80],str2[80];
 	ostringstream oss;
 	oss << hex << currentKeydown;
     sprintf(str, "(%d, %d) KeyDown:%s", mousePoint.x, mousePoint.y, ("0x"+oss.str()).c_str());
@@ -108,13 +114,22 @@ void BattleSystem::OnShow()
     OnShowText(str, 0, 24, 10);
     sprintf(str, "%s", GetNameFromIDB(player.ShowAnimationState()).c_str());
     OnShowText(str, 0, 36, 10);
-    auto end = chrono::high_resolution_clock::now();
-    auto dur = end - start;
-    auto ms = chrono::duration_cast<chrono::milliseconds>(dur).count();
-    sprintf(str, "Current run time : %f\n", ms / 1000.0);
-    OnShowText(str, 0, 48, 20);
+	sprintf(str, "%d", GetCurrenRemainTime() / 60);
+	sprintf(str2, "%d", GetCurrenRemainTime() % 60);
+    sprintf(str, "Remain Time : %s : %s\n", (GetCurrenRemainTime() /600==0?("0"+(string)str).c_str() : str), ((GetCurrenRemainTime() % 60)/10 == 0 ? ("0" + (string)str2).c_str():str2));
+    OnShowText(str, 500, 0, 30);
+	//------------------End of Test Text------------------//
     ground.OnShow();
-	player.OnShow();
 	enemy.OnShow();
+	player.OnShow();
 }
+
+int BattleSystem::GetCurrenRemainTime()
+{
+	auto end = chrono::high_resolution_clock::now();
+	auto dur = end - start;
+	auto ms = chrono::duration_cast<chrono::milliseconds>(dur).count();
+	return (int)(_secPerRound - (ms / 1000));
+}
+
 }

@@ -23,12 +23,13 @@ class BattleSystem : public CGameState
         void OnInit();  								// 遊戲的初值及圖形設定
         void OnKeyDown(UINT, UINT, UINT);				// 鍵盤按下
         void OnKeyUp(UINT, UINT, UINT);					// 鍵盤釋放
-        void OnMouseMove(UINT, CPoint);				// 滑鼠移動
+        void OnMouseMove(UINT, CPoint);					// 滑鼠移動
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
+		int GetCurrenRemainTime();
     private:
-        CMovingBitmap	help;		// 說明圖
-        CPoint mousePoint;
+		int _secPerRound;
+		CPoint mousePoint;
         UINT currentKeydown;
 		chrono::time_point<chrono::steady_clock> start;
         Ground ground;

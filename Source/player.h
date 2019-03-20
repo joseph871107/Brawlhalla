@@ -45,7 +45,7 @@ class Player
 		void ResetAttackAnimations();
 
         //Animations
-        void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1);
+        void AddCAnimation(vector<int>*, double = 1.0, int = 7, bool = true, int = 1);
         // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
 
         void SetAnimationState(int);	// Set which CAnimation is going to play

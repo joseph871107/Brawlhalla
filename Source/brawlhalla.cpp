@@ -161,6 +161,8 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
+	if (battleSystem.GetCurrenRemainTime()==0)								// Demo 關閉遊戲的方法
+		GotoGameState(GAME_STATE_OVER);					// 關閉遊戲
     battleSystem.OnMove();
 }
 

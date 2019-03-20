@@ -9,10 +9,10 @@
 namespace game_framework
 {
 //-----------------CONSTANTS DEFINITIONS-----------------//
-const int MOVEMENT_UNIT = 5;
-const double ACCELERATION_UNIT = 0.5;
-const double INITIAL_VELOCITY = 10.0;
-const int OFFSET_INITIAL_VELOCITY = 10;
+const int MOVEMENT_UNIT = 8;
+const double ACCELERATION_UNIT = 1.5;
+const double INITIAL_VELOCITY = 20.0;
+const int OFFSET_INITIAL_VELOCITY = 20;
 const long KEY_A = 0x41;
 const long KEY_D = 0x44;
 const long KEY_L = 0x4C;
@@ -82,8 +82,8 @@ void Player::LoadBitmap()
 {
     AddCAnimation(&rl, _size); //ani[0] Run Left
     AddCAnimation(&rr, _size); //ani[1] Run Right
-    AddCAnimation(&jl, _size, 10, false); //ani[2] Jump Left
-    AddCAnimation(&jr, _size, 10, false); //ani[3] Jump Right
+    AddCAnimation(&jl, _size, 5, false); //ani[2] Jump Left
+    AddCAnimation(&jr, _size, 5, false); //ani[3] Jump Right
     AddCAnimation(&sl, _size); //ani[4] Stand (Idle) Left
     AddCAnimation(&sr, _size); //ani[5] Stand (Idle) Right
 	AddCAnimation(&ll, _size); //ani[6] Lean Left
@@ -157,6 +157,9 @@ void Player::OnShow()
     }
 
     ShowAnimation();
+	char str[80];
+	sprintf(str, "Player%d", _keyMode);
+	OnShowText(str, GetX1()+_width/4, GetY2(), 20);
 }
 
 void Player::OnMove()
