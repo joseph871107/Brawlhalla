@@ -14,24 +14,14 @@ namespace game_framework
 
 Object::Object()
 {
-    x = y = width = height = osX1 = osY1 = osX2 = osY2 = currentAni = 0;
+    x = y = width = height = currentAni = 0;
     size = 1.0;
 }
 
 Object::Object(double s)
 {
-    x = y = width = height = osX1 = osY1 = osX2 = osY2 = currentAni = 0;
+    x = y = width = height = currentAni = 0;
     size = s;
-}
-
-Object::Object(int x1, int y1, int x2, int y2)
-{
-    x = y = width = height = 0;
-    size = 1.0;
-    osX1 = x1;
-    osY1 = y1;
-    osX2 = x2;
-    osY2 = y2;
 }
 
 Object::~Object()
@@ -51,16 +41,16 @@ int Object::GetCor(int index)
     switch (index)
     {
         case 0:
-            return x + (int)(osX1 * size);
+            return x;
 
         case 1:
-            return y + (int)(osY1 * size);
+            return y;
 
         case 2:
-            return x + (int)((width - osX2) * size);
+            return x + (int)(width * size);
 
         case 3:
-            return y + (int)((height - osY2) * size);
+            return y + (int)(height * size);
 
         default:
             return NULL;
@@ -74,8 +64,8 @@ void Object::LoadBitmap(vector<int>* resource, COLORREF color)
 
 void Object::SetXY(int nx, int ny)
 {
-    x = nx - (int)(osX1 * size);
-    y = ny - (int)(osY1 * size);
+    x = nx;
+    y = ny;
 }
 
 void Object::SetSize(double s)

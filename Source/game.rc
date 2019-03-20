@@ -130,6 +130,25 @@ IDB_P1_WALL0M           BITMAP                  "..\\RES\\player1\\adventurer-wa
 
 IDB_P1_WALL1M           BITMAP                  "..\\RES\\player1\\adventurer-wall-slide-01.bmp"
 
+IDB_P1_ATTACK0          BITMAP                  "..\\RES\\player1\\adventurer-attack1-00.bmp"
+
+IDB_P1_ATTACK1          BITMAP                  "..\\RES\\player1\\adventurer-attack1-01.bmp"
+
+IDB_P1_ATTACK2          BITMAP                  "..\\RES\\player1\\adventurer-attack1-02.bmp"
+
+IDB_P1_ATTACK3          BITMAP                  "..\\RES\\player1\\adventurer-attack1-03.bmp"
+
+IDB_P1_ATTACK4          BITMAP                  "..\\RES\\player1\\adventurer-attack1-04.bmp"
+
+IDB_P1_ATTACK0M         BITMAP                  "..\\RES\\player1\\adventurer-attack1-00(Mirrored).bmp"
+
+IDB_P1_ATTACK1M         BITMAP                  "..\\RES\\player1\\adventurer-attack1-01(Mirrored).bmp"
+
+IDB_P1_ATTACK2M         BITMAP                  "..\\RES\\player1\\adventurer-attack1-02(Mirrored).bmp"
+
+IDB_P1_ATTACK3M         BITMAP                  "..\\RES\\player1\\adventurer-attack1-03(Mirrored).bmp"
+
+IDB_P1_ATTACK4M         BITMAP                  "..\\RES\\player1\\adventurer-attack1-04(Mirrored).bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

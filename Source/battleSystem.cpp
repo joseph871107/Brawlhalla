@@ -29,6 +29,7 @@ void BattleSystem::OnBeginState()
 void BattleSystem::OnMove()							// 移動遊戲元素
 {
     player.OnMove();
+	enemy.OnMove();
     //background.SetXY((int)(-player.GetX1() * 0.3), (int)(-player.GetY1() * 0.2));
     //ground.SetXY((int)(-player.GetX1() * 0.5 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2 + 0.5) + 400, (int)(-player.GetY1() * 0.5 + 0.5) + 600);
 }
@@ -46,28 +47,34 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     TRACE("fileList size : %d\n", fileList.size());
     ShowInitProgress(25);
     /*------------------------------INIT PROGRESS STAGE 3------------------------------*/
-    InitializeCollideArray();							// 初始化所有點陣圖的布林碰撞矩陣
-    TRACE("cArray size : %d\n", cArray.size());
-    ShowInitProgress(50);
+	if (GENERATE_COLLISION_ARRAY) {
+		InitializeCollideArray();							// 初始化所有點陣圖的布林碰撞矩陣
+		TRACE("cArray size : %d\n", cArray.size());
+		ShowInitProgress(50);
+	}
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
     //CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
     ground.LoadBitmap();
-    ground.SetSize(0.65);
+    ground.SetSize(1);
     background.SetSize(0.8);
     background.LoadBitmap(&vector<int> { IDB_BACKGROUND }, RGB(0, 0, 0));
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
-    ground.SetXY(300, 400);
-    ground.SetLen(5);
-    player.Initialize(&ground);
+	ground.SetLen(5);
+	ground.SetXY(300, 400);
+    player.Initialize(&ground,1);
+	enemy.Initialize(&ground,2);
     player.LoadBitmap();
-    //player.SetXY((int)(2000 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2), 400);
+	enemy.LoadBitmap();
+	//player.SetXY((int)(2000 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2), 400);
     ShowInitProgress(100);
 }
 
 void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    player.OnKeyDown(nChar);
+	player.OnKeyDown(nChar);
+	enemy.OnKeyDown(nChar);
+	currentKeydown = nChar;
 }
 
 void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -78,6 +85,7 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
         GotoGameState(GAME_STATE_OVER);	// 關閉遊戲
 
     player.OnKeyUp(nChar);
+	enemy.OnKeyUp(nChar);
 }
 
 void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -90,9 +98,11 @@ void BattleSystem::OnShow()
 {
     background.OnShow();
     char str[80];
-    sprintf(str, "(%d, %d) KeyDown:%d", mousePoint.x, mousePoint.y, currentKeydown);
+	ostringstream oss;
+	oss << hex << currentKeydown;
+    sprintf(str, "(%d, %d) KeyDown:%s", mousePoint.x, mousePoint.y, ("0x"+oss.str()).c_str());
     OnShowText(str, 0, 0, 10);
-    sprintf(str, "Hit ground:%d, Player (x1:%d, y1:%d, x2:%d, y2:%d)", ground.Collision(&cArray.find(IDB_GROUND)->second, 1.0, ground.GetCor(0), ground.GetCor(1), player.GetX1(), player.GetY1()), player.GetX1(), player.GetY1(), player.GetX2(), player.GetY2());
+    sprintf(str, "Hit ground:%d, Player (x1:%d, y1:%d, x2:%d, y2:%d)", (GENERATE_COLLISION_ARRAY?ground.Collision(&cArray.find(IDB_GROUND)->second, 1.0, ground.GetCor(0), ground.GetCor(1), player.GetX1(), player.GetY1()):false), player.GetX1(), player.GetY1(), player.GetX2(), player.GetY2());
     OnShowText(str, 0, 12, 10);
     sprintf(str, "                      , Ground (x1:%d, y1:%d, x2:%d, y2:%d)", ground.GetCor(0), ground.GetCor(1), ground.GetCor(2), ground.GetCor(3));
     OnShowText(str, 0, 24, 10);
@@ -104,6 +114,7 @@ void BattleSystem::OnShow()
     sprintf(str, "Current run time : %f\n", ms / 1000.0);
     OnShowText(str, 0, 48, 20);
     ground.OnShow();
-    player.OnShow();
+	player.OnShow();
+	enemy.OnShow();
 }
 }

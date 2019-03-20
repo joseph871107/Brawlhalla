@@ -13,14 +13,17 @@ const int MOVEMENT_UNIT = 5;
 const double ACCELERATION_UNIT = 0.5;
 const double INITIAL_VELOCITY = 10.0;
 const int OFFSET_INITIAL_VELOCITY = 10;
-const char KEY_A = 0x41;
-const char KEY_D = 0x44;
-const char KEY_L = 0x4C;
-const char KEY_W = 0x57;
-const char KEY_LEFT = 0x25; // keyboard左箭頭
-const char KEY_UP = 0x26; // keyboard上箭頭
-const char KEY_RIGHT = 0x27; // keyboard右箭頭
-const char KEY_DOWN = 0x28; // keyboard下箭頭
+const long KEY_A = 0x41;
+const long KEY_D = 0x44;
+const long KEY_L = 0x4C;
+const long KEY_W = 0x57;
+const long KEY_LEFT = 0x25; // keyboard左箭頭
+const long KEY_UP = 0x26; // keyboard上箭頭
+const long KEY_RIGHT = 0x27; // keyboard右箭頭
+const long KEY_DOWN = 0x28; // keyboard下箭頭
+const long KEY_SPACE = 0x20;
+const long KEY_F = 0x43;
+const long KEY_M = 0xbc;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 
@@ -31,7 +34,7 @@ Player::Player() :
     bmp_iter(vector<vector<int>*>()), _width(int()), _height(int()), _isMovingLeft(bool()),
     _isMovingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
     _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _velocity(int()),
-    _ground(nullptr)
+    _ground(nullptr), _size(double()), _isAttacking(bool()), _keyMode(int()), _keyModeBool(vector<bool>())
 {
     /* Body intentionally empty */
 }
@@ -41,24 +44,28 @@ Player::~Player()
     _ground = nullptr;
 }
 
-void Player::Initialize(Ground* groundPtrValue)
+void Player::Initialize(Ground* groundPtrValue, int i)
 {
     /* Remarks:
     Variables that are later initialized in 'LoadBitmap()'
     'ani', 'currentAni', '_width', '_height', 'bmp_iter' */
-    _x = 600;
+    _x = (int)((groundPtrValue->GetCor(2) + groundPtrValue->GetCor(0)) / 2);
     _y = 100;
+	_size = 2.5;
+	SetKeyMode(i);
     //
+	rl = vector<int> { IDB_P1_RUN0M, IDB_P1_RUN1M, IDB_P1_RUN2M, IDB_P1_RUN3M, IDB_P1_RUN4M, IDB_P1_RUN5M };
     rr = vector<int> { IDB_P1_RUN0, IDB_P1_RUN1, IDB_P1_RUN2, IDB_P1_RUN3, IDB_P1_RUN4, IDB_P1_RUN5 };
-    rl = vector<int> { IDB_P1_RUN0M, IDB_P1_RUN1M, IDB_P1_RUN2M, IDB_P1_RUN3M, IDB_P1_RUN4M, IDB_P1_RUN5M };
+	jl = vector<int> { IDB_P1_JUMP0M, IDB_P1_JUMP1M, IDB_P1_JUMP2M, IDB_P1_JUMP3M };
     jr = vector<int> { IDB_P1_JUMP0, IDB_P1_JUMP1, IDB_P1_JUMP2, IDB_P1_JUMP3 };
-    jl = vector<int> { IDB_P1_JUMP0M, IDB_P1_JUMP1M, IDB_P1_JUMP2M, IDB_P1_JUMP3M };
+	sl = vector<int> { IDB_P1_IDLE0M, IDB_P1_IDLE1M, IDB_P1_IDLE2M };
     sr = vector<int> { IDB_P1_IDLE0, IDB_P1_IDLE1, IDB_P1_IDLE2 };
-    sl = vector<int> { IDB_P1_IDLE0M, IDB_P1_IDLE1M, IDB_P1_IDLE2M };
-    ll = vector<int> { IDB_P1_WALL0, IDB_P1_WALL1};
-    lr = vector<int> { IDB_P1_WALL0M, IDB_P1_WALL1M };
+    ll = vector<int> { IDB_P1_WALL0M, IDB_P1_WALL1M };
+    lr = vector<int> { IDB_P1_WALL0, IDB_P1_WALL1 };
+	al = vector<int> { IDB_P1_ATTACK0M, IDB_P1_ATTACK1M, IDB_P1_ATTACK2M, IDB_P1_ATTACK3M, IDB_P1_ATTACK4M };
+	ar = vector<int> { IDB_P1_ATTACK0, IDB_P1_ATTACK1, IDB_P1_ATTACK2, IDB_P1_ATTACK3, IDB_P1_ATTACK4 };
     //
-    _isMovingLeft = _isMovingRight = _dir = false;
+    _isMovingLeft = _isMovingRight = _isAttacking = _dir = false;
     //
     _isTriggerJump = false;
     ResetJumpCount();
@@ -73,14 +80,16 @@ void Player::Initialize(Ground* groundPtrValue)
 
 void Player::LoadBitmap()
 {
-    AddCAnimation(&rl, 2.5, 7); //ani[0] Run Left
-    AddCAnimation(&rr, 2.5, 7); //ani[1] Run Right
-    AddCAnimation(&jl, 2.5, 7, false); //ani[2] Jump Left
-    AddCAnimation(&jr, 2.5, 7, false); //ani[3] Jump Right
-    AddCAnimation(&sl, 2.5); //ani[4] Stand (Idle) Left
-    AddCAnimation(&sr, 2.5); //ani[5] Stand (Idle) Right
-    AddCAnimation(&ll, 2.5); //ani[6] Lean Left
-    AddCAnimation(&lr, 2.5); //ani[7] Lean Right
+    AddCAnimation(&rl, _size); //ani[0] Run Left
+    AddCAnimation(&rr, _size); //ani[1] Run Right
+    AddCAnimation(&jl, _size, 10, false); //ani[2] Jump Left
+    AddCAnimation(&jr, _size, 10, false); //ani[3] Jump Right
+    AddCAnimation(&sl, _size); //ani[4] Stand (Idle) Left
+    AddCAnimation(&sr, _size); //ani[5] Stand (Idle) Right
+	AddCAnimation(&ll, _size); //ani[6] Lean Left
+	AddCAnimation(&lr, _size); //ani[7] Lean Right
+	AddCAnimation(&al, _size, 4, false); //ani[8] Attack Left
+	AddCAnimation(&ar, _size, 4, false); //ani[9] Attack Right
     //
     _width = ani[0].Width();
     _height = ani[0].Height();
@@ -88,9 +97,20 @@ void Player::LoadBitmap()
 
 void Player::OnShow()
 {
-    if (IsOnGround())
+	if (_isAttacking)
+	{
+		if (_dir) //Player is attacking right
+		{
+			SetAnimationState(9);
+		}
+		else //Player is attcking left
+		{
+			SetAnimationState(8);
+		}
+	}
+    else if (IsOnGround())
     {
-        if (_isMovingLeft || _isMovingRight) //Player is moving
+		if (_isMovingLeft || _isMovingRight) //Player is moving
         {
             if (_dir) //Player is facing right
             {
@@ -144,12 +164,12 @@ void Player::OnMove()
     for (auto i = ani.begin(); i != ani.end(); i++) //For all CAnimation objects in 'ani'
         i->OnMove(); //Proceed to the next CMovingBitmap in the CAnimation 'i'
 
-    if (_isMovingLeft)
+    if (_isMovingLeft && !_isAttacking)
     {
         _x -= MOVEMENT_UNIT;
     }
 
-    if (_isMovingRight)
+    if (_isMovingRight && !_isAttacking)
     {
         _x += MOVEMENT_UNIT;
     }
@@ -161,6 +181,12 @@ void Player::OnMove()
         //Turn off the jump trigger
         _isTriggerJump = false;
     }
+
+	/* ATTACK */
+	if (_isAttacking)
+	{
+		DoAttack();
+	}
 
     /* WALL JUMP */
     if (_isOffsetLeft)
@@ -249,37 +275,71 @@ void Player::OnMove()
     }
 }
 
+void Player::SetSize(double s)
+{
+	_size = s;
+}
+
 void Player::OnKeyDown(const UINT& nChar)
 {
     switch (nChar)
     {
         case KEY_A:
-            _dir = false;
-            _isMovingLeft = true;
+			if(_keyModeBool[0] || _keyModeBool[1]){
+				_dir = false;
+				_isMovingLeft = true;
+			}
             break;
 
         case KEY_D:
-            _dir = true;
-            _isMovingRight = true;
+			if (_keyModeBool[0] || _keyModeBool[1]) {
+				_dir = true;
+				_isMovingRight = true;
+			}
             break;
 
         case KEY_W:
-            _isTriggerJump = true;
+			if (_keyModeBool[0] || _keyModeBool[1]) {
+				_isTriggerJump = true;
+			}
             break;
 
         case KEY_LEFT:
-            _dir = false;
-            _isMovingLeft = true;
+			if (_keyModeBool[0] || _keyModeBool[2]) {
+				_dir = false;
+				_isMovingLeft = true;
+			}
             break;
 
         case KEY_RIGHT:
-            _dir = true;
-            _isMovingRight = true;
-            break;
+			if (_keyModeBool[0] || _keyModeBool[2]) {
+				_dir = true;
+				_isMovingRight = true;
+			}
+			break;
 
-        case KEY_UP:
-            _isTriggerJump = true;
-            break;
+		case KEY_UP:
+			if (_keyModeBool[0] || _keyModeBool[2]) {
+				_isTriggerJump = true;
+			}
+			break;
+
+		case KEY_SPACE:
+			if (_keyModeBool[0])
+				_isTriggerJump = true;
+			break;
+
+		case KEY_F:
+			if (_keyModeBool[0] || _keyModeBool[1]) {
+				_isAttacking = true;
+			}
+			break;
+
+		case KEY_M:
+			if (_keyModeBool[0] || _keyModeBool[2]) {
+				_isAttacking = true;
+			}
+			break;
 
         default:
             break;
@@ -291,24 +351,40 @@ void Player::OnKeyUp(const UINT& nChar)
     switch (nChar)
     {
         case KEY_A:
-            _isMovingLeft = false;
+			if (_keyModeBool[0] || _keyModeBool[1]) {
+				_isMovingLeft = false;
+			}
             break;
 
         case KEY_D:
-            _isMovingRight = false;
+			if (_keyModeBool[0] || _keyModeBool[1]) {
+				_isMovingRight = false;
+			}
             break;
 
         case KEY_LEFT:
-            _isMovingLeft = false;
+			if (_keyModeBool[0] || _keyModeBool[2]) {
+				_isMovingLeft = false;
+			}
             break;
 
         case KEY_RIGHT:
-            _isMovingRight = false;
+			if (_keyModeBool[0] || _keyModeBool[2]) {
+				_isMovingRight = false;
+			}
             break;
 
         default:
             break;
     }
+}
+
+void Player::SetKeyMode(int i)
+{
+	_keyMode = i;
+	for (int i = 0; i < 3;i++)
+		_keyModeBool.push_back(false);
+	_keyModeBool[i] = true;
 }
 
 int Player::GetX1()
@@ -362,8 +438,13 @@ void Player::DoJump()
 
 void Player::DoFall()
 {
-    _velocity += ACCELERATION_UNIT;
-    _y += (int)_velocity;
+	_velocity += ACCELERATION_UNIT;
+	_y += (int)_velocity;
+}
+
+void Player::DoAttack()
+{
+	ResetAttackAnimations();
 }
 
 void Player::DoOnGround()
@@ -417,12 +498,23 @@ bool Player::IsOnRightEdge()
 void Player::ResetJumpAnimations()
 {
     ani[2].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[2]' (which is Jump Left)
-    ani[3].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[2]' (which is Jump Right)
+    ani[3].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[3]' (which is Jump Right)
 }
 
 void Player::ResetJumpCount()
 {
     _jumpCount = 2;
+}
+
+void Player::ResetAttackAnimations()
+{
+	if (ani[8].IsFinalBitmap() || ani[9].IsFinalBitmap())
+	{
+		ani[8].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[8]' (which is Attack Left)
+		ani[9].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[9]' (which is Attack Right)
+		//Turn off the attack trigger
+		_isAttacking = false;
+	}
 }
 
 void Player::AddCAnimation(vector<int>* list, double size, int delay, bool repeat, int times)

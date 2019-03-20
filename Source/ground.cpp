@@ -12,53 +12,54 @@ namespace game_framework
 // CGround : ground class
 /////////////////////////////////////////////////////////////////////////////
 
-Ground::Ground(): bmpID(IDB_GROUND)
+Ground::Ground(): _bmpID(IDB_GROUND)
 {
-    length = 1;
-    size = 1.0;
-    x = y = width = height = 0;
-    osX1 = osY1 = osX2 = osY2 = (int)(10 * size);
+    _length = 1;
+    _size = 1.0;
+    x = y = osX1 = osY1 = osX2 = osY2 = width = height = 0;
 }
 
 int Ground::GetCor(int index)
 {
-    switch (index)
-    {
-        case 0:
-            return x + (int)(osX1 * size);
+	switch (index)
+	{
+	case 0:
+		return x + (int)(osX1 * _size);
 
-        case 1:
-            return y + (int)(osY1 * size);
+	case 1:
+		return y + (int)(osY1 * _size);
 
-        case 2:
-            return x + (int)((width + (length - 2) * 100 - osX2) * size);
+	case 2:
+		return x + (int)((width - osX2) * size);
 
-        case 3:
-            return y + (int)((height - osY2) * size);
+	case 3:
+		return y + (int)((height - osY2) * size);
 
-        default:
-            return 0;
-    }
+	default:
+		return NULL;
+	}
 }
 
 void Ground::LoadBitmap()
 {
-    bmp.LoadBitmap(bmpID, RGB(0, 0, 0));			// 載入地圖的圖形
-    width = bmp.Width();
+    bmp.LoadBitmap(_bmpID, RGB(0, 0, 0));	// 載入地圖的圖形
+    width = bmp.Width() + (_length - 1) * 100;
     height = bmp.Height();
+	osX1 = osY1 = osX2 = osY2 = 5;
     //array = cArray.find(IDB_GROUND)->second;
 }
 
 void Ground::SetLen(int len)
 {
-    length = len;
+    _length = len;
+	width = bmp.Width() + (_length - 1) * 100;
 }
 
 void Ground::OnShow()
 {
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < _length; i++)
     {
-        bmp.SetTopLeft(x + (int)(i * 100 * size), y);
+        bmp.SetTopLeft(x + (int)((i * 100 - osX1) * size), y - (int)(osX2 * size));
         bmp.ShowBitmap(size);
     }
 }

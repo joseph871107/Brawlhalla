@@ -32,7 +32,7 @@ class BattleSystem : public CGameState
         UINT currentKeydown;
 		chrono::time_point<chrono::steady_clock> start;
         Ground ground;
-        Player player;
+        Player player,enemy;
         Object background;
 };
 
