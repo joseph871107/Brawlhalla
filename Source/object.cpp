@@ -15,13 +15,27 @@ namespace game_framework
 Object::Object()
 {
     x = y = width = height = currentAni = 0;
-    size = 1.0;
+    _size = 1.0;
 }
 
 Object::Object(double s)
 {
     x = y = width = height = currentAni = 0;
-    size = s;
+    _size = s;
+}
+
+Object & Object::operator=(const Object & rightObject)
+{
+	if (this != &rightObject)
+	{
+		x = rightObject.x;
+		y = rightObject.y;
+		_size = rightObject._size;
+		width = rightObject.width;
+		height = rightObject.height;
+	}
+
+	return (*this);
 }
 
 Object::~Object()
@@ -47,10 +61,10 @@ int Object::GetCor(int index)
             return y;
 
         case 2:
-            return x + (int)(width * size);
+            return x + (int)(width * _size);
 
         case 3:
-            return y + (int)(height * size);
+            return y + (int)(height * _size);
 
         default:
             return NULL;
@@ -70,7 +84,7 @@ void Object::SetXY(int nx, int ny)
 
 void Object::SetSize(double s)
 {
-    size = s;
+    _size = s;
 }
 
 void Object::OnShow()

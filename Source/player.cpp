@@ -50,8 +50,9 @@ void Player::Initialize(Ground* groundPtrValue, int i)
     /* Remarks:
     Variables that are later initialized in 'LoadBitmap()'
     'ani', 'currentAni', '_width', '_height', 'bmp_iter' */
-    _x = (int)((groundPtrValue->GetCor(2) + groundPtrValue->GetCor(0)) / 2);
-    _y = 100;
+    //_x = (int)((groundPtrValue->GetCor(2) + groundPtrValue->GetCor(0)) / 2);
+	_x = 700;
+	_y = 100;
     _size = 2.5;
     SetKeyMode(i);
     //

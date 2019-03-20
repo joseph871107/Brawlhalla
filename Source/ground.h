@@ -21,9 +21,9 @@ class Ground: public Object
     private:
         CMovingBitmap bmp;
         int _length;												// 長度
-        double _size;											// 大小
         int _bmpID;
 		int osX1,osY1,osX2,osY2;
+		ColArray array;
 };
 }
 

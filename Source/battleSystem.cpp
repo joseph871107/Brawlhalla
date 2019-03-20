@@ -11,7 +11,7 @@ namespace game_framework
 {
 
 	/////////////////////////////////////////////////////////////////////////////
-	// CGround : ground class
+	// BattleSystem class
 	/////////////////////////////////////////////////////////////////////////////
 
 BattleSystem::BattleSystem(CGame* g) : CGameState(g)
@@ -28,7 +28,7 @@ void BattleSystem::OnBeginState()
 	/*------------------------------INIT PROGRESS STAGE 1------------------------------*/
 	start = chrono::high_resolution_clock::now();
 	_secPerRound = 180;
-	ground.SetXY(300, 400);
+	ground.SetXY(500, 400);
 	player.Initialize(&ground, 1);
 	enemy.Initialize(&ground, 2);
 
@@ -108,7 +108,7 @@ void BattleSystem::OnShow()
 	oss << hex << currentKeydown;
     sprintf(str, "(%d, %d) KeyDown:%s", mousePoint.x, mousePoint.y, ("0x"+oss.str()).c_str());
     OnShowText(str, 0, 0, 10);
-    sprintf(str, "Hit ground:%d, Player (x1:%d, y1:%d, x2:%d, y2:%d)", (GENERATE_COLLISION_ARRAY?ground.Collision(&cArray.find(IDB_GROUND)->second, 1.0, ground.GetCor(0), ground.GetCor(1), player.GetX1(), player.GetY1()):false), player.GetX1(), player.GetY1(), player.GetX2(), player.GetY2());
+    sprintf(str, "Hit ground:%d, Player (x1:%d, y1:%d, x2:%d, y2:%d)", (GENERATE_COLLISION_ARRAY?ground.Collision(&cArray.find(IDB_P1_RUN0)->second, 1.0, ground.GetCor(0), ground.GetCor(1), player.GetX1(), player.GetY1()):false), player.GetX1(), player.GetY1(), player.GetX2(), player.GetY2());
     OnShowText(str, 0, 12, 10);
     sprintf(str, "                      , Ground (x1:%d, y1:%d, x2:%d, y2:%d)", ground.GetCor(0), ground.GetCor(1), ground.GetCor(2), ground.GetCor(3));
     OnShowText(str, 0, 24, 10);
@@ -117,7 +117,7 @@ void BattleSystem::OnShow()
 	sprintf(str, "%d", GetCurrenRemainTime() / 60);
 	sprintf(str2, "%d", GetCurrenRemainTime() % 60);
     sprintf(str, "Remain Time : %s : %s\n", (GetCurrenRemainTime() /600==0?("0"+(string)str).c_str() : str), ((GetCurrenRemainTime() % 60)/10 == 0 ? ("0" + (string)str2).c_str():str2));
-    OnShowText(str, 500, 0, 30);
+    OnShowText(str, 650, 0, 30);
 	//------------------End of Test Text------------------//
     ground.OnShow();
 	enemy.OnShow();

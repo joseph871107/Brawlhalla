@@ -16,6 +16,7 @@ class Object
     public:
         Object();
         Object(double);
+		Object& operator=(const Object& rightObject);
 		~Object();
         void OnShow();											// 將圖形貼到畫面
         void SetXY(int nx, int ny);								// 設定物件的座標
@@ -31,7 +32,7 @@ class Object
     protected:
         int x, y;												// 物件的座標
         int width, height;										// 物件的長寬
-        double size;											// 物件的大小
+        double _size;											// 物件的大小
         ColArray array;											// 碰撞矩陣
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 	private:

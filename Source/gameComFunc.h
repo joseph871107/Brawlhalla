@@ -15,6 +15,17 @@ struct ColArray
     int height;
     string fileName;
     vector<vector<bool>> pixel;
+	ColArray& operator=(const ColArray& rightObject)
+	{
+		if (this != &rightObject)
+		{
+			width  = rightObject.width;
+			height  = rightObject.height;
+			fileName  = rightObject.fileName;
+			pixel = rightObject.pixel;
+		}
+		return (*this);
+	}
 };
 
 struct ColBmp
