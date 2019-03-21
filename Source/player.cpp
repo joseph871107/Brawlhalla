@@ -10,10 +10,10 @@ namespace game_framework
 {
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MAX_JUMP_COUNT = 2;
-const int MOVEMENT_UNIT = 8;
-const double ACCELERATION_UNIT = 1.5;
-const double INITIAL_VELOCITY = 20.0;
-const int OFFSET_INITIAL_VELOCITY = 20;
+const int MOVEMENT_UNIT = 7;
+const double ACCELERATION_UNIT = 0.2;
+const double INITIAL_VELOCITY = 8;
+const int OFFSET_INITIAL_VELOCITY = 5;
 const long KEY_A = 0x41;
 const long KEY_D = 0x44;
 const long KEY_L = 0x4C;
@@ -25,8 +25,16 @@ const long KEY_DOWN = 0x28; // keyboard§UΩb¿Y
 const long KEY_SPACE = 0x20;
 const long KEY_C = 0x43;
 const long KEY_COMMA = 0xbc;
+const double COLLISION_ERRORS = 1.0;
+const int _OFFSET_X = 20;
+const int _OFFSET_Y = 7;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
+
+int _round(double i)
+{
+    return (int)(i - 0.5);
+}
 
 Player::Player() :
     _x(int()), _y(int()), ani(vector<CAnimation>()), currentAni(int()),
@@ -35,24 +43,24 @@ Player::Player() :
     bmp_iter(vector<vector<int>*>()), _width(int()), _height(int()), _isMovingLeft(bool()),
     _isMovingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
     _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _velocity(int()),
-    _ground(nullptr), _size(double()), _isAttacking(bool()), _keyMode(int()), _keyModeBool(vector<bool>())
+    _ground(vector<Ground*>()), _size(double()), _isAttacking(bool()), _keyMode(int()), _keyModeBool(vector<bool>())
+    , _collision_box(CMovingBitmap())
 {
     /* Body intentionally empty */
 }
 
 Player::~Player()
 {
-    _ground = nullptr;
 }
 
-void Player::Initialize(Ground* groundPtrValue, int i)
+void Player::Initialize(vector<Ground*> groundPtrValue, int i)
 {
     /* Remarks:
     Variables that are later initialized in 'LoadBitmap()'
     'ani', 'currentAni', '_width', '_height', 'bmp_iter' */
     //_x = (int)((groundPtrValue->GetCor(2) + groundPtrValue->GetCor(0)) / 2);
-	_x = 700;
-	_y = 100;
+    _x = 700;
+    _y = 100;
     _size = 2.5;
     SetKeyMode(i);
     //
@@ -92,9 +100,10 @@ void Player::LoadBitmap()
     AddCAnimation(&lr, _size); //ani[7] Lean Right
     AddCAnimation(&al, _size, 4, false); //ani[8] Attack Left
     AddCAnimation(&ar, _size, 4, false); //ani[9] Attack Right
-    //
-    _width = ani[0].Width();
-    _height = ani[0].Height();
+    // End of Animation Initialization
+    _collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
+    _width = (int)(_collision_box.Width() * _size);
+    _height = (int)(_collision_box.Height() * _size);
 }
 
 void Player::OnShow()
@@ -159,15 +168,85 @@ void Player::OnShow()
     }
 
     ShowAnimation();
-	char str[80];
-	sprintf(str, "Player%d", _keyMode);
-	OnShowText(str, GetX1()+_width/4, GetY2(), 20);
+
+    // For showing the "name tag"
+    if (_PLAYER_DEBUG)
+    {
+        char str[80];
+        sprintf(str, "Player%d", _keyMode);
+        OnShowText(str, GetCor(0) - 10, GetCor(3), 15);
+    }
 }
 
 void Player::OnMove()
 {
     for (auto i = ani.begin(); i != ani.end(); i++) //For all CAnimation objects in 'ani'
         i->OnMove(); //Proceed to the next CMovingBitmap in the CAnimation 'i'
+
+    /* PLAYER - GROUND */
+    int playerX1 = GetCor(0);
+    int playerY1 = GetCor(1);
+    int playerX2 = GetCor(2);
+    int playerY2 = GetCor(3);
+
+    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+    {
+        int groundX1 = (*i)->GetCor(0);
+        int groundY1 = (*i)->GetCor(1);
+        int groundX2 = (*i)->GetCor(2);
+        int groundY2 = (*i)->GetCor(3);
+
+        if (!((playerY2 <= groundY1) || (playerY1 >= groundY2))) //If in y-coordinate intersection range
+        {
+            if ((playerX1 < groundX1) && (groundX1 < playerX2) && (playerX2 < groundX2)) //Out on the left
+            {
+                _x = groundX1 - _width;
+                DoFall();
+            }
+            else if ((groundX1 < playerX1) && (playerX1 < groundX2) && (groundX2 < playerX2)) //Out on the right
+            {
+                _x = groundX2;
+                DoFall();
+            }
+            else if ((IsOnLeftEdge() || IsOnRightEdge()) && !IsOnGround())
+            {
+                DoOnEdge();
+            }
+            else if ((groundX1 <= playerX1) && (playerX2 <= groundX2))   //If in ground x-coordinate range
+            {
+                if ((groundY1 - playerY1 < COLLISION_ERRORS) && (playerY1 - groundY2 < COLLISION_ERRORS) && (groundY2 - playerY2 < COLLISION_ERRORS)) //If the player is trying to jump up from beneath the ground, then denies it
+                {
+                    _y = groundY2;
+                    DoFall();
+                }
+                else   //If the player is falling down onto the ground, then make him stand firmly on the ground
+                {
+                    _y = groundY1 - _height;
+                    DoOnGround();
+                }
+            }
+            else //If completely outside the ground
+            {
+                DoFall();
+            }
+        }
+        else if (playerY2 == groundY1) //If the player has already standed firmly on the ground
+        {
+            if ((groundX1 <= playerX1) && (playerX2 <= groundX2))
+            {
+                _y = groundY1 - _height;
+                DoOnGround();
+            }
+            else
+            {
+                DoFall();
+            }
+        }
+        else //If neither in y-coordinate intersection range nor on the ground
+        {
+            DoFall();
+        }
+    }
 
     if (_isMovingLeft && !_isAttacking)
     {
@@ -219,69 +298,9 @@ void Player::OnMove()
         }
     }
 
-    /* PLAYER - GROUND */
-    int playerX1 = GetX1();
-    int playerY1 = GetY1();
-    int playerX2 = GetX2();
-    int playerY2 = GetY2();
-    int groundX1 = _ground->GetCor(0);
-    int groundY1 = _ground->GetCor(1);
-    int groundX2 = _ground->GetCor(2);
-    int groundY2 = _ground->GetCor(3);
-
-    if (!((playerY2 <= groundY1) || (playerY1 >= groundY2))) //If in y-coordinate intersection range
-    {
-        if ((playerX1 < groundX1) && (groundX1 < playerX2) && (playerX2 < groundX2)) //Out on the left
-        {
-            _x = groundX1 - _width;
-            DoFall();
-        }
-        else if ((groundX1 < playerX1) && (playerX1 < groundX2) && (groundX2 < playerX2)) //Out on the right
-        {
-            _x = groundX2;
-            DoFall();
-        }
-        else if (IsOnLeftEdge() || IsOnRightEdge())
-        {
-            DoOnEdge();
-        }
-        else if ((groundX1 <= playerX1) && (playerX2 <= groundX2))   //If in ground x-coordinate range
-        {
-            if ((groundY1 < playerY1) && (playerY1 < groundY2) && (groundY2 < playerY2)) //If the player is trying to jump up from beneath the ground, then denies it
-            {
-                _y = groundY2;
-                DoFall();
-            }
-            else   //If the player is falling down onto the ground, then make him stand firmly on the ground
-            {
-                _y = groundY1 - _height;
-                DoOnGround();
-            }
-        }
-        else //If completely outside the ground
-        {
-            DoFall();
-        }
-    }
-    else if (playerY2 == groundY1) //If the player has already standed firmly on the ground
-    {
-        if ((groundX1 <= playerX1) && (playerX2 <= groundX2))
-        {
-            DoOnGround();
-        }
-        else
-        {
-            DoFall();
-        }
-    }
-    else //If neither in y-coordinate intersection range nor on the ground
-    {
-        DoFall();
-    }
-
     /* FALL OFF THE MAP */
 
-    if (GetY1() > 1000) //If the player is out of the screen, then he will be set on the highest position
+    if (GetCor(1) > 1000) //If the player is out of the screen, then he will be set on the highest position
     {
         _y = 0;
         _velocity = INITIAL_VELOCITY;
@@ -427,24 +446,25 @@ void Player::SetKeyMode(int i)
     _keyModeBool[i] = true;
 }
 
-int Player::GetX1()
+int Player::GetCor(int index)
 {
-    return (_x);
-}
+    switch (index)
+    {
+        case 0:
+            return _x;
 
-int Player::GetY1()
-{
-    return (_y);
-}
+        case 1:
+            return _y;
 
-int Player::GetX2()
-{
-    return (_x + _width);
-}
+        case 2:
+            return _x + (int)(_collision_box.Width() * _size);
 
-int Player::GetY2()
-{
-    return (_y + _height);
+        case 3:
+            return _y + (int)(_collision_box.Height() * _size) ;
+
+        default:
+            return NULL;
+    }
 }
 
 int Player::ShowAnimationState()
@@ -457,7 +477,7 @@ void Player::DoJump()
     if (_jumpCount > 0)   //If the player is able to jump more
     {
         _velocity = -INITIAL_VELOCITY;
-        _y -= (int)INITIAL_VELOCITY;
+        _y -= _round(INITIAL_VELOCITY);
 
         //Wall Jump
         if (IsOnLeftEdge())
@@ -479,7 +499,9 @@ void Player::DoJump()
 void Player::DoFall()
 {
     _velocity += ACCELERATION_UNIT;
-    _y += (int)_velocity;
+    //for (int i = 0; i < (int)_velocity;i++) {
+    _y += _round(_velocity) ;
+    //}
 }
 
 void Player::DoAttack()
@@ -497,42 +519,69 @@ void Player::DoOnGround()
 void Player::DoOnEdge()
 {
     _velocity += ACCELERATION_UNIT;
-    _y += (int)_velocity;
+    _y += _round(_velocity);
     ResetJumpCount();
     ResetJumpAnimations();
 }
 
 bool Player::IsOnGround()
 {
-    int playerY2 = GetY2();
-    int groundY1 = _ground->GetCor(1);
-    return (playerY2 == groundY1);
+    int playerX1 = GetCor(0);
+    int playerY1 = GetCor(1);
+    int playerX2 = GetCor(2);
+    int playerY2 = GetCor(3);
+
+    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+    {
+        int groundX1 = (*i)->GetCor(0), groundX2 = (*i)->GetCor(2), groundY1 = (*i)->GetCor(1);
+
+        if (abs(playerY2 - groundY1) <= COLLISION_ERRORS && playerX1 >= groundX1 && playerX2 <= groundX2)
+            return true;
+    }
+
+    return false;
 }
 
 bool Player::IsOnLeftEdge()
 {
-    int playerX1 = GetX1();
-    int playerY1 = GetY1();
-    int playerX2 = GetX2();
-    int playerY2 = GetY2();
-    int groundX1 = _ground->GetCor(0);
-    int groundY1 = _ground->GetCor(1);
-    int groundX2 = _ground->GetCor(2);
-    int groundY2 = _ground->GetCor(3);
-    return ((!((playerY2 <= groundY1) || (playerY1 >= groundY2))) && (_x == groundX1 - _width));
+    int playerX1 = GetCor(0);
+    int playerY1 = GetCor(1);
+    int playerX2 = GetCor(2);
+    int playerY2 = GetCor(3);
+
+    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+    {
+        int groundX1 = (*i)->GetCor(0);
+        int groundY1 = (*i)->GetCor(1);
+        int groundX2 = (*i)->GetCor(2);
+        int groundY2 = (*i)->GetCor(3);
+
+        if (((playerY2 - groundY1 >= COLLISION_ERRORS) && (playerY1 - groundY2 <= COLLISION_ERRORS)) && (_x == groundX1 - _width))
+            return true;
+    }
+
+    return false;
 }
 
 bool Player::IsOnRightEdge()
 {
-    int playerX1 = GetX1();
-    int playerY1 = GetY1();
-    int playerX2 = GetX2();
-    int playerY2 = GetY2();
-    int groundX1 = _ground->GetCor(0);
-    int groundY1 = _ground->GetCor(1);
-    int groundX2 = _ground->GetCor(2);
-    int groundY2 = _ground->GetCor(3);
-    return ((!((playerY2 <= groundY1) || (playerY1 >= groundY2))) && (_x == groundX2));
+    int playerX1 = GetCor(0);
+    int playerY1 = GetCor(1);
+    int playerX2 = GetCor(2);
+    int playerY2 = GetCor(3);
+
+    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+    {
+        int groundX1 = (*i)->GetCor(0);
+        int groundY1 = (*i)->GetCor(1);
+        int groundX2 = (*i)->GetCor(2);
+        int groundY2 = (*i)->GetCor(3);
+
+        if ((playerY2 - groundY1 >= COLLISION_ERRORS) && (playerY1 - groundY2 <= COLLISION_ERRORS) && (_x == groundX2))
+            return true;
+    }
+
+    return false;
 }
 
 void Player::ResetJumpAnimations()
@@ -587,7 +636,14 @@ void Player::SetAnimationState(int num)
 void Player::ShowAnimation()
 {
     vector<CAnimation>::iterator ani_iter = ani.begin() + currentAni;
-    ani_iter->SetTopLeft(_x, _y);
+    ani_iter->SetTopLeft(_x - (int)(_OFFSET_X * _size), _y - (int)(_OFFSET_Y * _size));	//just for showing
+
+    if (_PLAYER_DEBUG)
+    {
+        _collision_box.SetTopLeft(_x, _y);		//actual player blocks
+        _collision_box.ShowBitmap(_size);
+    }
+
     ani_iter->OnShow();
 }
 

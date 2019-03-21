@@ -175,6 +175,30 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 IDR_MAINFRAME           BITMAP                  "..\\res\\Toolbar.bmp"
 
+IDB_P1_TEST         	BITMAP                  "..\\RES\\player1\\player1_collision.bmp"
+
+IDB_NUM0         		BITMAP                  "..\\RES\\Numbers\\0.bmp"
+
+IDB_NUM1         		BITMAP                  "..\\RES\\Numbers\\1.bmp"
+
+IDB_NUM2         		BITMAP                  "..\\RES\\Numbers\\2.bmp"
+
+IDB_NUM3         		BITMAP                  "..\\RES\\Numbers\\3.bmp"
+
+IDB_NUM4         		BITMAP                  "..\\RES\\Numbers\\4.bmp"
+
+IDB_NUM5          		BITMAP                  "..\\RES\\Numbers\\5.bmp"
+
+IDB_NUM6          		BITMAP                  "..\\RES\\Numbers\\6.bmp"
+
+IDB_NUM7         		BITMAP                  "..\\RES\\Numbers\\7.bmp"
+
+IDB_NUM8          		BITMAP                  "..\\RES\\Numbers\\8.bmp"
+
+IDB_NUM9          		BITMAP                  "..\\RES\\Numbers\\9.bmp"
+
+IDB_NUM_MINUS         	BITMAP                  "..\\RES\\Numbers\\minus.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -7,7 +7,7 @@
 namespace game_framework
 {
 /////////////////////////////////////////////////////////////////////////////
-// 回合 class
+// BattleSystem class
 /////////////////////////////////////////////////////////////////////////////
 
 extern map<string, int> idbList;
@@ -26,15 +26,15 @@ class BattleSystem : public CGameState
         void OnMouseMove(UINT, CPoint);					// 滑鼠移動
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
-		int GetCurrenRemainTime();
+        int GetCurrenRemainTime();
     private:
-		int _secPerRound;
-		CPoint mousePoint;
+        int _secPerRound;
+        CPoint mousePoint;
         UINT currentKeydown;
-		chrono::time_point<chrono::steady_clock> start;
-        Ground ground;
-        Player player,enemy;
-        Object background;
+        chrono::time_point<chrono::steady_clock> start;
+        vector<Ground*> _ground;
+		Object background;
+        Player player1, player2;
 };
 
 }

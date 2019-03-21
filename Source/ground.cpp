@@ -9,51 +9,49 @@
 namespace game_framework
 {
 /////////////////////////////////////////////////////////////////////////////
-// CGround : ground class
+// Ground class
 /////////////////////////////////////////////////////////////////////////////
 
-Ground::Ground(): _bmpID(IDB_GROUND)
+Ground::Ground()
 {
     _length = 1;
-    _size = 1.0;
-    x = y = osX1 = osY1 = osX2 = osY2 = width = height = 0;
+    osX1 = osY1 = osX2 = osY2 = 4;
+    _bmpID = IDB_GROUND;
+    _color = RGB(0, 0, 0);
 }
 
 int Ground::GetCor(int index)
 {
-	switch (index)
-	{
-	case 0:
-		return x + (int)(osX1 * _size);
+    switch (index)
+    {
+        case 0:
+            return x + (int)(osX1 * _size);
 
-	case 1:
-		return y + (int)(osY1 * _size);
+        case 1:
+            return y + (int)(osY1 * _size);
 
-	case 2:
-		return x + (int)((width - osX2) * _size);
+        case 2:
+            return x + (int)((width - osX2) * _size);
 
-	case 3:
-		return y + (int)((height - osY2) * _size);
+        case 3:
+            return y + (int)((height - osY2) * _size);
 
-	default:
-		return NULL;
-	}
+        default:
+            return NULL;
+    }
 }
 
 void Ground::LoadBitmap()
 {
-    bmp.LoadBitmap(_bmpID, RGB(0, 0, 0));	// 載入地圖的圖形
+    bmp.LoadBitmap(_bmpID, _color);	// 載入地圖的圖形
     width = bmp.Width() + (_length - 1) * 100;
     height = bmp.Height();
-	osX1 = osY1 = osX2 = osY2 = 5;
-	if (GENERATE_COLLISION_ARRAY)
-		array = cArray.find(IDB_GROUND)->second;
 }
 
 void Ground::SetLen(int len)
 {
     _length = len;
-	width = bmp.Width() + (_length - 1) * 100;
+    width = bmp.Width() + (_length - 1) * 100;
 }
 
 void Ground::OnShow()
@@ -63,69 +61,5 @@ void Ground::OnShow()
         bmp.SetTopLeft(x + (int)((i * 100 - osX1) * _size), y - (int)(osX2 * _size));
         bmp.ShowBitmap(_size);
     }
-}
-
-bool GetInters(vector<vector<bool>> a, vector<vector<bool>> b, int aXS, int aYS, int bXS, int bYS, int width, int height)
-{
-    bool xb = width > height;
-    int minV = (!xb ? width : height);
-    int maxV = (xb ? width : height);
-
-    for (int i = 0; i < (int)(minV / 2); i++)//scan boarder of the rectangle by decendent
-    {
-        if (xb)
-        {
-            for (int j = i; j < maxV - i; j++) //scan the left and right sides of rectangle
-            {
-                if ((a[aXS + j][aYS] && b[bXS + j][bYS]) || (a[aXS + j][aYS + height] && b[bXS + j][bYS + height]))
-                    return true;
-            }
-
-            for (int j = i; j < minV - i; j++) //scan the top and bottom sides of rectangle
-            {
-                if ((a[aXS][aYS + j] && b[bXS][bYS + j]) || (a[aXS + width][aYS + j] && b[bXS + height][bYS + j]))
-                    return true;
-            }
-        }
-        else
-        {
-            for (int j = i; j < maxV - i; j++) //scan the top and bottom sides of rectangle
-            {
-                if ((a[aXS][aYS + j] && b[bXS][bYS + j]) || (a[aXS + height][aYS + j] && b[bXS + height][bYS + j]))
-                    return true;
-            }
-
-            for (int j = i; j < minV - i; j++) //scan the left and right sides of rectangle
-            {
-                if ((a[aXS + j][aYS] && b[bXS + j][bYS]) || (a[aXS + j][aYS + width] && b[bXS + j][bYS + height]))
-                    return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-bool Ground::Collision(ColArray* other, double bSize, int tx, int ty, int ox, int oy)
-{
-    
-	int offsetX = (int)((ox - tx) / 4);
-	int offsetY = (int)((oy - ty) / 4);
-	int aH = (int)(array.pixel.size() * _size);
-	int aW = (int)(array.pixel.begin()->size() * _size);
-	int bH = other->pixel.size();
-	int bW = other->pixel[0].size();
-    if ((tx + (int)(aH * 4) < ox || ty + (int)(aW * 4) < oy || ox + (int)(bH * 4 * bSize) < tx || oy + (int)(bW * 4 * bSize) < ty))         // This checks if the sprites aren't close to each other.
-    	return false;
-    int aXS, aYS, bXS, bYS, interW, interH;
-    aXS = (offsetX > 0 ? offsetX - 1 : 0);
-    aYS = (offsetY > 0 ? offsetY - 1 : 0);
-    bXS = (offsetX > 0 ? 0 : -offsetX - 1);
-    bYS = (offsetY > 0 ? 0 : -offsetY - 1);
-    interW = (offsetX > 0 ? aW - offsetX : bW + offsetX);
-    interH = (offsetY > 0 ? aH - offsetY : bH + offsetY);
-    TRACE("aW : %d, aH : %d, bW : %d, bH : %d, aXS : %d, aYS : %d, bXS : %d, bYS : %d, interW : %d, interH : %d\n",aW,aH,bW,bH,aXS,aYS,bXS,bYS,interW,interH);
-    return GetInters(array.pixel, other->pixel, aXS, aYS, bXS, bYS, interW, interH);
-    return false;
 }
 }

@@ -315,9 +315,8 @@ void CAnimation::SetRepeat(bool rt)
 CMovingBitmap CInteger::digit[11];
 
 CInteger::CInteger(int digits)
-    : NUMDIGITS(digits)
+    : NUMDIGITS(digits), _size(1.0)
 {
-    isBmpLoaded = false;
 }
 
 void CInteger::Add(int x)
@@ -335,12 +334,15 @@ void CInteger::LoadBitmap()
     //
     // digit[i]為class varibale，所以必須避免重複LoadBitmap
     //
-    //if (!isBmpLoaded) {
-    //	int d[11]={IDB_0,IDB_1,IDB_2,IDB_3,IDB_4,IDB_5,IDB_6,IDB_7,IDB_8,IDB_9,IDB_MINUS};
-    //	for (int i=0; i < 11; i++)
-    //		digit[i].LoadBitmap(d[i],RGB(255,255,255));
-    //	isBmpLoaded = true;
-    //}
+    if (!isBmpLoaded)
+    {
+        int d[11] = {IDB_NUM0, IDB_NUM1, IDB_NUM2, IDB_NUM3, IDB_NUM4, IDB_NUM5, IDB_NUM6, IDB_NUM7, IDB_NUM8, IDB_NUM9, IDB_NUM_MINUS};
+
+        for (int i = 0; i < 11; i++)
+            digit[i].LoadBitmap(d[i], RGB(0, 0, 0));
+
+        isBmpLoaded = true;
+    }
 }
 
 void CInteger::SetInteger(int i)
@@ -363,12 +365,12 @@ void CInteger::ShowBitmap()
     if (n >= 0)
     {
         MSB = n;
-        nx = x + digit[0].Width() * (NUMDIGITS - 1);
+        nx = x + (int)(digit[0].Width() * (NUMDIGITS - 1) * _size);
     }
     else
     {
         MSB = -n;
-        nx = x + digit[0].Width() * NUMDIGITS;
+        nx = x + (int)(digit[0].Width() * NUMDIGITS * _size);
     }
 
     for (int i = 0; i < NUMDIGITS; i++)
@@ -376,15 +378,20 @@ void CInteger::ShowBitmap()
         int d = MSB % 10;
         MSB /= 10;
         digit[d].SetTopLeft(nx, y);
-        digit[d].ShowBitmap();
-        nx -= digit[d].Width();
+        digit[d].ShowBitmap(_size);
+        nx -= (int)(digit[d].Width() * _size);
     }
 
     if (n < 0)   // 如果小於0，則顯示負號
     {
         digit[10].SetTopLeft(nx, y);
-        digit[10].ShowBitmap();
+        digit[10].ShowBitmap(_size);
     }
+}
+
+void CInteger::SetSize(double size)
+{
+    _size = size;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -589,7 +596,8 @@ CGame::~CGame()
 {
     for (int i = 0; i < NUM_GAME_STATES; i++)
         delete gameStateTable[i];
-	gameState = NULL;
+
+    gameState = NULL;
 }
 
 CGame* CGame::Instance()

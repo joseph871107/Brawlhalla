@@ -231,7 +231,7 @@ class CAnimation
         //Operator overloading function of the assignment operator
 
         CAnimation(int = 10);							// Constructor (預設動畫播放頻率每1/3秒換一張圖)
-		CAnimation(bool rt, int = 1, int = 10);			// Constructor (預設動畫播放頻率每1/3秒換一張圖)
+        CAnimation(bool rt, int = 1, int = 10);			// Constructor (預設動畫播放頻率每1/3秒換一張圖)
         void  AddBitmap(int, COLORREF = CLR_INVALID);
         // 增加一張圖形至動畫(圖的編號及透明色)
         void  AddBitmap(char*, COLORREF = CLR_INVALID);
@@ -279,12 +279,14 @@ class CInteger
         void SetInteger(int);		// 設定整數值
         void SetTopLeft(int, int);	// 將動畫的左上角座標移至 (x,y)
         void ShowBitmap();			// 將動畫貼到螢幕
+        void SetSize(double);
     private:
         const int NUMDIGITS;			// 共顯示NUMDIGITS個位數
         static CMovingBitmap digit[11]; // 儲存0..9及負號之圖形(bitmap)
         int x, y;						// 顯示的座標
         int n;							// 整數值
         bool isBmpLoaded;				// 是否已經載入圖形
+        double _size;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -304,7 +306,7 @@ class CGameStateOver;
 class CGameState
 {
     public:
-		CGameState(CGame* g);
+        CGameState(CGame* g);
         void OnDraw();			// Template Method
         void OnCycle();			// Template Method
         //
