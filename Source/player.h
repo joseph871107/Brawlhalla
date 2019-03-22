@@ -14,18 +14,20 @@ class Player
         ~Player();						//Destructor
 
         //Required for Game Framework
-        void Initialize(vector<Ground*> groundPtrValue, string nameValue, int = 0);
+        void Initialize(vector<Ground*> groundPtrValue, vector<Player*>* playerPtrValue, string nameValue, int = 0);
         void LoadBitmap();
         void OnShow();
         void OnMove();
         void OnKeyDown(const UINT& nChar);
         void OnKeyUp(const UINT& nChar);
-		void SetKeyMode(int = 0);
-		void SetWeapon(bool);
 
         //Others
-        void SetKeyMode(int = 0);
+		void SetKeyMode(int = 0);
+		int GetKeyMode();
+		void SetHoldWeapon(bool);
+		bool GetHoldWeapon();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
+		string GetName();
         int ShowAnimationState();		// Return which CAnimation is playing
         bool IsOutOfLife();
         const int& GetLife() const;
@@ -34,7 +36,7 @@ class Player
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
         //Movements
-        void DoJump();
+        void DoJump(int = 0);
         void DoFall();
         void DoAttack();
         void DoOnGround();
@@ -60,6 +62,7 @@ class Player
         int _x, _y; //The position of the collision's box
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
+		//bool _beInterrupt;
 
         //Bitmaps
         vector<int> rl;	// bmps of running left
@@ -70,8 +73,12 @@ class Player
         vector<int> sr;	// bmps of standing right
         vector<int> ll; // bmps of leaning left
         vector<int> lr; // bmps of leaning right
-        vector<int> al; // bmps of attacking left
-        vector<int> ar; // bmps of attacking right
+		vector<int> al; // bmps of attacking left
+		vector<int> ar; // bmps of attacking right
+		vector<int> sdl;// bmps of drawing sword left
+		vector<int> sdr;// bmps of drawing sword right
+		vector<int> s2l;// bmps of standing left with sword
+		vector<int> s2r;// bmps of standing right with sword
         vector<vector<int>*> bmp_iter;
 
         //Required for "physical" existence in the game
@@ -93,7 +100,10 @@ class Player
 
 		//[Attribute] Attack
 		bool _isHoldingWeapon;
+		bool _isDrawingWeapon;
         bool _isAttacking;
+		bool HitPlayer(Player*);
+		vector<Player*>* _player;
 
         //Required for a jump simulating the physical world
         double _velocity;

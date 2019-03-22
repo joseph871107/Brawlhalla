@@ -21,6 +21,7 @@ class Weapon : public Object
         void LoadBitmap();
         void Initialize(vector<Ground*>, vector<Player*>);
 		Player* HitPlayer();
+		bool HasTaken();
     private:
         CMovingBitmap bmp;
         int _bmpID;
@@ -29,7 +30,6 @@ class Weapon : public Object
 		Ground* _ground;
 		vector<Player*> _player;
         bool _isHolding;
-		int _flasingPtr;
 };
 }
 

@@ -150,6 +150,38 @@ IDB_P1_ATTACK3M         BITMAP                  "..\\RES\\player1\\adventurer-at
 
 IDB_P1_ATTACK4M         BITMAP                  "..\\RES\\player1\\adventurer-attack1-04(Mirrored).bmp"
 
+IDB_P1_SWD_DWR0         BITMAP                  "..\\RES\\player1\\adventurer-swrd-drw-00.bmp"
+
+IDB_P1_SWD_DWR1         BITMAP                  "..\\RES\\player1\\adventurer-swrd-drw-01.bmp"
+
+IDB_P1_SWD_DWR2         BITMAP                  "..\\RES\\player1\\adventurer-swrd-drw-02.bmp"
+
+IDB_P1_SWD_DWR3         BITMAP                  "..\\RES\\player1\\adventurer-swrd-drw-03.bmp"
+
+IDB_P1_SWD_DWR0M        BITMAP                  "..\\RES\\player1\\adventurer-swrd-drw-00(Mirrored).bmp"
+
+IDB_P1_SWD_DWR1M        BITMAP                  "..\\RES\\player1\\adventurer-swrd-drw-01(Mirrored).bmp"
+
+IDB_P1_SWD_DWR2M        BITMAP                  "..\\RES\\player1\\adventurer-swrd-drw-02(Mirrored).bmp"
+
+IDB_P1_SWD_DWR3M        BITMAP                  "..\\RES\\player1\\adventurer-swrd-drw-03(Mirrored).bmp"
+
+IDB_P1_IDLE2_0          BITMAP                  "..\\RES\\player1\\adventurer-idle-2-00.bmp"
+
+IDB_P1_IDLE2_1          BITMAP                  "..\\RES\\player1\\adventurer-idle-2-01.bmp"
+
+IDB_P1_IDLE2_2          BITMAP                  "..\\RES\\player1\\adventurer-idle-2-02.bmp"
+
+IDB_P1_IDLE2_3          BITMAP                  "..\\RES\\player1\\adventurer-idle-2-03.bmp"
+
+IDB_P1_IDLE2_0M         BITMAP                  "..\\RES\\player1\\adventurer-idle-2-00(Mirrored).bmp"
+
+IDB_P1_IDLE2_1M         BITMAP                  "..\\RES\\player1\\adventurer-idle-2-01(Mirrored).bmp"
+
+IDB_P1_IDLE2_2M         BITMAP                  "..\\RES\\player1\\adventurer-idle-2-02(Mirrored).bmp"
+
+IDB_P1_IDLE2_3M         BITMAP                  "..\\RES\\player1\\adventurer-idle-2-03(Mirrored).bmp"
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Cursor

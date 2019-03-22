@@ -13,13 +13,14 @@ namespace game_framework
 /////////////////////////////////////////////////////////////////////////////
 
 const double ACCELERATION_UNIT = 0.8;
-const int FLASHING[5] = { 4,3,2,1,0 };
 Weapon::Weapon()
 {
     _bmpID = IDB_WEAPON_FALLING;
     _color = RGB(0, 255, 0);
     _velocity = 0;
+	_size = 0.2;
     _isHolding = false;
+	LoadBitmap();
 }
 
 void Weapon::LoadBitmap()
@@ -46,6 +47,11 @@ Player * Weapon::HitPlayer()
 	return nullptr;
 }
 
+bool Weapon::HasTaken()
+{
+	return _isHolding;
+}
+
 void Weapon::OnShow()
 {
     if (!_isHolding)
@@ -69,11 +75,14 @@ void Weapon::OnMove()
 }
 void Weapon::OnKeyDown(UINT nChar)
 {
-	if (nChar == 0x43 || nChar == 0xbc) {
-		Player* _hitPlayer = HitPlayer();
-		if (_hitPlayer != nullptr) {
-			_isHolding = true;
-			_hitPlayer->SetWeapon(true);
+	Player* _hitPlayer = HitPlayer();
+	if (_hitPlayer != nullptr) {
+		int keyMode = _hitPlayer->GetKeyMode();
+		if ((nChar == 0x43 && (keyMode == 0 || keyMode == 1)) || (nChar == 0xbc && (keyMode == 0 || keyMode == 2))) {
+			if (!_hitPlayer->GetHoldWeapon()) {
+				_isHolding = true;
+				_hitPlayer->SetHoldWeapon(true);
+			}
 		}
 	}
 }

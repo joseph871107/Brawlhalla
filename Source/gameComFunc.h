@@ -65,7 +65,7 @@ void GetCollideArray(int file, ColBmp*);						// file 為IDB名稱
 /////////////////////////
 // 通用輔助副程式
 /////////////////////////
-void OnShowText(string, int, int, int = 20, LPCTSTR = "Times New Roman", COLORREF = RGB(255, 255, 0));	// 簡化原本Game Framework 的字串顯示
+void OnShowText(string, int, int, int = 20, COLORREF = RGB(255, 255, 0), LPCTSTR = "Times New Roman");	// 簡化原本Game Framework 的字串顯示
 }
 
 #endif //define GAMECOMFUNC_H

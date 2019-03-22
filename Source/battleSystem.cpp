@@ -16,12 +16,13 @@ namespace game_framework
 
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MATCH_TIME = 180;
+const int MAX_WEAPON = 5;
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 
 const vector<GroundPARM> _groundXY{ GroundPARM(0, 300, 0.65, 5), GroundPARM(500, 400, 0.65, 5), GroundPARM(1000, 500, 0.65, 5) };	// Define Ground position to automatically generate ground objects
 CInteger integer(2);																												// Used to show current remain time
 
-BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Object()), _ground(vector<Ground*>())
+BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Object()), _ground(vector<Ground*>()), _player(vector<Player*>()), _weapon(vector<Weapon*>())
 {
 }
 
@@ -29,37 +30,51 @@ BattleSystem::~BattleSystem()
 {
 }
 
+int random(int min, int max) {
+	return rand() % (max - min + 1) + min;
+}
+
 void BattleSystem::OnBeginState()
 {
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
-    start = chrono::high_resolution_clock::now();
+	start = lastTime = clock();
+	nextTimeGenerateWeapon = random(3,10);
+	_weapon.clear();
 
 	_secPerRound = MATCH_TIME;
 	vector<GroundPARM> groundXY = _groundXY;
-	player1.Initialize(_ground, "Player 1", 1);
-	player2.Initialize(_ground, "Player 2", 2);
-	weapon.Initialize(_ground, vector<Player*>{&player1, &player2});
+	for (auto i = _player.begin(); i != _player.end(); i++) {
+		char str[80];
+		sprintf(str, "%d", i - _player.begin() + 1);
+		(*i)->Initialize(_ground, &_player, "Player " + (string)str, i - _player.begin() + 1);
+	}
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
 {
-	weapon.OnMove();
-    player1.OnMove();
-    player2.OnMove();
-    /*background.SetXY(-(int)((player1.GetCor(0) + player2.GetCor(0)) / 2 * 0.2) - 100, -(int)((player1.GetCor(1) + player2.GetCor(1)) / 2 * 0.2) - 50);
-    vector<CPoint> groundXY = _groundXY;
-    for (vector<CPoint>::iterator i = groundXY.begin(); i != groundXY.end(); i++)
-    {
-    	_ground[i-groundXY.begin()]->SetXY(i->x-(int)((player1.GetCor(0) + player2.GetCor(0)) / 2 * 0.2), i->y-(int)((player1.GetCor(1) + player2.GetCor(1)) / 2 * 0.2));
-    }*/
-    //background.SetXY((int)(-player.GetX1() * 0.3), (int)(-player.GetY1() * 0.2));
-    //ground.SetXY((int)(-player.GetX1() * 0.5 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2 + 0.5) + 400, (int)(-player.GetY1() * 0.5 + 0.5) + 600);
+	// After certain amount of time, generates Weapon automatically //
+	if ((clock() - lastTime) / CLOCKS_PER_SEC > nextTimeGenerateWeapon) {
+		if (_weapon.size() < MAX_WEAPON) {
+			Weapon* weapon = new Weapon();
+			weapon->Initialize(_ground, _player);
+			_weapon.push_back(weapon);
+		}
+		lastTime = clock();
+		nextTimeGenerateWeapon = random(5, 8);
+	}/////////////////////////////////////////////////////////////////
+
+	for (auto i = _weapon.begin(); i != _weapon.end(); i++) {
+		(*i)->OnMove();
+	}
+
+	for (auto i = _player.begin(); i != _player.end(); i++) {
+		(*i)->OnMove();
+	}
 }
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
-    //InitializeAllBMP();								// 初始化點陣圖運算資源
     InitializeIDB();									// 初始化"resource.h"中點陣圖的資源編號
     TRACE("idbList size : %d\n", idbList.size());
     ShowInitProgress(13);
@@ -81,7 +96,8 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 
 	vector<GroundPARM> groundXY = _groundXY;
 
-	for (auto i = groundXY.begin(); i != groundXY.end(); i++)		// Automatically generate ground objects
+	// Automatically generate ground objects //
+	for (auto i = groundXY.begin(); i != groundXY.end(); i++)
 	{
 		Ground* ground = new Ground();
 		ground->LoadBitmap();
@@ -89,27 +105,44 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 		ground->SetSize(i->_size);
 		ground->SetLen(i->_length);
 		_ground.push_back(ground);
-	}
+	}//////////////////////////////////////////
 
     background.SetSize(1);
     background.SetXY(-250, 0);
     background.LoadBitmap(IDB_BACKGROUND, RGB(0, 0, 0));
-	weapon.LoadBitmap();
+
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
-    player1.LoadBitmap();				// Player1
-    player2.LoadBitmap();				// Player2
+	
+	Player* player = new Player();
+	player->LoadBitmap();
+	_player.push_back(player);				// Player1
+	player = new Player();
+	player->LoadBitmap();
+	_player.push_back(player);				// Player2
+
     integer.LoadBitmap();				// time + life
-    //player.SetXY((int)(2000 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2), 400);
     ShowInitProgress(100);
 }
 
 void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    player1.OnKeyDown(nChar);
-    player2.OnKeyDown(nChar);
+	for (auto i = _player.begin(); i != _player.end(); i++) {
+		(*i)->OnKeyDown(nChar);
+	}
+	
+	// If player takes the weapon //
+	vector<Weapon*>::iterator erase = _weapon.end();
+	for (auto i = _weapon.begin(); i != _weapon.end(); i++) {
+		(*i)->OnKeyDown(nChar);
+		if ((*i)->HasTaken())
+			erase = i;
+	}
+	if (erase != _weapon.end())
+		_weapon.erase(erase);
+	//////////////////////////////
+
     currentKeydown = nChar;
-	weapon.OnKeyDown(nChar);
 }
 
 void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -119,8 +152,9 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
     if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
         GotoGameState(GAME_STATE_OVER);	// 關閉遊戲
 
-    player1.OnKeyUp(nChar);
-    player2.OnKeyUp(nChar);
+	for (auto i = _player.begin(); i != _player.end(); i++) {
+		(*i)->OnKeyUp(nChar);
+	}
 }
 
 void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -132,35 +166,6 @@ void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動�
 void BattleSystem::OnShow()
 {
     background.OnShow();
-
-    //------------------Test Text------------------//
-    if (_PLAYER_DEBUG)
-    {
-        char str[80], str2[80];
-        ostringstream oss;
-        oss << hex << currentKeydown;
-        sprintf(str, "(%d, %d) KeyDown:%s", mousePoint.x, mousePoint.y, ("0x" + oss.str()).c_str());
-        OnShowText(str, 0, 0, 10);
-        sprintf(str, "Player1 (x1:%d, y1:%d, x2:%d, y2:%d)", player1.GetCor(0), player1.GetCor(1), player1.GetCor(2), player1.GetCor(3));
-        OnShowText(str, 0, 12, 10);
-        sprintf(str, "Player2 (x1:%d, y1:%d, x2:%d, y2:%d)", player2.GetCor(0), player2.GetCor(1), player2.GetCor(2), player2.GetCor(3));
-        OnShowText(str, 0, 24, 10);
-
-        for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
-        {
-            sprintf(str, "                      , Ground%d (x1:%d, y1:%d, x2:%d, y2:%d)", i - _ground.begin(), (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
-            OnShowText(str, 0, 36 + 12 * (i - _ground.begin()), 10);
-        }
-
-        sprintf(str, "%s", GetNameFromIDB(player1.ShowAnimationState()).c_str());
-        OnShowText(str, 0, SIZE_Y - 24, 20);
-        sprintf(str, "%s", GetNameFromIDB(player2.ShowAnimationState()).c_str());
-        OnShowText(str, 200, SIZE_Y - 24, 20);
-        sprintf(str, "Remain Time : %s : %s\n", (GetCurrentRemainTime() / 600 == 0 ? ("0" + (string)str).c_str() : str), ((GetCurrentRemainTime() % 60) / 10 == 0 ? ("0" + (string)str2).c_str() : str2));
-        OnShowText(str, 650, 0, 30);
-    }
-
-    //------------------End of Test Text------------------//
     // Showing the remain time
     // Display minute
     int now_time = GetCurrentRemainTime();
@@ -177,35 +182,69 @@ void BattleSystem::OnShow()
     {
         (*i)->OnShow();
     }
-	weapon.OnShow();
+	// Show weapon
+	for (auto i = _weapon.begin(); i != _weapon.end(); i++) {
+		(*i)->OnShow();
+	}
 
-    // Show player
-    player2.OnShow();
-    player1.OnShow();
-    // Show player's life
-    ShowPlayerLife(player1, 1200, 0);
-    ShowPlayerLife(player2, 1400, 0);
+	// Show player
+	for (auto i = _player.begin(); i != _player.end(); i++) {
+		// Show player
+		(*i)->OnShow();
+		// Show player's life
+		ShowPlayerLife((**i), 1200 + 200 * (i - _player.begin()), 0);
+	}
+
+	//------------------Test Text------------------//
+	if (_PLAYER_DEBUG)
+	{
+		char str[80], str2[80];
+		ostringstream oss;
+		oss << hex << currentKeydown;
+		sprintf(str, "(%d, %d) KeyDown:%s", mousePoint.x, mousePoint.y, ("0x" + oss.str()).c_str());
+		OnShowText(str, 0, 0, 10);
+		for (auto i = _player.begin(); i != _player.end(); i++) {
+			sprintf(str, "Player1 (x1:%d, y1:%d, x2:%d, y2:%d)", (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
+			OnShowText(str, 0, 12 + 12 * (i - _player.begin()), 10);
+		}
+
+		for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+		{
+			sprintf(str, "                      , Ground%d (x1:%d, y1:%d, x2:%d, y2:%d)", i - _ground.begin(), (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
+			OnShowText(str, 0, 36 + 12 * (i - _ground.begin()), 10);
+		}
+
+		for (auto i = _player.begin(); i != _player.end(); i++) {
+			sprintf(str, "%s", GetNameFromIDB((*i)->ShowAnimationState()).c_str());
+			OnShowText(str, 0 + 200 * (i - _player.begin()), SIZE_Y - 24, 20);
+		}
+		sprintf(str, "Remain Time : %s : %s\n", (GetCurrentRemainTime() / 600 == 0 ? ("0" + (string)str).c_str() : str), ((GetCurrentRemainTime() % 60) / 10 == 0 ? ("0" + (string)str2).c_str() : str2));
+		OnShowText(str, 650, 0, 30);
+	}
+
+	//------------------End of Test Text------------------//
 }
 
 bool BattleSystem::IsGameOver()
 {
-    return (player1.IsOutOfLife() || player2.IsOutOfLife() || (GetCurrentRemainTime() == 0));
+	for (auto i = _player.begin(); i != _player.end(); i++) {
+		if ((*i)->IsOutOfLife())
+			return true;
+	}
+    return (GetCurrentRemainTime() == 0);
 }
 
 string BattleSystem::GetGameResult()
 {
-    if (player1.GetLife() > player2.GetLife())
-    {
-        return ("Player 1 wins.");
-    }
-    else if (player1.GetLife() < player2.GetLife())
-    {
-        return ("Player 2 wins.");
-    }
-    else
-    {
+	Player* max = *(_player.begin());
+	for (auto i = _player.begin(); i != _player.end(); i++) {
+		if ((*i)->GetLife() > max->GetLife())
+			max = *i;
+	}
+	if (max != nullptr)
+		return (max->GetName() + " win.");
+	else
         return ("Draw.");
-    }
 }
 
 void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)
@@ -222,10 +261,7 @@ void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYV
 
 int BattleSystem::GetCurrentRemainTime()
 {
-    auto end = chrono::high_resolution_clock::now();
-    auto dur = end - start;
-    auto ms = chrono::duration_cast<chrono::milliseconds>(dur).count();
-    return (int)(_secPerRound - (ms / 1000));
+	return MATCH_TIME - (clock() - start) / CLOCKS_PER_SEC;
 }
 
 }

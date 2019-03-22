@@ -20,7 +20,7 @@ void InitializeAllBMP(bool trace, string file1, string file2)
     InitializeFile();
     InitializeCollideArray(trace);
 }
-void OnShowText(string msg, int x, int y, int size, LPCTSTR font, COLORREF color)
+void OnShowText(string msg, int x, int y, int size, COLORREF color, LPCTSTR font)
 {
     CDC* pDC = CDDraw::GetBackCDC();			// ¨ú±o Back Plain ªº CDC
     CFont f, *fp;
