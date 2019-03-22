@@ -139,6 +139,9 @@ void CGameStateOver::OnShow()
     char str[80];								// Demo 數字對字串的轉換
     sprintf(str, "Game Over ! (%d)", counter / 30);
     OnShowText(str, 240, 210);
+    char gameResultStr[80];
+    sprintf(gameResultStr, "Still working on it");
+    OnShowText(gameResultStr, 240, 300);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -161,7 +164,7 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-    if (battleSystem.GetCurrenRemainTime() == 0)								// Demo 關閉遊戲的方法
+    if (battleSystem.IsGameOver())								// Demo 關閉遊戲的方法
         GotoGameState(GAME_STATE_OVER);					// 關閉遊戲
 
     battleSystem.OnMove();
