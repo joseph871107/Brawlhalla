@@ -14,8 +14,12 @@ namespace game_framework
 // BattleSystem class
 /////////////////////////////////////////////////////////////////////////////
 
+//-----------------CONSTANTS DEFINITIONS-----------------//
+const int MATCH_TIME = 180;
+//-----------------FUNCTIONS DEFINITIONS-----------------//
+
 const vector<GroundPARM> _groundXY{ GroundPARM(0, 300, 0.65, 5), GroundPARM(500, 400, 0.65, 5), GroundPARM(1000, 500, 0.65, 5) };	// Define Ground position to automatically generate ground objects
-CInteger integer(2);																	// Used to show current remain time
+CInteger integer(2);																												// Used to show current remain time
 
 BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Object()), _ground(vector<Ground*>())
 {
@@ -30,25 +34,25 @@ void BattleSystem::OnBeginState()
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
     start = chrono::high_resolution_clock::now();
-    _secPerRound = 180;
+
+	_secPerRound = MATCH_TIME;
 	vector<GroundPARM> groundXY = _groundXY;
-    player1.Initialize(_ground, 1);
-	player2.Initialize(_ground, 2);
+	player1.Initialize(_ground, "Player 1", 1);
+	player2.Initialize(_ground, "Player 2", 2);
 	weapon.Initialize(_ground, vector<Player*>{&player1, &player2});
-	weapon.SetSize(0.2);
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
 {
 	weapon.OnMove();
     player1.OnMove();
-	player2.OnMove();
-	/*background.SetXY(-(int)((player1.GetCor(0) + player2.GetCor(0)) / 2 * 0.2) - 100, -(int)((player1.GetCor(1) + player2.GetCor(1)) / 2 * 0.2) - 50);
-	vector<CPoint> groundXY = _groundXY;
-	for (vector<CPoint>::iterator i = groundXY.begin(); i != groundXY.end(); i++)
-	{
-		_ground[i-groundXY.begin()]->SetXY(i->x-(int)((player1.GetCor(0) + player2.GetCor(0)) / 2 * 0.2), i->y-(int)((player1.GetCor(1) + player2.GetCor(1)) / 2 * 0.2));
-	}*/
+    player2.OnMove();
+    /*background.SetXY(-(int)((player1.GetCor(0) + player2.GetCor(0)) / 2 * 0.2) - 100, -(int)((player1.GetCor(1) + player2.GetCor(1)) / 2 * 0.2) - 50);
+    vector<CPoint> groundXY = _groundXY;
+    for (vector<CPoint>::iterator i = groundXY.begin(); i != groundXY.end(); i++)
+    {
+    	_ground[i-groundXY.begin()]->SetXY(i->x-(int)((player1.GetCor(0) + player2.GetCor(0)) / 2 * 0.2), i->y-(int)((player1.GetCor(1) + player2.GetCor(1)) / 2 * 0.2));
+    }*/
     //background.SetXY((int)(-player.GetX1() * 0.3), (int)(-player.GetY1() * 0.2));
     //ground.SetXY((int)(-player.GetX1() * 0.5 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2 + 0.5) + 400, (int)(-player.GetY1() * 0.5 + 0.5) + 600);
 }
@@ -88,16 +92,14 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 	}
 
     background.SetSize(1);
-	background.SetXY(-250, 0);
+    background.SetXY(-250, 0);
     background.LoadBitmap(IDB_BACKGROUND, RGB(0, 0, 0));
 	weapon.LoadBitmap();
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
-    player1.Initialize(_ground, 1);
-	player2.Initialize(_ground, 2);
     player1.LoadBitmap();				// Player1
     player2.LoadBitmap();				// Player2
-    integer.LoadBitmap();				// time
+    integer.LoadBitmap();				// time + life
     //player.SetXY((int)(2000 + (background.GetCor(2) - background.GetCor(0) - ground.GetCor(2) + ground.GetCor(0)) / 2), 400);
     ShowInitProgress(100);
 }
@@ -105,7 +107,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     player1.OnKeyDown(nChar);
-	player2.OnKeyDown(nChar);
+    player2.OnKeyDown(nChar);
     currentKeydown = nChar;
 	weapon.OnKeyDown(nChar);
 }
@@ -118,7 +120,7 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
         GotoGameState(GAME_STATE_OVER);	// 關閉遊戲
 
     player1.OnKeyUp(nChar);
-	player2.OnKeyUp(nChar);
+    player2.OnKeyUp(nChar);
 }
 
 void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -154,32 +156,71 @@ void BattleSystem::OnShow()
         OnShowText(str, 0, SIZE_Y - 24, 20);
         sprintf(str, "%s", GetNameFromIDB(player2.ShowAnimationState()).c_str());
         OnShowText(str, 200, SIZE_Y - 24, 20);
-        sprintf(str, "Remain Time : %s : %s\n", (GetCurrenRemainTime() / 600 == 0 ? ("0" + (string)str).c_str() : str), ((GetCurrenRemainTime() % 60) / 10 == 0 ? ("0" + (string)str2).c_str() : str2));
+        sprintf(str, "Remain Time : %s : %s\n", (GetCurrentRemainTime() / 600 == 0 ? ("0" + (string)str).c_str() : str), ((GetCurrentRemainTime() % 60) / 10 == 0 ? ("0" + (string)str2).c_str() : str2));
         OnShowText(str, 650, 0, 30);
     }
 
     //------------------End of Test Text------------------//
-
-	// Showing the remain time
-    int now_time = GetCurrenRemainTime();
+    // Showing the remain time
+    // Display minute
+    int now_time = GetCurrentRemainTime();
     integer.SetInteger(now_time / 60);
     integer.SetTopLeft(735, 0);
     integer.ShowBitmap();
+    // Display second
     integer.SetInteger(now_time % 60);
     integer.SetTopLeft(805, 0);
     integer.ShowBitmap();
 
+    // Show ground
     for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
     {
         (*i)->OnShow();
     }
 	weapon.OnShow();
 
-	player2.OnShow();
-	player1.OnShow();
+    // Show player
+    player2.OnShow();
+    player1.OnShow();
+    // Show player's life
+    ShowPlayerLife(player1, 1200, 0);
+    ShowPlayerLife(player2, 1400, 0);
 }
 
-int BattleSystem::GetCurrenRemainTime()
+bool BattleSystem::IsGameOver()
+{
+    return (player1.IsOutOfLife() || player2.IsOutOfLife() || (GetCurrentRemainTime() == 0));
+}
+
+string BattleSystem::GetGameResult()
+{
+    if (player1.GetLife() > player2.GetLife())
+    {
+        return ("Player 1 wins.");
+    }
+    else if (player1.GetLife() < player2.GetLife())
+    {
+        return ("Player 2 wins.");
+    }
+    else
+    {
+        return ("Draw.");
+    }
+}
+
+void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)
+{
+    // Display player's name
+    char playerName[80];
+    sprintf(playerName, (player.GetName() + " Life").c_str());
+    OnShowText(playerName, posXValue, posYValue + 20);
+    // Displayer player's life
+    integer.SetInteger(player.GetLife()); //CInteger integer
+    integer.SetTopLeft(posXValue + 120, posYValue);
+    integer.ShowBitmap();
+}
+
+int BattleSystem::GetCurrentRemainTime()
 {
     auto end = chrono::high_resolution_clock::now();
     auto dur = end - start;

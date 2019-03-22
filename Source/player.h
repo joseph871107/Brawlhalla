@@ -9,28 +9,27 @@ namespace game_framework
 class Player
 {
     public:
-        Player();
-        //Default constructor
-
-        ~Player();
-        //Destructor
+        //Essential functions for C++ class
+        Player();						//Default constructor
+        ~Player();						//Destructor
 
         //Required for Game Framework
-        void Initialize(vector<Ground*> groudPtrValue, int = 0);
+        void Initialize(vector<Ground*> groundPtrValue, string nameValue, int = 0);
         void LoadBitmap();
         void OnShow();
         void OnMove();
-        void SetSize(double);
         void OnKeyDown(const UINT& nChar);
         void OnKeyUp(const UINT& nChar);
 		void SetKeyMode(int = 0);
 		void SetWeapon(bool);
 
-        //Functions getting coordinates
-        int  GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
-
-        //
+        //Others
+        void SetKeyMode(int = 0);
+        int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
         int ShowAnimationState();		// Return which CAnimation is playing
+        bool IsOutOfLife();
+        const int& GetLife() const;
+        const string& GetName() const;
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -46,11 +45,12 @@ class Player
         void ResetJumpAnimations();
         void ResetJumpCount();
         void ResetAttackAnimations();
+        bool IsOutMapBorder();
+        void DoDead();
+        void DoRespawn();
 
         //Animations
-        void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1);
-        // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
-
+        void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
         void SetAnimationState(int);	// Set which CAnimation is going to play
         void ShowAnimation();			// Show CAnimation by currentAni
 
@@ -58,7 +58,6 @@ class Player
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y; //The position of the collision's box
-        double _size;
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
 
@@ -87,10 +86,12 @@ class Player
         //[Attribute] Jump
         bool _isTriggerJump;
         int _jumpCount;
-        //Wall Jump
+
+        //[Attribute] Wall Jump
         int _offsetVelocity;
         bool _isOffsetLeft, _isOffsetRight;
-        //Attack
+
+		//[Attribute] Attack
 		bool _isHoldingWeapon;
         bool _isAttacking;
 
@@ -103,6 +104,11 @@ class Player
         //Main Collision box to debug
         CMovingBitmap _collision_box;
 
+        //Life
+        int _life;
+
+        //Name
+        string _name;
 };
 #endif
 }

@@ -13,7 +13,7 @@ const int MAX_JUMP_COUNT = 2;
 const int MOVEMENT_UNIT = 7;
 const double ACCELERATION_UNIT = 0.2;
 const double INITIAL_VELOCITY = 8;
-const int OFFSET_INITIAL_VELOCITY = 5;
+const int OFFSET_INITIAL_VELOCITY = 8;
 const long KEY_A = 0x41;
 const long KEY_D = 0x44;
 const long KEY_L = 0x4C;
@@ -28,6 +28,13 @@ const long KEY_COMMA = 0xbc;
 const double COLLISION_ERRORS = 1.0;
 const int _OFFSET_X = 20;
 const int _OFFSET_Y = 7;
+const int MAX_LIFE = 3;
+const int MAP_BORDER_OFFSET = 100;
+const int MAP_BORDER_X1 = -MAP_BORDER_OFFSET;
+const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
+const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
+const int MAP_BORDER_Y2 = SIZE_Y + MAP_BORDER_OFFSET;
+const double BITMAP_SIZE = 2.5;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 
@@ -40,11 +47,12 @@ Player::Player() :
     _x(int()), _y(int()), ani(vector<CAnimation>()), currentAni(int()),
     rr(vector<int>()), rl(vector<int>()), jr(vector<int>()), jl(vector<int>()),
     sr(vector<int>()), sl(vector<int>()), ll(vector<int>()), lr(vector<int>()),
-    bmp_iter(vector<vector<int>*>()), _width(int()), _height(int()), _isMovingLeft(bool()),
+    al(vector<int>()), ar(vector<int>()), bmp_iter(vector<vector<int>*>()), _width(int()),
+    _height(int()), _keyMode(int()), _keyModeBool(vector<bool>()), _isMovingLeft(bool()),
     _isMovingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
-    _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _velocity(int()),
-    _ground(vector<Ground*>()), _size(double()), _isAttacking(bool()), _keyMode(int()), _keyModeBool(vector<bool>())
-    , _collision_box(CMovingBitmap())
+    _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _isAttacking(bool()),
+    _velocity(double()), _ground(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
+    _name(string()) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
 {
     /* Body intentionally empty */
 }
@@ -53,27 +61,15 @@ Player::~Player()
 {
 }
 
-void Player::Initialize(vector<Ground*> groundPtrValue, int i)
+void Player::Initialize(vector<Ground*> groundPtrValue, string nameValue, int i)
 {
-    /* Remarks:
-    Variables that are later initialized in 'LoadBitmap()'
-    'ani', 'currentAni', '_width', '_height', 'bmp_iter' */
+    /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
     //_x = (int)((groundPtrValue->GetCor(2) + groundPtrValue->GetCor(0)) / 2);
     _x = 700;
     _y = 100;
-    _size = 2.5;
+    /*_size = 2.5;*/
     SetKeyMode(i);
     //
-    rl = vector<int> { IDB_P1_RUN0M, IDB_P1_RUN1M, IDB_P1_RUN2M, IDB_P1_RUN3M, IDB_P1_RUN4M, IDB_P1_RUN5M };
-    rr = vector<int> { IDB_P1_RUN0, IDB_P1_RUN1, IDB_P1_RUN2, IDB_P1_RUN3, IDB_P1_RUN4, IDB_P1_RUN5 };
-    jl = vector<int> { IDB_P1_JUMP0M, IDB_P1_JUMP1M, IDB_P1_JUMP2M, IDB_P1_JUMP3M };
-    jr = vector<int> { IDB_P1_JUMP0, IDB_P1_JUMP1, IDB_P1_JUMP2, IDB_P1_JUMP3 };
-    sl = vector<int> { IDB_P1_IDLE0M, IDB_P1_IDLE1M, IDB_P1_IDLE2M };
-    sr = vector<int> { IDB_P1_IDLE0, IDB_P1_IDLE1, IDB_P1_IDLE2 };
-    ll = vector<int> { IDB_P1_WALL0, IDB_P1_WALL1 };
-    lr = vector<int> { IDB_P1_WALL0M, IDB_P1_WALL1M };
-    al = vector<int> { IDB_P1_ATTACK0M, IDB_P1_ATTACK1M, IDB_P1_ATTACK2M, IDB_P1_ATTACK3M, IDB_P1_ATTACK4M };
-    ar = vector<int> { IDB_P1_ATTACK0, IDB_P1_ATTACK1, IDB_P1_ATTACK2, IDB_P1_ATTACK3, IDB_P1_ATTACK4 };
     //
     _isMovingLeft = _isMovingRight = _isAttacking = _isHoldingWeapon = _dir = false;
     //
@@ -86,24 +82,38 @@ void Player::Initialize(vector<Ground*> groundPtrValue, int i)
     _velocity = INITIAL_VELOCITY;
     //
     _ground = groundPtrValue;
+    //
+    _life = MAX_LIFE;
+    //
+    _name = nameValue;
+    //
+    _width = (int)(_collision_box.Width() * BITMAP_SIZE);
+    _height = (int)(_collision_box.Height() * BITMAP_SIZE);
 }
 
 void Player::LoadBitmap()
 {
-    AddCAnimation(&rl, _size); //ani[0] Run Left
-    AddCAnimation(&rr, _size); //ani[1] Run Right
-    AddCAnimation(&jl, _size, 5, false); //ani[2] Jump Left
-    AddCAnimation(&jr, _size, 5, false); //ani[3] Jump Right
-    AddCAnimation(&sl, _size); //ani[4] Stand (Idle) Left
-    AddCAnimation(&sr, _size); //ani[5] Stand (Idle) Right
-    AddCAnimation(&ll, _size); //ani[6] Lean Left
-    AddCAnimation(&lr, _size); //ani[7] Lean Right
-    AddCAnimation(&al, _size, 4, false); //ani[8] Attack Left
-    AddCAnimation(&ar, _size, 4, false); //ani[9] Attack Right
-    // End of Animation Initialization
+    rl = vector<int> { IDB_P1_RUN0M, IDB_P1_RUN1M, IDB_P1_RUN2M, IDB_P1_RUN3M, IDB_P1_RUN4M, IDB_P1_RUN5M };
+    rr = vector<int> { IDB_P1_RUN0, IDB_P1_RUN1, IDB_P1_RUN2, IDB_P1_RUN3, IDB_P1_RUN4, IDB_P1_RUN5 };
+    jl = vector<int> { IDB_P1_JUMP0M, IDB_P1_JUMP1M, IDB_P1_JUMP2M, IDB_P1_JUMP3M };
+    jr = vector<int> { IDB_P1_JUMP0, IDB_P1_JUMP1, IDB_P1_JUMP2, IDB_P1_JUMP3 };
+    sl = vector<int> { IDB_P1_IDLE0M, IDB_P1_IDLE1M, IDB_P1_IDLE2M };
+    sr = vector<int> { IDB_P1_IDLE0, IDB_P1_IDLE1, IDB_P1_IDLE2 };
+    ll = vector<int> { IDB_P1_WALL0, IDB_P1_WALL1 };
+    lr = vector<int> { IDB_P1_WALL0M, IDB_P1_WALL1M };
+    al = vector<int> { IDB_P1_ATTACK0M, IDB_P1_ATTACK1M, IDB_P1_ATTACK2M, IDB_P1_ATTACK3M, IDB_P1_ATTACK4M };
+    ar = vector<int> { IDB_P1_ATTACK0, IDB_P1_ATTACK1, IDB_P1_ATTACK2, IDB_P1_ATTACK3, IDB_P1_ATTACK4 };
+    AddCAnimation(&rl, BITMAP_SIZE); //ani[0] Run Left
+    AddCAnimation(&rr, BITMAP_SIZE); //ani[1] Run Right
+    AddCAnimation(&jl, BITMAP_SIZE, 5, false); //ani[2] Jump Left
+    AddCAnimation(&jr, BITMAP_SIZE, 5, false); //ani[3] Jump Right
+    AddCAnimation(&sl, BITMAP_SIZE); //ani[4] Stand (Idle) Left
+    AddCAnimation(&sr, BITMAP_SIZE); //ani[5] Stand (Idle) Right
+    AddCAnimation(&ll, BITMAP_SIZE); //ani[6] Lean Left
+    AddCAnimation(&lr, BITMAP_SIZE); //ani[7] Lean Right
+    AddCAnimation(&al, BITMAP_SIZE, 4, false); //ani[8] Attack Left
+    AddCAnimation(&ar, BITMAP_SIZE, 4, false); //ani[9] Attack Right
     _collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
-    _width = (int)(_collision_box.Width() * _size);
-    _height = (int)(_collision_box.Height() * _size);
 }
 
 void Player::OnShow()
@@ -300,17 +310,17 @@ void Player::OnMove()
 
     /* FALL OFF THE MAP */
 
-    if (GetCor(1) > 1000) //If the player is out of the screen, then he will be set on the highest position
+    if (IsOutMapBorder())
     {
-        _y = 0;
-        _velocity = INITIAL_VELOCITY;
+        DoDead();
+        DoRespawn();
     }
 }
 
-void Player::SetSize(double s)
-{
-    _size = s;
-}
+//void Player::SetSize(double s)
+//{
+//    _size = s;
+//}
 
 void Player::OnKeyDown(const UINT& nChar)
 {
@@ -463,10 +473,10 @@ int Player::GetCor(int index)
             return _y;
 
         case 2:
-            return _x + (int)(_collision_box.Width() * _size);
+            return _x + (int)(_collision_box.Width() * BITMAP_SIZE);
 
         case 3:
-            return _y + (int)(_collision_box.Height() * _size) ;
+            return _y + (int)(_collision_box.Height() * BITMAP_SIZE) ;
 
         default:
             return NULL;
@@ -642,15 +652,53 @@ void Player::SetAnimationState(int num)
 void Player::ShowAnimation()
 {
     vector<CAnimation>::iterator ani_iter = ani.begin() + currentAni;
-    ani_iter->SetTopLeft(_x - (int)(_OFFSET_X * _size), _y - (int)(_OFFSET_Y * _size));	//Calculate and set the position of the player animation in respect to the collision box's
+    //Calculate and set the position of the player current animation in respect to the collision box's
+    ani_iter->SetTopLeft(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
 
     if (_PLAYER_DEBUG)
     {
         _collision_box.SetTopLeft(_x, _y);		//actual player blocks
-        _collision_box.ShowBitmap(_size);
+        _collision_box.ShowBitmap(BITMAP_SIZE);
     }
 
     ani_iter->OnShow();
+}
+
+bool Player::IsOutMapBorder()
+{
+    return (!(
+                ((MAP_BORDER_X1 <= GetCor(0)/*x1*/) && (GetCor(2)/*x2*/ <= MAP_BORDER_X2))
+                &&
+                ((MAP_BORDER_Y1 <= GetCor(1)/*y1*/) && (GetCor(3)/*y2*/ <= MAP_BORDER_Y2))
+            ));
+}
+
+void Player::DoDead()
+{
+    _life--;
+    /// activate dead effect
+}
+
+void Player::DoRespawn()
+{
+    //If the player is out of the screen, then he will be set on the highest position
+    _y = 0;
+    _velocity = INITIAL_VELOCITY;
+}
+
+bool Player::IsOutOfLife()
+{
+    return (_life == 0);
+}
+
+const int& Player::GetLife() const
+{
+    return (_life);
+}
+
+const string& Player::GetName() const
+{
+    return (_name);
 }
 
 }

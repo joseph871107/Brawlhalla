@@ -1,4 +1,3 @@
-#pragma   once
 #ifndef BATTLESYSTEM_H
 #define BATTLESYSTEM_H
 #include "player.h"
@@ -27,14 +26,20 @@ class BattleSystem : public CGameState
         void OnMouseMove(UINT, CPoint);					// 滑鼠移動
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
-        int GetCurrenRemainTime();
+        bool IsGameOver();
+        string GetGameResult();
+
     private:
+        //-----------------FUNCTIONS DECLARATIONS-----------------//
+        void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue);
+        int GetCurrentRemainTime();
+        //-----------------VARIABLES DECLARATIONS-----------------//
         int _secPerRound;
         CPoint mousePoint;
         UINT currentKeydown;
         chrono::time_point<chrono::steady_clock> start;
         vector<Ground*> _ground;
-		Object background;
+        Object background;
         Player player1, player2;
 		Weapon weapon;
 };
