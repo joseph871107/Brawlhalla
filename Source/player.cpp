@@ -636,7 +636,7 @@ void Player::SetAnimationState(int num)
 void Player::ShowAnimation()
 {
     vector<CAnimation>::iterator ani_iter = ani.begin() + currentAni;
-    ani_iter->SetTopLeft(_x - (int)(_OFFSET_X * _size), _y - (int)(_OFFSET_Y * _size));	//just for showing
+    ani_iter->SetTopLeft(_x - (int)(_OFFSET_X * _size), _y - (int)(_OFFSET_Y * _size));	//Calculate and set the position of the player animation in respect to the collision box's
 
     if (_PLAYER_DEBUG)
     {

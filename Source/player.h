@@ -1,6 +1,6 @@
 #include "ground.h"
 
-#define _PLAYER_DEBUG false
+#define _PLAYER_DEBUG true
 
 namespace game_framework
 {
@@ -9,8 +9,11 @@ namespace game_framework
 class Player
 {
     public:
-        Player();			// Constructor
-        ~Player();						// Deconstructor
+        Player();
+        //Default constructor
+
+        ~Player();
+        //Destructor
 
         //Required for Game Framework
         void Initialize(vector<Ground*> groudPtrValue, int = 0);
@@ -53,7 +56,7 @@ class Player
 
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
-        int _x, _y;
+        int _x, _y; //The position of the collision's box
         double _size;
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
