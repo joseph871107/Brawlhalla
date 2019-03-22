@@ -17,7 +17,7 @@ Ground::Ground()
     _length = 1;
     osX1 = osY1 = osX2 = osY2 = 4;
     _bmpID = IDB_GROUND;
-    _color = RGB(0, 0, 0);
+    _color = RGB(0, 255, 0);
 }
 
 int Ground::GetCor(int index)
