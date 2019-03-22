@@ -23,7 +23,8 @@ class Player
         void SetSize(double);
         void OnKeyDown(const UINT& nChar);
         void OnKeyUp(const UINT& nChar);
-        void SetKeyMode(int = 0);
+		void SetKeyMode(int = 0);
+		void SetWeapon(bool);
 
         //Functions getting coordinates
         int  GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
@@ -90,6 +91,7 @@ class Player
         int _offsetVelocity;
         bool _isOffsetLeft, _isOffsetRight;
         //Attack
+		bool _isHoldingWeapon;
         bool _isAttacking;
 
         //Required for a jump simulating the physical world

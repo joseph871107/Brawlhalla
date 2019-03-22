@@ -19,6 +19,9 @@ class Object
         void SetXY(int nx, int ny);								// 設定物件的座標
         void SetSize(double s);									// 設定物件大小
         int  GetCor(int);										// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
+		int GetWidth();
+		int GetHeight();
+		double GetSize();
         virtual void OnShow();									// 將圖形貼到畫面
         virtual void OnMove();									// 移動
         virtual void LoadBitmap(int, COLORREF);					// 載入圖形

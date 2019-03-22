@@ -199,6 +199,8 @@ IDB_NUM9          		BITMAP                  "..\\RES\\Numbers\\9.bmp"
 
 IDB_NUM_MINUS         	BITMAP                  "..\\RES\\Numbers\\minus.bmp"
 
+IDB_WEAPON_FALLING		BITMAP					"..\\RES\\weapons\\DefaultFallingSword\\WeaponPickup.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

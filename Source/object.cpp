@@ -51,6 +51,21 @@ int Object::GetCor(int index)
     }
 }
 
+int Object::GetWidth()
+{
+	return GetCor(2) - GetCor(0);
+}
+
+int Object::GetHeight()
+{
+	return GetCor(3) - GetCor(1);
+}
+
+double Object::GetSize()
+{
+	return _size;
+}
+
 void Object::LoadBitmap(int resource, COLORREF color)
 {
     bmp.LoadBitmap(resource, color);

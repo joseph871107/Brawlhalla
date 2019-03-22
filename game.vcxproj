@@ -287,11 +287,13 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="Source\weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\battleSystem.h" />
     <ClInclude Include="Source\gameComFunc.h" />
     <ClInclude Include="Source\ground.h" />
+    <ClInclude Include="Source\weapon.h" />
     <ClInclude Include="Source\object.h" />
     <ClInclude Include="Source\player.h" />
     <ClInclude Include="Source\audio.h" />

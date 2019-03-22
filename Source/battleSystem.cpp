@@ -14,19 +14,11 @@ namespace game_framework
 // BattleSystem class
 /////////////////////////////////////////////////////////////////////////////
 
-const vector<CPoint> _groundXY{ CPoint(0, 300), CPoint(500, 400), CPoint(1000, 500) };	// Define Ground position to automatically generate ground objects
+const vector<GroundPARM> _groundXY{ GroundPARM(0, 300, 0.65, 5), GroundPARM(500, 400, 0.65, 5), GroundPARM(1000, 500, 0.65, 5) };	// Define Ground position to automatically generate ground objects
 CInteger integer(2);																	// Used to show current remain time
 
 BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Object()), _ground(vector<Ground*>())
 {
-    vector<CPoint> groundXY = _groundXY;
-
-    for (vector<CPoint>::iterator i = groundXY.begin(); i != groundXY.end(); i++)		// Automatically generate ground objects
-    {
-        Ground* ground = new Ground();
-        ground->SetXY(i->x, i->y);
-        _ground.push_back(ground);
-    }
 }
 
 BattleSystem::~BattleSystem()
@@ -39,13 +31,16 @@ void BattleSystem::OnBeginState()
     /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
     start = chrono::high_resolution_clock::now();
     _secPerRound = 180;
-    vector<CPoint> groundXY = _groundXY;
+	vector<GroundPARM> groundXY = _groundXY;
     player1.Initialize(_ground, 1);
 	player2.Initialize(_ground, 2);
+	weapon.Initialize(_ground, vector<Player*>{&player1, &player2});
+	weapon.SetSize(0.2);
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
 {
+	weapon.OnMove();
     player1.OnMove();
 	player2.OnMove();
 	/*background.SetXY(-(int)((player1.GetCor(0) + player2.GetCor(0)) / 2 * 0.2) - 100, -(int)((player1.GetCor(1) + player2.GetCor(1)) / 2 * 0.2) - 50);
@@ -79,16 +74,23 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
     //CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
-    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)			// Initializing series of ground objects
-    {
-        (*i)->LoadBitmap();
-        (*i)->SetSize(0.65);
-        (*i)->SetLen(5);
-    }
+
+	vector<GroundPARM> groundXY = _groundXY;
+
+	for (auto i = groundXY.begin(); i != groundXY.end(); i++)		// Automatically generate ground objects
+	{
+		Ground* ground = new Ground();
+		ground->LoadBitmap();
+		ground->SetXY(i->point.x, i->point.y);
+		ground->SetSize(i->_size);
+		ground->SetLen(i->_length);
+		_ground.push_back(ground);
+	}
 
     background.SetSize(1);
 	background.SetXY(-250, 0);
     background.LoadBitmap(IDB_BACKGROUND, RGB(0, 0, 0));
+	weapon.LoadBitmap();
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
     player1.Initialize(_ground, 1);
@@ -105,6 +107,7 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     player1.OnKeyDown(nChar);
 	player2.OnKeyDown(nChar);
     currentKeydown = nChar;
+	weapon.OnKeyDown(nChar);
 }
 
 void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -170,6 +173,7 @@ void BattleSystem::OnShow()
     {
         (*i)->OnShow();
     }
+	weapon.OnShow();
 
 	player2.OnShow();
 	player1.OnShow();

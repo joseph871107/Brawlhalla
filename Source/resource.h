@@ -51,6 +51,7 @@
 #define IDB_P1_ATTACK3M                 316
 #define IDB_P1_ATTACK4                  317
 #define IDB_P1_ATTACK4M                 318
+#define IDB_WEAPON_FALLING              500
 #define IDB_NUM0                 		1000
 #define IDB_NUM1                 		1001
 #define IDB_NUM2                 		1002

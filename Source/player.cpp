@@ -75,7 +75,7 @@ void Player::Initialize(vector<Ground*> groundPtrValue, int i)
     al = vector<int> { IDB_P1_ATTACK0M, IDB_P1_ATTACK1M, IDB_P1_ATTACK2M, IDB_P1_ATTACK3M, IDB_P1_ATTACK4M };
     ar = vector<int> { IDB_P1_ATTACK0, IDB_P1_ATTACK1, IDB_P1_ATTACK2, IDB_P1_ATTACK3, IDB_P1_ATTACK4 };
     //
-    _isMovingLeft = _isMovingRight = _isAttacking = _dir = false;
+    _isMovingLeft = _isMovingRight = _isAttacking = _isHoldingWeapon = _dir = false;
     //
     _isTriggerJump = false;
     ResetJumpCount();
@@ -108,7 +108,7 @@ void Player::LoadBitmap()
 
 void Player::OnShow()
 {
-    if (_isAttacking)
+    if (_isHoldingWeapon && _isAttacking)
     {
         if (_dir) //Player is attacking right
         {
@@ -248,12 +248,12 @@ void Player::OnMove()
         }
     }
 
-    if (_isMovingLeft && !_isAttacking)
+    if (_isMovingLeft && !(_isHoldingWeapon && _isAttacking))
     {
         _x -= MOVEMENT_UNIT;
     }
 
-    if (_isMovingRight && !_isAttacking)
+    if (_isMovingRight && !(_isHoldingWeapon && _isAttacking))
     {
         _x += MOVEMENT_UNIT;
     }
@@ -267,7 +267,7 @@ void Player::OnMove()
     }
 
     /* ATTACK */
-    if (_isAttacking)
+    if (_isHoldingWeapon && _isAttacking)
     {
         DoAttack();
     }
@@ -444,6 +444,12 @@ void Player::SetKeyMode(int i)
         _keyModeBool.push_back(false);
 
     _keyModeBool[i] = true;
+}
+
+void Player::SetWeapon(bool isHolding)
+{
+	_isHoldingWeapon = isHolding;
+	_isAttacking = false;
 }
 
 int Player::GetCor(int index)

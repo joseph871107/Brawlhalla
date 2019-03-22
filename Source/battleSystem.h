@@ -2,6 +2,7 @@
 #ifndef BATTLESYSTEM_H
 #define BATTLESYSTEM_H
 #include "player.h"
+#include "weapon.h"
 #include <chrono>
 
 namespace game_framework
@@ -35,6 +36,7 @@ class BattleSystem : public CGameState
         vector<Ground*> _ground;
 		Object background;
         Player player1, player2;
+		Weapon weapon;
 };
 
 }
