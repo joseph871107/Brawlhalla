@@ -1,6 +1,6 @@
 #include "ground.h"
 
-#define _PLAYER_DEBUG true
+#define _PLAYER_DEBUG false
 
 namespace game_framework
 {
