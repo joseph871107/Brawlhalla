@@ -82,7 +82,7 @@ void Player::Initialize(vector<Ground*> groundPtrValue, vector<Player*>* playerP
     _velocity = INITIAL_VELOCITY;
     //
     _ground = groundPtrValue;
-	_player = playerPtrValue;
+    _player = playerPtrValue;
     //
     _life = MAX_LIFE;
     //
@@ -102,12 +102,12 @@ void Player::LoadBitmap()
     sr = vector<int> { IDB_P1_IDLE0, IDB_P1_IDLE1, IDB_P1_IDLE2 };
     ll = vector<int> { IDB_P1_WALL0, IDB_P1_WALL1 };
     lr = vector<int> { IDB_P1_WALL0M, IDB_P1_WALL1M };
-	al = vector<int>{ IDB_P1_ATTACK0M, IDB_P1_ATTACK1M, IDB_P1_ATTACK2M, IDB_P1_ATTACK3M, IDB_P1_ATTACK4M };
-	ar = vector<int>{ IDB_P1_ATTACK0, IDB_P1_ATTACK1, IDB_P1_ATTACK2, IDB_P1_ATTACK3, IDB_P1_ATTACK4 };
-	sdl = vector<int>{ IDB_P1_SWD_DWR0M, IDB_P1_SWD_DWR1M, IDB_P1_SWD_DWR2M, IDB_P1_SWD_DWR3M, IDB_P1_SWD_DWR3M };
-	sdr = vector<int>{ IDB_P1_SWD_DWR0, IDB_P1_SWD_DWR1, IDB_P1_SWD_DWR2, IDB_P1_SWD_DWR3, IDB_P1_SWD_DWR3 };
-	s2l = vector<int>{ IDB_P1_IDLE2_0M, IDB_P1_IDLE2_1M, IDB_P1_IDLE2_2M, IDB_P1_IDLE2_3M };
-	s2r = vector<int>{ IDB_P1_IDLE2_0, IDB_P1_IDLE2_1, IDB_P1_IDLE2_2, IDB_P1_IDLE2_3 };
+    al = vector<int> { IDB_P1_ATTACK0M, IDB_P1_ATTACK1M, IDB_P1_ATTACK2M, IDB_P1_ATTACK3M, IDB_P1_ATTACK4M };
+    ar = vector<int> { IDB_P1_ATTACK0, IDB_P1_ATTACK1, IDB_P1_ATTACK2, IDB_P1_ATTACK3, IDB_P1_ATTACK4 };
+    sdl = vector<int> { IDB_P1_SWD_DWR0M, IDB_P1_SWD_DWR1M, IDB_P1_SWD_DWR2M, IDB_P1_SWD_DWR3M, IDB_P1_SWD_DWR3M };
+    sdr = vector<int> { IDB_P1_SWD_DWR0, IDB_P1_SWD_DWR1, IDB_P1_SWD_DWR2, IDB_P1_SWD_DWR3, IDB_P1_SWD_DWR3 };
+    s2l = vector<int> { IDB_P1_IDLE2_0M, IDB_P1_IDLE2_1M, IDB_P1_IDLE2_2M, IDB_P1_IDLE2_3M };
+    s2r = vector<int> { IDB_P1_IDLE2_0, IDB_P1_IDLE2_1, IDB_P1_IDLE2_2, IDB_P1_IDLE2_3 };
     AddCAnimation(&rl, BITMAP_SIZE); //ani[0] Run Left
     AddCAnimation(&rr, BITMAP_SIZE); //ani[1] Run Right
     AddCAnimation(&jl, BITMAP_SIZE, 5, false); //ani[2] Jump Left
@@ -116,31 +116,32 @@ void Player::LoadBitmap()
     AddCAnimation(&sr, BITMAP_SIZE); //ani[5] Stand (Idle) Right
     AddCAnimation(&ll, BITMAP_SIZE); //ani[6] Lean Left
     AddCAnimation(&lr, BITMAP_SIZE); //ani[7] Lean Right
-	AddCAnimation(&al, BITMAP_SIZE, 4, false); //ani[8] Attack Left
-	AddCAnimation(&ar, BITMAP_SIZE, 4, false); //ani[9] Attack Right
-	AddCAnimation(&sdl, BITMAP_SIZE, 5, false); //ani[10] Draw sword Left
-	AddCAnimation(&sdr, BITMAP_SIZE, 5, false); //ani[11] Draw sword Right
-	AddCAnimation(&s2l, BITMAP_SIZE); //ani[12] Stand (Idle) Left with sword
-	AddCAnimation(&s2r, BITMAP_SIZE); //ani[13] Stand (Idle) Left with sword
+    AddCAnimation(&al, BITMAP_SIZE, 4, false); //ani[8] Attack Left
+    AddCAnimation(&ar, BITMAP_SIZE, 4, false); //ani[9] Attack Right
+    AddCAnimation(&sdl, BITMAP_SIZE, 5, false); //ani[10] Draw sword Left
+    AddCAnimation(&sdr, BITMAP_SIZE, 5, false); //ani[11] Draw sword Right
+    AddCAnimation(&s2l, BITMAP_SIZE); //ani[12] Stand (Idle) Left with sword
+    AddCAnimation(&s2r, BITMAP_SIZE); //ani[13] Stand (Idle) Left with sword
     _collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
 }
 
 void Player::OnShow()
 {
-	if (_isDrawingWeapon)
-	{
-		if (_dir) //Player is attacking right
-		{
-			SetAnimationState(11);
-		}
-		else //Player is attcking left
-		{
-			SetAnimationState(10);
-		}
-		if(ani[currentAni].IsFinalBitmap())
-			_isDrawingWeapon = false;
-	}
-	else if (_isHoldingWeapon && _isAttacking)
+    if (_isDrawingWeapon)
+    {
+        if (_dir) //Player is attacking right
+        {
+            SetAnimationState(11);
+        }
+        else //Player is attcking left
+        {
+            SetAnimationState(10);
+        }
+
+        if (ani[currentAni].IsFinalBitmap())
+            _isDrawingWeapon = false;
+    }
+    else if (_isHoldingWeapon && _isAttacking)
     {
         if (_dir) //Player is attacking right
         {
@@ -166,31 +167,31 @@ void Player::OnShow()
         }
         else //Player is idling
         {
-			if (_isHoldingWeapon) //With sword
-			{
-				if (_dir) //Player is facing right
-				{
-					SetAnimationState(13);
-				}
-				else //Player is facing left
-				{
-					SetAnimationState(12);
-				}
-			}
-			else //Without sword
-			{
-				if (_dir) //Player is facing right
-				{
-					SetAnimationState(5);
-				}
-				else //Player is facing left
-				{
-					SetAnimationState(4);
-				}
-			}
+            if (_isHoldingWeapon) //With sword
+            {
+                if (_dir) //Player is facing right
+                {
+                    SetAnimationState(13);
+                }
+                else //Player is facing left
+                {
+                    SetAnimationState(12);
+                }
+            }
+            else //Without sword
+            {
+                if (_dir) //Player is facing right
+                {
+                    SetAnimationState(5);
+                }
+                else //Player is facing left
+                {
+                    SetAnimationState(4);
+                }
+            }
         }
     }
-	else
+    else
     {
         if (IsOnLeftEdge()) //Player is leaning on left edge
         {
@@ -218,7 +219,7 @@ void Player::OnShow()
     // For showing the "name tag" //
     if (_PLAYER_DEBUG || 1)
     {
-        OnShowText(_name.c_str(), GetCor(0) - 10, GetCor(3), 15, RGB(255,255,255));
+        OnShowText(_name.c_str(), GetCor(0) - 10, GetCor(3), 15, RGB(255, 255, 255));
     }///////////////////////////////
 }
 
@@ -492,19 +493,19 @@ void Player::SetKeyMode(int i)
 
 int Player::GetKeyMode()
 {
-	return _keyMode;
+    return _keyMode;
 }
 
 void Player::SetHoldWeapon(bool isHolding)
 {
-	_isHoldingWeapon = isHolding;
-	_isDrawingWeapon = isHolding;
-	_isAttacking = false;
+    _isHoldingWeapon = isHolding;
+    _isDrawingWeapon = isHolding;
+    _isAttacking = false;
 }
 
 bool Player::GetHoldWeapon()
 {
-	return _isHoldingWeapon;
+    return _isHoldingWeapon;
 }
 
 int Player::GetCor(int index)
@@ -530,7 +531,7 @@ int Player::GetCor(int index)
 
 string Player::GetName()
 {
-	return _name;
+    return _name;
 }
 
 int Player::ShowAnimationState()
@@ -543,7 +544,10 @@ void Player::DoJump(int bounceOff)
     if (_jumpCount > 0)   //If the player is able to jump more
     {
         _velocity = -INITIAL_VELOCITY;
-        _y -= _round(INITIAL_VELOCITY);
+        _y -= _round(INITIAL_VELOCITY); //Trick explaination: By intuition, '_y' of the player should not be
+        // modified here, because it is expected to be modified whenever 'Player::OnMove()' is called. However,
+        // since the player is currently on the ground, 'Player::OnMove()' will fix its '_y' onto the surface
+        // instead of modifying it as expectation. Thus, '_y' must be altered here to set the player jump his ass up!!
 
         //Wall Jump
         if (IsOnLeftEdge() || bounceOff == 1)
@@ -572,14 +576,17 @@ void Player::DoFall()
 
 void Player::DoAttack()
 {
-	for (auto i = _player->begin(); i != _player->end(); i++) {
-		if (*i != this && HitPlayer(*i)) {
-			if (GetCor(0) > (*i)->GetCor(0))
-				(*i)->DoJump(1);
-			else
-				(*i)->DoJump(2);
-		}
-	}
+    for (auto i = _player->begin(); i != _player->end(); i++)
+    {
+        if (*i != this && HitPlayer(*i))
+        {
+            if (GetCor(0) > (*i)->GetCor(0))
+                (*i)->DoJump(1);
+            else
+                (*i)->DoJump(2);
+        }
+    }
+
     ResetAttackAnimations();
 }
 
@@ -696,15 +703,15 @@ void Player::AddCAnimation(vector<int>* list, double size, int delay, bool repea
 
 void Player::SetAnimationState(int num)
 {
-	currentAni = num;
+    currentAni = num;
 
-	for (auto i = ani.begin(); i != ani.end(); i++)
-	{
-		if (i == ani.begin() + num)
-			i->SetPause(false);
-		else
-			i->SetPause(true);
-	}
+    for (auto i = ani.begin(); i != ani.end(); i++)
+    {
+        if (i == ani.begin() + num)
+            i->SetPause(false);
+        else
+            i->SetPause(true);
+    }
 }
 
 void Player::ShowAnimation()
@@ -722,10 +729,10 @@ void Player::ShowAnimation()
     ani_iter->OnShow();
 }
 
-bool Player::HitPlayer(Player * player)
+bool Player::HitPlayer(Player* player)
 {
     int x1 = GetCor(0) - 50, y1 = GetCor(1), x2 = GetCor(2) + 50, y2 = GetCor(3);
-	return (player->GetCor(2) >= x1 && player->GetCor(0) <= x2 && player->GetCor(3) >= y1 && player->GetCor(1) <= y2);
+    return (player->GetCor(2) >= x1 && player->GetCor(0) <= x2 && player->GetCor(3) >= y1 && player->GetCor(1) <= y2);
 }
 
 bool Player::IsOutMapBorder()
@@ -739,7 +746,7 @@ bool Player::IsOutMapBorder()
 
 void Player::DoDead()
 {
-	SetHoldWeapon(false);
+    SetHoldWeapon(false);
     _life--;
     /// activate dead effect
 }
