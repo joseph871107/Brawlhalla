@@ -15,18 +15,6 @@ struct ColArray
     int height;
     string fileName;
     vector<vector<bool>> pixel;
-    ColArray& operator=(const ColArray& rightObject)
-    {
-        if (this != &rightObject)
-        {
-            width  = rightObject.width;
-            height  = rightObject.height;
-            fileName  = rightObject.fileName;
-            pixel = rightObject.pixel;
-        }
-
-        return (*this);
-    }
 };
 
 struct ColBmp
@@ -42,6 +30,7 @@ struct ColBmp
 /////////////////////////
 extern map<string, int> idbList;
 extern map<int, string> fileList;
+extern map<int, ColBmp> colBmp;
 extern map<int, ColArray> cArray;
 
 /////////////////////////
@@ -57,7 +46,7 @@ void InitializeCollideArray(bool = false);														// ªì©l¤ÆÂI°}¹Ïªº¥¬ªL¸I¼
 /////////////////////////
 string GetPathFromIDB(int);										// ¥HIDB¨ú±o¸ê·½¸ô®|
 string GetNameFromIDB(int);										// ¥HIDB¨ú±oIDB¦WºÙ
-void TraceCollideArray(int, bool = true);				// Åã¥ÜÂI°}¹Ï¥¬ªL¯x°}¦bDebugger¤¤
+void TraceCollideArray(int, bool = true);						// Åã¥ÜÂI°}¹Ï¥¬ªL¯x°}¦bDebugger¤¤
 ColBmp readBMP(int file, int = 1000, int = 1000);				// file ¬°ÀÉ®×¸ô®|
 void GetCollideArray(int file, ColBmp*);						// file ¬°IDB¦WºÙ
 
@@ -66,6 +55,7 @@ void GetCollideArray(int file, ColBmp*);						// file ¬°IDB¦WºÙ
 // ³q¥Î»²§U°Æµ{¦¡
 /////////////////////////
 void OnShowText(string, int, int, int = 20, COLORREF = RGB(255, 255, 0), LPCTSTR = "Times New Roman");	// Â²¤Æ­ì¥»Game Framework ªº¦r¦êÅã¥Ü
+void DrawRectangle(int x, int y, int width, int height, COLORREF color = RGB(0, 0, 0));
 }
 
 #endif //define GAMECOMFUNC_H

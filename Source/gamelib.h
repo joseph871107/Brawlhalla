@@ -157,7 +157,7 @@ class CDDraw
         static bool  IsFullScreen();			// 回答是否為全螢幕模式/視窗模式
     private:
         CDDraw();								// private constructor
-        static void  BltBitmapToBack(unsigned SurfaceID, int x, int y);
+		static void  BltBitmapToBack(unsigned SurfaceID, int x, int y);
         static void  BltBitmapToBack(unsigned SurfaceID, int x, int y, double factor);
         static void  BltBitmapToBitmap(unsigned SourceID, unsigned TargetID, int x, int y);
         static void	 CheckDDFail(char* s);

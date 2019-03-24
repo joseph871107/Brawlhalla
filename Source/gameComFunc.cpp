@@ -12,6 +12,7 @@ namespace game_framework
 
 map<string, int> idbList;
 map<int, string> fileList;
+map<int, ColBmp> colBmp;
 map<int, ColArray> cArray;
 
 void InitializeAllBMP(bool trace, string file1, string file2)
@@ -31,6 +32,19 @@ void OnShowText(string msg, int x, int y, int size, COLORREF color, LPCTSTR font
     pDC->TextOut(x, y, msg.c_str());
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+}
+
+void DrawRectangle(int x, int y, int width, int height, COLORREF color)
+{
+	CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
+	CPen* pp, p(PS_NULL, 0, RGB(0, 0, 0));		// 清除pen
+	pp = pDC->SelectObject(&p);
+	CBrush* pb, b(color);
+	pb = pDC->SelectObject(&b);
+	pDC->Rectangle(x, y, x + width, y + height);
+	pDC->SelectObject(pp);						// 釋放 pen
+	pDC->SelectObject(pb);						// 釋放 brush
+	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 }
 
 int ti(int i, double j)
@@ -173,6 +187,7 @@ void InitializeCollideArray(bool trace)
     {
         TRACE("---Generating %s collide array...\n", i->first.c_str());
         ColBmp tt = readBMP(i->second);
+		colBmp.insert(pair<int, ColBmp>(i->second, tt));
         GetCollideArray(i->second, &tt);
         TraceCollideArray(i->second, trace);
     }

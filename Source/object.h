@@ -31,7 +31,7 @@ class Object
         double _size;											// 物件的大小
         bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
     private:
-        CMovingBitmap bmp;
+		CMovingBitmap bmp;
 };
 }
 
