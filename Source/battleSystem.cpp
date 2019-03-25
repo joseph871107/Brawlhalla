@@ -30,47 +30,54 @@ BattleSystem::~BattleSystem()
 {
 }
 
-int random(int min, int max) {
-	return rand() % (max - min + 1) + min;
+int random(int min, int max)
+{
+    return rand() % (max - min + 1) + min;
 }
 
 void BattleSystem::OnBeginState()
 {
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
-	start = lastTime = clock();
-	nextTimeGenerateWeapon = random(3,10);
-	_weapon.clear();
+    start = lastTime = clock();
+    nextTimeGenerateWeapon = random(3, 10);
+    _weapon.clear();
+    _secPerRound = MATCH_TIME;
+    vector<GroundPARM> groundXY = _groundXY;
 
-	_secPerRound = MATCH_TIME;
-	vector<GroundPARM> groundXY = _groundXY;
-	for (auto i = _player.begin(); i != _player.end(); i++) {
-		char str[80];
-		sprintf(str, "%d", i - _player.begin() + 1);
-		(*i)->Initialize(_ground, &_player, "Player " + (string)str, i - _player.begin() + 1);
-	}
+    for (auto i = _player.begin(); i != _player.end(); i++)
+    {
+        char str[80];
+        sprintf(str, "%d", i - _player.begin() + 1);
+        (*i)->Initialize(_ground, &_player, "Player " + (string)str, i - _player.begin() + 1);
+    }
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
 {
-	// After certain amount of time, generates Weapon automatically //
-	if ((clock() - lastTime) / CLOCKS_PER_SEC > nextTimeGenerateWeapon) {
-		if (_weapon.size() < MAX_WEAPON) {
-			Weapon* weapon = new Weapon();
-			weapon->Initialize(_ground, _player);
-			_weapon.push_back(weapon);
-		}
-		lastTime = clock();
-		nextTimeGenerateWeapon = random(5, 8);
-	}/////////////////////////////////////////////////////////////////
+    // After certain amount of time, generates Weapon automatically //
+    if ((clock() - lastTime) / CLOCKS_PER_SEC > nextTimeGenerateWeapon)
+    {
+        if (_weapon.size() < MAX_WEAPON)
+        {
+            Weapon* weapon = new Weapon();
+            weapon->Initialize(_ground, _player);
+            _weapon.push_back(weapon);
+        }
 
-	for (auto i = _weapon.begin(); i != _weapon.end(); i++) {
-		(*i)->OnMove();
-	}
+        lastTime = clock();
+        nextTimeGenerateWeapon = random(5, 8);
+    }/////////////////////////////////////////////////////////////////
 
-	for (auto i = _player.begin(); i != _player.end(); i++) {
-		(*i)->OnMove();
-	}
+    for (auto i = _weapon.begin(); i != _weapon.end(); i++)
+    {
+        (*i)->OnMove();
+    }
+
+    for (auto i = _player.begin(); i != _player.end(); i++)
+    {
+        (*i)->OnMove();
+    }
 }
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
@@ -93,55 +100,56 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
     //CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
+    vector<GroundPARM> groundXY = _groundXY;
 
-	vector<GroundPARM> groundXY = _groundXY;
-
-	// Automatically generate ground objects //
-	for (auto i = groundXY.begin(); i != groundXY.end(); i++)
-	{
-		Ground* ground = new Ground();
-		ground->LoadBitmap();
-		ground->SetXY(i->point.x, i->point.y);
-		ground->SetSize(i->_size);
-		ground->SetLen(i->_length);
-		_ground.push_back(ground);
-	}//////////////////////////////////////////
+    // Automatically generate ground objects //
+    for (auto i = groundXY.begin(); i != groundXY.end(); i++)
+    {
+        Ground* ground = new Ground();
+        ground->LoadBitmap();
+        ground->SetXY(i->point.x, i->point.y);
+        ground->SetSize(i->_size);
+        ground->SetLen(i->_length);
+        _ground.push_back(ground);
+    }//////////////////////////////////////////
 
     background.SetSize(1);
     background.SetXY(-250, 0);
     background.LoadBitmap(IDB_BACKGROUND, RGB(0, 0, 0));
-
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
-	
-	Player* player = new Player();
-	player->LoadBitmap();
-	_player.push_back(player);				// Player1
-	player = new Player();
-	player->LoadBitmap();
-	_player.push_back(player);				// Player2
-
+    Player* player = new Player();
+    player->LoadBitmap();
+    _player.push_back(player);				// Player1
+    player = new Player();
+    player->LoadBitmap();
+    _player.push_back(player);				// Player2
     integer.LoadBitmap();				// time + life
     ShowInitProgress(100);
 }
 
 void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	for (auto i = _player.begin(); i != _player.end(); i++) {
-		(*i)->OnKeyDown(nChar);
-	}
-	
-	// If player takes the weapon //
-	vector<Weapon*>::iterator erase = _weapon.end();
-	for (auto i = _weapon.begin(); i != _weapon.end(); i++) {
-		(*i)->OnKeyDown(nChar);
-		if ((*i)->HasTaken())
-			erase = i;
-	}
-	if (erase != _weapon.end())
-		_weapon.erase(erase);
-	//////////////////////////////
+    for (auto i = _player.begin(); i != _player.end(); i++)
+    {
+        (*i)->OnKeyDown(nChar);
+    }
 
+    // If player takes the weapon //
+    vector<Weapon*>::iterator erase = _weapon.end();
+
+    for (auto i = _weapon.begin(); i != _weapon.end(); i++)
+    {
+        (*i)->OnKeyDown(nChar);
+
+        if ((*i)->HasTaken())
+            erase = i;
+    }
+
+    if (erase != _weapon.end())
+        _weapon.erase(erase);
+
+    //////////////////////////////
     currentKeydown = nChar;
 }
 
@@ -152,9 +160,10 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
     if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
         GotoGameState(GAME_STATE_OVER);	// 關閉遊戲
 
-	for (auto i = _player.begin(); i != _player.end(); i++) {
-		(*i)->OnKeyUp(nChar);
-	}
+    for (auto i = _player.begin(); i != _player.end(); i++)
+    {
+        (*i)->OnKeyUp(nChar);
+    }
 }
 
 void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -182,69 +191,92 @@ void BattleSystem::OnShow()
     {
         (*i)->OnShow();
     }
-	// Show weapon
-	for (auto i = _weapon.begin(); i != _weapon.end(); i++) {
-		(*i)->OnShow();
-	}
 
-	// Show player
-	for (auto i = _player.begin(); i != _player.end(); i++) {
-		// Show player
-		(*i)->OnShow();
-		// Show player's life
-		ShowPlayerLife((**i), 1200 + 200 * (i - _player.begin()), 0);
-	}
+    // Show weapon
+    for (auto i = _weapon.begin(); i != _weapon.end(); i++)
+    {
+        (*i)->OnShow();
+    }
 
-	//------------------Test Text------------------//
-	if (_PLAYER_DEBUG)
-	{
-		char str[80], str2[80];
-		ostringstream oss;
-		oss << hex << currentKeydown;
-		sprintf(str, "(%d, %d) KeyDown:%s", mousePoint.x, mousePoint.y, ("0x" + oss.str()).c_str());
-		OnShowText(str, 0, 0, 10);
-		for (auto i = _player.begin(); i != _player.end(); i++) {
-			sprintf(str, "Player1 (x1:%d, y1:%d, x2:%d, y2:%d)", (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
-			OnShowText(str, 0, 12 + 12 * (i - _player.begin()), 10);
-		}
+    // Show player
+    for (auto i = _player.begin(); i != _player.end(); i++)
+    {
+        // Show player
+        (*i)->OnShow();
+        // Show player's life
+        ShowPlayerLife((**i), 1200 + 200 * (i - _player.begin()), 0);
+    }
 
-		for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
-		{
-			sprintf(str, "                      , Ground%d (x1:%d, y1:%d, x2:%d, y2:%d)", i - _ground.begin(), (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
-			OnShowText(str, 0, 36 + 12 * (i - _ground.begin()), 10);
-		}
+    //------------------Test Text------------------//
+    if (_PLAYER_DEBUG)
+    {
+        char str[80], str2[80];
+        ostringstream oss;
+        oss << hex << currentKeydown;
+        sprintf(str, "(%d, %d) KeyDown:%s", mousePoint.x, mousePoint.y, ("0x" + oss.str()).c_str());
+        OnShowText(str, 0, 0, 10);
 
-		for (auto i = _player.begin(); i != _player.end(); i++) {
-			sprintf(str, "%s", GetNameFromIDB((*i)->ShowAnimationState()).c_str());
-			OnShowText(str, 0 + 200 * (i - _player.begin()), SIZE_Y - 24, 20);
-		}
-		sprintf(str, "Remain Time : %s : %s\n", (GetCurrentRemainTime() / 600 == 0 ? ("0" + (string)str).c_str() : str), ((GetCurrentRemainTime() % 60) / 10 == 0 ? ("0" + (string)str2).c_str() : str2));
-		OnShowText(str, 650, 0, 30);
-	}
+        for (auto i = _player.begin(); i != _player.end(); i++)
+        {
+            sprintf(str, "Player1 (x1:%d, y1:%d, x2:%d, y2:%d)", (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
+            OnShowText(str, 0, 12 + 12 * (i - _player.begin()), 10);
+        }
 
-	//------------------End of Test Text------------------//
+        for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+        {
+            sprintf(str, "                      , Ground%d (x1:%d, y1:%d, x2:%d, y2:%d)", i - _ground.begin(), (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
+            OnShowText(str, 0, 36 + 12 * (i - _ground.begin()), 10);
+        }
+
+        for (auto i = _player.begin(); i != _player.end(); i++)
+        {
+            sprintf(str, "%s", GetNameFromIDB((*i)->ShowAnimationState()).c_str());
+            OnShowText(str, 0 + 200 * (i - _player.begin()), SIZE_Y - 24, 20);
+        }
+
+        sprintf(str, "Remain Time : %s : %s\n", (GetCurrentRemainTime() / 600 == 0 ? ("0" + (string)str).c_str() : str), ((GetCurrentRemainTime() % 60) / 10 == 0 ? ("0" + (string)str2).c_str() : str2));
+        OnShowText(str, 650, 0, 30);
+    }
+
+    //------------------End of Test Text------------------//
 }
 
 bool BattleSystem::IsGameOver()
 {
-	for (auto i = _player.begin(); i != _player.end(); i++) {
-		if ((*i)->IsOutOfLife())
-			return true;
-	}
+    for (auto i = _player.begin(); i != _player.end(); i++)
+    {
+        if ((*i)->IsOutOfLife())
+            return true;
+    }
+
     return (GetCurrentRemainTime() == 0);
 }
 
 string BattleSystem::GetGameResult()
 {
-	Player* max = *(_player.begin());
-	for (auto i = _player.begin(); i != _player.end(); i++) {
-		if ((*i)->GetLife() > max->GetLife())
-			max = *i;
-	}
-	if (max != nullptr)
-		return (max->GetName() + " win.");
-	else
+    Player* max = *(_player.begin());
+    bool draw = true;
+
+    for (auto i = _player.begin(); i != _player.end(); i++)
+    {
+        if ((*i)->GetLife() > max->GetLife())
+        {
+            max = *i;
+        }
+    }
+
+    for (auto i = _player.begin(); i != _player.end(); i++)
+    {
+        if ((*i)->GetLife() < max->GetLife())
+        {
+            draw = false;
+        }
+    }
+
+    if (draw)
         return ("Draw.");
+    else
+        return (max->GetName() + " win.");
 }
 
 void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)
@@ -261,7 +293,7 @@ void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYV
 
 int BattleSystem::GetCurrentRemainTime()
 {
-	return MATCH_TIME - (clock() - start) / CLOCKS_PER_SEC;
+    return MATCH_TIME - (clock() - start) / CLOCKS_PER_SEC;
 }
 
 }

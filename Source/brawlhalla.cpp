@@ -126,7 +126,7 @@ void CGameStateOver::OnMove()
 
 void CGameStateOver::OnBeginState()
 {
-    counter = (int)(30 * 0.5); // 0.5 seconds
+    counter = (int)(180 * 0.5); // 0.5 seconds
 }
 
 void CGameStateOver::OnInit()
@@ -140,13 +140,15 @@ void CGameStateOver::OnShow()
     sprintf(str, "Game Over ! (%d)", counter / 30);
     OnShowText(str, 240, 210);
     char gameResultStr[80];
-    sprintf(gameResultStr, "Still working on it");
+    sprintf(gameResultStr, CGameStateRun::GetLegacyString().c_str());
     OnShowText(gameResultStr, 240, 300);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
+
+string CGameStateRun::_legacyString = ""; //initialize
 
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g), battleSystem(BattleSystem(g))
@@ -165,7 +167,10 @@ void CGameStateRun::OnBeginState()
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
     if (battleSystem.IsGameOver())								// Demo 關閉遊戲的方法
+    {
+        SetLegacyString(battleSystem.GetGameResult());
         GotoGameState(GAME_STATE_OVER);					// 關閉遊戲
+    }
 
     battleSystem.OnMove();
 }
@@ -209,6 +214,16 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 void CGameStateRun::OnShow()
 {
     battleSystem.OnShow();
+}
+
+string CGameStateRun::GetLegacyString()
+{
+    return (_legacyString);
+}
+
+void CGameStateRun::SetLegacyString(string newLegacyString)
+{
+    _legacyString = newLegacyString;
 }
 
 }

@@ -95,8 +95,11 @@ class CGameStateRun : public CGameState
         void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
+        static string GetLegacyString();
+        static void SetLegacyString(string newLegacyString);
     private:
         BattleSystem battleSystem;
+        static string _legacyString;				// used for transferring message to other game state (e.g., CGameStateInit, CGameStateOver)
 };
 
 /////////////////////////////////////////////////////////////////////////////
