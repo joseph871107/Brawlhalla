@@ -37,12 +37,12 @@ class BattleSystem : public CGameState
         int _secPerRound;
         CPoint mousePoint;
         UINT currentKeydown;
-		clock_t start, lastTime;
-		int nextTimeGenerateWeapon;
+        clock_t start, lastTime;
+        int nextTimeGenerateWeapon;
         Object background;
-		vector<Ground*> _ground;
+        vector<Ground*> _ground;
         vector<Player*> _player;
-		vector<Weapon*> _weapon;
+        vector<Weapon*> _weapon;
 };
 
 }

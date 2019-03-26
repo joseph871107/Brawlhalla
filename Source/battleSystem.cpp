@@ -28,6 +28,20 @@ BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Object()), _gro
 
 BattleSystem::~BattleSystem()
 {
+    for (auto element : _ground)
+    {
+        delete element;
+    }
+
+    for (auto element : _player)
+    {
+        delete element;
+    }
+
+    for (auto element : _weapon)
+    {
+        delete element;
+    }
 }
 
 int random(int min, int max)
@@ -147,7 +161,10 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     }
 
     if (erase != _weapon.end())
+    {
+        delete (*erase); //Resolve memory leak of weapons
         _weapon.erase(erase);
+    }
 
     //////////////////////////////
     currentKeydown = nChar;

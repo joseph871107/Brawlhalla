@@ -22,12 +22,12 @@ class Player
         void OnKeyUp(const UINT& nChar);
 
         //Others
-		void SetKeyMode(int = 0);
-		int GetKeyMode();
-		void SetHoldWeapon(bool);
-		bool GetHoldWeapon();
+        void SetKeyMode(int = 0);
+        int GetKeyMode();
+        void SetHoldWeapon(bool);
+        bool GetHoldWeapon();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
-		string GetName();
+        string GetName();
         int ShowAnimationState();		// Return which CAnimation is playing
         bool IsOutOfLife();
         const int& GetLife() const;
@@ -62,7 +62,7 @@ class Player
         int _x, _y; //The position of the collision's box
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
-		//bool _beInterrupt;
+        //bool _beInterrupt;
 
         //Bitmaps
         vector<int> rl;	// bmps of running left
@@ -73,12 +73,12 @@ class Player
         vector<int> sr;	// bmps of standing right
         vector<int> ll; // bmps of leaning left
         vector<int> lr; // bmps of leaning right
-		vector<int> al; // bmps of attacking left
-		vector<int> ar; // bmps of attacking right
-		vector<int> sdl;// bmps of drawing sword left
-		vector<int> sdr;// bmps of drawing sword right
-		vector<int> s2l;// bmps of standing left with sword
-		vector<int> s2r;// bmps of standing right with sword
+        vector<int> al; // bmps of attacking left
+        vector<int> ar; // bmps of attacking right
+        vector<int> sdl;// bmps of drawing sword left
+        vector<int> sdr;// bmps of drawing sword right
+        vector<int> s2l;// bmps of standing left with sword
+        vector<int> s2r;// bmps of standing right with sword
         vector<vector<int>*> bmp_iter;
 
         //Required for "physical" existence in the game
@@ -98,12 +98,12 @@ class Player
         int _offsetVelocity;
         bool _isOffsetLeft, _isOffsetRight;
 
-		//[Attribute] Attack
-		bool _isHoldingWeapon;
-		bool _isDrawingWeapon;
+        //[Attribute] Attack
+        bool _isHoldingWeapon;
+        bool _isDrawingWeapon;
         bool _isAttacking;
-		bool HitPlayer(Player*);
-		vector<Player*>* _player;
+        bool HitPlayer(Player*);
+        vector<Player*>* _player;
 
         //Required for a jump simulating the physical world
         double _velocity;
