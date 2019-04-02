@@ -14,7 +14,7 @@ class Player
         ~Player();						//Destructor
 
         //Required for Game Framework
-        void Initialize(vector<Ground*> groundPtrValue, vector<Player*>* playerPtrValue, string nameValue, int = 0);
+        void Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, int = 0);
         void LoadBitmap();
         void OnShow();
         void OnMove();
@@ -116,7 +116,7 @@ class Player
         double _velocity;
 
         //Ground
-        vector<Ground*> _ground;
+        vector<Ground*> _grounds;
 
         //Main Collision box to debug
         CMovingBitmap _collision_box;

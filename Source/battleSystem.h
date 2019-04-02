@@ -40,9 +40,9 @@ class BattleSystem : public CGameState
         clock_t start, lastTime;
         int nextTimeGenerateWeapon;
         Object background;
-        vector<Ground*> _ground;
-        vector<Player*> _player;
-        vector<Weapon*> _weapon;
+        vector<Ground*> _grounds;
+        vector<Player*> _players;
+        vector<Weapon*> _weapons;
 };
 
 }

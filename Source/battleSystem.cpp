@@ -16,29 +16,29 @@ namespace game_framework
 
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MATCH_TIME = 180;
-const int MAX_WEAPON = 5;
+const int MAX_weapons = 5;
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 
-const vector<GroundPARM> _groundXY{ GroundPARM(0, 300, 0.65, 5), GroundPARM(500, 400, 0.65, 5), GroundPARM(1000, 500, 0.65, 5) };	// Define Ground position to automatically generate ground objects
+const vector<GroundPARM> _groundsXY{ GroundPARM(0, 300, 0.65, 5), GroundPARM(500, 400, 0.65, 5), GroundPARM(1000, 500, 0.65, 5) };	// Define Ground position to automatically generate ground objects
 CInteger integer(2);																												// Used to show current remain time
 
-BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Object()), _ground(vector<Ground*>()), _player(vector<Player*>()), _weapon(vector<Weapon*>())
+BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Object()), _grounds(vector<Ground*>()), _players(vector<Player*>()), _weapons(vector<Weapon*>())
 {
 }
 
 BattleSystem::~BattleSystem()
 {
-    for (auto element : _ground)
+    for (auto element : _grounds)
     {
         delete element;
     }
 
-    for (auto element : _player)
+    for (auto element : _players)
     {
         delete element;
     }
 
-    for (auto element : _weapon)
+    for (auto element : _weapons)
     {
         delete element;
     }
@@ -55,15 +55,15 @@ void BattleSystem::OnBeginState()
     /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
     start = lastTime = clock();
     nextTimeGenerateWeapon = random(3, 10);
-    _weapon.clear();
+    _weapons.clear();
     _secPerRound = MATCH_TIME;
-    vector<GroundPARM> groundXY = _groundXY;
+    vector<GroundPARM> groundXY = _groundsXY;
 
-    for (auto i = _player.begin(); i != _player.end(); i++)
+    for (auto i = _players.begin(); i != _players.end(); i++)
     {
         char str[80];
-        sprintf(str, "%d", i - _player.begin() + 1);
-        (*i)->Initialize(_ground, &_player, "Player " + (string)str, i - _player.begin() + 1);
+        sprintf(str, "%d", i - _players.begin() + 1);
+        (*i)->Initialize(_grounds, &_players, "Player " + (string)str, i - _players.begin() + 1);
     }
 }
 
@@ -72,23 +72,23 @@ void BattleSystem::OnMove()							// 移動遊戲元素
     // After certain amount of time, generates Weapon automatically //
     if ((clock() - lastTime) / CLOCKS_PER_SEC > nextTimeGenerateWeapon)
     {
-        if (_weapon.size() < MAX_WEAPON)
+        if (_weapons.size() < MAX_weapons)
         {
             Weapon* weapon = new Weapon();
-            weapon->Initialize(_ground, _player);
-            _weapon.push_back(weapon);
+            weapon->Initialize(_grounds, _players);
+            _weapons.push_back(weapon);
         }
 
         lastTime = clock();
         nextTimeGenerateWeapon = random(5, 8);
     }/////////////////////////////////////////////////////////////////
 
-    for (auto i = _weapon.begin(); i != _weapon.end(); i++)
+    for (auto i = _weapons.begin(); i != _weapons.end(); i++)
     {
         (*i)->OnMove();
     }
 
-    for (auto i = _player.begin(); i != _player.end(); i++)
+    for (auto i = _players.begin(); i != _players.end(); i++)
     {
         (*i)->OnMove();
     }
@@ -114,7 +114,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
     //CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
-    vector<GroundPARM> groundXY = _groundXY;
+    vector<GroundPARM> groundXY = _groundsXY;
 
     // Automatically generate ground objects //
     for (auto i = groundXY.begin(); i != groundXY.end(); i++)
@@ -124,7 +124,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
         ground->SetXY(i->point.x, i->point.y);
         ground->SetSize(i->_size);
         ground->SetLen(i->_length);
-        _ground.push_back(ground);
+        _grounds.push_back(ground);
     }//////////////////////////////////////////
 
     background.SetSize(1);
@@ -134,25 +134,25 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
     Player* player = new Player();
     player->LoadBitmap();
-    _player.push_back(player);				// Player1
+    _players.push_back(player);				// Player1
     player = new Player();
     player->LoadBitmap();
-    _player.push_back(player);				// Player2
+    _players.push_back(player);				// Player2
     integer.LoadBitmap();				// time + life
     ShowInitProgress(100);
 }
 
 void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    for (auto i = _player.begin(); i != _player.end(); i++)
+    for (auto i = _players.begin(); i != _players.end(); i++)
     {
         (*i)->OnKeyDown(nChar);
     }
 
     // If player takes the weapon //
-    vector<Weapon*>::iterator erase = _weapon.end();
+    vector<Weapon*>::iterator erase = _weapons.end();
 
-    for (auto i = _weapon.begin(); i != _weapon.end(); i++)
+    for (auto i = _weapons.begin(); i != _weapons.end(); i++)
     {
         (*i)->OnKeyDown(nChar);
 
@@ -160,10 +160,10 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
             erase = i;
     }
 
-    if (erase != _weapon.end())
+    if (erase != _weapons.end())
     {
         delete (*erase); //Resolve memory leak of weapons
-        _weapon.erase(erase);
+        _weapons.erase(erase);
     }
 
     //////////////////////////////
@@ -177,7 +177,7 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
     if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
         GotoGameState(GAME_STATE_OVER);	// 關閉遊戲
 
-    for (auto i = _player.begin(); i != _player.end(); i++)
+    for (auto i = _players.begin(); i != _players.end(); i++)
     {
         (*i)->OnKeyUp(nChar);
     }
@@ -204,24 +204,24 @@ void BattleSystem::OnShow()
     integer.ShowBitmap();
 
     // Show ground
-    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+    for (vector<Ground*>::iterator i = _grounds.begin(); i != _grounds.end(); i++)
     {
         (*i)->OnShow();
     }
 
     // Show weapon
-    for (auto i = _weapon.begin(); i != _weapon.end(); i++)
+    for (auto i = _weapons.begin(); i != _weapons.end(); i++)
     {
         (*i)->OnShow();
     }
 
     // Show player
-    for (auto i = _player.begin(); i != _player.end(); i++)
+    for (auto i = _players.begin(); i != _players.end(); i++)
     {
         // Show player
         (*i)->OnShow();
         // Show player's life
-        ShowPlayerLife((**i), 1200 + 200 * (i - _player.begin()), 0);
+        ShowPlayerLife((**i), 1200 + 200 * (i - _players.begin()), 0);
     }
 
     //------------------Test Text------------------//
@@ -233,22 +233,22 @@ void BattleSystem::OnShow()
         sprintf(str, "(%d, %d) KeyDown:%s", mousePoint.x, mousePoint.y, ("0x" + oss.str()).c_str());
         OnShowText(str, 0, 0, 10);
 
-        for (auto i = _player.begin(); i != _player.end(); i++)
+        for (auto i = _players.begin(); i != _players.end(); i++)
         {
             sprintf(str, "Player1 (x1:%d, y1:%d, x2:%d, y2:%d)", (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
-            OnShowText(str, 0, 12 + 12 * (i - _player.begin()), 10);
+            OnShowText(str, 0, 12 + 12 * (i - _players.begin()), 10);
         }
 
-        for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+        for (vector<Ground*>::iterator i = _grounds.begin(); i != _grounds.end(); i++)
         {
-            sprintf(str, "                      , Ground%d (x1:%d, y1:%d, x2:%d, y2:%d)", i - _ground.begin(), (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
-            OnShowText(str, 0, 36 + 12 * (i - _ground.begin()), 10);
+            sprintf(str, "                      , Ground%d (x1:%d, y1:%d, x2:%d, y2:%d)", i - _grounds.begin(), (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
+            OnShowText(str, 0, 36 + 12 * (i - _grounds.begin()), 10);
         }
 
-        for (auto i = _player.begin(); i != _player.end(); i++)
+        for (auto i = _players.begin(); i != _players.end(); i++)
         {
             sprintf(str, "%s", GetNameFromIDB((*i)->ShowAnimationState()).c_str());
-            OnShowText(str, 0 + 200 * (i - _player.begin()), SIZE_Y - 24, 20);
+            OnShowText(str, 0 + 200 * (i - _players.begin()), SIZE_Y - 24, 20);
         }
 
         sprintf(str, "Remain Time : %s : %s\n", (GetCurrentRemainTime() / 600 == 0 ? ("0" + (string)str).c_str() : str), ((GetCurrentRemainTime() % 60) / 10 == 0 ? ("0" + (string)str2).c_str() : str2));
@@ -260,7 +260,7 @@ void BattleSystem::OnShow()
 
 bool BattleSystem::IsGameOver()
 {
-    for (auto i = _player.begin(); i != _player.end(); i++)
+    for (auto i = _players.begin(); i != _players.end(); i++)
     {
         if ((*i)->IsOutOfLife())
             return true;
@@ -271,10 +271,10 @@ bool BattleSystem::IsGameOver()
 
 string BattleSystem::GetGameResult()
 {
-    Player* max = *(_player.begin());
+    Player* max = *(_players.begin());
     bool draw = true;
 
-    for (auto i = _player.begin(); i != _player.end(); i++)
+    for (auto i = _players.begin(); i != _players.end(); i++)
     {
         if ((*i)->GetLife() > max->GetLife())
         {
@@ -282,7 +282,7 @@ string BattleSystem::GetGameResult()
         }
     }
 
-    for (auto i = _player.begin(); i != _player.end(); i++)
+    for (auto i = _players.begin(); i != _players.end(); i++)
     {
         if ((*i)->GetLife() < max->GetLife())
         {

@@ -51,7 +51,7 @@ Player::Player() :
     _height(int()), _keyMode(int()), _keyModeBool(vector<bool>()), _isMovingLeft(bool()),
     _isMovingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
     _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _isAttacking(bool()),
-    _velocity(double()), _ground(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
+    _velocity(double()), _grounds(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
     _name(string()) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
 {
     /* Body intentionally empty */
@@ -61,7 +61,7 @@ Player::~Player()
 {
 }
 
-void Player::Initialize(vector<Ground*> groundPtrValue, vector<Player*>* playerPtrValue, string nameValue, int i)
+void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, int i)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
     //_x = (int)((groundPtrValue->GetCor(2) + groundPtrValue->GetCor(0)) / 2);
@@ -81,7 +81,7 @@ void Player::Initialize(vector<Ground*> groundPtrValue, vector<Player*>* playerP
     //
     _velocity = INITIAL_VELOCITY;
     //
-    _ground = groundPtrValue;
+	_grounds = groundsValue;
     _player = playerPtrValue;
     //
     _life = MAX_LIFE;
@@ -300,7 +300,7 @@ void Player::OnMove()
     int playerX2 = GetCor(2);
     int playerY2 = GetCor(3);
 
-    for (auto groundPtr : _ground)
+    for (auto groundPtr : _grounds)
     {
         int groundX1 = groundPtr->GetCor(0);
         int groundY1 = groundPtr->GetCor(1);
@@ -625,7 +625,7 @@ bool Player::IsOnGround()
     int playerX2 = GetCor(2);
     int playerY2 = GetCor(3);
 
-    for (auto groundPtr : _ground)
+    for (auto groundPtr : _grounds)
     {
         int groundX1 = groundPtr->GetCor(0);
         int groundY1 = groundPtr->GetCor(1);
@@ -646,7 +646,7 @@ bool Player::IsOnLeftEdge()
     int playerX2 = GetCor(2);
     int playerY2 = GetCor(3);
 
-    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+    for (vector<Ground*>::iterator i = _grounds.begin(); i != _grounds.end(); i++)
     {
         int groundX1 = (*i)->GetCor(0);
         int groundY1 = (*i)->GetCor(1);
@@ -667,7 +667,7 @@ bool Player::IsOnRightEdge()
     int playerX2 = GetCor(2);
     int playerY2 = GetCor(3);
 
-    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+    for (vector<Ground*>::iterator i = _grounds.begin(); i != _grounds.end(); i++)
     {
         int groundX1 = (*i)->GetCor(0);
         int groundY1 = (*i)->GetCor(1);
