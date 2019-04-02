@@ -35,13 +35,20 @@ class Player
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
+        //Reposition about the grounds
+        bool IsIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+        bool IsExplicitlyVerticallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+        bool IsOnGroundLeftEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+        bool IsOnGroundRightEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+        bool IsExplicitlyHorizontallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+        bool IsOnGroundUnderside(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+        bool IsOnParticularGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+        void DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+
         //Movements
         void DoJump(int = 0);
-        void DoFall();
         void DoAttack();
-        void DoOnGround();
-        void DoOnEdge();
-        bool IsOnGround();
+        bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
         bool IsOnLeftEdge();
         bool IsOnRightEdge();
         void ResetJumpAnimations();
@@ -59,7 +66,7 @@ class Player
 
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
-        int _x, _y; //The position of the collision's box
+        int _x, _y;						// Position of the collision's box
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
         //bool _beInterrupt;
@@ -82,7 +89,7 @@ class Player
         vector<vector<int>*> bmp_iter;
 
         //Required for "physical" existence in the game
-        int _width, _height;
+        int _width, _height;			// of the collision box
         int _keyMode;	//0 as test, 1 as P1, 2 as P3
         vector<bool> _keyModeBool;
 

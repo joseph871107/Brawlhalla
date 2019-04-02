@@ -11,8 +11,8 @@ namespace game_framework
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MAX_JUMP_COUNT = 2;
 const int MOVEMENT_UNIT = 7;
-const double ACCELERATION_UNIT = 0.2;
-const double INITIAL_VELOCITY = 8;
+const double ACCELERATION_UNIT = 1.2;
+const double INITIAL_VELOCITY = 18;
 const int OFFSET_INITIAL_VELOCITY = 15;
 const long KEY_A = 0x41;
 const long KEY_D = 0x44;
@@ -223,76 +223,108 @@ void Player::OnShow()
     }///////////////////////////////
 }
 
+bool Player::IsIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
+{
+    return (playerX2 >= groundX1 && playerX1 <= groundX2 && playerY2 >= groundY1 && playerY1 <= groundY2);
+}
+
+bool Player::IsExplicitlyVerticallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
+{
+    return (!(playerY2 <= groundY1 || playerY1 >= groundY2));
+}
+
+bool Player::IsOnGroundLeftEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
+{
+    return (IsExplicitlyVerticallyIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2)
+            &&
+            (playerX1 < groundX1 && groundX1 < playerX2 && playerX2 < groundX2));
+}
+
+bool Player::IsOnGroundRightEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
+{
+    return (IsExplicitlyVerticallyIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2)
+            &&
+            (groundX1 < playerX1 && playerX1 < groundX2 && groundX2 < playerX2));
+}
+
+bool Player::IsExplicitlyHorizontallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
+{
+    return (!((playerX2 <= groundX1) || (playerX1 >= groundX2)));
+}
+
+bool Player::IsOnGroundUnderside(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
+{
+    return (IsExplicitlyHorizontallyIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2)
+            &&
+            (groundY1 < playerY1 && playerY1 <= groundY2 && groundY2 < playerY2));
+}
+
+bool Player::IsOnParticularGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
+{
+    return (playerY1 < groundY1 && groundY1 <= playerY2 && playerY2 < groundY2
+            &&
+            groundX1 <= playerX1 && playerX2 <= groundX2);
+}
+
+void Player::DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
+{
+    if (IsOnGroundLeftEdge(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
+    {
+        _x = groundX1 - _width;
+    }
+
+    if (IsOnGroundRightEdge(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
+    {
+        _x = groundX2;
+    }
+
+    if (IsOnGroundUnderside(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
+    {
+        _y = groundY2;
+    }
+
+    if (IsOnParticularGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
+    {
+        _y = groundY1 - _height;
+    }
+}
+
 void Player::OnMove()
 {
     for (auto i = ani.begin(); i != ani.end(); i++) //For all CAnimation objects in 'ani'
         i->OnMove(); //Proceed to the next CMovingBitmap in the CAnimation 'i'
 
-    /* PLAYER - GROUND */
+    /* REPOSITION PLAYER ABOUT GROUNDS */
     int playerX1 = GetCor(0);
     int playerY1 = GetCor(1);
     int playerX2 = GetCor(2);
     int playerY2 = GetCor(3);
 
-    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+    for (auto groundPtr : _ground)
     {
-        int groundX1 = (*i)->GetCor(0);
-        int groundY1 = (*i)->GetCor(1);
-        int groundX2 = (*i)->GetCor(2);
-        int groundY2 = (*i)->GetCor(3);
+        int groundX1 = groundPtr->GetCor(0);
+        int groundY1 = groundPtr->GetCor(1);
+        int groundX2 = groundPtr->GetCor(2);
+        int groundY2 = groundPtr->GetCor(3);
 
-        if (!((playerY2 <= groundY1) || (playerY1 >= groundY2))) //If in y-coordinate intersection range
+        if (IsIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
         {
-            if ((playerX1 < groundX1) && (groundX1 < playerX2) && (playerX2 < groundX2)) //Out on the left
-            {
-                _x = groundX1 - _width;
-                DoFall();
-            }
-            else if ((groundX1 < playerX1) && (playerX1 < groundX2) && (groundX2 < playerX2)) //Out on the right
-            {
-                _x = groundX2;
-                DoFall();
-            }
-            else if ((IsOnLeftEdge() || IsOnRightEdge()) && !IsOnGround())
-            {
-                DoOnEdge();
-            }
-            else if ((groundX1 <= playerX1) && (playerX2 <= groundX2))   //If in ground x-coordinate range
-            {
-                if ((groundY1 - playerY1 < COLLISION_ERRORS) && (playerY1 - groundY2 < COLLISION_ERRORS) && (groundY2 - playerY2 < COLLISION_ERRORS)) //If the player is trying to jump up from beneath the ground, then denies it
-                {
-                    _y = groundY2;
-                    DoFall();
-                }
-                else   //If the player is falling down onto the ground, then make him stand firmly on the ground
-                {
-                    _y = groundY1 - _height;
-                    DoOnGround();
-                }
-            }
-            else //If completely outside the ground
-            {
-                DoFall();
-            }
-        }
-        else if (playerY2 == groundY1) //If the player has already standed firmly on the ground
-        {
-            if ((groundX1 <= playerX1) && (playerX2 <= groundX2))
-            {
-                _y = groundY1 - _height;
-                DoOnGround();
-            }
-            else
-            {
-                DoFall();
-            }
-        }
-        else //If neither in y-coordinate intersection range nor on the ground
-        {
-            DoFall();
+            DoRepositionAboutGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2);
         }
     }
 
+    /* GRAVITY */
+    if (IsOnGround())
+    {
+        _velocity = 0.0;
+    }
+    else
+    {
+        _velocity += ACCELERATION_UNIT;
+        _y += _round(_velocity);
+    }
+
+    /* MOVING LEFT / RIGHT */
     if (_isMovingLeft && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
     {
         _x -= MOVEMENT_UNIT;
@@ -304,17 +336,16 @@ void Player::OnMove()
     }
 
     /* JUMP */
+    if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
+    {
+        ResetJumpCount();
+        ResetJumpAnimations();
+    }
+
     if (_isTriggerJump) //Game logic 'OnMove()' catches the signal jump
     {
         DoJump();
-        //Turn off the jump trigger
-        _isTriggerJump = false;
-    }
-
-    /* ATTACK */
-    if (_isHoldingWeapon && _isAttacking)
-    {
-        DoAttack();
+        _isTriggerJump = false; //Turn off the jump trigger
     }
 
     /* WALL JUMP */
@@ -343,8 +374,13 @@ void Player::OnMove()
         }
     }
 
-    /* FALL OFF THE MAP */
+    /* ATTACK */
+    if (_isHoldingWeapon && _isAttacking)
+    {
+        DoAttack();
+    }
 
+    /* FALL OFF THE MAP */
     if (IsOutMapBorder())
     {
         DoDead();
@@ -566,14 +602,6 @@ void Player::DoJump(int bounceOff)
     }
 }
 
-void Player::DoFall()
-{
-    _velocity += ACCELERATION_UNIT;
-    //for (int i = 0; i < (int)_velocity;i++) {
-    _y += _round(_velocity) ;
-    //}
-}
-
 void Player::DoAttack()
 {
     for (auto i = _player->begin(); i != _player->end(); i++)
@@ -590,21 +618,6 @@ void Player::DoAttack()
     ResetAttackAnimations();
 }
 
-void Player::DoOnGround()
-{
-    _velocity = 0.0;
-    ResetJumpCount();
-    ResetJumpAnimations();
-}
-
-void Player::DoOnEdge()
-{
-    _velocity += ACCELERATION_UNIT;
-    _y += _round(_velocity);
-    ResetJumpCount();
-    ResetJumpAnimations();
-}
-
 bool Player::IsOnGround()
 {
     int playerX1 = GetCor(0);
@@ -612,11 +625,14 @@ bool Player::IsOnGround()
     int playerX2 = GetCor(2);
     int playerY2 = GetCor(3);
 
-    for (vector<Ground*>::iterator i = _ground.begin(); i != _ground.end(); i++)
+    for (auto groundPtr : _ground)
     {
-        int groundX1 = (*i)->GetCor(0), groundX2 = (*i)->GetCor(2), groundY1 = (*i)->GetCor(1);
+        int groundX1 = groundPtr->GetCor(0);
+        int groundY1 = groundPtr->GetCor(1);
+        int groundX2 = groundPtr->GetCor(2);
+        int groundY2 = groundPtr->GetCor(3);
 
-        if (abs(playerY2 - groundY1) <= COLLISION_ERRORS && playerX1 >= groundX1 && playerX2 <= groundX2)
+        if (IsOnParticularGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
             return true;
     }
 
