@@ -14,22 +14,11 @@ const int MOVEMENT_UNIT = 7;
 const double ACCELERATION_UNIT = 1.2;
 const double INITIAL_VELOCITY = 18;
 const int OFFSET_INITIAL_VELOCITY = 15;
-const long KEY_A = 0x41;
-const long KEY_D = 0x44;
-const long KEY_L = 0x4C;
-const long KEY_W = 0x57;
-const long KEY_LEFT = 0x25; // keyboard左箭頭
-const long KEY_UP = 0x26; // keyboard上箭頭
-const long KEY_RIGHT = 0x27; // keyboard右箭頭
-const long KEY_DOWN = 0x28; // keyboard下箭頭
-const long KEY_SPACE = 0x20;
-const long KEY_C = 0x43;
-const long KEY_COMMA = 0xbc;
 const double COLLISION_ERRORS = 1.0;
 const int _OFFSET_X = 20;
 const int _OFFSET_Y = 7;
 const int MAX_LIFE = 3;
-const int MAP_BORDER_OFFSET = 100;
+const int MAP_BORDER_OFFSET = 300;
 const int MAP_BORDER_X1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
@@ -48,7 +37,7 @@ Player::Player() :
     rr(vector<int>()), rl(vector<int>()), jr(vector<int>()), jl(vector<int>()),
     sr(vector<int>()), sl(vector<int>()), ll(vector<int>()), lr(vector<int>()),
     al(vector<int>()), ar(vector<int>()), bmp_iter(vector<vector<int>*>()), _width(int()),
-    _height(int()), _keyMode(int()), _keyModeBool(vector<bool>()), _isMovingLeft(bool()),
+    _height(int()), _isMovingLeft(bool()),
     _isMovingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
     _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _isAttacking(bool()),
     _velocity(double()), _grounds(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
@@ -61,15 +50,13 @@ Player::~Player()
 {
 }
 
-void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, int i)
+void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, vector<long> keysValue)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
     //_x = (int)((groundPtrValue->GetCor(2) + groundPtrValue->GetCor(0)) / 2);
     _x = 700;
     _y = 100;
     /*_size = 2.5;*/
-    SetKeyMode(i);
-    //
     //
     _isMovingLeft = _isMovingRight = _isAttacking = _isHoldingWeapon = _isDrawingWeapon = _dir = false;
     //
@@ -81,7 +68,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     //
     _velocity = INITIAL_VELOCITY;
     //
-	_grounds = groundsValue;
+    _grounds = groundsValue;
     _player = playerPtrValue;
     //
     _life = MAX_LIFE;
@@ -90,6 +77,8 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     //
     _width = (int)(_collision_box.Width() * BITMAP_SIZE);
     _height = (int)(_collision_box.Height() * BITMAP_SIZE);
+    //
+    _keys = keysValue;
 }
 
 void Player::LoadBitmap()
@@ -395,141 +384,48 @@ void Player::OnMove()
 
 void Player::OnKeyDown(const UINT& nChar)
 {
-    switch (nChar)
+    if (nChar == _keys[0]) // Up
     {
-        case KEY_A:
-            if (_keyModeBool[0] || _keyModeBool[1])
-            {
-                _dir = false;
-                _isMovingLeft = true;
-            }
-
-            break;
-
-        case KEY_D:
-            if (_keyModeBool[0] || _keyModeBool[1])
-            {
-                _dir = true;
-                _isMovingRight = true;
-            }
-
-            break;
-
-        case KEY_W:
-            if (_keyModeBool[0] || _keyModeBool[1])
-            {
-                _isTriggerJump = true;
-            }
-
-            break;
-
-        case KEY_LEFT:
-            if (_keyModeBool[0] || _keyModeBool[2])
-            {
-                _dir = false;
-                _isMovingLeft = true;
-            }
-
-            break;
-
-        case KEY_RIGHT:
-            if (_keyModeBool[0] || _keyModeBool[2])
-            {
-                _dir = true;
-                _isMovingRight = true;
-            }
-
-            break;
-
-        case KEY_UP:
-            if (_keyModeBool[0] || _keyModeBool[2])
-            {
-                _isTriggerJump = true;
-            }
-
-            break;
-
-        case KEY_SPACE:
-            if (_keyModeBool[0])
-                _isTriggerJump = true;
-
-            break;
-
-        case KEY_C:
-            if (_keyModeBool[0] || _keyModeBool[1])
-            {
-                _isAttacking = true;
-            }
-
-            break;
-
-        case KEY_COMMA:
-            if (_keyModeBool[0] || _keyModeBool[2])
-            {
-                _isAttacking = true;
-            }
-
-            break;
-
-        default:
-            break;
+        _isTriggerJump = true;
+    }
+    else if (nChar == _keys[1]) // Right
+    {
+        _dir = true;
+        _isMovingRight = true;
+    }
+    else if (nChar == _keys[2]) // Down
+    {
+        /// Later use to fall down from certain terrain
+    }
+    else if (nChar == _keys[3]) // Left
+    {
+        _dir = false;
+        _isMovingLeft = true;
+    }
+    else if (nChar == _keys[4]) //Attack
+    {
+        _isAttacking = true;
+    }
+    else
+    {
+        // Do nothing
     }
 }
 
 void Player::OnKeyUp(const UINT& nChar)
 {
-    switch (nChar)
+    if (nChar == _keys[1]) // Right
     {
-        case KEY_A:
-            if (_keyModeBool[0] || _keyModeBool[1])
-            {
-                _isMovingLeft = false;
-            }
-
-            break;
-
-        case KEY_D:
-            if (_keyModeBool[0] || _keyModeBool[1])
-            {
-                _isMovingRight = false;
-            }
-
-            break;
-
-        case KEY_LEFT:
-            if (_keyModeBool[0] || _keyModeBool[2])
-            {
-                _isMovingLeft = false;
-            }
-
-            break;
-
-        case KEY_RIGHT:
-            if (_keyModeBool[0] || _keyModeBool[2])
-            {
-                _isMovingRight = false;
-            }
-
-            break;
-
-        default:
-            break;
+        _isMovingRight = false;
     }
-}
-
-void Player::SetKeyMode(int i)
-{
-    _keyMode = i;
-
-    for (int i = 0; i < 3; i++)
-        _keyModeBool.push_back(false);
-
-    _keyModeBool[i] = true;
-}
-
-int Player::GetKeyMode()
-{
-    return _keyMode;
+    else if (nChar == _keys[3]) // Left
+    {
+        _isMovingLeft = false;
+    }
+    else
+    {
+        // Do nothing
+    }
 }
 
 void Player::SetHoldWeapon(bool isHolding)

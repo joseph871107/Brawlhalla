@@ -51,6 +51,16 @@ int random(int min, int max)
 
 void BattleSystem::OnBeginState()
 {
+    const long KEY_A = 0x41;
+    const long KEY_S = 0x53;
+    const long KEY_D = 0x44;
+    const long KEY_W = 0x57;
+    const long KEY_LEFT = 0x25;
+    const long KEY_UP = 0x26;
+    const long KEY_RIGHT = 0x27;
+    const long KEY_DOWN = 0x28;
+    const long KEY_C = 0x43;
+    const long KEY_COMMA = 0xbc;
     //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
     start = lastTime = clock();
@@ -58,12 +68,13 @@ void BattleSystem::OnBeginState()
     _weapons.clear();
     _secPerRound = MATCH_TIME;
     vector<GroundPARM> groundXY = _groundsXY;
+    vector<vector<long>> playerKeys = { {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C}, {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA} };
 
     for (auto i = _players.begin(); i != _players.end(); i++)
     {
         char str[80];
         sprintf(str, "%d", i - _players.begin() + 1);
-        (*i)->Initialize(_grounds, &_players, "Player " + (string)str, i - _players.begin() + 1);
+        (*i)->Initialize(_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
     }
 }
 

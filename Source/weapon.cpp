@@ -18,9 +18,9 @@ Weapon::Weapon()
     _bmpID = IDB_WEAPON_FALLING;
     _color = RGB(0, 255, 0);
     _velocity = 0;
-	_size = 0.2;
+    _size = 0.2;
     _isHolding = false;
-	LoadBitmap();
+    LoadBitmap();
 }
 
 void Weapon::LoadBitmap()
@@ -32,24 +32,26 @@ void Weapon::LoadBitmap()
 
 void Weapon::Initialize(vector<Ground*> ground, vector<Player*> player)
 {
-	_ground = ground[(rand() * 100) % ground.size()];												// Randomly choose one of the ground object
+    _ground = ground[(rand() * 100) % ground.size()];												// Randomly choose one of the ground object
     x = (rand() * 1000) % (int)(_ground->GetWidth() * _ground->GetSize()) + _ground->GetCor(0);		// Randomly set x coordinate within Ground's width
     y = _ground->GetCor(1) - 400;																	// Set y with Ground's top adding 400 pixels
-	_player = player;
+    _player = player;
 }
 
-Player * Weapon::HitPlayer()
+Player* Weapon::HitPlayer()
 {
-	for (auto i = _player.begin(); i != _player.end(); i++) {
-		if (HitRectangle((*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3)))
-			return *i;
-	}
-	return nullptr;
+    for (auto i = _player.begin(); i != _player.end(); i++)
+    {
+        if (HitRectangle((*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3)))
+            return *i;
+    }
+
+    return nullptr;
 }
 
 bool Weapon::HasTaken()
 {
-	return _isHolding;
+    return _isHolding;
 }
 
 void Weapon::OnShow()
@@ -75,15 +77,21 @@ void Weapon::OnMove()
 }
 void Weapon::OnKeyDown(UINT nChar)
 {
-	Player* _hitPlayer = HitPlayer();
-	if (_hitPlayer != nullptr) {
-		int keyMode = _hitPlayer->GetKeyMode();
-		if ((nChar == 0x43 && (keyMode == 0 || keyMode == 1)) || (nChar == 0xbc && (keyMode == 0 || keyMode == 2))) {
-			if (!_hitPlayer->GetHoldWeapon()) {
-				_isHolding = true;
-				_hitPlayer->SetHoldWeapon(true);
-			}
-		}
-	}
+    Player* _hitPlayer = HitPlayer();
+
+    if (_hitPlayer != nullptr)
+    {
+        //int keyMode = _hitPlayer->GetKeyMode();
+
+        //if ((nChar == 0x43 && (keyMode == 0 || keyMode == 1)) || (nChar == 0xbc && (keyMode == 0 || keyMode == 2)))
+        if (nChar == 0x43 /*KEY_C*/ || nChar == 0xbc /*KEY_COMMA*/)
+        {
+            if (!_hitPlayer->GetHoldWeapon())
+            {
+                _isHolding = true;
+                _hitPlayer->SetHoldWeapon(true);
+            }
+        }
+    }
 }
 }

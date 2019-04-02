@@ -14,7 +14,7 @@ class Player
         ~Player();						//Destructor
 
         //Required for Game Framework
-        void Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, int = 0);
+        void Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, vector<long> keysValue);
         void LoadBitmap();
         void OnShow();
         void OnMove();
@@ -22,8 +22,6 @@ class Player
         void OnKeyUp(const UINT& nChar);
 
         //Others
-        void SetKeyMode(int = 0);
-        int GetKeyMode();
         void SetHoldWeapon(bool);
         bool GetHoldWeapon();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
@@ -90,8 +88,9 @@ class Player
 
         //Required for "physical" existence in the game
         int _width, _height;			// of the collision box
-        int _keyMode;	//0 as test, 1 as P1, 2 as P3
-        vector<bool> _keyModeBool;
+
+        //Keys
+        vector<long> _keys; // 0 - up, 1 - right, 2 - down, 3 - left, 4 - attack
 
         //[Attribute] Move left/ right
         bool _isMovingLeft, _isMovingRight;
