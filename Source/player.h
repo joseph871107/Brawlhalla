@@ -88,6 +88,8 @@ class Player
         vector<int> sdr;// bmps of drawing sword right
         vector<int> s2l;// bmps of standing left with sword
         vector<int> s2r;// bmps of standing right with sword
+        vector<int>	lfl;// bmps of landing falling left
+        vector<int> lfr;// bmps of landing falling right
         vector<vector<int>*> bmp_iter;
 
         //Required for "physical" existence in the game
@@ -97,7 +99,7 @@ class Player
         vector<long> _keys; // 0 - up, 1 - right, 2 - down, 3 - left, 4 - attack
 
         //[Attribute] Move left/ right
-        bool _isMovingLeft, _isMovingRight;
+        bool _isPressingLeft, _isPressingRight;
         bool _dir; //false: player facing left, true: player facing right
 
         //[Attribute] Jump
@@ -115,8 +117,12 @@ class Player
         bool HitPlayer(Player*);
         vector<Player*>* _player;
 
+        //[Attribute] Landing down
+        bool _isPressingDown;
+
         //Required for a jump simulating the physical world
         double _velocity;
+        double _acceleration;
 
         //Ground
         vector<Ground*> _grounds;

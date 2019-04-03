@@ -11,8 +11,9 @@ namespace game_framework
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MAX_JUMP_COUNT = 2;
 const int MOVEMENT_UNIT = 7;
-const double ACCELERATION_UNIT = 1.2;
 const double INITIAL_VELOCITY = 18;
+const double INITIAL_ACCELERATION = 1.2;
+const double LANDING_ACCELERATION = 2;
 const int OFFSET_INITIAL_VELOCITY = 15;
 const double COLLISION_ERRORS = 1.0;
 const int _OFFSET_X = 20;
@@ -37,8 +38,8 @@ Player::Player() :
     rr(vector<int>()), rl(vector<int>()), jr(vector<int>()), jl(vector<int>()),
     sr(vector<int>()), sl(vector<int>()), ll(vector<int>()), lr(vector<int>()),
     al(vector<int>()), ar(vector<int>()), bmp_iter(vector<vector<int>*>()), _width(int()),
-    _height(int()), _isMovingLeft(bool()),
-    _isMovingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
+    _height(int()), _isPressingLeft(bool()),
+    _isPressingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
     _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _isAttacking(bool()),
     _velocity(double()), _grounds(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
     _name(string()) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
@@ -58,7 +59,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     _y = 100;
     /*_size = 2.5;*/
     //
-    _isMovingLeft = _isMovingRight = _isAttacking = _isHoldingWeapon = _isDrawingWeapon = _dir = false;
+    _isPressingLeft = _isPressingRight = _isPressingDown  = _isAttacking = _isHoldingWeapon = _isDrawingWeapon = _dir = false;
     //
     _isTriggerJump = false;
     ResetJumpCount();
@@ -67,6 +68,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     _isOffsetLeft = _isOffsetRight = false;
     //
     _velocity = INITIAL_VELOCITY;
+    _acceleration = INITIAL_ACCELERATION;
     //
     _grounds = groundsValue;
     _player = playerPtrValue;
@@ -97,6 +99,8 @@ void Player::LoadBitmap()
     sdr = vector<int> { IDB_P1_SWD_DWR0, IDB_P1_SWD_DWR1, IDB_P1_SWD_DWR2, IDB_P1_SWD_DWR3, IDB_P1_SWD_DWR3 };
     s2l = vector<int> { IDB_P1_IDLE2_0M, IDB_P1_IDLE2_1M, IDB_P1_IDLE2_2M, IDB_P1_IDLE2_3M };
     s2r = vector<int> { IDB_P1_IDLE2_0, IDB_P1_IDLE2_1, IDB_P1_IDLE2_2, IDB_P1_IDLE2_3 };
+    lfl = vector<int> { IDB_P1_FALL0M, IDB_P1_FALL1M };
+    lfr = vector<int> { IDB_P1_FALL0, IDB_P1_FALL1 };
     AddCAnimation(&rl, BITMAP_SIZE); //ani[0] Run Left
     AddCAnimation(&rr, BITMAP_SIZE); //ani[1] Run Right
     AddCAnimation(&jl, BITMAP_SIZE, 5, false); //ani[2] Jump Left
@@ -110,7 +114,9 @@ void Player::LoadBitmap()
     AddCAnimation(&sdl, BITMAP_SIZE, 5, false); //ani[10] Draw sword Left
     AddCAnimation(&sdr, BITMAP_SIZE, 5, false); //ani[11] Draw sword Right
     AddCAnimation(&s2l, BITMAP_SIZE); //ani[12] Stand (Idle) Left with sword
-    AddCAnimation(&s2r, BITMAP_SIZE); //ani[13] Stand (Idle) Left with sword
+    AddCAnimation(&s2r, BITMAP_SIZE); //ani[13] Stand (Idle) Right with sword
+    AddCAnimation(&lfl, BITMAP_SIZE); //ani[14] Landing Falling Left
+    AddCAnimation(&lfr, BITMAP_SIZE); //ani[15] Landing Falling Right
     _collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
 }
 
@@ -143,7 +149,7 @@ void Player::OnShow()
     }
     else if (IsOnGround())
     {
-        if (_isMovingLeft || _isMovingRight) //Player is moving
+        if (_isPressingLeft || _isPressingRight) //Player is moving
         {
             if (_dir) //Player is facing right
             {
@@ -178,6 +184,17 @@ void Player::OnShow()
                     SetAnimationState(4);
                 }
             }
+        }
+    }
+    else if (_isPressingDown)
+    {
+        if (_dir) //Player is facing right
+        {
+            SetAnimationState(15);
+        }
+        else //Player is facing left
+        {
+            SetAnimationState(14);
         }
     }
     else
@@ -335,6 +352,16 @@ void Player::OnMove()
         }
     }
 
+    /* LANDING DOWN - Modifying acceleration */
+    if (!IsOnGround() && _isPressingDown)
+    {
+        _acceleration = LANDING_ACCELERATION;
+    }
+    else
+    {
+        _acceleration = INITIAL_ACCELERATION;
+    }
+
     /* GRAVITY */
     if (IsOnGround())
     {
@@ -342,19 +369,8 @@ void Player::OnMove()
     }
     else
     {
-        _velocity += ACCELERATION_UNIT;
+        _velocity += _acceleration;
         _y += _round(_velocity);
-    }
-
-    /* MOVING LEFT / RIGHT */
-    if (_isMovingLeft && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
-    {
-        _x -= MOVEMENT_UNIT;
-    }
-
-    if (_isMovingRight && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
-    {
-        _x += MOVEMENT_UNIT;
     }
 
     /* JUMP */
@@ -373,6 +389,17 @@ void Player::OnMove()
     if (IsWallJumping()) // Wall Jump
     {
         DoWallJump(); // Modify the x-coordinate of the player
+    }
+
+    /* MOVING LEFT / RIGHT */
+    if (_isPressingLeft && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
+    {
+        _x -= MOVEMENT_UNIT;
+    }
+
+    if (_isPressingRight && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
+    {
+        _x += MOVEMENT_UNIT;
     }
 
     /* ATTACK */
@@ -403,16 +430,17 @@ void Player::OnKeyDown(const UINT& nChar)
     else if (nChar == _keys[1]) // Right
     {
         _dir = true;
-        _isMovingRight = true;
+        _isPressingRight = true;
     }
     else if (nChar == _keys[2]) // Down
     {
         /// Later use to fall down from certain terrain
+        _isPressingDown = true;
     }
     else if (nChar == _keys[3]) // Left
     {
         _dir = false;
-        _isMovingLeft = true;
+        _isPressingLeft = true;
     }
     else if (nChar == _keys[4]) //Attack
     {
@@ -428,11 +456,15 @@ void Player::OnKeyUp(const UINT& nChar)
 {
     if (nChar == _keys[1]) // Right
     {
-        _isMovingRight = false;
+        _isPressingRight = false;
+    }
+    else if (nChar == _keys[2]) // Down
+    {
+        _isPressingDown = false;
     }
     else if (nChar == _keys[3]) // Left
     {
-        _isMovingLeft = false;
+        _isPressingLeft = false;
     }
     else
     {
