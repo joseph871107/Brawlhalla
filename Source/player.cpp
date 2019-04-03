@@ -278,6 +278,39 @@ void Player::DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, i
     }
 }
 
+bool Player::IsWallJumping()
+{
+    return (_isOffsetLeft || _isOffsetRight);
+}
+
+void Player::DoWallJump()
+{
+    if (_isOffsetLeft)
+    {
+        if (_offsetVelocity > 0)
+        {
+            _offsetVelocity--;
+            _x -= _offsetVelocity;
+        }
+        else
+        {
+            _isOffsetLeft = false;
+        }
+    }
+    else if (_isOffsetRight)
+    {
+        if (_offsetVelocity > 0)
+        {
+            _offsetVelocity--;
+            _x += _offsetVelocity;
+        }
+        else
+        {
+            _isOffsetRight = false;
+        }
+    }
+}
+
 void Player::OnMove()
 {
     for (auto i = ani.begin(); i != ani.end(); i++) //For all CAnimation objects in 'ani'
@@ -331,36 +364,15 @@ void Player::OnMove()
         ResetJumpAnimations();
     }
 
-    if (_isTriggerJump) //Game logic 'OnMove()' catches the signal jump
+    if (_isTriggerJump) // Game logic 'OnMove()' catches the signal jump
     {
         DoJump();
-        _isTriggerJump = false; //Turn off the jump trigger
+        _isTriggerJump = false; // Turn off the jump trigger
     }
 
-    /* WALL JUMP */
-    if (_isOffsetLeft)
+    if (IsWallJumping()) // Wall Jump
     {
-        if (_offsetVelocity > 0)
-        {
-            _offsetVelocity--;
-            _x -= _offsetVelocity;
-        }
-        else
-        {
-            _isOffsetLeft = false;
-        }
-    }
-    else if (_isOffsetRight)
-    {
-        if (_offsetVelocity > 0)
-        {
-            _offsetVelocity--;
-            _x += _offsetVelocity;
-        }
-        else
-        {
-            _isOffsetRight = false;
-        }
+        DoWallJump(); // Modify the x-coordinate of the player
     }
 
     /* ATTACK */

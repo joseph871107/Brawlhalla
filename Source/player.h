@@ -43,8 +43,12 @@ class Player
         bool IsOnParticularGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
         void DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
 
+
+
         //Movements
         void DoJump(int = 0);
+        bool IsWallJumping();
+        void DoWallJump();
         void DoAttack();
         bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
         bool IsOnLeftEdge();
