@@ -69,6 +69,8 @@ class Player
 
         bool IsAttacking();
 
+        bool IsDrawingWeapon();
+
         int GetKeyCombination();
 
         void DoMoveLeft();

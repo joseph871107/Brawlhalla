@@ -353,6 +353,11 @@ bool Player::IsAttacking()
     return (_isHoldingWeapon && _isAttacking);
 }
 
+bool Player::IsDrawingWeapon()
+{
+    return (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap());
+}
+
 int Player::GetKeyCombination()
 {
     string keyCombString = "";
@@ -361,6 +366,8 @@ int Player::GetKeyCombination()
         keyCombString = keyCombString + "1";
     else
         keyCombString = keyCombString + "2";
+
+    /// If on edge?
 
     if (_isPressingRight)
         keyCombString = keyCombString + "2";
@@ -375,6 +382,9 @@ int Player::GetKeyCombination()
         keyCombString = keyCombString + "2";
     else
         keyCombString = keyCombString + "1";
+
+    if (IsDrawingWeapon())
+        keyCombString = "0"; // Do nothing
 
     return (stoi(keyCombString));
 }
@@ -412,6 +422,11 @@ void Player::ProcessKeyCombination()
 
     switch (keyCombInt)
     {
+        /* DO NOTHING */
+        case 0:
+            // Do nothing
+            break;
+
         /* ON GROUND */
         case 111:
             // Do nothing
