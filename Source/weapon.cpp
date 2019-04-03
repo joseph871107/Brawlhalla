@@ -81,10 +81,7 @@ void Weapon::OnKeyDown(UINT nChar)
 
     if (_hitPlayer != nullptr)
     {
-        //int keyMode = _hitPlayer->GetKeyMode();
-
-        //if ((nChar == 0x43 && (keyMode == 0 || keyMode == 1)) || (nChar == 0xbc && (keyMode == 0 || keyMode == 2)))
-        if (nChar == 0x43 /*KEY_C*/ || nChar == 0xbc /*KEY_COMMA*/)
+        if (nChar == _hitPlayer->GetAttackKey())
         {
             if (!_hitPlayer->GetHoldWeapon())
             {

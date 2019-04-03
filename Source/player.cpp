@@ -383,6 +383,12 @@ void Player::OnMove()
     if (_isTriggerJump) // Game logic 'OnMove()' catches the signal jump
     {
         DoJump();
+
+        if (IsOnLeftEdge() || IsOnRightEdge())
+        {
+            SetWallJump();
+        }
+
         _isTriggerJump = false; // Turn off the jump trigger
     }
 
@@ -505,9 +511,9 @@ int Player::GetCor(int index)
     }
 }
 
-string Player::GetName()
+const long& Player::GetAttackKey() const
 {
-    return _name;
+    return (_keys[4]);
 }
 
 int Player::ShowAnimationState()
@@ -515,30 +521,49 @@ int Player::ShowAnimationState()
     return (*bmp_iter[currentAni])[ani[currentAni].GetCurrentBitmapNumber()];
 }
 
-void Player::DoJump(int bounceOff)
+void Player::SetOffsetUp()
+{
+    _velocity = -INITIAL_VELOCITY;
+    _y -= _round(INITIAL_VELOCITY); //Trick explaination: By intuition, '_y' of the player should not be
+    // modified here, because it is expected to be modified whenever 'Player::OnMove()' is called. However,
+    // since the player is currently on the ground, 'Player::OnMove()' will fix its '_y' onto the surface
+    // instead of modifying it as expectation. Thus, '_y' must be altered here to set the player jump his ass up!!
+}
+
+void Player::DoJump()
 {
     if (_jumpCount > 0)   //If the player is able to jump more
     {
-        _velocity = -INITIAL_VELOCITY;
-        _y -= _round(INITIAL_VELOCITY); //Trick explaination: By intuition, '_y' of the player should not be
-        // modified here, because it is expected to be modified whenever 'Player::OnMove()' is called. However,
-        // since the player is currently on the ground, 'Player::OnMove()' will fix its '_y' onto the surface
-        // instead of modifying it as expectation. Thus, '_y' must be altered here to set the player jump his ass up!!
-
-        //Wall Jump
-        if (IsOnLeftEdge() || bounceOff == 1)
-        {
-            _offsetVelocity = OFFSET_INITIAL_VELOCITY;
-            _isOffsetLeft = true;
-        }
-        else if (IsOnRightEdge() || bounceOff == 2)
-        {
-            _offsetVelocity = OFFSET_INITIAL_VELOCITY;
-            _isOffsetRight = true;
-        }
-
+        SetOffsetUp();
         _jumpCount--; //Decrement the jumps available
         ResetJumpAnimations();
+    }
+}
+
+void Player::SetOffsetLeft()
+{
+    _offsetVelocity = OFFSET_INITIAL_VELOCITY;
+    _isOffsetLeft = true;
+}
+
+void Player::SetOffsetRight()
+{
+    _offsetVelocity = OFFSET_INITIAL_VELOCITY;
+    _isOffsetRight = true;
+}
+
+void Player::SetWallJump()
+{
+    if (_jumpCount > 0) //If the player is able to jump more
+    {
+        if (IsOnLeftEdge())
+        {
+            SetOffsetLeft();
+        }
+        else if (IsOnRightEdge())
+        {
+            SetOffsetRight();
+        }
     }
 }
 
@@ -548,10 +573,12 @@ void Player::DoAttack()
     {
         if (*i != this && HitPlayer(*i))
         {
+            (*i)->SetOffsetUp();
+
             if (GetCor(0) > (*i)->GetCor(0))
-                (*i)->DoJump(1);
+                (*i)->SetOffsetLeft();
             else
-                (*i)->DoJump(2);
+                (*i)->SetOffsetRight();
         }
     }
 

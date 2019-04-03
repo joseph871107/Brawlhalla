@@ -25,11 +25,12 @@ class Player
         void SetHoldWeapon(bool);
         bool GetHoldWeapon();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
-        string GetName();
         int ShowAnimationState();		// Return which CAnimation is playing
+        void SetOffsetUp();
         bool IsOutOfLife();
         const int& GetLife() const;
         const string& GetName() const;
+        const long& GetAttackKey() const;
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -46,7 +47,10 @@ class Player
 
 
         //Movements
-        void DoJump(int = 0);
+        void DoJump();
+        void SetOffsetLeft();
+        void SetOffsetRight();
+        void SetWallJump();
         bool IsWallJumping();
         void DoWallJump();
         void DoAttack();
