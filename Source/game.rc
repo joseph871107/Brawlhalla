@@ -242,6 +242,30 @@ IDB_P1_FALL0            BITMAP                  "..\\RES\\player1\\adventurer-fa
 
 IDB_P1_FALL0M           BITMAP                  "..\\RES\\player1\\adventurer-fall-00(Mirrored).bmp"
 
+IDB_P1_GND_MOVE_ATTACK0M BITMAP                  "..\\RES\\player1\\adventurer-attack2-00(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK0 BITMAP                  "..\\RES\\player1\\adventurer-attack2-00.bmp"
+
+IDB_P1_GND_MOVE_ATTACK1M BITMAP                  "..\\RES\\player1\\adventurer-attack2-01(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK1 BITMAP                  "..\\RES\\player1\\adventurer-attack2-01.bmp"
+
+IDB_P1_GND_MOVE_ATTACK2M BITMAP                  "..\\RES\\player1\\adventurer-attack2-02(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK2 BITMAP                  "..\\RES\\player1\\adventurer-attack2-02.bmp"
+
+IDB_P1_GND_MOVE_ATTACK3M BITMAP                  "..\\RES\\player1\\adventurer-attack2-03(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK3 BITMAP                  "..\\RES\\player1\\adventurer-attack2-03.bmp"
+
+IDB_P1_GND_MOVE_ATTACK4M BITMAP                  "..\\RES\\player1\\adventurer-attack2-04(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK4 BITMAP                  "..\\RES\\player1\\adventurer-attack2-04.bmp"
+
+IDB_P1_GND_MOVE_ATTACK5M BITMAP                  "..\\RES\\player1\\adventurer-attack2-05(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK5 BITMAP                  "..\\RES\\player1\\adventurer-attack2-05.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

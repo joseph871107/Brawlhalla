@@ -70,8 +70,20 @@
 #define IDB_P1_FALL1                    335
 #define IDB_P1_FALL1M                   336
 #define IDB_P1_FALL0                    337
-#define IDB_FALL0M                      338
 #define IDB_P1_FALL0M                   338
+#define IDB_P1_GND_MOVE_ATTACK0M        340
+#define IDB_P1_GND_MOVE_ATTACK0         341
+#define IDB_P1_GND_MOVE_ATTACK1M        342
+#define IDB_P1_GND_MOVE_ATTACK1         343
+#define IDB_P1_GND_MOVE_ATTACK2M        344
+#define IDB_P1_GND_MOVE_ATTACK2         345
+#define IDB_P1_GND_MOVE_ATTACK3M        346
+#define IDB_P1_GND_MOVE_ATTACK3         347
+#define IDB_BITMAP9                     348
+#define IDB_P1_GND_MOVE_ATTACK4M        348
+#define IDB_P1_GND_MOVE_ATTACK4         349
+#define IDB_P1_GND_MOVE_ATTACK5M        350
+#define IDB_P1_GND_MOVE_ATTACK5         351
 #define IDB_WEAPON_FALLING              500
 #define IDB_NUM0                        1000
 #define IDB_NUM1                        1001
@@ -97,7 +109,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        339
+#define _APS_NEXT_RESOURCE_VALUE        352
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

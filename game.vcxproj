@@ -352,6 +352,18 @@
     <Image Include="RES\player1\adventurer-attack1-03.bmp" />
     <Image Include="RES\player1\adventurer-attack1-04(Mirrored).bmp" />
     <Image Include="RES\player1\adventurer-attack1-04.bmp" />
+    <Image Include="RES\player1\adventurer-attack2-00(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-attack2-00.bmp" />
+    <Image Include="RES\player1\adventurer-attack2-01(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-attack2-01.bmp" />
+    <Image Include="RES\player1\adventurer-attack2-02(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-attack2-02.bmp" />
+    <Image Include="RES\player1\adventurer-attack2-03(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-attack2-03.bmp" />
+    <Image Include="RES\player1\adventurer-attack2-04(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-attack2-04.bmp" />
+    <Image Include="RES\player1\adventurer-attack2-05(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-attack2-05.bmp" />
     <Image Include="RES\player1\adventurer-fall-00(Mirrored).bmp" />
     <Image Include="RES\player1\adventurer-fall-00.bmp" />
     <Image Include="RES\player1\adventurer-fall-01(Mirrored).bmp" />
@@ -402,6 +414,7 @@
     <Image Include="RES\player1\adventurer-wall-slide-00.bmp" />
     <Image Include="RES\player1\adventurer-wall-slide-01(Mirrored).bmp" />
     <Image Include="RES\player1\adventurer-wall-slide-01.bmp" />
+    <Image Include="res\player1\bitmap1.bmp" />
     <Image Include="RES\player1\player1_collision.bmp" />
     <Image Include="res\player\player.bmp" />
     <Image Include="RES\tests\lean_left.bmp" />

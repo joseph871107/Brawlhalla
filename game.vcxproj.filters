@@ -456,5 +456,44 @@
     <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-00(Mirrored).bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\player1\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-00(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-01(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-02(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-02.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-03(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-03.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-04(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-04.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-05(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack2-05.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

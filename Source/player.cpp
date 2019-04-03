@@ -10,7 +10,8 @@ namespace game_framework
 {
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MAX_JUMP_COUNT = 2;
-const int MOVEMENT_UNIT = 7;
+const int MOVEMENT_UNIT = 6;
+const int GND_ATTACK_MOVEMENT_UNIT = 12;
 const double INITIAL_VELOCITY = 18;
 const double INITIAL_ACCELERATION = 1.2;
 const double LANDING_ACCELERATION = 10;
@@ -25,6 +26,7 @@ const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
 const int MAP_BORDER_Y2 = SIZE_Y + MAP_BORDER_OFFSET;
 const double BITMAP_SIZE = 2.5;
+const int MAX_ANIMATION_DURATION = 20;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 
@@ -40,7 +42,7 @@ Player::Player() :
     al(vector<int>()), ar(vector<int>()), bmp_iter(vector<vector<int>*>()), _width(int()),
     _height(int()), _isPressingLeft(bool()),
     _isPressingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
-    _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _isAttacking(bool()),
+    _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()),
     _velocity(double()), _grounds(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
     _name(string()) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
 {
@@ -51,6 +53,13 @@ Player::~Player()
 {
 }
 
+void Player::ResetTriggeredAnimationVariables()
+{
+    _isTriggeredAni = false;
+    _triggeredAniID = -1;
+    _triggeredAniCount = 0;
+}
+
 void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, vector<long> keysValue)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
@@ -59,7 +68,16 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     _y = 100;
     /*_size = 2.5;*/
     //
-    _isPressingLeft = _isPressingRight = _isPressingDown  = _isAttacking = _isHoldingWeapon = _isDrawingWeapon = _dir = false;
+    ResetTriggeredAnimationVariables();
+    //
+    _width = (int)(_collision_box.Width() * BITMAP_SIZE);
+    _height = (int)(_collision_box.Height() * BITMAP_SIZE);
+    //
+    _keys = keysValue;
+    //
+    _isPressingLeft = _isPressingRight = _dir = false;
+    //
+    _isPressingDown = false;
     //
     _isTriggerJump = false;
     ResetJumpCount();
@@ -70,17 +88,16 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     _velocity = INITIAL_VELOCITY;
     _acceleration = INITIAL_ACCELERATION;
     //
-    _grounds = groundsValue;
+    _isDrawingWeapon = false;
+    //
+    _isHoldingWeapon = _isTriggerAttack = false;
     _player = playerPtrValue;
+    //
+    _grounds = groundsValue;
     //
     _life = MAX_LIFE;
     //
     _name = nameValue;
-    //
-    _width = (int)(_collision_box.Width() * BITMAP_SIZE);
-    _height = (int)(_collision_box.Height() * BITMAP_SIZE);
-    //
-    _keys = keysValue;
 }
 
 void Player::LoadBitmap()
@@ -101,6 +118,8 @@ void Player::LoadBitmap()
     s2r = vector<int> { IDB_P1_IDLE2_0, IDB_P1_IDLE2_1, IDB_P1_IDLE2_2, IDB_P1_IDLE2_3 };
     lfl = vector<int> { IDB_P1_FALL0M, IDB_P1_FALL1M };
     lfr = vector<int> { IDB_P1_FALL0, IDB_P1_FALL1 };
+    gmal = vector<int> { IDB_P1_GND_MOVE_ATTACK0M, IDB_P1_GND_MOVE_ATTACK1M, IDB_P1_GND_MOVE_ATTACK2M, IDB_P1_GND_MOVE_ATTACK3M, IDB_P1_GND_MOVE_ATTACK4M, IDB_P1_GND_MOVE_ATTACK5M };
+    gmar = vector<int> { IDB_P1_GND_MOVE_ATTACK0, IDB_P1_GND_MOVE_ATTACK1, IDB_P1_GND_MOVE_ATTACK2, IDB_P1_GND_MOVE_ATTACK3, IDB_P1_GND_MOVE_ATTACK4, IDB_P1_GND_MOVE_ATTACK5 };
     AddCAnimation(&rl, BITMAP_SIZE); //ani[0] Run Left
     AddCAnimation(&rr, BITMAP_SIZE); //ani[1] Run Right
     AddCAnimation(&jl, BITMAP_SIZE, 5, false); //ani[2] Jump Left
@@ -117,107 +136,64 @@ void Player::LoadBitmap()
     AddCAnimation(&s2r, BITMAP_SIZE); //ani[13] Stand (Idle) Right with sword
     AddCAnimation(&lfl, BITMAP_SIZE); //ani[14] Landing Falling Left
     AddCAnimation(&lfr, BITMAP_SIZE); //ani[15] Landing Falling Right
+    AddCAnimation(&gmal, BITMAP_SIZE, 4, false); //ani[16] On-Ground-Moving Attack Left
+    AddCAnimation(&gmar, BITMAP_SIZE, 4, false); //ani[17] On-Ground-Moving Attack Right
     _collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
+}
+
+void Player::SetAnimationStateLeftRight(int leftAnimationID)
+{
+    if (_dir) // Player is facing right
+    {
+        SetAnimationState(leftAnimationID + 1);
+    }
+    else // Player is facing left
+    {
+        SetAnimationState(leftAnimationID);
+    }
+}
+
+void Player::ShowTriggeredAnimation()
+{
+    SetAnimationState(_triggeredAniID);
+}
+
+void Player::ShowNonTriggerAnimations()
+{
+    if (_isDrawingWeapon) // Special case: Player is drawing weapon
+        SetAnimationStateLeftRight(10);
+    else if (IsOnGround()) // Player is on ground
+    {
+        if (_isPressingLeft || _isPressingRight) // Player is moving
+            SetAnimationStateLeftRight(0);
+        else // Player is idling
+            if (_isHoldingWeapon) // With sword
+                SetAnimationStateLeftRight(12);
+            else // Without sword
+                SetAnimationStateLeftRight(4);
+    }
+    else // Player is NOT on ground
+    {
+        if (IsOnLeftEdge()) // Player is leaning on left edge
+            SetAnimationState(7);
+        else if (IsOnRightEdge()) // Player is leaning on left edge
+            SetAnimationState(6);
+        else if (_isPressingDown) // Player is intentionally landing down
+            SetAnimationStateLeftRight(14);
+        else   // Player is jumping
+            SetAnimationStateLeftRight(2);
+    }
 }
 
 void Player::OnShow()
 {
-    if (_isDrawingWeapon)
+    if (_isTriggeredAni)
     {
-        if (_dir) //Player is attacking right
-        {
-            SetAnimationState(11);
-        }
-        else //Player is attcking left
-        {
-            SetAnimationState(10);
-        }
-
-        if (ani[currentAni].IsFinalBitmap())
-            _isDrawingWeapon = false;
-    }
-    else if (IsAttacking())
-    {
-        if (_dir) //Player is attacking right
-        {
-            SetAnimationState(9);
-        }
-        else //Player is attacking left
-        {
-            SetAnimationState(8);
-        }
-    }
-    else if (IsOnGround())
-    {
-        if (_isPressingLeft || _isPressingRight) //Player is moving
-        {
-            if (_dir) //Player is facing right
-            {
-                SetAnimationState(1);
-            }
-            else //Player is facing left
-            {
-                SetAnimationState(0);
-            }
-        }
-        else //Player is idling
-        {
-            if (_isHoldingWeapon) //With sword
-            {
-                if (_dir) //Player is facing right
-                {
-                    SetAnimationState(13);
-                }
-                else //Player is facing left
-                {
-                    SetAnimationState(12);
-                }
-            }
-            else //Without sword
-            {
-                if (_dir) //Player is facing right
-                {
-                    SetAnimationState(5);
-                }
-                else //Player is facing left
-                {
-                    SetAnimationState(4);
-                }
-            }
-        }
-    }
-    else if (_isPressingDown)
-    {
-        if (_dir) //Player is facing right
-        {
-            SetAnimationState(15);
-        }
-        else //Player is facing left
-        {
-            SetAnimationState(14);
-        }
+        ShowTriggeredAnimation();
     }
     else
     {
-        if (IsOnLeftEdge()) //Player is leaning on left edge
-        {
-            SetAnimationState(7);
-        }
-        else if (IsOnRightEdge()) //Player is leaning on left edge
-        {
-            SetAnimationState(6);
-        }
-        else   //Player is falling or jumping
-        {
-            if (_dir) //Player is facing right
-            {
-                SetAnimationState(3);
-            }
-            else //Player is facing left
-            {
-                SetAnimationState(2);
-            }
-        }
+        ShowNonTriggerAnimations();
     }
 
     ShowAnimation();
@@ -328,29 +304,9 @@ void Player::DoWallJump()
     }
 }
 
-void Player::OldFunctionOfKeyCombination()
-{
-    /* MOVING LEFT / RIGHT */
-    if (_isPressingLeft && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
-    {
-        _x -= MOVEMENT_UNIT;
-    }
-
-    if (_isPressingRight && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
-    {
-        _x += MOVEMENT_UNIT;
-    }
-
-    /* ATTACK */
-    if (_isHoldingWeapon && _isAttacking)
-    {
-        DoAttack();
-    }
-}
-
 bool Player::IsAttacking()
 {
-    return (_isHoldingWeapon && _isAttacking);
+    return (_isHoldingWeapon && _isTriggerAttack);
 }
 
 bool Player::IsDrawingWeapon()
@@ -360,14 +316,19 @@ bool Player::IsDrawingWeapon()
 
 int Player::GetKeyCombination()
 {
+    /* Key combination structure:
+    [ 1 ][ 2 ][ 3 ]
+
+    [ 1 ] determines the player is on air or on ground
+    [ 2 ] determine the right button is pressed, the left button is pressed, the down button is pressed, or none of the movement keys are pressed
+    [ 3 ] determine whether it is the case that the attack button is pressed and the player is holding a weapon
+    */
     string keyCombString = "";
 
-    if (IsOnGround())
+    if (IsOnGround()) /// Comment for future devs: If the player is on edge?
         keyCombString = keyCombString + "1";
     else
         keyCombString = keyCombString + "2";
-
-    /// If on edge?
 
     if (_isPressingRight)
         keyCombString = keyCombString + "2";
@@ -375,7 +336,7 @@ int Player::GetKeyCombination()
         keyCombString = keyCombString + "3";
     else if (_isPressingDown)
         keyCombString = keyCombString + "4";
-    else // All movement key up
+    else // All movement keys are up
         keyCombString = keyCombString + "1";
 
     if (IsAttacking())
@@ -383,26 +344,20 @@ int Player::GetKeyCombination()
     else
         keyCombString = keyCombString + "1";
 
-    if (IsDrawingWeapon())
+    if (IsDrawingWeapon()) /// Comment for future devs: Drawing the weapon is a special case. Do we need to tackle it?
         keyCombString = "0"; // Do nothing
 
     return (stoi(keyCombString));
 }
 
-void Player::DoMoveLeft()
+void Player::DoMoveLeft(int movementUnit)
 {
-    _x -= MOVEMENT_UNIT;
+    _x -= movementUnit;
 }
 
-void Player::DoMoveRight()
+void Player::DoMoveRight(int movementUnit)
 {
-    _x += MOVEMENT_UNIT;
-}
-
-void Player::DoSlideAttack()
-{
-    ///
-    exit(0);
+    _x += movementUnit;
 }
 
 void Player::DoLand()
@@ -410,95 +365,195 @@ void Player::DoLand()
     _acceleration = LANDING_ACCELERATION;
 }
 
-void Player::DoLandAttack()
+bool Player::IsFinishedDrawingAnimation()
 {
-    ///
-    exit(0);
+    return (ani[10].IsFinalBitmap() || ani[11].IsFinalBitmap());
 }
 
-void Player::ProcessKeyCombination()
+void Player::ResetAnimations(int leftAnimationID)
 {
+    ani[leftAnimationID].Reset(); // Reset left animation
+    ani[leftAnimationID + 1].Reset(); // Reset right animation
+}
+
+void Player::SetTriggeredAnimationVariables(int leftAnimationID)
+{
+    _isTriggeredAni = true;
+
+    if (_dir)
+        _triggeredAniID = leftAnimationID + 1;
+    else
+        _triggeredAniID = leftAnimationID;
+
+    _triggeredAniCount = 0;
+}
+
+void Player::GetTriggeredAnimation()
+{
+    /*	~ Remarks:
+    	~ We care only about key combinations that determines the attack button is pressed and the player is holding a weapon
+    	~ That is, only the key combinations ending with '2' are taken into account
+    */
     int keyCombInt = GetKeyCombination();
 
     switch (keyCombInt)
     {
-        /* DO NOTHING */
-        case 0:
-            // Do nothing
-            break;
-
         /* ON GROUND */
-        case 111:
-            // Do nothing
+        case 112: // on ground, not move, attack
+            SetTriggeredAnimationVariables(8);
             break;
 
-        case 112:
-            DoAttack();
+        case 122: // on ground, move right, attack
+            SetTriggeredAnimationVariables(16);
             break;
 
-        case 121:
-            DoMoveRight();
+        case 132: // on ground, move left, attack
+            SetTriggeredAnimationVariables(16);
             break;
 
-        case 122:
-            DoAttack();
-            DoMoveRight();
-            break;
-
-        case 131:
-            DoMoveLeft();
-            break;
-
-        case 132:
-            DoAttack();
-            DoMoveLeft();
-            break;
-
-        case 141:
-            // Do nothing
-            break;
-
-        case 142:
-            DoSlideAttack();
+        case 142: // on ground, land down, attack
+            ///
             break;
 
         /* ON AIR */
-        case 211:
-            // Do nothing
+        case 212: // on air, not move, attack
+            ///
             break;
 
-        case 212:
-            DoAttack();
+        case 222: // on air, move right, attack
+            ///
             break;
 
-        case 221:
-            DoMoveRight();
+        case 232: // on air, move left, attack
+            ///
             break;
 
-        case 222:
-            DoAttack();
-            DoMoveRight();
-            break;
-
-        case 231:
-            DoMoveLeft();
-            break;
-
-        case 232:
-            DoAttack();
-            DoMoveLeft();
-            break;
-
-        case 241:
-            DoLand();
-            break;
-
-        case 242:
-            DoLandAttack();
+        case 242: // on air, land down, attack
+            ///
             break;
 
         default:
             break;
+    }
+
+    /// Comment for future devs: After having caught the attack trigger, I turn it off. This logic works, but it seems dirty and should be rectified
+    if (IsAttacking())
+    {
+        _isTriggerAttack = false;
+    }
+}
+
+bool Player::IsFinishedTriggeredAnimation()
+{
+    return (_triggeredAniCount > MAX_ANIMATION_DURATION);
+}
+
+void Player::DoTriggeredAnimation()
+{
+    switch (_triggeredAniID)
+    {
+        case 8: // Attack Left
+            DoAttack();
+            break;
+
+        case 9: // Attack Right
+            DoAttack();
+            break;
+
+        case 16: // On-Ground-Moving Attack Left
+            DoAttack();
+            DoMoveLeft(GND_ATTACK_MOVEMENT_UNIT);
+            break;
+
+        case 17: // On-Ground-Moving Attack Right
+            DoAttack();
+            DoMoveRight(GND_ATTACK_MOVEMENT_UNIT);
+            break;
+
+        default:
+            break;
+    }
+}
+
+void Player::DoNonTriggeredAnimation()
+{
+    /*	~ Remarks:
+    ~ We care only about key combinations that does NOT determine the attack button is pressed and the player is holding a weapon
+    ~ That is, only the key combinations ending with '1' are taken into account
+    */
+    int keyCombInt = GetKeyCombination();
+
+    switch (keyCombInt)
+    {
+        /* ON GROUND */
+        case 111: // on ground, not move, not attack
+            // Do nothing
+            break;
+
+        case 121: // on ground, move right, not attack
+            DoMoveRight(MOVEMENT_UNIT);
+            break;
+
+        case 131: // on ground, move left, not attack
+            DoMoveLeft(MOVEMENT_UNIT);
+            break;
+
+        case 141: // on ground, land down, not attack
+            // Do nothing
+            break;
+
+        /* ON AIR */
+        case 211: // on air, not move, not attack
+            // Do nothing
+            break;
+
+        case 221: // on air, move right, not attack
+            DoMoveRight(MOVEMENT_UNIT);
+            break;
+
+        case 231: // on air, move left, not attack
+            DoMoveLeft(MOVEMENT_UNIT);
+            break;
+
+        case 241: // on air, land down, not attack
+            DoLand();
+            break;
+
+        default:
+            break;
+    }
+}
+
+void Player::ProcessKeyCombinationOnMove()
+{
+    /*	~ Remarks: Explaination of the triggered animation concept
+    	~ When an animation is said to be "triggered", it prevails all other animations by means of depiction for a period of time;
+    	~ that is, when an animation is triggered, it becomes the only animation being shown for a time interval.
+    	~ In this case, it is often the key combo (key combination of the attack button with one movement button) that triggers an animation
+    */
+    if (!_isTriggeredAni) // If there is no animation being triggered in the meantime, then detect should there be any
+    {
+        GetTriggeredAnimation();
+    }
+
+    if (_isTriggeredAni) // If an animation is triggered
+    {
+        if (!IsFinishedTriggeredAnimation()) // If an animation is triggered and the time duration dedicated for it has not elapsed, then increment '_triggeredAniCount' (representing the elapsed animation time) and finish doing the triggered animation
+        {
+            _triggeredAniCount++;
+            DoTriggeredAnimation();
+        }
+        else // If an animation is triggered and it has exceeded its show time, then reset the triggered animation's variables
+        {
+            ResetTriggeredAnimationVariables();
+            /// Comment for future devs: The two lines below reset the animations for attack. Since it is a fucking dirty code, it should be rectified in the future
+            ResetAnimations(8);
+            ResetAnimations(16);
+        }
+    }
+    else // If there is no triggered animation in the meantime, then do the other animations
+    {
+        DoNonTriggeredAnimation();
     }
 }
 
@@ -508,21 +563,20 @@ void Player::OnMove()
     for (auto i = ani.begin(); i != ani.end(); i++) //For all CAnimation objects in 'ani'
         i->OnMove(); //Proceed to the next CMovingBitmap in the CAnimation 'i'
 
-    /* ATTACK ANIMATION */
-    if (IsFinishedAttackAnimation())
+    /* DRAWING ANIMATION */
+    if (IsFinishedDrawingAnimation())
     {
-        _isAttacking = false; //Turn off the attack signal
-        ResetAttackAnimations();
+        _isDrawingWeapon = false;
+        ResetAnimations(10);
     }
 
     /* JUMP ANIMATION */
-    if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
-    {
-        ResetJumpCount();
-        ResetJumpAnimations();
-    }
+    if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge() || (_isTriggerJump && _jumpCount > 0))
+        ResetAnimations(2);
 
     //-----------------POSITION TRANSFORMATION SECTION-----------------//
+    /* INITIALIZATION FOR GRAVITY and PREPARATION FOR LANDING DOWN */
+    _acceleration = INITIAL_ACCELERATION;
     /* REPOSITION PLAYER ABOUT GROUNDS */
     int playerX1 = GetCor(0);
     int playerY1 = GetCor(1);
@@ -542,18 +596,8 @@ void Player::OnMove()
         }
     }
 
-    ///* LANDING DOWN - Modifying acceleration */
-    //if (!IsOnGround() && _isPressingDown)
-    //{
-    //    _acceleration = LANDING_ACCELERATION;
-    //}
-    //else
-    //{
-    //    _acceleration = INITIAL_ACCELERATION;
-    //}
-    ///DEBUG
-    _acceleration = INITIAL_ACCELERATION;
-    ProcessKeyCombination();
+    /// Warning: 'DoLand()' inside 'ProcessKeyCombinationOnMove()' modifies the member variable '_acceleration'. Thus, the function affects the below codes regarding gravity and as a result must be placed here!!!
+    ProcessKeyCombinationOnMove();
 
     /* GRAVITY */
     if (IsOnGround())
@@ -584,13 +628,17 @@ void Player::OnMove()
         DoWallJump(); // Modify the x-coordinate of the player
     }
 
-    ///OldFunctionOfKeyCombination();
-
     /* FALL OFF THE MAP */
     if (IsOutMapBorder())
     {
         DoDead();
         DoRespawn();
+    }
+
+    //-----------------UNTITLED SECTION-----------------//
+    if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
+    {
+        ResetJumpCount();
     }
 }
 
@@ -612,7 +660,7 @@ void Player::OnKeyDown(const UINT& nChar)
     }
     else if (nChar == _keys[2]) // Down
     {
-        /// Later use to fall down from certain terrain
+        /// Comment for future devs: Later use to slip down from certain terrain
         _isPressingDown = true;
     }
     else if (nChar == _keys[3]) // Left
@@ -622,7 +670,7 @@ void Player::OnKeyDown(const UINT& nChar)
     }
     else if (nChar == _keys[4]) //Attack
     {
-        _isAttacking = true;
+        _isTriggerAttack = true;
     }
     else
     {
@@ -654,7 +702,6 @@ void Player::SetHoldWeapon(bool isHolding)
 {
     _isHoldingWeapon = isHolding;
     _isDrawingWeapon = isHolding;
-    _isAttacking = false;
 }
 
 bool Player::GetHoldWeapon()
@@ -708,7 +755,6 @@ void Player::DoJump()
     {
         SetOffsetUp();
         _jumpCount--; //Decrement the jumps available
-        ResetJumpAnimations();
     }
 }
 
@@ -818,12 +864,6 @@ bool Player::IsOnRightEdge()
     return false;
 }
 
-void Player::ResetJumpAnimations()
-{
-    ani[2].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[2]' (which is Jump Left)
-    ani[3].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[3]' (which is Jump Right)
-}
-
 void Player::ResetJumpCount()
 {
     _jumpCount = MAX_JUMP_COUNT;
@@ -831,13 +871,9 @@ void Player::ResetJumpCount()
 
 bool Player::IsFinishedAttackAnimation()
 {
-    return (ani[8].IsFinalBitmap() || ani[9].IsFinalBitmap());
-}
-
-void Player::ResetAttackAnimations()
-{
-    ani[8].Reset(); //reset to the first cmovingbitmap in the canimation 'ani[8]' (which is attack left)
-    ani[9].Reset(); //reset to the first CMovingBitmap in the CAnimation 'ani[9]' (which is Attack Right)
+    return (ani[8].IsFinalBitmap() || ani[9].IsFinalBitmap()
+            ||
+            ani[16].IsFinalBitmap() || ani[17].IsFinalBitmap());
 }
 
 void Player::AddCAnimation(vector<int>* list, double size, int delay, bool repeat, int times)
