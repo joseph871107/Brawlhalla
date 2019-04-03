@@ -117,7 +117,7 @@ class Player
         //[Attribute] Attack
         bool _isHoldingWeapon;
         bool _isDrawingWeapon;
-        bool _isAttacking;
+        bool _isTriggerAttack;
         bool HitPlayer(Player*);
         vector<Player*>* _player;
 

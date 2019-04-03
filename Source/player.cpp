@@ -40,7 +40,7 @@ Player::Player() :
     al(vector<int>()), ar(vector<int>()), bmp_iter(vector<vector<int>*>()), _width(int()),
     _height(int()), _isPressingLeft(bool()),
     _isPressingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
-    _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _isAttacking(bool()),
+    _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _isTriggerAttack(bool()),
     _velocity(double()), _grounds(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
     _name(string()) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
 {
@@ -59,7 +59,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     _y = 100;
     /*_size = 2.5;*/
     //
-    _isPressingLeft = _isPressingRight = _isPressingDown  = _isAttacking = _isHoldingWeapon = _isDrawingWeapon = _dir = false;
+    _isPressingLeft = _isPressingRight = _isPressingDown  = _isTriggerAttack = _isHoldingWeapon = _isDrawingWeapon = _dir = false;
     //
     _isTriggerJump = false;
     ResetJumpCount();
@@ -136,7 +136,7 @@ void Player::OnShow()
         if (ani[currentAni].IsFinalBitmap())
             _isDrawingWeapon = false;
     }
-    else if (_isHoldingWeapon && _isAttacking)
+    else if (_isHoldingWeapon && _isTriggerAttack)
     {
         if (_dir) //Player is attacking right
         {
@@ -398,18 +398,18 @@ void Player::OnMove()
     }
 
     /* MOVING LEFT / RIGHT */
-    if (_isPressingLeft && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
+    if (_isPressingLeft && !(_isHoldingWeapon && _isTriggerAttack || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
     {
         _x -= MOVEMENT_UNIT;
     }
 
-    if (_isPressingRight && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
+    if (_isPressingRight && !(_isHoldingWeapon && _isTriggerAttack || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
     {
         _x += MOVEMENT_UNIT;
     }
 
     /* ATTACK */
-    if (_isHoldingWeapon && _isAttacking)
+    if (_isHoldingWeapon && _isTriggerAttack)
     {
         DoAttack();
     }
@@ -450,7 +450,7 @@ void Player::OnKeyDown(const UINT& nChar)
     }
     else if (nChar == _keys[4]) //Attack
     {
-        _isAttacking = true;
+        _isTriggerAttack = true;
     }
     else
     {
@@ -482,7 +482,7 @@ void Player::SetHoldWeapon(bool isHolding)
 {
     _isHoldingWeapon = isHolding;
     _isDrawingWeapon = isHolding;
-    _isAttacking = false;
+    _isTriggerAttack = false;
 }
 
 bool Player::GetHoldWeapon()
@@ -666,7 +666,7 @@ void Player::ResetAttackAnimations()
         ani[8].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[8]' (which is Attack Left)
         ani[9].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[9]' (which is Attack Right)
         //Turn off the attack trigger
-        _isAttacking = false;
+        _isTriggerAttack = false;
     }
 }
 
