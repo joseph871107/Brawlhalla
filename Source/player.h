@@ -59,10 +59,29 @@ class Player
         bool IsOnRightEdge();
         void ResetJumpAnimations();
         void ResetJumpCount();
+        bool IsFinishedAttackAnimation();
         void ResetAttackAnimations();
         bool IsOutMapBorder();
         void DoDead();
         void DoRespawn();
+        ///DEBUG
+        void OldFunctionOfKeyCombination();
+
+        bool IsAttacking();
+
+        int GetKeyCombination();
+
+        void DoMoveLeft();
+
+        void DoMoveRight();
+
+        void DoSlideAttack();
+
+        void DoLand();
+
+        void DoLandAttack();
+
+        void ProcessKeyCombination();
 
         //Animations
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
@@ -117,7 +136,7 @@ class Player
         //[Attribute] Attack
         bool _isHoldingWeapon;
         bool _isDrawingWeapon;
-        bool _isTriggerAttack;
+        bool _isAttacking;
         bool HitPlayer(Player*);
         vector<Player*>* _player;
 

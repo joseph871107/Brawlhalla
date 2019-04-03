@@ -13,7 +13,7 @@ const int MAX_JUMP_COUNT = 2;
 const int MOVEMENT_UNIT = 7;
 const double INITIAL_VELOCITY = 18;
 const double INITIAL_ACCELERATION = 1.2;
-const double LANDING_ACCELERATION = 2;
+const double LANDING_ACCELERATION = 10;
 const int OFFSET_INITIAL_VELOCITY = 15;
 const double COLLISION_ERRORS = 1.0;
 const int _OFFSET_X = 20;
@@ -40,7 +40,7 @@ Player::Player() :
     al(vector<int>()), ar(vector<int>()), bmp_iter(vector<vector<int>*>()), _width(int()),
     _height(int()), _isPressingLeft(bool()),
     _isPressingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
-    _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _isTriggerAttack(bool()),
+    _offsetVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()), _isAttacking(bool()),
     _velocity(double()), _grounds(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
     _name(string()) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
 {
@@ -59,7 +59,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     _y = 100;
     /*_size = 2.5;*/
     //
-    _isPressingLeft = _isPressingRight = _isPressingDown  = _isTriggerAttack = _isHoldingWeapon = _isDrawingWeapon = _dir = false;
+    _isPressingLeft = _isPressingRight = _isPressingDown  = _isAttacking = _isHoldingWeapon = _isDrawingWeapon = _dir = false;
     //
     _isTriggerJump = false;
     ResetJumpCount();
@@ -136,13 +136,13 @@ void Player::OnShow()
         if (ani[currentAni].IsFinalBitmap())
             _isDrawingWeapon = false;
     }
-    else if (_isHoldingWeapon && _isTriggerAttack)
+    else if (IsAttacking())
     {
         if (_dir) //Player is attacking right
         {
             SetAnimationState(9);
         }
-        else //Player is attcking left
+        else //Player is attacking left
         {
             SetAnimationState(8);
         }
@@ -328,11 +328,186 @@ void Player::DoWallJump()
     }
 }
 
+void Player::OldFunctionOfKeyCombination()
+{
+    /* MOVING LEFT / RIGHT */
+    if (_isPressingLeft && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
+    {
+        _x -= MOVEMENT_UNIT;
+    }
+
+    if (_isPressingRight && !(_isHoldingWeapon && _isAttacking || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
+    {
+        _x += MOVEMENT_UNIT;
+    }
+
+    /* ATTACK */
+    if (_isHoldingWeapon && _isAttacking)
+    {
+        DoAttack();
+    }
+}
+
+bool Player::IsAttacking()
+{
+    return (_isHoldingWeapon && _isAttacking);
+}
+
+int Player::GetKeyCombination()
+{
+    string keyCombString = "";
+
+    if (IsOnGround())
+        keyCombString = keyCombString + "1";
+    else
+        keyCombString = keyCombString + "2";
+
+    if (_isPressingRight)
+        keyCombString = keyCombString + "2";
+    else if (_isPressingLeft)
+        keyCombString = keyCombString + "3";
+    else if (_isPressingDown)
+        keyCombString = keyCombString + "4";
+    else // All movement key up
+        keyCombString = keyCombString + "1";
+
+    if (IsAttacking())
+        keyCombString = keyCombString + "2";
+    else
+        keyCombString = keyCombString + "1";
+
+    return (stoi(keyCombString));
+}
+
+void Player::DoMoveLeft()
+{
+    _x -= MOVEMENT_UNIT;
+}
+
+void Player::DoMoveRight()
+{
+    _x += MOVEMENT_UNIT;
+}
+
+void Player::DoSlideAttack()
+{
+    ///
+    exit(0);
+}
+
+void Player::DoLand()
+{
+    _acceleration = LANDING_ACCELERATION;
+}
+
+void Player::DoLandAttack()
+{
+    ///
+    exit(0);
+}
+
+void Player::ProcessKeyCombination()
+{
+    int keyCombInt = GetKeyCombination();
+
+    switch (keyCombInt)
+    {
+        /* ON GROUND */
+        case 111:
+            // Do nothing
+            break;
+
+        case 112:
+            DoAttack();
+            break;
+
+        case 121:
+            DoMoveRight();
+            break;
+
+        case 122:
+            DoAttack();
+            DoMoveRight();
+            break;
+
+        case 131:
+            DoMoveLeft();
+            break;
+
+        case 132:
+            DoAttack();
+            DoMoveLeft();
+            break;
+
+        case 141:
+            // Do nothing
+            break;
+
+        case 142:
+            DoSlideAttack();
+            break;
+
+        /* ON AIR */
+        case 211:
+            // Do nothing
+            break;
+
+        case 212:
+            DoAttack();
+            break;
+
+        case 221:
+            DoMoveRight();
+            break;
+
+        case 222:
+            DoAttack();
+            DoMoveRight();
+            break;
+
+        case 231:
+            DoMoveLeft();
+            break;
+
+        case 232:
+            DoAttack();
+            DoMoveLeft();
+            break;
+
+        case 241:
+            DoLand();
+            break;
+
+        case 242:
+            DoLandAttack();
+            break;
+
+        default:
+            break;
+    }
+}
+
 void Player::OnMove()
 {
+    //-----------------ANIMATIONS SECTION-----------------//
     for (auto i = ani.begin(); i != ani.end(); i++) //For all CAnimation objects in 'ani'
         i->OnMove(); //Proceed to the next CMovingBitmap in the CAnimation 'i'
 
+    /* ATTACK ANIMATION */
+    if (IsFinishedAttackAnimation())
+    {
+        _isAttacking = false; //Turn off the attack signal
+        ResetAttackAnimations();
+    }
+
+    /* JUMP ANIMATION */
+    if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
+    {
+        ResetJumpCount();
+        ResetJumpAnimations();
+    }
+
+    //-----------------POSITION TRANSFORMATION SECTION-----------------//
     /* REPOSITION PLAYER ABOUT GROUNDS */
     int playerX1 = GetCor(0);
     int playerY1 = GetCor(1);
@@ -352,15 +527,18 @@ void Player::OnMove()
         }
     }
 
-    /* LANDING DOWN - Modifying acceleration */
-    if (!IsOnGround() && _isPressingDown)
-    {
-        _acceleration = LANDING_ACCELERATION;
-    }
-    else
-    {
-        _acceleration = INITIAL_ACCELERATION;
-    }
+    ///* LANDING DOWN - Modifying acceleration */
+    //if (!IsOnGround() && _isPressingDown)
+    //{
+    //    _acceleration = LANDING_ACCELERATION;
+    //}
+    //else
+    //{
+    //    _acceleration = INITIAL_ACCELERATION;
+    //}
+    ///DEBUG
+    _acceleration = INITIAL_ACCELERATION;
+    ProcessKeyCombination();
 
     /* GRAVITY */
     if (IsOnGround())
@@ -374,12 +552,6 @@ void Player::OnMove()
     }
 
     /* JUMP */
-    if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
-    {
-        ResetJumpCount();
-        ResetJumpAnimations();
-    }
-
     if (_isTriggerJump) // Game logic 'OnMove()' catches the signal jump
     {
         DoJump();
@@ -397,22 +569,7 @@ void Player::OnMove()
         DoWallJump(); // Modify the x-coordinate of the player
     }
 
-    /* MOVING LEFT / RIGHT */
-    if (_isPressingLeft && !(_isHoldingWeapon && _isTriggerAttack || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
-    {
-        _x -= MOVEMENT_UNIT;
-    }
-
-    if (_isPressingRight && !(_isHoldingWeapon && _isTriggerAttack || (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap())))
-    {
-        _x += MOVEMENT_UNIT;
-    }
-
-    /* ATTACK */
-    if (_isHoldingWeapon && _isTriggerAttack)
-    {
-        DoAttack();
-    }
+    ///OldFunctionOfKeyCombination();
 
     /* FALL OFF THE MAP */
     if (IsOutMapBorder())
@@ -450,7 +607,7 @@ void Player::OnKeyDown(const UINT& nChar)
     }
     else if (nChar == _keys[4]) //Attack
     {
-        _isTriggerAttack = true;
+        _isAttacking = true;
     }
     else
     {
@@ -482,7 +639,7 @@ void Player::SetHoldWeapon(bool isHolding)
 {
     _isHoldingWeapon = isHolding;
     _isDrawingWeapon = isHolding;
-    _isTriggerAttack = false;
+    _isAttacking = false;
 }
 
 bool Player::GetHoldWeapon()
@@ -581,8 +738,6 @@ void Player::DoAttack()
                 (*i)->SetOffsetRight();
         }
     }
-
-    ResetAttackAnimations();
 }
 
 bool Player::IsOnGround()
@@ -659,15 +814,15 @@ void Player::ResetJumpCount()
     _jumpCount = MAX_JUMP_COUNT;
 }
 
+bool Player::IsFinishedAttackAnimation()
+{
+    return (ani[8].IsFinalBitmap() || ani[9].IsFinalBitmap());
+}
+
 void Player::ResetAttackAnimations()
 {
-    if (ani[8].IsFinalBitmap() || ani[9].IsFinalBitmap())
-    {
-        ani[8].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[8]' (which is Attack Left)
-        ani[9].Reset(); //Reset to the first CMovingBitmap in the CAnimation 'ani[9]' (which is Attack Right)
-        //Turn off the attack trigger
-        _isTriggerAttack = false;
-    }
+    ani[8].Reset(); //reset to the first cmovingbitmap in the canimation 'ani[8]' (which is attack left)
+    ani[9].Reset(); //reset to the first CMovingBitmap in the CAnimation 'ani[9]' (which is Attack Right)
 }
 
 void Player::AddCAnimation(vector<int>* list, double size, int delay, bool repeat, int times)
