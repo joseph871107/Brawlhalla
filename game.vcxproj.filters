@@ -50,6 +50,9 @@
     <Filter Include="Brawlhalla\Weapon">
       <UniqueIdentifier>{418f50f4-226b-4692-b861-52f39d442a2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\UI">
+      <UniqueIdentifier>{f46e6c8d-3b0d-44a2-b992-0d6f80a81215}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
@@ -123,6 +126,9 @@
     <ClCompile Include="Source\weapon.cpp">
       <Filter>Brawlhalla\Weapon</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ui.cpp">
+      <Filter>Brawlhalla\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -169,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="Source\weapon.h">
       <Filter>Brawlhalla\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ui.h">
+      <Filter>Brawlhalla\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
