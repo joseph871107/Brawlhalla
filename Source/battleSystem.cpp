@@ -310,6 +310,8 @@ void BattleSystem::ResolveMemoryLeaksOnEndState()
     {
         delete element;
     }
+
+	_weapons.clear();
 }
 
 void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)
