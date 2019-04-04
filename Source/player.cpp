@@ -480,6 +480,7 @@ void Player::DoNonTriggeredAnimation()
     /*	~ Remarks:
     ~ We care only about key combinations that does NOT determine the attack button is pressed and the player is holding a weapon
     ~ That is, only the key combinations ending with '1' are taken into account
+    ~ Jump is a special case and thus is added into the bottom of the function
     */
     int keyCombInt = GetKeyCombination();
 
@@ -521,6 +522,24 @@ void Player::DoNonTriggeredAnimation()
 
         default:
             break;
+    }
+
+    /* JUMP */
+    if (_isTriggerJump) // Game logic 'OnMove()' catches the signal jump
+    {
+        DoJump();
+
+        if (IsOnLeftEdge() || IsOnRightEdge())
+        {
+            SetWallJump();
+        }
+
+        _isTriggerJump = false; // Turn off the jump trigger
+    }
+
+    if (IsWallJumping()) // Wall Jump
+    {
+        DoWallJump(); // Modify the x-coordinate of the player
     }
 }
 
@@ -608,24 +627,6 @@ void Player::OnMove()
     {
         _velocity += _acceleration;
         _y += _round(_velocity);
-    }
-
-    /* JUMP */
-    if (_isTriggerJump) // Game logic 'OnMove()' catches the signal jump
-    {
-        DoJump();
-
-        if (IsOnLeftEdge() || IsOnRightEdge())
-        {
-            SetWallJump();
-        }
-
-        _isTriggerJump = false; // Turn off the jump trigger
-    }
-
-    if (IsWallJumping()) // Wall Jump
-    {
-        DoWallJump(); // Modify the x-coordinate of the player
     }
 
     /* FALL OFF THE MAP */
