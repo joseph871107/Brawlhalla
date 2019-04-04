@@ -210,6 +210,7 @@ class CMovingBitmap
         void  ShowBitmap(CMovingBitmap&);	// 將圖貼到到另一張圖上 (僅供特殊用途)
         int   Top();						// 取得圖形的左上角的 y 座標
         int   Width();						// 取得圖形的寬度
+		bool  IsLoaded();
     protected:
         CRect    location;			// location of the bitmap
         bool     isBitmapLoaded;	// whether a bitmap has been loaded

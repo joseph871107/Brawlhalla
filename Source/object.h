@@ -22,6 +22,7 @@ class Object
 		int GetWidth();
 		int GetHeight();
 		double GetSize();
+		bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
         virtual void OnShow();									// 將圖形貼到畫面
         virtual void OnMove();									// 移動
         virtual void LoadBitmap(int, COLORREF);					// 載入圖形
@@ -29,7 +30,6 @@ class Object
         int x, y;												// 物件的座標
         int width, height;										// 物件的長寬
         double _size;											// 物件的大小
-        bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
     private:
 		CMovingBitmap bmp;
 };

@@ -74,37 +74,67 @@ CGameStateInit::CGameStateInit(CGame* g)
 void CGameStateInit::OnInit()
 {
     ShowInitProgress(0);
+	ui.AddButton("start", 100, 100, 100, 30);
+	ui.AddButton("settings", 100, 200, 100, 30);
+	ui.AddButton("exit", 100, 300, 100, 30);
 }
 
 void CGameStateInit::OnBeginState()
+{
+	_lButton = false;
+	_point.x = 0;
+	_point.y = 0;
+	ui.Reset();
+}
+
+void CGameStateInit::OnKeyDown(UINT, UINT, UINT)
 {
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    const char KEY_ESC = 27;
-    const char KEY_SPACE = ' ';
-
-    if (nChar == KEY_SPACE)
-        GotoGameState(GAME_STATE_RUN);						// 切換至GAME_STATE_RUN
-    else if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
-        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-    GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
+	_lButton = true;
+}
+
+void CGameStateInit::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	_lButton = false;
+}
+
+void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
+{
+	_point = point;
+}
+
+void CGameStateInit::OnRButtonDown(UINT nFlags, CPoint point)
+{
+}
+
+void CGameStateInit::OnRButtonUp(UINT nFlags, CPoint point)
+{
 }
 
 void CGameStateInit::OnShow()
 {
-    OnShowText("Please click mouse or press SPACE to begin.", 120, 220);
-    OnShowText("Press Ctrl-F to switch in between window mode and full screen mode.", 5, 395);
 
-    if (ENABLE_GAME_PAUSE)
-        OnShowText("Press Ctrl-Q to pause the Game.", 5, 425);
+	ui.OnShow();
 
-    OnShowText("Press Alt-F4 or ESC to Quit.", 5, 455);
+	string chosenBut = ui.ChosenButton(_lButton, _point);
+	if (chosenBut == "start")
+		GotoGameState(GAME_STATE_RUN);
+	else if(chosenBut == "settings")
+		;
+	else if(chosenBut == "exit")
+		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
+}
+
+void CGameStateInit::OnMove()
+{
+	ui.SetButtonState(_lButton, _point);
 }
 
 /////////////////////////////////////////////////////////////////////////////
