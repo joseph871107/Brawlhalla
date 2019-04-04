@@ -50,13 +50,13 @@ class Player
         //Jump
         void DoJump();
         void ResetJumpCount();
-        void SetOffsetUp();
-        void SetOffsetLeft();
-        void SetOffsetRight();
+        void InitiateOffsetUp();
         //Wall jump
-        void SetWallJump();
-        bool IsWallJumping();
-        void DoWallJump();
+        void InitiateWallJump();
+		void InitiateOffsetLeft();
+		void InitiateOffsetRight();
+        bool IsBeingOffsetHorizontally();
+        void DoHorizontalOffset();
         //Positions
         bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
         bool IsOnLeftEdge();
@@ -74,6 +74,8 @@ class Player
         void ResetTriggeredAnimationVariables();
         void DoTriggeredAnimation();
         void DoNonTriggeredAnimation();
+		void InitiateTriggeredAnimation();
+		void FinishTriggeredAnimation();
         bool IsFinishedTriggeredAnimation();
         void ShowTriggeredAnimation();
         void ShowNonTriggerAnimations();

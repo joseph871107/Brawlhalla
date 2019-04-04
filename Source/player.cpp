@@ -271,12 +271,12 @@ void Player::DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, i
     }
 }
 
-bool Player::IsWallJumping()
+bool Player::IsBeingOffsetHorizontally()
 {
     return (_isOffsetLeft || _isOffsetRight);
 }
 
-void Player::DoWallJump()
+void Player::DoHorizontalOffset()
 {
     if (_isOffsetLeft)
     {
@@ -435,12 +435,6 @@ void Player::GetTriggeredAnimation()
         default:
             break;
     }
-
-    /// Comment for future devs: After having caught the attack trigger, I turn it off. This logic works, but it seems dirty and should be rectified
-    if (IsAttacking())
-    {
-        _isTriggerAttack = false;
-    }
 }
 
 bool Player::IsFinishedTriggeredAnimation()
@@ -462,12 +456,12 @@ void Player::DoTriggeredAnimation()
 
         case 16: // On-Ground-Moving Attack Left
             DoAttack();
-            DoMoveLeft(GND_ATTACK_MOVEMENT_UNIT);
+            //DoMoveLeft(GND_ATTACK_MOVEMENT_UNIT);
             break;
 
         case 17: // On-Ground-Moving Attack Right
             DoAttack();
-            DoMoveRight(GND_ATTACK_MOVEMENT_UNIT);
+            //DoMoveRight(GND_ATTACK_MOVEMENT_UNIT);
             break;
 
         default:
@@ -531,16 +525,43 @@ void Player::DoNonTriggeredAnimation()
 
         if (IsOnLeftEdge() || IsOnRightEdge())
         {
-            SetWallJump();
+            InitiateWallJump();
         }
 
         _isTriggerJump = false; // Turn off the jump trigger
     }
+}
 
-    if (IsWallJumping()) // Wall Jump
+void Player::InitiateTriggeredAnimation()
+{
+    switch (_triggeredAniID)
     {
-        DoWallJump(); // Modify the x-coordinate of the player
+        case 8: // Attack Left
+            _isTriggerAttack = false;
+            break;
+
+        case 9: // Attack Right
+            _isTriggerAttack = false;
+            break;
+
+        case 16: // On-Ground-Moving Attack Left
+            _isTriggerAttack = false;
+            InitiateOffsetLeft();
+            break;
+
+        case 17: // On-Ground-Moving Attack Right
+            _isTriggerAttack = false;
+            InitiateOffsetRight();
+            break;
+
+        default:
+            break;
     }
+}
+
+void Player::FinishTriggeredAnimation()
+{
+    ani[_triggeredAniID].Reset();
 }
 
 void Player::ProcessKeyCombinationOnMove()
@@ -553,21 +574,24 @@ void Player::ProcessKeyCombinationOnMove()
     if (!_isTriggeredAni) // If there is no animation being triggered in the meantime, then detect should there be any
     {
         GetTriggeredAnimation();
+
+        if (_isTriggeredAni) // If an animation is found to be triggered, then we firstly initiate it (there is no process here)
+        {
+            InitiateTriggeredAnimation();
+        }
     }
 
-    if (_isTriggeredAni) // If an animation is triggered
+    if (_isTriggeredAni) // If an animation is triggered, then we process it (there is no initiation here)
     {
         if (!IsFinishedTriggeredAnimation()) // If an animation is triggered and the time duration dedicated for it has not elapsed, then increment '_triggeredAniCount' (representing the elapsed animation time) and finish doing the triggered animation
         {
             _triggeredAniCount++;
             DoTriggeredAnimation();
         }
-        else // If an animation is triggered and it has exceeded its show time, then reset the triggered animation's variables
+        else // If an animation is triggered and it has done its showcase, then thoroughly finish it and reset the triggered animation's variables
         {
+            FinishTriggeredAnimation();
             ResetTriggeredAnimationVariables();
-            /// Comment for future devs: The two lines below reset the animations for attack. Since it is a fucking dirty code, it should be rectified in the future
-            ResetAnimations(8);
-            ResetAnimations(16);
         }
     }
     else // If there is no triggered animation in the meantime, then do the other animations
@@ -594,8 +618,6 @@ void Player::OnMove()
         ResetAnimations(2);
 
     //-----------------POSITION TRANSFORMATION SECTION-----------------//
-    /* INITIALIZATION FOR GRAVITY and PREPARATION FOR LANDING DOWN */
-    _acceleration = INITIAL_ACCELERATION;
     /* REPOSITION PLAYER ABOUT GROUNDS */
     int playerX1 = GetCor(0);
     int playerY1 = GetCor(1);
@@ -615,6 +637,8 @@ void Player::OnMove()
         }
     }
 
+    /* INITIALIZATION FOR GRAVITY and PREPARATION FOR LANDING DOWN */
+    _acceleration = INITIAL_ACCELERATION;
     /// Warning: 'DoLand()' inside 'ProcessKeyCombinationOnMove()' modifies the member variable '_acceleration'. Thus, the function affects the below codes regarding gravity and as a result must be placed here!!!
     ProcessKeyCombinationOnMove();
 
@@ -628,6 +652,10 @@ void Player::OnMove()
         _velocity += _acceleration;
         _y += _round(_velocity);
     }
+
+    /* WALL JUMP */
+    if (IsBeingOffsetHorizontally())
+        DoHorizontalOffset(); // Modify the x-coordinate of the player
 
     /* FALL OFF THE MAP */
     if (IsOutMapBorder())
@@ -741,7 +769,7 @@ int Player::ShowAnimationState()
     return (*bmp_iter[currentAni])[ani[currentAni].GetCurrentBitmapNumber()];
 }
 
-void Player::SetOffsetUp()
+void Player::InitiateOffsetUp()
 {
     _velocity = -INITIAL_VELOCITY;
     _y -= _round(INITIAL_VELOCITY); //Trick explaination: By intuition, '_y' of the player should not be
@@ -754,34 +782,34 @@ void Player::DoJump()
 {
     if (_jumpCount > 0)   //If the player is able to jump more
     {
-        SetOffsetUp();
+        InitiateOffsetUp();
         _jumpCount--; //Decrement the jumps available
     }
 }
 
-void Player::SetOffsetLeft()
+void Player::InitiateOffsetLeft()
 {
     _offsetVelocity = OFFSET_INITIAL_VELOCITY;
     _isOffsetLeft = true;
 }
 
-void Player::SetOffsetRight()
+void Player::InitiateOffsetRight()
 {
     _offsetVelocity = OFFSET_INITIAL_VELOCITY;
     _isOffsetRight = true;
 }
 
-void Player::SetWallJump()
+void Player::InitiateWallJump()
 {
     if (_jumpCount > 0) //If the player is able to jump more
     {
         if (IsOnLeftEdge())
         {
-            SetOffsetLeft();
+            InitiateOffsetLeft();
         }
         else if (IsOnRightEdge())
         {
-            SetOffsetRight();
+            InitiateOffsetRight();
         }
     }
 }
@@ -792,12 +820,12 @@ void Player::DoAttack()
     {
         if (*i != this && HitPlayer(*i))
         {
-            (*i)->SetOffsetUp();
+            (*i)->InitiateOffsetUp();
 
             if (GetCor(0) > (*i)->GetCor(0))
-                (*i)->SetOffsetLeft();
+                (*i)->InitiateOffsetLeft();
             else
-                (*i)->SetOffsetRight();
+                (*i)->InitiateOffsetRight();
         }
     }
 }
