@@ -120,6 +120,14 @@ void Player::LoadBitmap()
     lfr = vector<int> { IDB_P1_FALL0, IDB_P1_FALL1 };
     gmal = vector<int> { IDB_P1_GND_MOVE_ATTACK0M, IDB_P1_GND_MOVE_ATTACK1M, IDB_P1_GND_MOVE_ATTACK2M, IDB_P1_GND_MOVE_ATTACK3M, IDB_P1_GND_MOVE_ATTACK4M, IDB_P1_GND_MOVE_ATTACK5M };
     gmar = vector<int> { IDB_P1_GND_MOVE_ATTACK0, IDB_P1_GND_MOVE_ATTACK1, IDB_P1_GND_MOVE_ATTACK2, IDB_P1_GND_MOVE_ATTACK3, IDB_P1_GND_MOVE_ATTACK4, IDB_P1_GND_MOVE_ATTACK5 };
+    sal = vector<int> { IDB_P1_SLIDE0M, IDB_P1_SLIDE1M };
+    sar = vector<int> { IDB_P1_SLIDE0, IDB_P1_SLIDE1 };
+    aal = vector<int> { IDB_P1_AIR_ATTACK0M, IDB_P1_AIR_ATTACK1M, IDB_P1_AIR_ATTACK2M };
+    aar = vector<int> { IDB_P1_AIR_ATTACK0, IDB_P1_AIR_ATTACK1, IDB_P1_AIR_ATTACK2 };
+    amal = vector<int> { IDB_P1_AIR_MOVE_ATTACK0M, IDB_P1_AIR_MOVE_ATTACK1M, IDB_P1_AIR_MOVE_ATTACK2M, IDB_P1_AIR_MOVE_ATTACK3M };
+    amar = vector<int> { IDB_P1_AIR_MOVE_ATTACK0, IDB_P1_AIR_MOVE_ATTACK1, IDB_P1_AIR_MOVE_ATTACK2, IDB_P1_AIR_MOVE_ATTACK3 };
+    adal = vector<int> { IDB_P1_AIR_DOWN_ATTACK_R0M, IDB_P1_AIR_DOWN_ATTACK_L0M, IDB_P1_AIR_DOWN_ATTACK_L1M, IDB_P1_AIR_DOWN_ATTACK_E0M, IDB_P1_AIR_DOWN_ATTACK_E1M, IDB_P1_AIR_DOWN_ATTACK_E2M };
+    adar = vector<int> { IDB_P1_AIR_DOWN_ATTACK_R0, IDB_P1_AIR_DOWN_ATTACK_L0, IDB_P1_AIR_DOWN_ATTACK_L1, IDB_P1_AIR_DOWN_ATTACK_E0, IDB_P1_AIR_DOWN_ATTACK_E1, IDB_P1_AIR_DOWN_ATTACK_E2 };
     AddCAnimation(&rl, BITMAP_SIZE); //ani[0] Run Left
     AddCAnimation(&rr, BITMAP_SIZE); //ani[1] Run Right
     AddCAnimation(&jl, BITMAP_SIZE, 5, false); //ani[2] Jump Left
@@ -138,6 +146,14 @@ void Player::LoadBitmap()
     AddCAnimation(&lfr, BITMAP_SIZE); //ani[15] Landing Falling Right
     AddCAnimation(&gmal, BITMAP_SIZE, 4, false); //ani[16] On-Ground-Moving Attack Left
     AddCAnimation(&gmar, BITMAP_SIZE, 4, false); //ani[17] On-Ground-Moving Attack Right
+    AddCAnimation(&sal, BITMAP_SIZE, 4, false); //ani[18] Slide Attack Left
+    AddCAnimation(&sar, BITMAP_SIZE, 4, false); //ani[19] Slide Attack Right
+    AddCAnimation(&aal, BITMAP_SIZE, 4, false); //ani[20] Air Attack Left
+    AddCAnimation(&aar, BITMAP_SIZE, 4, false); //ani[21] Air Attack Right
+    AddCAnimation(&amal, BITMAP_SIZE, 4, false); //ani[22] On-Air-Moving Attack Left
+    AddCAnimation(&amar, BITMAP_SIZE, 4, false); //ani[23] On-Air-Moving Attack Right
+    AddCAnimation(&adal, BITMAP_SIZE, 4, false); //ani[24] On-Air-Down Attack Left
+    AddCAnimation(&adar, BITMAP_SIZE, 4, false); //ani[25] On-Air-Down Attack Right
     _collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
 }
 
@@ -325,7 +341,7 @@ int Player::GetKeyCombination()
     */
     string keyCombString = "";
 
-    if (IsOnGround()) /// Comment for future devs: If the player is on edge?
+    if (IsOnGround())
         keyCombString = keyCombString + "1";
     else
         keyCombString = keyCombString + "2";
@@ -412,24 +428,24 @@ void Player::GetTriggeredAnimation()
             break;
 
         case 142: // on ground, land down, attack
-            ///
+            SetTriggeredAnimationVariables(18);
             break;
 
         /* ON AIR */
         case 212: // on air, not move, attack
-            ///
+            SetTriggeredAnimationVariables(20);
             break;
 
         case 222: // on air, move right, attack
-            ///
+            SetTriggeredAnimationVariables(22);
             break;
 
         case 232: // on air, move left, attack
-            ///
+            SetTriggeredAnimationVariables(22);
             break;
 
         case 242: // on air, land down, attack
-            ///
+            SetTriggeredAnimationVariables(24);
             break;
 
         default:
@@ -456,12 +472,42 @@ void Player::DoTriggeredAnimation()
 
         case 16: // On-Ground-Moving Attack Left
             DoAttack();
-            //DoMoveLeft(GND_ATTACK_MOVEMENT_UNIT);
             break;
 
         case 17: // On-Ground-Moving Attack Right
             DoAttack();
-            //DoMoveRight(GND_ATTACK_MOVEMENT_UNIT);
+            break;
+
+        case 18: // Slide Attack Left
+            DoAttack();
+            break;
+
+        case 19: // Slide Attack Right
+            DoAttack();
+            break;
+
+        case 20: // Air Attack Left
+            DoAttack();
+            break;
+
+        case 21: // Air Attack Right
+            DoAttack();
+            break;
+
+        case 22: // On-Air-Moving Attack Left
+            DoAttack();
+            break;
+
+        case 23: // On-Air-Moving Attack Right
+            DoAttack();
+            break;
+
+        case 24: // On-Air-Down Attack Left
+            DoAttack();
+            break;
+
+        case 25: // On-Air-Down Attack Right
+            DoAttack();
             break;
 
         default:
@@ -552,6 +598,42 @@ void Player::InitiateTriggeredAnimation()
         case 17: // On-Ground-Moving Attack Right
             _isTriggerAttack = false;
             InitiateOffsetRight();
+            break;
+
+        case 18: // Slide Attack Left
+            _isTriggerAttack = false;
+            InitiateOffsetLeft();
+            break;
+
+        case 19: // Slide Attack Right
+            _isTriggerAttack = false;
+            InitiateOffsetRight();
+            break;
+
+        case 20: // Air Attack Left
+            _isTriggerAttack = false;
+            break;
+
+        case 21: // Air Attack Right
+            _isTriggerAttack = false;
+            break;
+
+        case 22: // On-Air-Moving Attack Left
+            _isTriggerAttack = false;
+            InitiateOffsetLeft();
+            break;
+
+        case 23: // On-Air-Moving Attack Right
+            _isTriggerAttack = false;
+            InitiateOffsetRight();
+            break;
+
+        case 24: // On-Air-Down Attack Left
+            _isTriggerAttack = false;
+            break;
+
+        case 25: // On-Air-Down Attack Right
+            _isTriggerAttack = false;
             break;
 
         default:
@@ -731,6 +813,7 @@ void Player::SetHoldWeapon(bool isHolding)
 {
     _isHoldingWeapon = isHolding;
     _isDrawingWeapon = isHolding;
+    _isTriggerAttack = false; // We are picking weapon, not performing an attack
 }
 
 bool Player::GetHoldWeapon()

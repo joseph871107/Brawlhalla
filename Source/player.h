@@ -131,6 +131,14 @@ class Player
         vector<int> lfr;// bmps of landing falling right
         vector<int> gmal;// bmps of on-ground-moving attack left
         vector<int> gmar;// bmps of on-ground-moving attack right
+		vector<int> sal;// bmps of slide-attack left
+		vector<int> sar;// bmps of slide-attack right
+		vector<int> aal;// bmps of air-attack left
+		vector<int> aar;// bmps of air-attack right
+		vector<int> amal;// bmps of on-air-moving attack left
+		vector<int> amar;// bmps of on-air-moving attack right
+		vector<int> adal;// bmps of on-air-down attack left
+		vector<int> adar;// bmps of on-air-down attack right
         vector<vector<int>*> bmp_iter;
 
         //Required for "physical" existence in the game
