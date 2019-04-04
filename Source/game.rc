@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文 (繁體，台灣) resources
+// Chinese (Traditional, Taiwan) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
@@ -182,6 +182,7 @@ IDB_P1_IDLE2_2M         BITMAP                  "..\\RES\\player1\\adventurer-id
 
 IDB_P1_IDLE2_3M         BITMAP                  "..\\RES\\player1\\adventurer-idle-2-03(Mirrored).bmp"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Cursor
@@ -189,12 +190,12 @@ IDB_P1_IDLE2_3M         BITMAP                  "..\\RES\\player1\\adventurer-id
 
 IDC_GAMECURSOR          CURSOR                  "..\\res\\gamecurs.cur"
 
-#endif    // 中文 (繁體，台灣) resources
+#endif    // Chinese (Traditional, Taiwan) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// 英文 (美國) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -207,31 +208,63 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 IDR_MAINFRAME           BITMAP                  "..\\res\\Toolbar.bmp"
 
-IDB_P1_TEST         	BITMAP                  "..\\RES\\player1\\player1_collision.bmp"
+IDB_P1_TEST             BITMAP                  "..\\RES\\player1\\player1_collision.bmp"
 
-IDB_NUM0         		BITMAP                  "..\\RES\\Numbers\\0.bmp"
+IDB_NUM0                BITMAP                  "..\\RES\\Numbers\\0.bmp"
 
-IDB_NUM1         		BITMAP                  "..\\RES\\Numbers\\1.bmp"
+IDB_NUM1                BITMAP                  "..\\RES\\Numbers\\1.bmp"
 
-IDB_NUM2         		BITMAP                  "..\\RES\\Numbers\\2.bmp"
+IDB_NUM2                BITMAP                  "..\\RES\\Numbers\\2.bmp"
 
-IDB_NUM3         		BITMAP                  "..\\RES\\Numbers\\3.bmp"
+IDB_NUM3                BITMAP                  "..\\RES\\Numbers\\3.bmp"
 
-IDB_NUM4         		BITMAP                  "..\\RES\\Numbers\\4.bmp"
+IDB_NUM4                BITMAP                  "..\\RES\\Numbers\\4.bmp"
 
-IDB_NUM5          		BITMAP                  "..\\RES\\Numbers\\5.bmp"
+IDB_NUM5                BITMAP                  "..\\RES\\Numbers\\5.bmp"
 
-IDB_NUM6          		BITMAP                  "..\\RES\\Numbers\\6.bmp"
+IDB_NUM6                BITMAP                  "..\\RES\\Numbers\\6.bmp"
 
-IDB_NUM7         		BITMAP                  "..\\RES\\Numbers\\7.bmp"
+IDB_NUM7                BITMAP                  "..\\RES\\Numbers\\7.bmp"
 
-IDB_NUM8          		BITMAP                  "..\\RES\\Numbers\\8.bmp"
+IDB_NUM8                BITMAP                  "..\\RES\\Numbers\\8.bmp"
 
-IDB_NUM9          		BITMAP                  "..\\RES\\Numbers\\9.bmp"
+IDB_NUM9                BITMAP                  "..\\RES\\Numbers\\9.bmp"
 
-IDB_NUM_MINUS         	BITMAP                  "..\\RES\\Numbers\\minus.bmp"
+IDB_NUM_MINUS           BITMAP                  "..\\RES\\Numbers\\minus.bmp"
 
-IDB_WEAPON_FALLING		BITMAP					"..\\RES\\weapons\\DefaultFallingSword\\WeaponPickup.bmp"
+IDB_WEAPON_FALLING      BITMAP                  "..\\RES\\weapons\\DefaultFallingSword\\WeaponPickup.bmp"
+
+IDB_P1_FALL1            BITMAP                  "..\\RES\\player1\\adventurer-fall-01.bmp"
+
+IDB_P1_FALL1M           BITMAP                  "..\\RES\\player1\\adventurer-fall-01(Mirrored).bmp"
+
+IDB_P1_FALL0            BITMAP                  "..\\RES\\player1\\adventurer-fall-00.bmp"
+
+IDB_P1_FALL0M           BITMAP                  "..\\RES\\player1\\adventurer-fall-00(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK0M BITMAP                  "..\\RES\\player1\\adventurer-attack2-00(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK0 BITMAP                  "..\\RES\\player1\\adventurer-attack2-00.bmp"
+
+IDB_P1_GND_MOVE_ATTACK1M BITMAP                  "..\\RES\\player1\\adventurer-attack2-01(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK1 BITMAP                  "..\\RES\\player1\\adventurer-attack2-01.bmp"
+
+IDB_P1_GND_MOVE_ATTACK2M BITMAP                  "..\\RES\\player1\\adventurer-attack2-02(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK2 BITMAP                  "..\\RES\\player1\\adventurer-attack2-02.bmp"
+
+IDB_P1_GND_MOVE_ATTACK3M BITMAP                  "..\\RES\\player1\\adventurer-attack2-03(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK3 BITMAP                  "..\\RES\\player1\\adventurer-attack2-03.bmp"
+
+IDB_P1_GND_MOVE_ATTACK4M BITMAP                  "..\\RES\\player1\\adventurer-attack2-04(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK4 BITMAP                  "..\\RES\\player1\\adventurer-attack2-04.bmp"
+
+IDB_P1_GND_MOVE_ATTACK5M BITMAP                  "..\\RES\\player1\\adventurer-attack2-05(Mirrored).bmp"
+
+IDB_P1_GND_MOVE_ATTACK5 BITMAP                  "..\\RES\\player1\\adventurer-attack2-05.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -518,7 +551,7 @@ BEGIN
     ID_BUTTON_UNITTEST      "Perform Unit Test"
 END
 
-#endif    // 英文 (美國) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

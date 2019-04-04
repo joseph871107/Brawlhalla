@@ -199,10 +199,13 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
     if (battleSystem.IsGameOver())								// Demo 關閉遊戲的方法
     {
         SetLegacyString(battleSystem.GetGameResult());
+        battleSystem.ResolveMemoryLeaksOnEndState();
         GotoGameState(GAME_STATE_OVER);					// 關閉遊戲
     }
-
-    battleSystem.OnMove();
+    else
+    {
+        battleSystem.OnMove();
+    }
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -243,7 +246,8 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnShow()
 {
-    battleSystem.OnShow();
+    if (!battleSystem.IsGameOver())
+        battleSystem.OnShow();
 }
 
 string CGameStateRun::GetLegacyString()

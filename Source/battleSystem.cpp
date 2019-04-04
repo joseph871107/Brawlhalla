@@ -28,17 +28,14 @@ BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Object()), _gro
 
 BattleSystem::~BattleSystem()
 {
+    ResolveMemoryLeaksOnEndState();
+
     for (auto element : _grounds)
     {
         delete element;
     }
 
     for (auto element : _players)
-    {
-        delete element;
-    }
-
-    for (auto element : _weapons)
     {
         delete element;
     }
@@ -305,6 +302,16 @@ string BattleSystem::GetGameResult()
         return ("Draw.");
     else
         return (max->GetName() + " win.");
+}
+
+void BattleSystem::ResolveMemoryLeaksOnEndState()
+{
+    for (auto element : _weapons)
+    {
+        delete element;
+    }
+
+	_weapons.clear();
 }
 
 void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)

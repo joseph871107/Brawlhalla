@@ -17,18 +17,18 @@ class Weapon : public Object
         Weapon();
         void OnShow();
         void OnMove();
-		void OnKeyDown(UINT);
+        void OnKeyDown(UINT);
         void LoadBitmap();
         void Initialize(vector<Ground*>, vector<Player*>);
-		Player* HitPlayer();
-		bool HasTaken();
+        Player* HitPlayer();
+        bool HasTaken();
     private:
         CMovingBitmap bmp;
         int _bmpID;
         COLORREF _color;
         double _velocity;
-		Ground* _ground;
-		vector<Player*> _player;
+        Ground* _ground;
+        vector<Player*> _player;
         bool _isHolding;
 };
 }

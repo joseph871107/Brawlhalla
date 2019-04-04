@@ -25,11 +25,11 @@ class Player
         void SetHoldWeapon(bool);
         bool GetHoldWeapon();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
-        string GetName();
         int ShowAnimationState();		// Return which CAnimation is playing
         bool IsOutOfLife();
         const int& GetLife() const;
         const string& GetName() const;
+        const long& GetAttackKey() const;
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -44,30 +44,73 @@ class Player
         void DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
 
         //Movements
-        void DoJump(int = 0);
-        void DoAttack();
+        void DoMoveLeft(int movementUnit);
+        void DoMoveRight(int movementUnit);
+        void DoLand();
+        //Jump
+        void DoJump();
+        void ResetJumpCount();
+        void InitiateOffsetUp();
+        //Wall jump
+        void InitiateWallJump();
+		void InitiateOffsetLeft();
+		void InitiateOffsetRight();
+        bool IsBeingOffsetHorizontally();
+        void DoHorizontalOffset();
+        //Positions
         bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
         bool IsOnLeftEdge();
         bool IsOnRightEdge();
-        void ResetJumpAnimations();
-        void ResetJumpCount();
-        void ResetAttackAnimations();
         bool IsOutMapBorder();
         void DoDead();
         void DoRespawn();
+        //Key combination
+        int GetKeyCombination();
+        void ProcessKeyCombinationOnMove();
+
+        //Triggered animation concept
+        void GetTriggeredAnimation();
+        void SetTriggeredAnimationVariables(int leftAnimationID);
+        void ResetTriggeredAnimationVariables();
+        void DoTriggeredAnimation();
+        void DoNonTriggeredAnimation();
+		void InitiateTriggeredAnimation();
+		void FinishTriggeredAnimation();
+        bool IsFinishedTriggeredAnimation();
+        void ShowTriggeredAnimation();
+        void ShowNonTriggerAnimations();
+
+        //[Attribute] Attack
+        void DoAttack();
+        bool IsAttacking();
+        bool IsFinishedAttackAnimation();
+
+        //[Attribute] Draw Weapon
+        bool IsDrawingWeapon();
+        bool IsFinishedDrawingAnimation();
 
         //Animations
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
         void SetAnimationState(int);	// Set which CAnimation is going to play
         void ShowAnimation();			// Show CAnimation by currentAni
+        void ResetAnimations(int animationID);
+        void SetAnimationStateLeftRight(int leftAnimationId);
+
+        //[Attribute] Attack
+        bool HitPlayer(Player*);
 
 
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
-        int _x, _y;						// Position of the collision's box
+        int _x, _y;						// position of the collision's box
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
         //bool _beInterrupt;
+
+        //Required for triggered animation concept
+        bool _isTriggeredAni;
+        int _triggeredAniID;
+        int _triggeredAniCount;
 
         //Bitmaps
         vector<int> rl;	// bmps of running left
@@ -84,17 +127,25 @@ class Player
         vector<int> sdr;// bmps of drawing sword right
         vector<int> s2l;// bmps of standing left with sword
         vector<int> s2r;// bmps of standing right with sword
+        vector<int>	lfl;// bmps of landing falling left
+        vector<int> lfr;// bmps of landing falling right
+        vector<int> gmal;// bmps of on-ground-moving attack left
+        vector<int> gmar;// bmps of on-ground-moving attack right
         vector<vector<int>*> bmp_iter;
 
         //Required for "physical" existence in the game
+        CMovingBitmap _collision_box;
         int _width, _height;			// of the collision box
 
         //Keys
         vector<long> _keys; // 0 - up, 1 - right, 2 - down, 3 - left, 4 - attack
 
         //[Attribute] Move left/ right
-        bool _isMovingLeft, _isMovingRight;
+        bool _isPressingLeft, _isPressingRight;
         bool _dir; //false: player facing left, true: player facing right
+
+        //[Attribute] Landing down
+        bool _isPressingDown;
 
         //[Attribute] Jump
         bool _isTriggerJump;
@@ -104,21 +155,20 @@ class Player
         int _offsetVelocity;
         bool _isOffsetLeft, _isOffsetRight;
 
-        //[Attribute] Attack
-        bool _isHoldingWeapon;
-        bool _isDrawingWeapon;
-        bool _isAttacking;
-        bool HitPlayer(Player*);
-        vector<Player*>* _player;
-
         //Required for a jump simulating the physical world
         double _velocity;
+        double _acceleration;
 
-        //Ground
+        //[Attribute] Draw Weapon
+        bool _isDrawingWeapon;
+
+        //[Attribute] Attack
+        bool _isHoldingWeapon;
+        bool _isTriggerAttack;
+        vector<Player*>* _player;
+
+        //Grounds
         vector<Ground*> _grounds;
-
-        //Main Collision box to debug
-        CMovingBitmap _collision_box;
 
         //Life
         int _life;
