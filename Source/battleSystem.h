@@ -28,6 +28,7 @@ class BattleSystem : public CGameState
         void OnShow();									// 顯示這個狀態的遊戲畫面
         bool IsGameOver();
         string GetGameResult();
+		void ResolveMemoryLeaksOnEndState();
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
