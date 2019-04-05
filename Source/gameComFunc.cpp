@@ -211,7 +211,7 @@ ColBmp readBMP(int file, int x_max, int y_max)
 {
     ColBmp tBmp;
     HBITMAP hBmp = (HBITMAP)LoadImage(NULL, (LPCSTR) GetPathFromIDB(file).c_str(), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_DEFAULTSIZE | LR_LOADFROMFILE);
-
+	
     if (hBmp == NULL) return tBmp;
 
     BITMAP bmp;

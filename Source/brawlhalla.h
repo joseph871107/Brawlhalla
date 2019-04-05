@@ -42,6 +42,7 @@
 #include "player.h"
 #include "battleSystem.h"
 #include "ui.h"
+#include "fImage.h"
 
 namespace game_framework
 {
@@ -108,6 +109,7 @@ class CGameStateRun : public CGameState
         static string GetLegacyString();
         static void SetLegacyString(string newLegacyString);
     private:
+		FImage test;
         BattleSystem battleSystem;
         static string _legacyString;				// used for transferring message to other game state (e.g., CGameStateInit, CGameStateOver)
 };

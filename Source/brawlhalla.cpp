@@ -123,7 +123,7 @@ void CGameStateInit::OnShow()
 
 	ui.OnShow();
 
-	string chosenBut = ui.ChosenButton(_lButton, _point);
+	string chosenBut = ui.ChosenButton();
 	if (chosenBut == "start")
 		GotoGameState(GAME_STATE_RUN);
 	else if(chosenBut == "settings")
@@ -211,6 +211,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
     battleSystem.OnInit();
+	test.LoadBitmap(IDB_GROUND,RGB(0,255,0));
+	test.SetAlpha(100);
+	test.SetTopLeft(0, 0);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -246,8 +249,12 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnShow()
 {
-    if (!battleSystem.IsGameOver())
+	if (!battleSystem.IsGameOver())
         battleSystem.OnShow();
+	static int deg = 0;
+	test.Rotate(deg++);
+	test.ShowBitmap();
+
 }
 
 string CGameStateRun::GetLegacyString()

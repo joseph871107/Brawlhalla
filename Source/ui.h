@@ -81,7 +81,8 @@ namespace game_framework
 
 	class UI {
 	public:
-		string ChosenButton(UINT nFlags, CPoint point);
+		~UI();
+		string ChosenButton();
 		int GetButtonState(string name);
 		void SetButtonState(UINT nFlags, CPoint point);
 		void AddButton(string name, int x = 0, int y = 0, int width = 50, int height = 50, int tri = BUTTON_RELEASE);
@@ -91,7 +92,6 @@ namespace game_framework
 		vector<UI_Button*>::iterator Index(string name);
 	private:
 		vector<UI_Button*> _buttons;
-		
 	};
 }
 

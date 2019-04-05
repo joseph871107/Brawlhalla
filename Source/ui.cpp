@@ -8,7 +8,13 @@
 
 namespace game_framework
 {
-	string UI::ChosenButton(UINT nFlags, CPoint point)
+	UI::~UI()
+	{
+		for (auto i = _buttons.begin(); i != _buttons.end(); i++)
+			delete(*i);
+		_buttons.clear();
+	}
+	string UI::ChosenButton()
 	{
 		for (auto i = _buttons.begin(); i != _buttons.end(); i++) {
 			if ((*i)->state == (*i)->trigger)
