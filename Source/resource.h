@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by game.rc
+// Microsoft Visual C++ 產生的 Include 檔案。
+// 由 game.rc 使用
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_SOCKETS_INIT_FAILED         104
@@ -114,7 +114,10 @@
 #define IDB_P1_AIR_DOWN_ATTACK_E1M      392
 #define IDB_P1_AIR_DOWN_ATTACK_E0       393
 #define IDB_P1_AIR_DOWN_ATTACK_E0M      394
+#define IDR_UI_TITLE                    395
 #define IDB_WEAPON_FALLING              500
+#define IDB_WEAPON_THROWING_L           501
+#define IDB_WEAPON_THROWING_R           502
 #define IDB_NUM0                        1000
 #define IDB_NUM1                        1001
 #define IDB_NUM2                        1002
@@ -128,6 +131,12 @@
 #define IDB_NUM_MINUS                   1010
 #define IDB_P1_TEST                     1011
 #define IDC_README                      1012
+#define IDB_UI_TITLE                    2000
+#define IDB_UI_BACKGROUND               2001
+#define IDB_UI_INFO1                    2002
+#define IDB_UI_INFO2                    2003
+#define IDB_UI_INFO3                    2004
+#define IDB_UI_INFO4                    2005
 #define ID_FILE_PAUSE                   32771
 #define ID_TOGGLE_FULLSCREEN            32772
 #define ID_BUTTON_FULLSCREEN            32773
@@ -139,7 +148,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        395
+#define _APS_NEXT_RESOURCE_VALUE        396
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

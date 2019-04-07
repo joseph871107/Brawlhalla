@@ -816,9 +816,23 @@ void Player::SetHoldWeapon(bool isHolding)
     _isTriggerAttack = false; // We are picking weapon, not performing an attack
 }
 
+void Player::BeenAttacked(bool dir)
+{
+	InitiateOffsetUp();
+	if (!dir)
+		InitiateOffsetLeft();
+	else
+		InitiateOffsetRight();
+}
+
 bool Player::GetHoldWeapon()
 {
     return _isHoldingWeapon;
+}
+
+bool Player::GetDirection()
+{
+	return _dir;
 }
 
 int Player::GetCor(int index)
@@ -911,6 +925,12 @@ void Player::DoAttack()
                 (*i)->InitiateOffsetRight();
         }
     }
+}
+
+void Player::DoThrowingWeapon()
+{
+	Weapon throwing;
+	throwing.Initialize(vector<Ground*>{}, vector<Player*>{this});
 }
 
 bool Player::IsOnGround()

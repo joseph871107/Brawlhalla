@@ -20,16 +20,19 @@ class Weapon : public Object
         void OnKeyDown(UINT);
         void LoadBitmap();
         void Initialize(vector<Ground*>, vector<Player*>);
+		void Throw(bool, Player*);
         Player* HitPlayer();
-        bool HasTaken();
+		bool HasTaken();
+		bool BeThrowen();
     private:
-        CMovingBitmap bmp;
-        int _bmpID;
+        CMovingBitmap bmp,tl, tr;
+        int _bmpID, _throwLID, _throwRID, _flyingDistance;
         COLORREF _color;
         double _velocity;
         Ground* _ground;
         vector<Player*> _player;
-        bool _isHolding;
+        bool _isHolding, _isThrowing, _tDir;
+		Player* _throwHost;
 };
 }
 

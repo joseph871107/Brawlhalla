@@ -53,12 +53,12 @@ int Object::GetCor(int index)
 
 int Object::GetWidth()
 {
-	return GetCor(2) - GetCor(0);
+	return (int)(width * _size);
 }
 
 int Object::GetHeight()
 {
-	return GetCor(3) - GetCor(1);
+	return (int)(height * _size);
 }
 
 double Object::GetSize()
@@ -66,9 +66,18 @@ double Object::GetSize()
 	return _size;
 }
 
+void Object::LoadBitmap(int resource)
+{
+	bmp.LoadBitmap(resource);
+	width = bmp.Width();
+	height = bmp.Height();
+}
+
 void Object::LoadBitmap(int resource, COLORREF color)
 {
     bmp.LoadBitmap(resource, color);
+	width = bmp.Width();
+	height = bmp.Height();
 }
 
 void Object::SetXY(int nx, int ny)

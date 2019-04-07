@@ -453,6 +453,7 @@
     <Image Include="res\player\player.bmp" />
     <Image Include="RES\tests\lean_left.bmp" />
     <Image Include="RES\tests\lean_right.bmp" />
+    <Image Include="res\ui\brawlhalla-logo.bmp" />
     <Image Include="RES\weapons\DefaultFallingSword\WeaponPickup.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

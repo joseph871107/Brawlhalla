@@ -1,6 +1,7 @@
 #ifndef UI_H
 #define UI_H
 #include "object.h"
+#include "fImage.h"
 #define BUTTON_OUTSIDE 0
 #define BUTTON_HOVER 1
 #define BUTTON_CLICK 2
@@ -20,7 +21,7 @@ struct UI_Button
     string name;
     int x, y, width, height, state, trigger;
     UINT _bounce, isBitmapLoaded;
-    CMovingBitmap* _outside, *_hover, *_click;
+    FImage* _outside, *_hover, *_click;
     bool InRange(CPoint point)
     {
         int tx = point.x + 3, ty = point.y + 3;

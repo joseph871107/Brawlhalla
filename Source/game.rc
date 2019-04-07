@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Chinese (Traditional, Taiwan) resources
+// 中文 (繁體，台灣) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
@@ -190,12 +190,12 @@ IDB_P1_IDLE2_3M         BITMAP                  "..\\RES\\player1\\adventurer-id
 
 IDC_GAMECURSOR          CURSOR                  "..\\res\\gamecurs.cur"
 
-#endif    // Chinese (Traditional, Taiwan) resources
+#endif    // 中文 (繁體，台灣) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (United States) resources
+// 英文 (美國) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -205,6 +205,18 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 // Bitmap
 //
+
+IDB_UI_TITLE            BITMAP                  "..\\res\\ui\\brawlhalla-logo.bmp"
+
+IDB_UI_BACKGROUND       BITMAP                  "..\\res\\ui\\UIBackgroundBitmap.bmp"
+
+IDB_UI_INFO1	        BITMAP                  "..\\res\\ui\\largetile.bmp"
+
+IDB_UI_INFO2	        BITMAP                  "..\\res\\ui\\faitmidtile.bmp"
+
+IDB_UI_INFO3	        BITMAP                  "..\\res\\ui\\newstile.bmp"
+
+IDB_UI_INFO4	        BITMAP                  "..\\res\\ui\\communitytourneynew.bmp"
 
 IDR_MAINFRAME           BITMAP                  "..\\res\\Toolbar.bmp"
 
@@ -233,6 +245,10 @@ IDB_NUM9                BITMAP                  "..\\RES\\Numbers\\9.bmp"
 IDB_NUM_MINUS           BITMAP                  "..\\RES\\Numbers\\minus.bmp"
 
 IDB_WEAPON_FALLING      BITMAP                  "..\\RES\\weapons\\DefaultFallingSword\\WeaponPickup.bmp"
+
+IDB_WEAPON_THROWING_L   BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L.bmp"
+
+IDB_WEAPON_THROWING_R   BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R.bmp"
 
 IDB_P1_FALL1            BITMAP                  "..\\RES\\player1\\adventurer-fall-01.bmp"
 
@@ -611,7 +627,7 @@ BEGIN
     ID_BUTTON_UNITTEST      "Perform Unit Test"
 END
 
-#endif    // English (United States) resources
+#endif    // 英文 (美國) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

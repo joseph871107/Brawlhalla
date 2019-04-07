@@ -8,7 +8,14 @@
 using namespace std;
 
 namespace game_framework {
-
+	int FImage::Width()
+	{
+		return imageWidth;
+	}
+	int FImage::Height()
+	{
+		return imageHeight;
+	}
 	void FImage::LoadBitmap(int resID)
 	{
 		this->useRGBMask = false;
@@ -132,5 +139,4 @@ namespace game_framework {
 		cdcMem.DeleteDC();
 		CDDraw::ReleaseBackCDC();
 	}
-
 }

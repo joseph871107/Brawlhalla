@@ -74,9 +74,34 @@ CGameStateInit::CGameStateInit(CGame* g)
 void CGameStateInit::OnInit()
 {
     ShowInitProgress(0);
-	ui.AddButton("start", 100, 100, 100, 30);
-	ui.AddButton("settings", 100, 200, 100, 30);
-	ui.AddButton("exit", 100, 300, 100, 30);
+
+	ui_title.LoadBitmap(IDB_UI_TITLE, RGB(0,255,0));
+	ui_title.SetSize(0.8);
+	ui_title.SetXY((SIZE_X - ui_title.GetWidth())/2, 0);
+
+	ui_background.LoadBitmap(IDB_UI_BACKGROUND);
+	ui_background.SetSize(ui_background.GetWidth()/ SIZE_X);
+	ui_background.SetXY((SIZE_X - ui_background.GetWidth()) / 2, 0);
+
+	ui_info1.LoadBitmap(IDB_UI_INFO1);
+	ui_info1.SetSize(0.7);
+	ui_info2.LoadBitmap(IDB_UI_INFO2);
+	ui_info2.SetSize(ui_info1.GetSize());
+	ui_info3.LoadBitmap(IDB_UI_INFO3);
+	ui_info3.SetSize((float)(ui_info2.GetWidth()) / (float)(ui_info3.GetWidth()));
+	ui_info4.LoadBitmap(IDB_UI_INFO4);
+	ui_info4.SetSize((float)(ui_info1.GetWidth()) / (float)(ui_info4.GetWidth()));
+	int refX = (SIZE_X - ui_info1.GetWidth()) / 2, refY = 200;
+	ui_info1.SetXY(refX, refY);
+	ui_info2.SetXY(refX + ui_info1.GetWidth(), refY);
+	ui_info3.SetXY(refX + ui_info1.GetWidth(), refY + ui_info2.GetHeight());
+	ui_info4.SetXY(refX, refY + ui_info1.GetHeight());
+
+	int butW = refX - (SIZE_X - ui_info2.GetCor(2)), butH = 80;
+	ui.AddButton("start", refX - butW, refY, butW, butH);
+	ui.AddButton("settings", refX - butW, refY + butH, butW, butH);
+	ui.AddButton("exit", refX - butW, refY + butH * 2, butW, butH);
+	ShowInitProgress(10);
 }
 
 void CGameStateInit::OnBeginState()
@@ -121,7 +146,13 @@ void CGameStateInit::OnRButtonUp(UINT nFlags, CPoint point)
 void CGameStateInit::OnShow()
 {
 
+	ui_background.OnShow();
+	ui_title.OnShow();
 	ui.OnShow();
+	ui_info1.OnShow();
+	ui_info2.OnShow();
+	ui_info3.OnShow();
+	ui_info4.OnShow();
 
 	string chosenBut = ui.ChosenButton();
 	if (chosenBut == "start")
@@ -211,9 +242,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
     battleSystem.OnInit();
-	test.LoadBitmap(IDB_GROUND,RGB(0,255,0));
+	/*test.LoadBitmap(IDB_GROUND,RGB(0,255,0));
 	test.SetAlpha(100);
-	test.SetTopLeft(0, 0);
+	test.SetTopLeft(0, 0);*/
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -252,9 +283,8 @@ void CGameStateRun::OnShow()
 	if (!battleSystem.IsGameOver())
         battleSystem.OnShow();
 	static int deg = 0;
-	test.Rotate(deg++);
-	test.ShowBitmap();
-
+	/*test.Rotate(deg++);
+	test.ShowBitmap();*/
 }
 
 string CGameStateRun::GetLegacyString()

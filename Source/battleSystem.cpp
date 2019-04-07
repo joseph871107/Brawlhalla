@@ -95,6 +95,19 @@ void BattleSystem::OnMove()							// 移動遊戲元素
     {
         (*i)->OnMove();
     }
+	for (auto i : _flyingWeapons)
+		i->OnMove();
+	vector<Weapon*>::iterator erase = _flyingWeapons.end();
+	for (auto i = _flyingWeapons.begin(); i != _flyingWeapons.end(); i++)
+	{
+		if (!(*i)->BeThrowen())
+			erase = i;
+	}
+	if (erase != _flyingWeapons.end())
+	{
+		delete (*erase); //Resolve memory leak of weapons
+		_flyingWeapons.erase(erase);
+	}
 
     for (auto i = _players.begin(); i != _players.end(); i++)
     {
@@ -157,6 +170,21 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
         (*i)->OnKeyDown(nChar);
     }
 
+	Player* player = _players[1];
+	if (nChar == 0x56 && player->GetHoldWeapon()) {
+		Weapon* weapon = new Weapon();
+		weapon->Initialize(_grounds, _players);
+		weapon->SetSize(0.04);
+		bool dir = player->GetDirection();
+		if (!dir)
+			weapon->SetXY(player->GetCor(0) - 100, player->GetCor(1) + 10);
+		else
+			weapon->SetXY(player->GetCor(2) + 20, player->GetCor(1) + 10);
+		weapon->Throw(player->GetDirection(), player);
+		_flyingWeapons.push_back(weapon);
+		player->SetHoldWeapon(false);
+	}
+
     // If player takes the weapon //
     vector<Weapon*>::iterator erase = _weapons.end();
 
@@ -164,8 +192,8 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     {
         (*i)->OnKeyDown(nChar);
 
-        if ((*i)->HasTaken())
-            erase = i;
+		if ((*i)->HasTaken())
+			erase = i;
     }
 
     if (erase != _weapons.end())
@@ -222,6 +250,8 @@ void BattleSystem::OnShow()
     {
         (*i)->OnShow();
     }
+	for (auto i : _flyingWeapons)
+		i->OnShow();
 
     // Show player
     for (auto i = _players.begin(); i != _players.end(); i++)

@@ -43,7 +43,8 @@ class BattleSystem : public CGameState
         Object background;
         vector<Ground*> _grounds;
         vector<Player*> _players;
-        vector<Weapon*> _weapons;
+		vector<Weapon*> _weapons;
+		vector<Weapon*> _flyingWeapons;
 };
 
 }

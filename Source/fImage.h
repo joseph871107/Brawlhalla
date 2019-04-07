@@ -9,6 +9,8 @@ namespace game_framework {
 	class FImage
 	{
 	public:
+		int Width();
+		int Height();
 		void LoadBitmap(int resID);
 		void LoadBitmap(int resID, COLORREF RGBMask);
 		void SetTopLeft(int xDst, int yDst, int wDst = -1, int hDst = -1);

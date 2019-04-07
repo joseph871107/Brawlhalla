@@ -1,4 +1,5 @@
 #include "ground.h"
+#include "weapon.h"
 
 #define _PLAYER_DEBUG false
 
@@ -23,7 +24,9 @@ class Player
 
         //Others
         void SetHoldWeapon(bool);
+		void BeenAttacked(bool);
         bool GetHoldWeapon();
+		bool GetDirection();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
         int ShowAnimationState();		// Return which CAnimation is playing
         bool IsOutOfLife();
@@ -82,6 +85,7 @@ class Player
 
         //[Attribute] Attack
         void DoAttack();
+		void DoThrowingWeapon();
         bool IsAttacking();
         bool IsFinishedAttackAnimation();
 
