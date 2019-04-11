@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文 (繁體，台灣) resources
+// Chinese (Traditional, Taiwan) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
@@ -190,12 +190,12 @@ IDB_P1_IDLE2_3M         BITMAP                  "..\\RES\\player1\\adventurer-id
 
 IDC_GAMECURSOR          CURSOR                  "..\\res\\gamecurs.cur"
 
-#endif    // 中文 (繁體，台灣) resources
+#endif    // Chinese (Traditional, Taiwan) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// 英文 (美國) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -210,13 +210,13 @@ IDB_UI_TITLE            BITMAP                  "..\\res\\ui\\brawlhalla-logo.bm
 
 IDB_UI_BACKGROUND       BITMAP                  "..\\res\\ui\\UIBackgroundBitmap.bmp"
 
-IDB_UI_INFO1	        BITMAP                  "..\\res\\ui\\largetile.bmp"
+IDB_UI_INFO1            BITMAP                  "..\\res\\ui\\largetile.bmp"
 
-IDB_UI_INFO2	        BITMAP                  "..\\res\\ui\\faitmidtile.bmp"
+IDB_UI_INFO2            BITMAP                  "..\\res\\ui\\faitmidtile.bmp"
 
-IDB_UI_INFO3	        BITMAP                  "..\\res\\ui\\newstile.bmp"
+IDB_UI_INFO3            BITMAP                  "..\\res\\ui\\newstile.bmp"
 
-IDB_UI_INFO4	        BITMAP                  "..\\res\\ui\\communitytourneynew.bmp"
+IDB_UI_INFO4            BITMAP                  "..\\res\\ui\\communitytourneynew.bmp"
 
 IDR_MAINFRAME           BITMAP                  "..\\res\\Toolbar.bmp"
 
@@ -341,6 +341,118 @@ IDB_P1_AIR_DOWN_ATTACK_E1M BITMAP                  "..\\RES\\player1\\adventurer
 IDB_P1_AIR_DOWN_ATTACK_E0 BITMAP                  "..\\RES\\player1\\adventurer-air-attack-3-end-00.bmp"
 
 IDB_P1_AIR_DOWN_ATTACK_E0M BITMAP                  "..\\RES\\player1\\adventurer-air-attack-3-end-00(Mirrored).bmp"
+
+IDB_P1_WPN0_KICK7M      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-07(Mirrored).bmp"
+
+IDB_P1_WPN0_KICK6M      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-06(Mirrored).bmp"
+
+IDB_P1_WPN0_KICK5M      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-05(Mirrored).bmp"
+
+IDB_P1_WPN0_KICK4M      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-04(Mirrored).bmp"
+
+IDB_P1_WPN0_KICK3M      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-03(Mirrored).bmp"
+
+IDB_P1_WPN0_KICK2M      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-02(Mirrored).bmp"
+
+IDB_P1_WPN0_KICK1M      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-01(Mirrored).bmp"
+
+IDB_P1_WPN0_KICK0M      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-00(Mirrored).bmp"
+
+IDB_P1_WPN0_KICK7       BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-07.bmp"
+
+IDB_P1_WPN0_KICK6       BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-06.bmp"
+
+IDB_P1_WPN0_KICK5       BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-05.bmp"
+
+IDB_P1_WPN0_KICK4       BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-04.bmp"
+
+IDB_P1_WPN0_KICK3       BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-03.bmp"
+
+IDB_P1_WPN0_KICK2       BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-02.bmp"
+
+IDB_P1_WPN0_KICK1       BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-01.bmp"
+
+IDB_P1_WPN0_KICK0       BITMAP                  "..\\RES\\player1\\Punch\\adventurer-kick-00.bmp"
+
+IDB_P1_WPN0_PUNCH12M    BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-12(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH11M    BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-11(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH10M    BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-10(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH9M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-09(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH8M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-08(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH7M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-07(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH6M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-06(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH5M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-05(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH4M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-04(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH3M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-03(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH2M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-02(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH1M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-01(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH0M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-00(Mirrored).bmp"
+
+IDB_P1_WPN0_PUNCH12     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-12.bmp"
+
+IDB_P1_WPN0_PUNCH11     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-11.bmp"
+
+IDB_P1_WPN0_PUNCH10     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-10.bmp"
+
+IDB_P1_WPN0_PUNCH9      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-09.bmp"
+
+IDB_P1_WPN0_PUNCH8      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-08.bmp"
+
+IDB_P1_WPN0_PUNCH7      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-07.bmp"
+
+IDB_P1_WPN0_PUNCH6      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-06.bmp"
+
+IDB_P1_WPN0_PUNCH5      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-05.bmp"
+
+IDB_P1_WPN0_PUNCH4      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-04.bmp"
+
+IDB_P1_WPN0_PUNCH3      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-03.bmp"
+
+IDB_P1_WPN0_PUNCH2      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-02.bmp"
+
+IDB_P1_WPN0_PUNCH1      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-01.bmp"
+
+IDB_P1_WPN0_PUNCH0      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-punch-00.bmp"
+
+IDB_P1_WPN0_RUN_PUNCH6M BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-06(Mirrored).bmp"
+
+IDB_P1_WPN0_RUN_PUNCH4M BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-04(Mirrored).bmp"
+
+IDB_P1_WPN0_RUN_PUNCH3M BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-03(Mirrored).bmp"
+
+IDB_P1_WPN0_RUN_PUNCH2M BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-02(Mirrored).bmp"
+
+IDB_P1_WPN0_RUN_PUNCH1M BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-01(Mirrored).bmp"
+
+IDB_P1_WPN0_RUN_PUNCH0M BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-00(Mirrored).bmp"
+
+IDB_P1_WPN0_RUN_PUNCH6  BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-06.bmp"
+
+IDB_P1_WPN0_RUN_PUNCH5  BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-05.bmp"
+
+IDB_P1_WPN0_RUN_PUNCH4  BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-04.bmp"
+
+IDB_P1_WPN0_RUN_PUNCH3  BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-03.bmp"
+
+IDB_P1_WPN0_RUN_PUNCH2  BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-02.bmp"
+
+IDB_P1_WPN0_RUN_PUNCH1  BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-01.bmp"
+
+IDB_P1_WPN0_RUN_PUNCH0  BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-00.bmp"
+
+IDB_P1_WPN0_RUN_PUNCH5M BITMAP                  "..\\RES\\player1\\Punch\\adventurer-run-punch-05(Mirrored).bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -627,7 +739,7 @@ BEGIN
     ID_BUTTON_UNITTEST      "Perform Unit Test"
 END
 
-#endif    // 英文 (美國) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

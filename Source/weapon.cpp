@@ -16,8 +16,8 @@ const double ACCELERATION_UNIT = 0.8;
 Weapon::Weapon()
 {
     _bmpID = IDB_WEAPON_FALLING;
-	_throwLID = IDB_WEAPON_THROWING_L;
-	_throwRID = IDB_WEAPON_THROWING_R;
+    _throwLID = IDB_WEAPON_THROWING_L;
+    _throwRID = IDB_WEAPON_THROWING_R;
     _color = RGB(0, 255, 0);
     _velocity = 0;
     _size = 0.2;
@@ -28,8 +28,8 @@ Weapon::Weapon()
 void Weapon::LoadBitmap()
 {
     bmp.LoadBitmap(_bmpID, _color);
-	tl.LoadBitmap(_throwLID, _color);
-	tr.LoadBitmap(_throwRID, _color);
+    tl.LoadBitmap(_throwLID, _color);
+    tr.LoadBitmap(_throwRID, _color);
     width = bmp.Width();
     height = bmp.Height();
 }
@@ -40,24 +40,26 @@ void Weapon::Initialize(vector<Ground*> ground, vector<Player*> player)
     x = (rand() * 1000) % (int)(_ground->GetWidth() * _ground->GetSize()) + _ground->GetCor(0);		// Randomly set x coordinate within Ground's width
     y = _ground->GetCor(1) - 400;																	// Set y with Ground's top adding 400 pixels
     _player = player;
-	_flyingDistance = 0;
+    _flyingDistance = 0;
 }
 
 void Weapon::Throw(bool dir, Player* player)
 {
-	_velocity = 30;
-	_throwHost = player;
-	_isThrowing = true;
-	_tDir = dir;
-	if (_tDir) {
-		width = tl.Width();
-		height = tl.Height();
-	}
-	else {
-		width = tr.Width();
-		height = tr.Height();
-	}
-	
+    _velocity = 30;
+    _throwHost = player;
+    _isThrowing = true;
+    _tDir = dir;
+
+    if (_tDir)
+    {
+        width = tl.Width();
+        height = tl.Height();
+    }
+    else
+    {
+        width = tr.Width();
+        height = tr.Height();
+    }
 }
 
 Player* Weapon::HitPlayer()
@@ -78,57 +80,66 @@ bool Weapon::HasTaken()
 
 bool Weapon::BeThrowen()
 {
-	return _isThrowing;
+    return _isThrowing;
 }
 
 void Weapon::OnShow()
 {
-    if (_isThrowing && !_tDir) {
-		tl.SetTopLeft(x, y);
-		tl.ShowBitmap(_size);
-	}
-	else if (_isThrowing && _tDir) {
-		tr.SetTopLeft(x, y);
-		tr.ShowBitmap(_size);
-	}
-	else if (!_isHolding)
-	{
-		bmp.SetTopLeft(x, y - (int)(height * _size));
-		bmp.ShowBitmap(_size);
-	}
+    if (_isThrowing && !_tDir)
+    {
+        tl.SetTopLeft(x, y);
+        tl.ShowBitmap(_size);
+    }
+    else if (_isThrowing && _tDir)
+    {
+        tr.SetTopLeft(x, y);
+        tr.ShowBitmap(_size);
+    }
+    else if (!_isHolding)
+    {
+        bmp.SetTopLeft(x, y - (int)(height * _size));
+        bmp.ShowBitmap(_size);
+    }
 }
 void Weapon::OnMove()
 {
-	if (!_isThrowing) {
-		if (y < _ground->GetCor(1))	// If not yet hitting the ground
-		{
-			_velocity += ACCELERATION_UNIT;
-			y += (int)_velocity;
-		}
-		else // On the ground
-		{
-			_velocity = 0;
-			y = _ground->GetCor(1);
-		}
-	}
-	else {
-		Player* _hitPlayer = HitPlayer();
-		_flyingDistance += (int)_velocity;
-		if (_flyingDistance > 500)
-			_isThrowing = false;
-		else if (_hitPlayer != nullptr && _hitPlayer != _throwHost) {
-			_isThrowing = false;
-			_hitPlayer->BeenAttacked(_tDir);
-		}
-		if (_tDir) {
-			_velocity -= ACCELERATION_UNIT;
-			x += (int)_velocity;
-		}
-		else {
-			_velocity -= ACCELERATION_UNIT;
-			x -= (int)_velocity;
-		}
-	}
+    if (!_isThrowing)
+    {
+        if (y < _ground->GetCor(1))	// If not yet hitting the ground
+        {
+            _velocity += ACCELERATION_UNIT;
+            y += (int)_velocity;
+        }
+        else // On the ground
+        {
+            _velocity = 0;
+            y = _ground->GetCor(1);
+        }
+    }
+    else
+    {
+        Player* _hitPlayer = HitPlayer();
+        _flyingDistance += (int)_velocity;
+
+        if (_flyingDistance > 500)
+            _isThrowing = false;
+        else if (_hitPlayer != nullptr && _hitPlayer != _throwHost)
+        {
+            _isThrowing = false;
+            _hitPlayer->BeenAttacked(_tDir);
+        }
+
+        if (_tDir)
+        {
+            _velocity -= ACCELERATION_UNIT;
+            x += (int)_velocity;
+        }
+        else
+        {
+            _velocity -= ACCELERATION_UNIT;
+            x -= (int)_velocity;
+        }
+    }
 }
 void Weapon::OnKeyDown(UINT nChar)
 {
@@ -142,6 +153,7 @@ void Weapon::OnKeyDown(UINT nChar)
             {
                 _isHolding = true;
                 _hitPlayer->SetHoldWeapon(true);
+                _hitPlayer->GenerateAndSetWeaponID();
             }
         }
     }

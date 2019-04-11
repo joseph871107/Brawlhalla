@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 產生的 Include 檔案。
-// 由 game.rc 使用
+// Microsoft Visual C++ generated include file.
+// Used by game.rc
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_SOCKETS_INIT_FAILED         104
@@ -115,6 +115,63 @@
 #define IDB_P1_AIR_DOWN_ATTACK_E0       393
 #define IDB_P1_AIR_DOWN_ATTACK_E0M      394
 #define IDR_UI_TITLE                    395
+#define IDB_P1_WPN0_KICK7M              396
+#define IDB_P1_WPN0_KICK6M              397
+#define IDB_P1_WPN0_KICK5M              398
+#define IDB_P1_WPN0_KICK4M              399
+#define IDB_P1_WPN0_KICK3M              400
+#define IDB_P1_WPN0_KICK2M              401
+#define IDB_P1_WPN0_KICK1M              402
+#define IDB_P1_WPN0_KICK0M              403
+#define IDB_P1_WPN0_KICK7               404
+#define IDB_P1_WPN0_KICK6               405
+#define IDB_P1_WPN0_KICK5               406
+#define IDB_P1_WPN0_KICK4               407
+#define IDB_P1_WPN0_KICK3               408
+#define IDB_P1_WPN0_KICK2               409
+#define IDB_P1_WPN0_KICK1               410
+#define IDB_P1_WPN0_KICK0               411
+#define IDB_P1_WPN0_PUNCH12M            412
+#define IDB_P1_WPN0_PUNCH11M            413
+#define IDB_P1_WPN0_PUNCH10M            414
+#define IDB_P1_WPN0_PUNCH9M             415
+#define IDB_P1_WPN0_PUNCH8M             416
+#define IDB_P1_WPN0_PUNCH7M             417
+#define IDB_P1_WPN0_PUNCH6M             418
+#define IDB_P1_WPN0_PUNCH5M             419
+#define IDB_P1_WPN0_PUNCH4M             420
+#define IDB_P1_WPN0_PUNCH3M             421
+#define IDB_P1_WPN0_PUNCH2M             422
+#define IDB_P1_WPN0_PUNCH1M             423
+#define IDB_P1_WPN0_PUNCH0M             424
+#define IDB_P1_WPN0_PUNCH12             425
+#define IDB_P1_WPN0_PUNCH11             426
+#define IDB_P1_WPN0_PUNCH10             427
+#define IDB_P1_WPN0_PUNCH9              428
+#define IDB_P1_WPN0_PUNCH8              429
+#define IDB_P1_WPN0_PUNCH7              430
+#define IDB_P1_WPN0_PUNCH6              431
+#define IDB_P1_WPN0_PUNCH5              432
+#define IDB_P1_WPN0_PUNCH4              433
+#define IDB_P1_WPN0_PUNCH3              434
+#define IDB_P1_WPN0_PUNCH2              435
+#define IDB_P1_WPN0_PUNCH1              436
+#define IDB_P1_WPN0_PUNCH0              437
+#define IDB_P1_WPN0_RUN_PUNCH6M         438
+#define IDB_P1_WPN0_RUN_PUNCH4M         440
+#define IDB_P1_WPN0_RUN_PUNCH3M         441
+#define IDB_P1_WPN0_RUN_PUNCH2M         442
+#define IDB_P1_WPN0_RUN_PUNCH1M         443
+#define IDB_P1_WPN0_RUN_PUNCH0M         444
+#define IDB_P1_WPN0_RUN_PUNCH6          445
+#define IDB_P1_WPN0_RUN_PUNCH5          446
+#define IDB_P1_WPN0_RUN_PUNCH4          447
+#define IDB_P1_WPN0_RUN_PUNCH3          448
+#define IDB_P1_WPN0_RUN_PUNCH2          449
+#define IDB_P1_WPN0_RUN_PUNCH1          450
+#define IDB_P1_WPN0_RUN_PUNCH0          451
+#define IDB_BITMAP1                     452
+#define IDB_P1_WPN0_RUN_PUNCH5M         452
 #define IDB_WEAPON_FALLING              500
 #define IDB_WEAPON_THROWING_L           501
 #define IDB_WEAPON_THROWING_R           502
@@ -148,7 +205,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        396
+#define _APS_NEXT_RESOURCE_VALUE        453
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

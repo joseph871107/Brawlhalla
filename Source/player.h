@@ -17,92 +17,118 @@ class Player
         //Required for Game Framework
         void Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, vector<long> keysValue);
         void LoadBitmap();
-        void OnShow();
         void OnMove();
+        void OnShow();
         void OnKeyDown(const UINT& nChar);
         void OnKeyUp(const UINT& nChar);
 
-        //Others
+        //Others - Joseph
         void SetHoldWeapon(bool);
-		void BeenAttacked(bool);
+        void BeenAttacked(bool);
         bool GetHoldWeapon();
-		bool GetDirection();
+        bool GetDirection();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
         int ShowAnimationState();		// Return which CAnimation is playing
-        bool IsOutOfLife();
-        const int& GetLife() const;
+
+        //Others - Bill
         const string& GetName() const;
+        const int& GetLife() const;
+        const bool IsOutOfLife() const;
         const long& GetAttackKey() const;
+        void GenerateAndSetWeaponID();	// Called by 'Weapon::HitPlayer()' when the player picks up a weapon
+        void ResetWeaponID();
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
+        //Animations
+        void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
+        void ResetAnimations(int animationID);
+
+        void SetAnimationStateLeftRight(int leftAnimationId);
+        void SetAnimationState(int);	// Set which CAnimation is going to play
+        void ShowAnimation();			// Show CAnimation by currentAni
+
         //Reposition about the grounds
         bool IsIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
         bool IsExplicitlyVerticallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+        bool IsExplicitlyHorizontallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+
         bool IsOnGroundLeftEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
         bool IsOnGroundRightEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
-        bool IsExplicitlyHorizontallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
         bool IsOnGroundUnderside(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
         bool IsOnParticularGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+
         void DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+
+        //Position
+        bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
+        bool IsOnLeftEdge();
+        bool IsOnRightEdge();
+        bool IsOutMapBorder();
+
+        //Offsets
+        void InitiateOffsetUp();
+        void InitiateOffsetLeft();
+        void InitiateOffsetRight();
+
+        bool IsBeingOffsetHorizontally();
+        void DoHorizontalOffset();
 
         //Movements
         void DoMoveLeft(int movementUnit);
         void DoMoveRight(int movementUnit);
         void DoLand();
+
         //Jump
         void DoJump();
         void ResetJumpCount();
-        void InitiateOffsetUp();
+
         //Wall jump
         void InitiateWallJump();
-		void InitiateOffsetLeft();
-		void InitiateOffsetRight();
-        bool IsBeingOffsetHorizontally();
-        void DoHorizontalOffset();
-        //Positions
-        bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
-        bool IsOnLeftEdge();
-        bool IsOnRightEdge();
-        bool IsOutMapBorder();
+
+        //Attack
+        void DoAttack();
+        bool IsAttacking();
+        bool HitPlayer(Player*);
+
+        //Draw weapon
+        bool IsDrawingWeapon();
+        bool IsFinishedDrawingAnimation();
+
+        //Throw weapon
+        void DoThrowingWeapon(); /// Unused function
+
+        //Others
         void DoDead();
         void DoRespawn();
+        int Round(double i);
+
+        ///Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
+        //Weapon
+        void SetAnimationStateByWeapon(int num);
+
+        //Animation By Weapon
+        void AddCollectionOfAnimationsByWeapon(vector<int>& s2l, vector<int>& s2r, vector<int>& al, vector<int>& ar, vector<int>& gmal, vector<int>& gmar, vector<int>& sal, vector<int>& sar, vector<int>& aal, vector<int>& aar, vector<int>& amal, vector<int>& amar, vector<int>& adal, vector<int>& adar);
+        void AddCAnimationByWeapon(vector<CAnimation>& tempAniByWpn, vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
+
         //Key combination
         int GetKeyCombination();
         void ProcessKeyCombinationOnMove();
 
         //Triggered animation concept
-        void GetTriggeredAnimation();
-        void SetTriggeredAnimationVariables(int leftAnimationID);
         void ResetTriggeredAnimationVariables();
+        void SetFirstThreeTriggeredAnimationVariables(int keyCombInt);
+        void SetTriggeredAnimationVariables(int leftAnimationID);
+        void GetAndSetTriggeredAnimation();
+
+        void InitiateTriggeredAnimation();
         void DoTriggeredAnimation();
-        void DoNonTriggeredAnimation();
-		void InitiateTriggeredAnimation();
-		void FinishTriggeredAnimation();
         bool IsFinishedTriggeredAnimation();
-        void ShowTriggeredAnimation();
-        void ShowNonTriggerAnimations();
+        void FinishTriggeredAnimation();
+        void SetCurrentTriggeredAnimation();
 
-        //[Attribute] Attack
-        void DoAttack();
-		void DoThrowingWeapon();
-        bool IsAttacking();
-        bool IsFinishedAttackAnimation();
-
-        //[Attribute] Draw Weapon
-        bool IsDrawingWeapon();
-        bool IsFinishedDrawingAnimation();
-
-        //Animations
-        void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
-        void SetAnimationState(int);	// Set which CAnimation is going to play
-        void ShowAnimation();			// Show CAnimation by currentAni
-        void ResetAnimations(int animationID);
-        void SetAnimationStateLeftRight(int leftAnimationId);
-
-        //[Attribute] Attack
-        bool HitPlayer(Player*);
-
+        void DoNonTriggeredAnimation();
+        void SetCurrentNonTriggerAnimation();
 
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
@@ -110,40 +136,7 @@ class Player
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
         //bool _beInterrupt;
-
-        //Required for triggered animation concept
-        bool _isTriggeredAni;
-        int _triggeredAniID;
-        int _triggeredAniCount;
-
-        //Bitmaps
-        vector<int> rl;	// bmps of running left
-        vector<int> rr;	// bmps of running right
-        vector<int> jl;	// bmps of jumping left
-        vector<int> jr;	// bmps of jumping right
-        vector<int> sl;	// bmps of standing left
-        vector<int> sr;	// bmps of standing right
-        vector<int> ll; // bmps of leaning left
-        vector<int> lr; // bmps of leaning right
-        vector<int> al; // bmps of attacking left
-        vector<int> ar; // bmps of attacking right
-        vector<int> sdl;// bmps of drawing sword left
-        vector<int> sdr;// bmps of drawing sword right
-        vector<int> s2l;// bmps of standing left with sword
-        vector<int> s2r;// bmps of standing right with sword
-        vector<int>	lfl;// bmps of landing falling left
-        vector<int> lfr;// bmps of landing falling right
-        vector<int> gmal;// bmps of on-ground-moving attack left
-        vector<int> gmar;// bmps of on-ground-moving attack right
-		vector<int> sal;// bmps of slide-attack left
-		vector<int> sar;// bmps of slide-attack right
-		vector<int> aal;// bmps of air-attack left
-		vector<int> aar;// bmps of air-attack right
-		vector<int> amal;// bmps of on-air-moving attack left
-		vector<int> amar;// bmps of on-air-moving attack right
-		vector<int> adal;// bmps of on-air-down attack left
-		vector<int> adar;// bmps of on-air-down attack right
-        vector<vector<int>*> bmp_iter;
+        vector<vector<int>*> bmp_iter;	// used to display current animation state in DEBUG mode
 
         //Required for "physical" existence in the game
         CMovingBitmap _collision_box;
@@ -152,29 +145,26 @@ class Player
         //Keys
         vector<long> _keys; // 0 - up, 1 - right, 2 - down, 3 - left, 4 - attack
 
-        //[Attribute] Move left/ right
-        bool _isPressingLeft, _isPressingRight;
+        //Offsets
+        bool _isOffsetLeft, _isOffsetRight;
+        int _offsetVelocity;
+
+        //Movements
+        bool _isPressingLeft, _isPressingRight, _isPressingDown;
         bool _dir; //false: player facing left, true: player facing right
 
-        //[Attribute] Landing down
-        bool _isPressingDown;
-
-        //[Attribute] Jump
+        //Jump
         bool _isTriggerJump;
         int _jumpCount;
 
-        //[Attribute] Wall Jump
-        int _offsetVelocity;
-        bool _isOffsetLeft, _isOffsetRight;
-
-        //Required for a jump simulating the physical world
+        //Gravity
         double _velocity;
         double _acceleration;
 
-        //[Attribute] Draw Weapon
+        //Draw Weapon
         bool _isDrawingWeapon;
 
-        //[Attribute] Attack
+        //Attack
         bool _isHoldingWeapon;
         bool _isTriggerAttack;
         vector<Player*>* _player;
@@ -187,6 +177,23 @@ class Player
 
         //Name
         string _name;
+
+        ///Comment for future devs: Unorganized member variables are declared below. They should be cleaned up in the near future
+        //Required for triggered animation concept
+        bool _isTriggeredAni;
+        int _triggeredAniKeyID;
+        int _triggeredAniCount;
+        int _triggeredAniByWpnID; // the animation needed is defined by '_aniByWpn[_wpnID][_triggeredAniByWpnID]'
+
+        //Weapon
+        int _wpnID; // 0 - punch (default), 1 - sword 1, 2 - sword 2
+        int _roundPrevPickedUpWpnID; // The previously picked up weapon in the round. Values: 1 - sword 1, 2 - sword 2 (initialized as 2)
+
+        //Animation By Weapons
+        ///Remark: Technically, if '_isTriggeredAni' is true, '_aniByWpn' is displayed instead of the traditional 'ani', and vice versa.
+        vector<vector<CAnimation>> _aniByWpn;
+        int _currentAniByWpn;
+
 };
 #endif
 }

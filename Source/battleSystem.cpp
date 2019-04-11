@@ -183,6 +183,7 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		weapon->Throw(player->GetDirection(), player);
 		_flyingWeapons.push_back(weapon);
 		player->SetHoldWeapon(false);
+		player->ResetWeaponID();
 	}
 
     // If player takes the weapon //
