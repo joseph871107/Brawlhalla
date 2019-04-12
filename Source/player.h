@@ -108,7 +108,11 @@ class Player
         void SetAnimationStateByWeapon(int num);
 
         //Animation By Weapon
-        void AddCollectionOfAnimationsByWeapon(vector<int>& s2l, vector<int>& s2r, vector<int>& al, vector<int>& ar, vector<int>& gmal, vector<int>& gmar, vector<int>& sal, vector<int>& sar, vector<int>& aal, vector<int>& aar, vector<int>& amal, vector<int>& amar, vector<int>& adal, vector<int>& adar);
+        void AddCollectionOfAnimationsByWeapon(
+			vector<int>& s2l, vector<int>& s2r, vector<int>& al, vector<int>& ar,
+			vector<int>& gmal, vector<int>& gmar, vector<int>& sal, vector<int>& sar,
+			vector<int>& aal, vector<int>& aar, vector<int>& amal, vector<int>& amar,
+			vector<int>& adal, vector<int>& adar, vector<int>& sdl, vector<int>& sdr);
         void AddCAnimationByWeapon(vector<CAnimation>& tempAniByWpn, vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
 
         //Key combination
@@ -151,7 +155,7 @@ class Player
 
         //Movements
         bool _isPressingLeft, _isPressingRight, _isPressingDown;
-        bool _dir; //false: player facing left, true: player facing right
+        bool _dir; // false: player facing left, true: player facing right
 
         //Jump
         bool _isTriggerJump;
@@ -190,9 +194,10 @@ class Player
         int _roundPrevPickedUpWpnID; // The previously picked up weapon in the round. Values: 1 - sword 1, 2 - sword 2 (initialized as 2)
 
         //Animation By Weapons
-        ///Remark: Technically, if '_isTriggeredAni' is true, '_aniByWpn' is displayed instead of the traditional 'ani', and vice versa.
+		/// Remark: Technically, if '_aniSelector' is true, '_aniByWpn' is displayed instead of the traditional 'ani', and vice versa.
         vector<vector<CAnimation>> _aniByWpn;
         int _currentAniByWpn;
+		bool _aniSelector; // false - choose 'ani' for showing the animation, true - choose '_aniByWpn' for showing the animation
 
 };
 #endif

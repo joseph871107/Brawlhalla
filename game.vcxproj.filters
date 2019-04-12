@@ -942,5 +942,53 @@
     <Image Include="RES\player1\Sword2\adventurer-air-attack-3-end-02.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-03(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-02(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-01(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-00(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-02.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-03.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-03(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-02(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-01(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-00(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-02.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-03.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

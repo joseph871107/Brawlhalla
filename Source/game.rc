@@ -550,6 +550,38 @@ IDB_P1_WPN2_AIR_DOWN_ATTACK_E1 BITMAP                  "..\\RES\\player1\\Sword2
 
 IDB_P1_WPN2_AIR_DOWN_ATTACK_E2 BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-air-attack-3-end-02.bmp"
 
+IDB_P1_WPN2_IDLE3M      BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-idle-2-03(Mirrored).bmp"
+
+IDB_P1_WPN2_IDLE2M      BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-idle-2-02(Mirrored).bmp"
+
+IDB_P1_WPN2_IDLE1M      BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-idle-2-01(Mirrored).bmp"
+
+IDB_P1_WPN2_IDLE0M      BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-idle-2-00(Mirrored).bmp"
+
+IDB_P1_WPN2_IDLE0       BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-idle-2-00.bmp"
+
+IDB_P1_WPN2_IDLE1       BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-idle-2-01.bmp"
+
+IDB_P1_WPN2_IDLE2       BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-idle-2-02.bmp"
+
+IDB_P1_WPN2_IDLE3       BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-idle-2-03.bmp"
+
+IDB_P1_WPN2_DRAW3M      BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-swrd-drw-03(Mirrored).bmp"
+
+IDB_P1_WPN2_DRAW2M      BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-swrd-drw-02(Mirrored).bmp"
+
+IDB_P1_WPN2_DRAW1M      BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-swrd-drw-01(Mirrored).bmp"
+
+IDB_P1_WPN2_DRAW0M      BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-swrd-drw-00(Mirrored).bmp"
+
+IDB_P1_WPN2_DRAW0       BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-swrd-drw-00.bmp"
+
+IDB_P1_WPN2_DRAW1       BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-swrd-drw-01.bmp"
+
+IDB_P1_WPN2_DRAW2       BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-swrd-drw-02.bmp"
+
+IDB_P1_WPN2_DRAW3       BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-swrd-drw-03.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -45,11 +45,36 @@ const int KEY_AIR_IDLE = 211;
 const int KEY_AIR_MOVE_RIGHT = 221;
 const int KEY_AIR_MOVE_LEFT = 231;
 const int KEY_AIR_LAND_DOWN = 241;
+//Animations ID of '_ani'
+const int ANI_ID_RUN_LEFT = 0;
+const int ANI_ID_RUN_RIGHT = 1;
+const int ANI_ID_JUMP_LEFT = 2;
+const int ANI_ID_JUMP_RIGHT = 3;
+const int ANI_ID_STAND_LEFT = 4;
+const int ANI_ID_STAND_RIGHT = 5;
+const int ANI_ID_LEAN_LEFT = 6;
+const int ANI_ID_LEAN_RIGHT = 7;
+const int ANI_ID_LAND_FALL_LEFT = 8;
+const int ANI_ID_LAND_FALL_RIGHT = 9;
+//Animations ID of '_aniByWpn'
+const int ANI_WPN_ID_STAND_LEFT = 0;
+const int ANI_WPN_ID_STAND_RIGHT = 1;
+const int ANI_WPN_ID_ATTACK_LEFT = 2;
+const int ANI_WPN_ID_ATTACK_RIGHT = 3;
+const int ANI_WPN_ID_GND_MOVE_ATTACK_LEFT = 4;
+const int ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT = 5;
+const int ANI_WPN_ID_SLIDE_ATTACK_LEFT = 6;
+const int ANI_WPN_ID_SLIDE_ATTACK_RIGHT = 7;
+const int ANI_WPN_ID_AIR_ATTACK_LEFT = 8;
+const int ANI_WPN_ID_AIR_ATTACK_RIGHT = 9;
+const int ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT = 10;
+const int ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT = 11;
+const int ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT = 12;
+const int ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT = 13;
+const int ANI_WPN_ID_DRAW_SWORD_LEFT = 14;
+const int ANI_WPN_ID_DRAW_SWORD_RIGHT = 15;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
-
-
-
 Player::Player() :
     _x(int()), _y(int()), ani(vector<CAnimation>()), currentAni(int()),
     bmp_iter(vector<vector<int>*>()), _width(int()),
@@ -108,6 +133,10 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     //
     ResetWeaponID();
     _roundPrevPickedUpWpnID = 2;
+    //
+    _aniSelector = false;
+    //
+    _currentAniByWpn = 0;
 }
 
 void Player::LoadBitmap()
@@ -121,10 +150,6 @@ void Player::LoadBitmap()
     vector<int> sr;	// bmps of standing right
     vector<int> ll; // bmps of leaning left
     vector<int> lr; // bmps of leaning right
-    vector<int> sdl;// bmps of drawing sword left
-    vector<int> sdr;// bmps of drawing sword right
-    vector<int> s2l;// bmps of standing left with sword
-    vector<int> s2r;// bmps of standing right with sword
     vector<int>	lfl;// bmps of landing falling left
     vector<int> lfr;// bmps of landing falling right
     rl = vector<int> { IDB_P1_RUN0M, IDB_P1_RUN1M, IDB_P1_RUN2M, IDB_P1_RUN3M, IDB_P1_RUN4M, IDB_P1_RUN5M };
@@ -135,10 +160,6 @@ void Player::LoadBitmap()
     sr = vector<int> { IDB_P1_IDLE0, IDB_P1_IDLE1, IDB_P1_IDLE2 };
     ll = vector<int> { IDB_P1_WALL0, IDB_P1_WALL1 };
     lr = vector<int> { IDB_P1_WALL0M, IDB_P1_WALL1M };
-    sdl = vector<int> { IDB_P1_SWD_DWR0M, IDB_P1_SWD_DWR1M, IDB_P1_SWD_DWR2M, IDB_P1_SWD_DWR3M, IDB_P1_SWD_DWR3M };
-    sdr = vector<int> { IDB_P1_SWD_DWR0, IDB_P1_SWD_DWR1, IDB_P1_SWD_DWR2, IDB_P1_SWD_DWR3, IDB_P1_SWD_DWR3 };
-    s2l = vector<int> { IDB_P1_IDLE2_0M, IDB_P1_IDLE2_1M, IDB_P1_IDLE2_2M, IDB_P1_IDLE2_3M };
-    s2r = vector<int> { IDB_P1_IDLE2_0, IDB_P1_IDLE2_1, IDB_P1_IDLE2_2, IDB_P1_IDLE2_3 };
     lfl = vector<int> { IDB_P1_FALL0M, IDB_P1_FALL1M };
     lfr = vector<int> { IDB_P1_FALL0, IDB_P1_FALL1 };
     AddCAnimation(&rl, BITMAP_SIZE); //ani[0] Run Left
@@ -149,17 +170,14 @@ void Player::LoadBitmap()
     AddCAnimation(&sr, BITMAP_SIZE); //ani[5] Stand (Idle) Right
     AddCAnimation(&ll, BITMAP_SIZE); //ani[6] Lean Left
     AddCAnimation(&lr, BITMAP_SIZE); //ani[7] Lean Right
-    AddCAnimation(&sdl, BITMAP_SIZE, 5, false); //ani[8] Draw sword Left
-    AddCAnimation(&sdr, BITMAP_SIZE, 5, false); //ani[9] Draw sword Right
-    AddCAnimation(&s2l, BITMAP_SIZE); //ani[10] Stand (Idle) Left with sword
-    AddCAnimation(&s2r, BITMAP_SIZE); //ani[11] Stand (Idle) Right with sword
-    AddCAnimation(&lfl, BITMAP_SIZE); //ani[12] Landing Falling Left
-    AddCAnimation(&lfr, BITMAP_SIZE); //ani[13] Landing Falling Right
+    AddCAnimation(&lfl, BITMAP_SIZE); //ani[8] Landing Falling Left
+    AddCAnimation(&lfr, BITMAP_SIZE); //ani[9] Landing Falling Right
     _collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
     //-----------------ANIMATION BY WEAPONS-----------------//
-    ///Remark: Technically, if '_isTriggeredAni' is true, '_aniByWpn' is displayed instead of the traditional 'ani', and vice versa.
-    /// Comment for future devs: Standing idle with weapon animation has not yet been considered for "Animation By Weapon", and should be in the near future
+    /// Remark: Technically, if '_aniSelector' is true, '_aniByWpn' is displayed instead of the traditional 'ani', and vice versa.
     _aniByWpn = vector<vector<CAnimation>>();
+    vector<int> s2l;// bmps of standing left with sword
+    vector<int> s2r;// bmps of standing right with sword
     vector<int> al; // bmps of attacking left
     vector<int> ar; // bmps of attacking right
     vector<int> gmal;// bmps of on-ground-moving attack left
@@ -172,8 +190,12 @@ void Player::LoadBitmap()
     vector<int> amar;// bmps of on-air-moving attack right
     vector<int> adal;// bmps of on-air-down attack left
     vector<int> adar;// bmps of on-air-down attack right
+    vector<int> sdl;// bmps of drawing sword left
+    vector<int> sdr;// bmps of drawing sword right
     // ~
     // ~ Weapon 0 - default
+    s2l = vector<int> { IDB_P1_IDLE2_0M, IDB_P1_IDLE2_1M, IDB_P1_IDLE2_2M, IDB_P1_IDLE2_3M };
+    s2r = vector<int> { IDB_P1_IDLE2_0, IDB_P1_IDLE2_1, IDB_P1_IDLE2_2, IDB_P1_IDLE2_3 };
     al = vector<int> { IDB_P1_WPN0_PUNCH0M, IDB_P1_WPN0_PUNCH1M, IDB_P1_WPN0_PUNCH2M, IDB_P1_WPN0_PUNCH3M, IDB_P1_WPN0_PUNCH4M, IDB_P1_WPN0_PUNCH5M, IDB_P1_WPN0_PUNCH6M, IDB_P1_WPN0_PUNCH7M, IDB_P1_WPN0_PUNCH8M };
     ar = vector<int> { IDB_P1_WPN0_PUNCH0, IDB_P1_WPN0_PUNCH1, IDB_P1_WPN0_PUNCH2, IDB_P1_WPN0_PUNCH3, IDB_P1_WPN0_PUNCH4, IDB_P1_WPN0_PUNCH5, IDB_P1_WPN0_PUNCH6, IDB_P1_WPN0_PUNCH7, IDB_P1_WPN0_PUNCH8 };
     gmal = vector<int> { IDB_P1_WPN0_KICK0M, IDB_P1_WPN0_KICK1M, IDB_P1_WPN0_KICK2M, IDB_P1_WPN0_KICK3M, IDB_P1_WPN0_KICK4M, IDB_P1_WPN0_KICK5M, IDB_P1_WPN0_KICK6M, IDB_P1_WPN0_KICK7M };
@@ -186,7 +208,13 @@ void Player::LoadBitmap()
     amar = vector<int> { IDB_P1_WPN0_RUN_PUNCH0, IDB_P1_WPN0_RUN_PUNCH1, IDB_P1_WPN0_RUN_PUNCH2, IDB_P1_WPN0_RUN_PUNCH3, IDB_P1_WPN0_RUN_PUNCH4, IDB_P1_WPN0_RUN_PUNCH5, IDB_P1_WPN0_RUN_PUNCH6 };
     adal = vector<int> { IDB_P1_AIR_DOWN_ATTACK_R0M, IDB_P1_AIR_DOWN_ATTACK_L0M, IDB_P1_AIR_DOWN_ATTACK_L1M, IDB_P1_AIR_DOWN_ATTACK_E0M, IDB_P1_AIR_DOWN_ATTACK_E1M, IDB_P1_AIR_DOWN_ATTACK_E2M };
     adar = vector<int> { IDB_P1_AIR_DOWN_ATTACK_R0, IDB_P1_AIR_DOWN_ATTACK_L0, IDB_P1_AIR_DOWN_ATTACK_L1, IDB_P1_AIR_DOWN_ATTACK_E0, IDB_P1_AIR_DOWN_ATTACK_E1, IDB_P1_AIR_DOWN_ATTACK_E2 };
-    AddCollectionOfAnimationsByWeapon(s2l, s2r, al, ar, gmal, gmar, sal, sar, aal, aar, amal, amar, adal, adar);
+    sdl = vector<int> { IDB_P1_SWD_DWR0M, IDB_P1_SWD_DWR1M, IDB_P1_SWD_DWR2M, IDB_P1_SWD_DWR3M, IDB_P1_SWD_DWR3M };
+    sdr = vector<int> { IDB_P1_SWD_DWR0, IDB_P1_SWD_DWR1, IDB_P1_SWD_DWR2, IDB_P1_SWD_DWR3, IDB_P1_SWD_DWR3 };
+    AddCollectionOfAnimationsByWeapon(
+        s2l, s2r, al, ar,
+        gmal, gmar, sal, sar,
+        aal, aar, amal, amar,
+        adal, adar, sdl, sdr);
     // ~
     // ~ Weapon 1
     al = vector<int> { IDB_P1_ATTACK0M, IDB_P1_ATTACK1M, IDB_P1_ATTACK2M, IDB_P1_ATTACK3M, IDB_P1_ATTACK4M };
@@ -197,9 +225,15 @@ void Player::LoadBitmap()
     aar = vector<int> { IDB_P1_AIR_ATTACK0, IDB_P1_AIR_ATTACK1, IDB_P1_AIR_ATTACK2 };
     amal = vector<int> { IDB_P1_AIR_MOVE_ATTACK0M, IDB_P1_AIR_MOVE_ATTACK1M, IDB_P1_AIR_MOVE_ATTACK2M, IDB_P1_AIR_MOVE_ATTACK3M };
     amar = vector<int> { IDB_P1_AIR_MOVE_ATTACK0, IDB_P1_AIR_MOVE_ATTACK1, IDB_P1_AIR_MOVE_ATTACK2, IDB_P1_AIR_MOVE_ATTACK3 };
-    AddCollectionOfAnimationsByWeapon(s2l, s2r, al, ar, gmal, gmar, sal, sar, aal, aar, amal, amar, adal, adar);
+    AddCollectionOfAnimationsByWeapon(
+        s2l, s2r, al, ar,
+        gmal, gmar, sal, sar,
+        aal, aar, amal, amar,
+        adal, adar, sdl, sdr);
     // ~
     // ~ Weapon 2
+    s2l = vector<int> { IDB_P1_WPN2_IDLE0M, IDB_P1_WPN2_IDLE1M, IDB_P1_WPN2_IDLE2M, IDB_P1_WPN2_IDLE3M };
+    s2r = vector<int> { IDB_P1_WPN2_IDLE0, IDB_P1_WPN2_IDLE1, IDB_P1_WPN2_IDLE2, IDB_P1_WPN2_IDLE3 };
     al = vector<int> { IDB_P1_WPN2_ATTACK0M, IDB_P1_WPN2_ATTACK1M, IDB_P1_WPN2_ATTACK2M, IDB_P1_WPN2_ATTACK3M, IDB_P1_WPN2_ATTACK4M };
     ar = vector<int> { IDB_P1_WPN2_ATTACK0, IDB_P1_WPN2_ATTACK1, IDB_P1_WPN2_ATTACK2, IDB_P1_WPN2_ATTACK3, IDB_P1_WPN2_ATTACK4 };
     gmal = vector<int> { IDB_P1_WPN2_GND_MOVE_ATTACK0M, IDB_P1_WPN2_GND_MOVE_ATTACK1M, IDB_P1_WPN2_GND_MOVE_ATTACK2M, IDB_P1_WPN2_GND_MOVE_ATTACK3M, IDB_P1_WPN2_GND_MOVE_ATTACK4M, IDB_P1_WPN2_GND_MOVE_ATTACK5M };
@@ -210,7 +244,13 @@ void Player::LoadBitmap()
     amar = vector<int> { IDB_P1_WPN2_AIR_MOVE_ATTACK0, IDB_P1_WPN2_AIR_MOVE_ATTACK1, IDB_P1_WPN2_AIR_MOVE_ATTACK2, IDB_P1_WPN2_AIR_MOVE_ATTACK3 };
     adal = vector<int> { IDB_P1_WPN2_AIR_DOWN_ATTACK_R0M, IDB_P1_WPN2_AIR_DOWN_ATTACK_L0M, IDB_P1_WPN2_AIR_DOWN_ATTACK_L1M, IDB_P1_WPN2_AIR_DOWN_ATTACK_E0M, IDB_P1_WPN2_AIR_DOWN_ATTACK_E1M, IDB_P1_WPN2_AIR_DOWN_ATTACK_E2M };
     adar = vector<int> { IDB_P1_WPN2_AIR_DOWN_ATTACK_R0, IDB_P1_WPN2_AIR_DOWN_ATTACK_L0, IDB_P1_WPN2_AIR_DOWN_ATTACK_L1, IDB_P1_WPN2_AIR_DOWN_ATTACK_E0, IDB_P1_WPN2_AIR_DOWN_ATTACK_E1, IDB_P1_WPN2_AIR_DOWN_ATTACK_E2 };
-    AddCollectionOfAnimationsByWeapon(s2l, s2r, al, ar, gmal, gmar, sal, sar, aal, aar, amal, amar, adal, adar);
+    sdl = vector<int> { IDB_P1_WPN2_DRAW0M, IDB_P1_WPN2_DRAW1M, IDB_P1_WPN2_DRAW2M, IDB_P1_WPN2_DRAW3M };
+    sdr = vector<int> { IDB_P1_WPN2_DRAW0, IDB_P1_WPN2_DRAW1, IDB_P1_WPN2_DRAW2, IDB_P1_WPN2_DRAW3 };
+    AddCollectionOfAnimationsByWeapon(
+        s2l, s2r, al, ar,
+        gmal, gmar, sal, sar,
+        aal, aar, amal, amar,
+        adal, adar, sdl, sdr);
 }
 
 void Player::OnMove()
@@ -232,12 +272,14 @@ void Player::OnMove()
     if (IsFinishedDrawingAnimation())
     {
         _isDrawingWeapon = false;
-        ResetAnimations(8);
+        // Reset the animations (left & right)
+        _aniByWpn[_wpnID][ANI_WPN_ID_DRAW_SWORD_LEFT].Reset();
+        _aniByWpn[_wpnID][ANI_WPN_ID_DRAW_SWORD_RIGHT].Reset();
     }
 
     /* JUMP ANIMATION */
     if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge() || (_isTriggerJump && _jumpCount > 0))
-        ResetAnimations(2);
+        ResetAnimations(ANI_ID_JUMP_LEFT);
 
     //-----------------POSITION TRANSFORMATION SECTION-----------------//
     /* REPOSITION PLAYER ABOUT GROUNDS */
@@ -495,6 +537,7 @@ void Player::SetAnimationStateLeftRight(int leftAnimationID)
 
 void Player::SetAnimationState(int num)
 {
+    _aniSelector = false; // Choose '_ani' for showing the animation
     currentAni = num;
 
     for (auto i = ani.begin(); i != ani.end(); i++)
@@ -517,13 +560,13 @@ void Player::SetAnimationState(int num)
 
 void Player::ShowAnimation()
 {
-    if (_isTriggeredAni)
+    if (_aniSelector) // If '_aniByWpn' is chosen for showing the animation
     {
         //Calculate and set the position of the player current animation in respect to the collision box's
         _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
         _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
     }
-    else
+    else // If '_ani' is chosen for showing the animation
     {
         vector<CAnimation>::iterator ani_iter = ani.begin() + currentAni;
         //Calculate and set the position of the player current animation in respect to the collision box's
@@ -803,12 +846,12 @@ bool Player::HitPlayer(Player* player)
 
 bool Player::IsDrawingWeapon()
 {
-    return (_isDrawingWeapon && !ani[currentAni].IsFinalBitmap());
+    return (_isDrawingWeapon && !IsFinishedDrawingAnimation());
 }
 
 bool Player::IsFinishedDrawingAnimation()
 {
-    return (ani[8].IsFinalBitmap() || ani[9].IsFinalBitmap());
+    return (_aniByWpn[_wpnID][ANI_WPN_ID_DRAW_SWORD_LEFT].IsFinalBitmap() || _aniByWpn[_wpnID][ANI_WPN_ID_DRAW_SWORD_RIGHT].IsFinalBitmap());
 }
 
 void Player::DoThrowingWeapon()
@@ -834,6 +877,7 @@ void Player::DoRespawn()
 
 void Player::SetAnimationStateByWeapon(int num)
 {
+    _aniSelector = true; // Choose '_aniByWpn' for showing the animation
     _currentAniByWpn = num;
 
     for (unsigned int i = 0; i < _aniByWpn.size(); i++)
@@ -862,7 +906,7 @@ void Player::AddCollectionOfAnimationsByWeapon(
     vector<int>& s2l, vector<int>& s2r, vector<int>& al, vector<int>& ar,
     vector<int>& gmal, vector<int>& gmar, vector<int>& sal, vector<int>& sar,
     vector<int>& aal, vector<int>& aar, vector<int>& amal, vector<int>& amar,
-    vector<int>& adal, vector<int>& adar)
+    vector<int>& adal, vector<int>& adar, vector<int>& sdl, vector<int>& sdr)
 {
     vector<CAnimation> tempAniByWpn = vector<CAnimation>();
     AddCAnimationByWeapon(tempAniByWpn, &s2l, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
@@ -879,6 +923,8 @@ void Player::AddCollectionOfAnimationsByWeapon(
     AddCAnimationByWeapon(tempAniByWpn, &amar, BITMAP_SIZE, 4, false); //ani[11] On-Air-Moving Attack Right
     AddCAnimationByWeapon(tempAniByWpn, &adal, BITMAP_SIZE, 4, false); //ani[12] On-Air-Down Attack Left
     AddCAnimationByWeapon(tempAniByWpn, &adar, BITMAP_SIZE, 4, false); //ani[13] On-Air-Down Attack Right
+    AddCAnimationByWeapon(tempAniByWpn, &sdl, BITMAP_SIZE, 5, false); //ani[14] Draw sword Left
+    AddCAnimationByWeapon(tempAniByWpn, &sdr, BITMAP_SIZE, 5, false); //ani[15] Draw sword Right
     _aniByWpn.push_back(tempAniByWpn);
 }
 
@@ -991,9 +1037,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_dir)
-                _triggeredAniByWpnID = 3;
+                _triggeredAniByWpnID = ANI_WPN_ID_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = 2;
+                _triggeredAniByWpnID = ANI_WPN_ID_ATTACK_LEFT;
 
             break;
 
@@ -1001,9 +1047,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_dir)
-                _triggeredAniByWpnID = 5;
+                _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = 4;
+                _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
 
             break;
 
@@ -1011,9 +1057,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_dir)
-                _triggeredAniByWpnID = 5;
+                _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = 4;
+                _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
 
             break;
 
@@ -1021,9 +1067,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_dir)
-                _triggeredAniByWpnID = 7;
+                _triggeredAniByWpnID = ANI_WPN_ID_SLIDE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = 6;
+                _triggeredAniByWpnID = ANI_WPN_ID_SLIDE_ATTACK_LEFT;
 
             break;
 
@@ -1032,9 +1078,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_dir)
-                _triggeredAniByWpnID = 9;
+                _triggeredAniByWpnID = ANI_WPN_ID_AIR_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = 8;
+                _triggeredAniByWpnID = ANI_WPN_ID_AIR_ATTACK_LEFT;
 
             break;
 
@@ -1042,9 +1088,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_dir)
-                _triggeredAniByWpnID = 11;
+                _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = 10;
+                _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
 
             break;
 
@@ -1052,9 +1098,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_dir)
-                _triggeredAniByWpnID = 11;
+                _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = 10;
+                _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
 
             break;
 
@@ -1062,9 +1108,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_dir)
-                _triggeredAniByWpnID = 13;
+                _triggeredAniByWpnID = ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = 12;
+                _triggeredAniByWpnID = ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT;
 
             break;
 
@@ -1256,27 +1302,33 @@ void Player::DoNonTriggeredAnimation()
 void Player::SetCurrentNonTriggerAnimation()
 {
     if (_isDrawingWeapon) // Special case: Player is drawing weapon
-        SetAnimationStateLeftRight(8);
+        if (_dir) // If the player is facing right
+            SetAnimationStateByWeapon(ANI_WPN_ID_DRAW_SWORD_RIGHT);
+        else
+            SetAnimationStateByWeapon(ANI_WPN_ID_DRAW_SWORD_LEFT);
     else if (IsOnGround()) // Player is on ground
     {
         if (_isPressingLeft || _isPressingRight) // Player is moving
-            SetAnimationStateLeftRight(0);
+            SetAnimationStateLeftRight(ANI_ID_RUN_LEFT);
         else // Player is idling
             if (_isHoldingWeapon) // With sword
-                SetAnimationStateLeftRight(10);
+                if (_dir) // If the player is facing right
+                    SetAnimationStateByWeapon(ANI_WPN_ID_STAND_RIGHT);
+                else
+                    SetAnimationStateByWeapon(ANI_WPN_ID_STAND_LEFT);
             else // Without sword
-                SetAnimationStateLeftRight(4);
+                SetAnimationStateLeftRight(ANI_ID_STAND_LEFT);
     }
     else // Player is NOT on ground
     {
         if (IsOnLeftEdge()) // Player is leaning on left edge
-            SetAnimationState(7);
+            SetAnimationState(ANI_ID_LEAN_RIGHT); // Set the leaning animation of player facing right
         else if (IsOnRightEdge()) // Player is leaning on left edge
-            SetAnimationState(6);
+            SetAnimationState(ANI_ID_LEAN_LEFT); // Set the leaning animation of player facing left
         else if (_isPressingDown) // Player is intentionally landing down
-            SetAnimationStateLeftRight(12);
+            SetAnimationStateLeftRight(ANI_ID_LAND_FALL_LEFT);
         else   // Player is jumping
-            SetAnimationStateLeftRight(2);
+            SetAnimationStateLeftRight(ANI_ID_JUMP_LEFT);
     }
 }
 

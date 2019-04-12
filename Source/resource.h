@@ -214,7 +214,6 @@
 #define IDB_P1_WPN2_AIR_DOWN_ATTACK_L1  494
 #define IDB_P1_WPN2_AIR_DOWN_ATTACK_R0  495
 #define IDB_P1_WPN2_AIR_DOWN_ATTACK_E2M 496
-#define IDB_BITMAP8                     497
 #define IDB_P1_WPN2_AIR_DOWN_ATTACK_E1M 497
 #define IDB_P1_WPN2_AIR_DOWN_ATTACK_E0M 498
 #define IDB_P1_WPN2_AIR_DOWN_ATTACK_E0  499
@@ -223,6 +222,23 @@
 #define IDB_WEAPON_THROWING_R           502
 #define IDB_P1_WPN2_AIR_DOWN_ATTACK_E1  503
 #define IDB_P1_WPN2_AIR_DOWN_ATTACK_E2  504
+#define IDB_P1_WPN2_IDLE3M              505
+#define IDB_P1_WPN2_IDLE2M              506
+#define IDB_P1_WPN2_IDLE1M              507
+#define IDB_P1_WPN2_IDLE0M              508
+#define IDB_P1_WPN2_IDLE0               509
+#define IDB_P1_WPN2_IDLE1               510
+#define IDB_P1_WPN2_IDLE2               511
+#define IDB_P1_WPN2_IDLE3               512
+#define IDB_P1_WPN2_DRAW3M              513
+#define IDB_P1_WPN2_DRAW2M              514
+#define IDB_P1_WPN2_DRAW1M              515
+#define IDB_P1_WPN2_DRAW0M              516
+#define IDB_P1_WPN2_DRAW0               517
+#define IDB_P1_WPN2_DRAW1               518
+#define IDB_P1_WPN2_DRAW2               519
+#define IDB_BITMAP8                     520
+#define IDB_P1_WPN2_DRAW3               520
 #define IDB_NUM0                        1000
 #define IDB_NUM1                        1001
 #define IDB_NUM2                        1002
@@ -253,7 +269,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        505
+#define _APS_NEXT_RESOURCE_VALUE        521
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101
