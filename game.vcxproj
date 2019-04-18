@@ -238,6 +238,8 @@
     <None Include="RES\gamecurs.cur" />
     <None Include="res\gameDoc.ico" />
     <None Include="RES\loading.bmp" />
+    <None Include="res\sound1.bin" />
+    <None Include="res\sound2.bin" />
     <None Include="res\Toolbar.bmp" />
   </ItemGroup>
   <ItemGroup>

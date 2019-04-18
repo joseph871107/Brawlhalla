@@ -15,10 +15,12 @@ map<int, string> fileList;
 map<int, ColBmp> colBmp;
 map<int, ColArray> cArray;
 
-void InitializeAllBMP(bool trace, string file1, string file2)
+void InitializeAll(bool trace, string file1, string file2)
 {
-    InitializeIDB();
-    InitializeFile();
+	InitializeNum();
+	InitializeNum("IDS");
+	InitializeFile();
+	InitializeFile("SOUND");
     InitializeCollideArray(trace);
 }
 void OnShowText(string msg, int x, int y, int size, COLORREF color, LPCTSTR font)
@@ -106,44 +108,45 @@ void GetCollideArray(int file, ColBmp* bmp)
 }
 
 
-void InitializeIDB(string file)
+void InitializeNum(string type, string file)
 {
-    TRACE("Initializing map IDB...\n");
-    ifstream myfile;
-    map<string, int>* idblist = (map<string, int>*)malloc(sizeof(map<string, int>));
-    myfile.open(file.c_str());
-    string line;
+	TRACE(("Initializing map " + type + "...\n").c_str());
+	ifstream myfile;
+	map<string, int>* idblist = (map<string, int>*)malloc(sizeof(map<string, int>));
+	myfile.open(file.c_str());
+	string line;
 
-    while (getline(myfile, line))
-    {
-        bool flag = false;
-        istringstream iss(line);
-        string s, s_n;
+	while (getline(myfile, line))
+	{
+		bool flag = false;
+		istringstream iss(line);
+		string s, s_n;
 
-        while (iss >> s && !flag)
-        {
-            if (s == "#define")
-            {
-                iss >> s;
+		while (iss >> s && !flag)
+		{
+			if (s == "#define")
+			{
+				iss >> s;
 
-                if (s.find("IDB") != string::npos)
-                {
-                    s_n = s;
-                    flag = true;
-                }
-            }
-        }
+				if (s.find(type) != string::npos)
+				{
+					s_n = s;
+					flag = true;
+				}
+			}
+		}
 
-        if (flag)
-            idbList.insert(pair<string, int>(s_n, stoi(s)));
-    }
+		if (flag)
+			idbList.insert(pair<string, int>(s_n, stoi(s)));
+	}
 
-    free(idblist);
-    myfile.close();
+	free(idblist);
+	myfile.close();
 }
-void InitializeFile(string file)
+
+void InitializeFile(string type, string file)
 {
-    TRACE("Initializing map file...\n");
+    TRACE("Initializing file...\n");
     ifstream myfile(file.c_str());
     string line;
 
@@ -162,7 +165,7 @@ void InitializeFile(string file)
             {
                 iss >> s;
 
-                if (s == "BITMAP")
+                if (s == type)
                     flag = true;
             }
 
@@ -237,5 +240,12 @@ ColBmp readBMP(int file, int x_max, int y_max)
     DeleteDC(hdc);
     DeleteObject(hBmp);
     return tBmp;
+}
+
+
+char* ToCharPtr(string str) {
+	char* ptr = new char[128];
+	strcpy(ptr, str.c_str());
+	return ptr;
 }
 }

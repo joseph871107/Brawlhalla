@@ -48,18 +48,8 @@ int random(int min, int max)
 
 void BattleSystem::OnBeginState()
 {
-    const long KEY_A = 0x41;
-    const long KEY_S = 0x53;
-    const long KEY_D = 0x44;
-    const long KEY_W = 0x57;
-    const long KEY_LEFT = 0x25;
-    const long KEY_UP = 0x26;
-    const long KEY_RIGHT = 0x27;
-    const long KEY_DOWN = 0x28;
-    const long KEY_C = 0x43;
-    const long KEY_COMMA = 0xbc;
-    //CAudio::Instance()->Play(AUDIO_LAKE, true);			// 撥放 WAVE
     /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
+	CAudio::Instance()->Play(IDS_BATTLE_MUSIC,true);
     start = lastTime = clock();
     nextTimeGenerateWeapon = random(3, 10);
     _weapons.clear();
@@ -117,11 +107,13 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
-    InitializeIDB();									// 初始化"resource.h"中點陣圖的資源編號
+	InitializeNum();									// 初始化"resource.h"中點陣圖的資源編號
+	InitializeNum("IDS");									// 初始化"resource.h"中音效的資源編號
     TRACE("idbList size : %d\n", idbList.size());
     ShowInitProgress(13);
     /*------------------------------INIT PROGRESS STAGE 2------------------------------*/
-    InitializeFile();									// 初始化"game.rc"中點陣圖的路徑
+	InitializeFile();									// 初始化"game.rc"中點陣圖的路徑
+	InitializeFile("SOUND");									// 初始化"game.rc"中音效的路徑
     TRACE("fileList size : %d\n", fileList.size());
     ShowInitProgress(25);
 
@@ -134,7 +126,13 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
-    //CAudio::Instance()->Load(AUDIO_LAKE, "sounds\\lake.mp3");	// 載入編號1的聲音lake.mp3
+	CAudio::Instance()->Load(IDS_PUNCH);	// 載入聲音
+	CAudio::Instance()->Load(IDS_BATTLE_MUSIC);
+	CAudio::Instance()->Load(IDS_DRAW_WEAPON);
+	CAudio::Instance()->Load(IDS_SWOOSH);
+	CAudio::Instance()->Load(IDS_SWING_ATTACK);
+	CAudio::Instance()->Load(IDS_MENU_MUSIC);
+	CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
     vector<GroundPARM> groundXY = _groundsXY;
 
     // Automatically generate ground objects //
@@ -171,7 +169,7 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     }
 
 	Player* player = _players[1];
-	if (nChar == 0x56 && player->GetHoldWeapon()) {
+	if (nChar == KEY_TROW && player->GetHoldWeapon()) {
 		Weapon* weapon = new Weapon();
 		weapon->Initialize(_grounds, _players);
 		weapon->SetSize(0.04);
@@ -209,10 +207,10 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    const char KEY_ESC = 27;
-
-    if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
-        GotoGameState(GAME_STATE_OVER);	// 關閉遊戲
+	if (nChar == KEY_ESC) {								// Demo 關閉遊戲的方法
+		CAudio::Instance()->Stop(IDS_BATTLE_MUSIC);
+		GotoGameState(GAME_STATE_OVER);	// 關閉遊戲
+	}
 
     for (auto i = _players.begin(); i != _players.end(); i++)
     {

@@ -85,6 +85,12 @@
     <None Include="res\player11.bin">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\sound1.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\sound2.bin">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\audio.cpp">

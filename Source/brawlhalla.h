@@ -50,13 +50,6 @@ namespace game_framework
 // Constants
 /////////////////////////////////////////////////////////////////////////////
 
-enum AUDIO_ID  				// 定義各種音效的編號
-{
-    AUDIO_DING,				// 0
-    AUDIO_LAKE,				// 1
-    AUDIO_NTUT				// 2
-};
-
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲開頭畫面物件
@@ -81,8 +74,9 @@ class CGameStateInit : public CGameState
     private:
 		Object ui_title, ui_background, ui_info1, ui_info2, ui_info3, ui_info4;
 		CPoint _point;
-		UI ui;
+		UI *ui;
 		bool _lButton;
+		bool _key;
 };
 
 /////////////////////////////////////////////////////////////////////////////

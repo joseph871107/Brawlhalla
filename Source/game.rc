@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Chinese (Traditional, Taiwan) resources
+// 中文 (繁體，台灣) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
@@ -190,12 +190,26 @@ IDB_P1_IDLE2_3M         BITMAP                  "..\\RES\\player1\\adventurer-id
 
 IDC_GAMECURSOR          CURSOR                  "..\\res\\gamecurs.cur"
 
-#endif    // Chinese (Traditional, Taiwan) resources
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// SOUND
+//
+
+IDS_MENU_MUSIC			SOUND					"..\\sounds\\Menu.mp3"
+IDS_BATTLE_MUSIC		SOUND					"..\\sounds\\BattleMusic.mp3"
+IDS_SWING_ATTACK		SOUND					"..\\sounds\\SwingAttack.mp3"
+IDS_PUNCH				SOUND					"..\\sounds\\Punch.mp3"
+IDS_DRAW_WEAPON			SOUND					"..\\sounds\\DrawWeapon.mp3"
+IDS_SWOOSH				SOUND					"..\\sounds\\Swoosh.mp3"
+
+
+#endif    // 中文 (繁體，台灣) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (United States) resources
+// 英文 (美國) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -867,7 +881,7 @@ BEGIN
     ID_BUTTON_UNITTEST      "Perform Unit Test"
 END
 
-#endif    // English (United States) resources
+#endif    // 英文 (美國) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

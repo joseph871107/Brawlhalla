@@ -59,6 +59,7 @@
 #include <string.h>
 #include "gamelib.h"
 #include "audio.h"
+#include "gameComFunc.h"
 
 namespace game_framework {
 
@@ -211,13 +212,14 @@ CAudio *CAudio::Instance()
 	return &audio;
 }
 
-bool CAudio::Load(unsigned id, char *lpzFileName)
+bool CAudio::Load(unsigned id)
 {
 	if (!isOpened)
 		return false;
 	//
 	// Make sure the audio file has not been loaded yet.
 	//
+	char *lpzFileName = ToCharPtr(GetPathFromIDB(id));
 	map<int, Info>::iterator i = info.find(id);
 	if (i != info.end()) {
 		string str;

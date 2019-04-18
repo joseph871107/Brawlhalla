@@ -246,7 +246,7 @@ void CAnimation::OnMove()
             bmp_counter = 0;
 
             if (!repeat)
-                times -= 1;
+                times --;
         }
     }
 }

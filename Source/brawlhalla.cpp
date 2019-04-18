@@ -98,26 +98,41 @@ void CGameStateInit::OnInit()
 	ui_info4.SetXY(refX, refY + ui_info1.GetHeight());
 
 	int butW = refX - (SIZE_X - ui_info2.GetCor(2)), butH = 80;
-	ui.AddButton("start", refX - butW, refY, butW, butH);
-	ui.AddButton("settings", refX - butW, refY + butH, butW, butH);
-	ui.AddButton("exit", refX - butW, refY + butH * 2, butW, butH);
+	ui = new UI(1, 3);
+	ui->AddButton("start", refX - butW, refY, butW, butH, 0, 0);
+	ui->AddButton("settings", refX - butW, refY + butH, butW, butH, 0, 1);
+	ui->AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 0, 2);
+
 	ShowInitProgress(10);
 }
 
 void CGameStateInit::OnBeginState()
 {
 	_lButton = false;
+	_key = false;
 	_point.x = 0;
 	_point.y = 0;
-	ui.Reset();
+	static bool first = true;
+	if (first) {
+		first = false;
+	}
+	else {
+		ui->Reset();
+		CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
+	}
 }
 
-void CGameStateInit::OnKeyDown(UINT, UINT, UINT)
+void CGameStateInit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+	ui->OnKeyDown(nChar, nRepCnt, nFlags);
+	if (nChar == KEY_ENTER)
+		_key = true;
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+	if (nChar == KEY_ENTER)
+		_key = false;
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
@@ -148,15 +163,17 @@ void CGameStateInit::OnShow()
 
 	ui_background.OnShow();
 	ui_title.OnShow();
-	ui.OnShow();
+	ui->OnShow();
 	ui_info1.OnShow();
 	ui_info2.OnShow();
 	ui_info3.OnShow();
 	ui_info4.OnShow();
 
-	string chosenBut = ui.ChosenButton();
-	if (chosenBut == "start")
+	string chosenBut = ui->ChosenButton();
+	if (chosenBut == "start") {
+		CAudio::Instance()->Stop(IDS_MENU_MUSIC);
 		GotoGameState(GAME_STATE_RUN);
+	}
 	else if(chosenBut == "settings")
 		;
 	else if(chosenBut == "exit")
@@ -165,7 +182,7 @@ void CGameStateInit::OnShow()
 
 void CGameStateInit::OnMove()
 {
-	ui.SetButtonState(_lButton, _point);
+	ui->SetButtonState(_lButton, _key, _point);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -229,6 +246,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 {
     if (battleSystem.IsGameOver())								// Demo 關閉遊戲的方法
     {
+		CAudio::Instance()->Stop(IDS_BATTLE_MUSIC);
         SetLegacyString(battleSystem.GetGameResult());
         battleSystem.ResolveMemoryLeaksOnEndState();
         GotoGameState(GAME_STATE_OVER);					// 關閉遊戲

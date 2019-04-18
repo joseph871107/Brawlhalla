@@ -380,6 +380,8 @@ void Player::OnKeyDown(const UINT& nChar)
     }
     else if (nChar == _keys[4]) //Attack
     {
+		if (!_isDrawingWeapon)
+			CAudio::Instance()->Play(IDS_SWING_ATTACK);
         _isTriggerAttack = true;
     }
     else
@@ -823,12 +825,11 @@ void Player::DoAttack()
     {
         if (*i != this && HitPlayer(*i))
         {
-            (*i)->InitiateOffsetUp();
-
-            if (GetCor(0) > (*i)->GetCor(0))
-                (*i)->InitiateOffsetLeft();
-            else
-                (*i)->InitiateOffsetRight();
+			if (_isHoldingWeapon)
+				CAudio::Instance()->Play(IDS_SWOOSH);
+			else
+				CAudio::Instance()->Play(IDS_PUNCH);
+			(*i)->BeenAttacked(_dir);
         }
     }
 }
@@ -1301,12 +1302,14 @@ void Player::DoNonTriggeredAnimation()
 
 void Player::SetCurrentNonTriggerAnimation()
 {
-    if (_isDrawingWeapon) // Special case: Player is drawing weapon
-        if (_dir) // If the player is facing right
-            SetAnimationStateByWeapon(ANI_WPN_ID_DRAW_SWORD_RIGHT);
-        else
-            SetAnimationStateByWeapon(ANI_WPN_ID_DRAW_SWORD_LEFT);
-    else if (IsOnGround()) // Player is on ground
+	if (_isDrawingWeapon) { // Special case: Player is drawing weapon
+		CAudio::Instance()->Play(IDS_DRAW_WEAPON);
+		if (_dir) // If the player is facing right
+			SetAnimationStateByWeapon(ANI_WPN_ID_DRAW_SWORD_RIGHT);
+		else
+			SetAnimationStateByWeapon(ANI_WPN_ID_DRAW_SWORD_LEFT);
+	}
+	else if (IsOnGround()) // Player is on ground
     {
         if (_isPressingLeft || _isPressingRight) // Player is moving
             SetAnimationStateLeftRight(ANI_ID_RUN_LEFT);

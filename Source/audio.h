@@ -83,7 +83,7 @@ public:
 	~CAudio();
 	void           Close();						// 關閉Direct Sound介面
 	static CAudio* Instance();					// 取得CAudio的Instance
-	bool           Load(unsigned, char *);		// 載入編號i的聲音，指定MIDI檔案
+	bool           Load(unsigned);				// 載入編號i的聲音，指定MIDI檔案
 	bool           Open();						// 開啟Direct Sound介面
 	void		   Pause();						// 暫停播放所有音效
 	void           Play(unsigned, bool=false);	// 開始撥放編號i的聲音，指定是否重覆撥放

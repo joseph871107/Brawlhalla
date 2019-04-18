@@ -9,6 +9,20 @@
 
 namespace game_framework
 {
+	const long KEY_A = 0x41;
+	const long KEY_S = 0x53;
+	const long KEY_D = 0x44;
+	const long KEY_W = 0x57;
+	const long KEY_LEFT = 0x25;
+	const long KEY_UP = 0x26;
+	const long KEY_RIGHT = 0x27;
+	const long KEY_DOWN = 0x28;
+	const long KEY_C = 0x43;
+	const long KEY_COMMA = 0xbc;
+	const long KEY_TROW = 0x56;
+	const long KEY_ENTER = 0x0d;
+	const long KEY_ESC = 0x1b;
+
 struct ColArray
 {
     int width;
@@ -36,9 +50,9 @@ extern map<int, ColArray> cArray;
 /////////////////////////
 // 碰撞矩陣處理副程式
 /////////////////////////
-void InitializeAllBMP(bool = false, string = "Source\\resource.h", string = "Source\\game.rc");	// 初始化點陣圖運算資源
-void InitializeIDB(string = "Source\\resource.h");												// 初始化"resource.h"中點陣圖的資源編號
-void InitializeFile(string = "Source\\game.rc");												// 初始化"game.rc"中點陣圖的路徑
+void InitializeAll(bool = false, string = "Source\\resource.h", string = "Source\\game.rc");	// 初始化點陣圖運算資源
+void InitializeNum(string = "IDB", string = "Source\\resource.h");								// 初始化"resource.h"中的資源編號
+void InitializeFile(string = "BITMAP", string = "Source\\game.rc");								// 初始化"game.rc"中點陣圖的路徑
 void InitializeCollideArray(bool = false);														// 初始化點陣圖的布林碰撞矩陣
 
 /////////////////////////
@@ -56,6 +70,7 @@ void GetCollideArray(int file, ColBmp*);						// file 為IDB名稱
 /////////////////////////
 void OnShowText(string, int, int, int = 20, COLORREF = RGB(255, 255, 0), LPCTSTR = "Times New Roman");	// 簡化原本Game Framework 的字串顯示
 void DrawRectangle(int x, int y, int width, int height, COLORREF color = RGB(0, 0, 0));
+char* ToCharPtr(string);
 }
 
 #endif //define GAMECOMFUNC_H
