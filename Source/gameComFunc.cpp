@@ -244,7 +244,7 @@ ColBmp readBMP(int file, int x_max, int y_max)
 
 
 char* ToCharPtr(string str) {
-	char* ptr = new char[128];
+	static char ptr[128];
 	strcpy(ptr, str.c_str());
 	return ptr;
 }
