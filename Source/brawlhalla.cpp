@@ -71,6 +71,11 @@ CGameStateInit::CGameStateInit(CGame* g)
 {
 }
 
+CGameStateInit::~CGameStateInit()
+{
+	delete ui;
+}
+
 void CGameStateInit::OnInit()
 {
     ShowInitProgress(0);

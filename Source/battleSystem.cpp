@@ -102,6 +102,8 @@ void BattleSystem::OnMove()							// 移動遊戲元素
     for (auto i = _players.begin(); i != _players.end(); i++)
     {
         (*i)->OnMove();
+		CPoint temp = camera.GetXY((*i)->GetCor(0), (*i)->GetCor(1));
+		(*i)->SetXY(temp.x, temp.y);
     }
 }
 
@@ -134,6 +136,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 	CAudio::Instance()->Load(IDS_MENU_MUSIC);
 	CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
     vector<GroundPARM> groundXY = _groundsXY;
+	camera = Camera();
 
     // Automatically generate ground objects //
     for (auto i = groundXY.begin(); i != groundXY.end(); i++)

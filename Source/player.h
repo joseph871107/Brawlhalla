@@ -29,6 +29,7 @@ class Player
         bool GetDirection();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
         int ShowAnimationState();		// Return which CAnimation is playing
+		void SetXY(int, int);
 
         //Others - Bill
         const string& GetName() const;
@@ -98,10 +99,15 @@ class Player
         //Throw weapon
         void DoThrowingWeapon(); /// Unused function
 
+		//Audio management
+		void PlayAudioByState();
+
         //Others
         void DoDead();
         void DoRespawn();
         int Round(double i);
+		bool StateChanged();
+		bool WpnStateChanged();
 
         ///Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
         //Weapon
@@ -185,9 +191,11 @@ class Player
         ///Comment for future devs: Unorganized member variables are declared below. They should be cleaned up in the near future
         //Required for triggered animation concept
         bool _isTriggeredAni;
-        int _triggeredAniKeyID;
+		int _triggeredAniKeyID;
+		int _lastTriggeredAniKeyID;
         int _triggeredAniCount;
         int _triggeredAniByWpnID; // the animation needed is defined by '_aniByWpn[_wpnID][_triggeredAniByWpnID]'
+		int _lastTriggeredAniByWpnID;
 
         //Weapon
         int _wpnID; // 0 - punch (default), 1 - sword 1, 2 - sword 2

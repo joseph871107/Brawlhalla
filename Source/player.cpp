@@ -36,6 +36,7 @@ const int KEY_AIR_ATTACK = 212;
 const int KEY_AIR_MOVE_RIGHT_ATTACK = 222;
 const int KEY_AIR_MOVE_LEFT_ATTACK = 232;
 const int KEY_AIR_LAND_DOWN_ATTACK = 242;
+const int KEY_DRAW_SWORD = 113;
 // Non-triggered Animation Key ID
 const int KEY_GND_IDLE = 111;
 const int KEY_GND_MOVE_RIGHT = 121;
@@ -268,15 +269,6 @@ void Player::OnMove()
         }
     }
 
-    /* DRAWING ANIMATION */
-    if (IsFinishedDrawingAnimation())
-    {
-        _isDrawingWeapon = false;
-        // Reset the animations (left & right)
-        _aniByWpn[_wpnID][ANI_WPN_ID_DRAW_SWORD_LEFT].Reset();
-        _aniByWpn[_wpnID][ANI_WPN_ID_DRAW_SWORD_RIGHT].Reset();
-    }
-
     /* JUMP ANIMATION */
     if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge() || (_isTriggerJump && _jumpCount > 0))
         ResetAnimations(ANI_ID_JUMP_LEFT);
@@ -349,6 +341,8 @@ void Player::OnShow()
 
     // Show current animation
     ShowAnimation();
+	// Play current audio
+	PlayAudioByState();
 
     // For showing the "name tag" //
     if (_PLAYER_DEBUG || 1)
@@ -380,8 +374,6 @@ void Player::OnKeyDown(const UINT& nChar)
     }
     else if (nChar == _keys[4]) //Attack
     {
-		if (!_isDrawingWeapon)
-			CAudio::Instance()->Play(IDS_SWING_ATTACK);
         _isTriggerAttack = true;
     }
     else
@@ -461,6 +453,12 @@ int Player::GetCor(int index)
 int Player::ShowAnimationState()
 {
     return (*bmp_iter[currentAni])[ani[currentAni].GetCurrentBitmapNumber()];
+}
+
+void Player::SetXY(int x, int y)
+{
+	_x = x;
+	_y = y;
 }
 
 const string& Player::GetName() const
@@ -861,6 +859,52 @@ void Player::DoThrowingWeapon()
     throwing.Initialize(vector<Ground*> {}, vector<Player*> {this});
 }
 
+void Player::PlayAudioByState()
+{
+	int aboutToPlay = -1;
+
+	if (WpnStateChanged() && _isTriggeredAni) {
+		switch (_triggeredAniByWpnID) {
+
+		case ANI_WPN_ID_DRAW_SWORD_LEFT:
+		case ANI_WPN_ID_DRAW_SWORD_RIGHT:
+
+			aboutToPlay = IDS_DRAW_WEAPON;
+			break;
+
+		case ANI_WPN_ID_STAND_LEFT:
+		case ANI_WPN_ID_STAND_RIGHT:
+		case ANI_WPN_ID_ATTACK_LEFT:
+		case ANI_WPN_ID_ATTACK_RIGHT:
+		case ANI_WPN_ID_GND_MOVE_ATTACK_LEFT:
+		case ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT:
+		case ANI_WPN_ID_SLIDE_ATTACK_LEFT:
+		case ANI_WPN_ID_SLIDE_ATTACK_RIGHT:
+		case ANI_WPN_ID_AIR_ATTACK_LEFT:
+		case ANI_WPN_ID_AIR_ATTACK_RIGHT:
+		case ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT:
+		case ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT:
+		case ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT:
+		case ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT:
+
+			aboutToPlay = IDS_SWING_ATTACK;
+			break;
+
+		}
+	}
+
+	if (StateChanged() && !_isTriggeredAni) {
+		switch (GetKeyCombination()) {
+		case KEY_GND_IDLE:
+			break;
+
+		}
+	}
+
+	if (aboutToPlay != -1)
+		CAudio::Instance()->Play(aboutToPlay);
+}
+
 void Player::DoDead()
 {
     SetHoldWeapon(false);
@@ -967,13 +1011,12 @@ int Player::GetKeyCombination()
     else // All movement keys are up
         keyCombString = keyCombString + "1";
 
-    if (IsAttacking())
-        keyCombString = keyCombString + "2";
+    if (IsDrawingWeapon())
+		keyCombString = keyCombString + "3";
+	else if (IsAttacking())
+		keyCombString = keyCombString + "2";
     else
         keyCombString = keyCombString + "1";
-
-    if (IsDrawingWeapon()) /// Comment for future devs: Drawing the weapon is a special case. Do we need to tackle it?
-        keyCombString = "0"; // Do nothing
 
     return (stoi(keyCombString));
 }
@@ -1016,6 +1059,7 @@ void Player::ProcessKeyCombinationOnMove()
 
 void Player::ResetTriggeredAnimationVariables()
 {
+	_isDrawingWeapon = false;
     _isTriggeredAni = false;
     _triggeredAniKeyID = 0;
     _triggeredAniCount = 0;
@@ -1114,6 +1158,16 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT;
 
             break;
+
+		case KEY_DRAW_SWORD:
+			SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+
+			if (_dir) // If the player is facing right
+				_triggeredAniByWpnID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
+			else
+				_triggeredAniByWpnID = ANI_WPN_ID_DRAW_SWORD_LEFT;
+
+			break;
 
         default:
             // Do nothing
@@ -1302,14 +1356,7 @@ void Player::DoNonTriggeredAnimation()
 
 void Player::SetCurrentNonTriggerAnimation()
 {
-	if (_isDrawingWeapon) { // Special case: Player is drawing weapon
-		CAudio::Instance()->Play(IDS_DRAW_WEAPON);
-		if (_dir) // If the player is facing right
-			SetAnimationStateByWeapon(ANI_WPN_ID_DRAW_SWORD_RIGHT);
-		else
-			SetAnimationStateByWeapon(ANI_WPN_ID_DRAW_SWORD_LEFT);
-	}
-	else if (IsOnGround()) // Player is on ground
+	if (IsOnGround()) // Player is on ground
     {
         if (_isPressingLeft || _isPressingRight) // Player is moving
             SetAnimationStateLeftRight(ANI_ID_RUN_LEFT);
@@ -1338,6 +1385,24 @@ void Player::SetCurrentNonTriggerAnimation()
 int Player::Round(double i)
 {
     return (int)(i - 0.5);
+}
+
+bool Player::StateChanged()
+{
+	bool ret = false;
+	if (_lastTriggeredAniKeyID != GetKeyCombination())
+		ret = true;
+	_lastTriggeredAniKeyID = GetKeyCombination();
+	return ret;
+}
+
+bool Player::WpnStateChanged()
+{
+	bool ret = false;
+	if (_lastTriggeredAniByWpnID != _triggeredAniByWpnID)
+		ret = true;
+	_lastTriggeredAniByWpnID = _triggeredAniByWpnID;
+	return ret;
 }
 
 }

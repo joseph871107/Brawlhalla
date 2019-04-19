@@ -14,6 +14,25 @@ extern map<string, int> idbList;
 extern map<int, string> fileList;
 extern map<int, ColArray> cArray;
 
+struct Camera {
+	Camera() {
+		x = SIZE_X / 2; y = SIZE_Y / 2;
+		size = 1;
+	}
+	Camera(int tx, int ty) {
+		x = tx; y = ty;
+		size = 1;
+	}
+	int x, y;
+	double size;
+	CPoint GetXY(int tx, int ty) {
+		CPoint temp;
+		temp.x = (int)( x + (tx - x) * size);
+		temp.y = (int)( y + (ty - y) * size);
+		return temp;
+	}
+};
+
 class BattleSystem : public CGameState
 {
     public:
@@ -45,6 +64,7 @@ class BattleSystem : public CGameState
         vector<Player*> _players;
 		vector<Weapon*> _weapons;
 		vector<Weapon*> _flyingWeapons;
+		Camera camera;
 };
 
 }
