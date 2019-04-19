@@ -16,18 +16,25 @@ Object::Object()
 {
     x = y = width = height = 0;
     _size = 1.0;
+	camera = nullptr;
 }
 
 Object::Object(double s)
 {
     x = y = width = height = 0;
     _size = s;
+	camera = nullptr;
 }
 
 bool Object::HitRectangle(int tx1, int ty1, int tx2, int ty2)
 {
     int x1 = GetCor(0), y1 = GetCor(1), x2 = GetCor(2), y2 = GetCor(3);
     return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
+}
+
+void Object::AddCamera(Camera * cam)
+{
+	camera = cam;
 }
 
 int Object::GetCor(int index)
@@ -41,10 +48,10 @@ int Object::GetCor(int index)
             return y;
 
         case 2:
-            return x + (int)(width * _size);
+            return x + GetWidth();
 
         case 3:
-            return y + (int)(height * _size);
+            return y + GetHeight();
 
         default:
             return NULL;
@@ -93,8 +100,15 @@ void Object::SetSize(double s)
 
 void Object::OnShow()
 {
-	bmp.SetTopLeft(x, y);
-    bmp.ShowBitmap(_size);
+	if (camera != nullptr) {
+		CPoint cam = camera->GetXY(x, y);
+		bmp.SetTopLeft(cam.x, cam.y);
+		bmp.ShowBitmap(_size * camera->GetSize());
+	}
+	else {
+		bmp.SetTopLeft(x, y);
+		bmp.ShowBitmap(_size);
+	}
 }
 
 void Object::OnMove()

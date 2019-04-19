@@ -22,7 +22,7 @@ const int MAX_weapons = 5;
 const vector<GroundPARM> _groundsXY{ GroundPARM(0, 300, 0.65, 5), GroundPARM(500, 400, 0.65, 5), GroundPARM(1000, 500, 0.65, 5) };	// Define Ground position to automatically generate ground objects
 CInteger integer(2);																												// Used to show current remain time
 
-BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Object()), _grounds(vector<Ground*>()), _players(vector<Player*>()), _weapons(vector<Weapon*>())
+BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Background()), _grounds(vector<Ground*>()), _players(vector<Player*>()), _weapons(vector<Weapon*>())
 {
 }
 
@@ -73,6 +73,7 @@ void BattleSystem::OnMove()							// 移動遊戲元素
         if (_weapons.size() < MAX_weapons)
         {
             Weapon* weapon = new Weapon();
+			weapon->AddCamera(&camera);
             weapon->Initialize(_grounds, _players);
             _weapons.push_back(weapon);
         }
@@ -99,12 +100,26 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 		_flyingWeapons.erase(erase);
 	}
 
+	int totalX = 0, totalY = 0;
+	for (auto i = _players.begin(); i != _players.end(); i++)
+	{
+		totalX += (*i)->GetCor(0);
+		totalY += (*i)->GetCor(1);
+		(*i)->OnMove();
+	}
+	int minX = totalX / _players.size(), maxX = minX, minY = totalY / _players.size(), maxY = minY, offset = 400;
     for (auto i = _players.begin(); i != _players.end(); i++)
     {
+		minX = ((*i)->GetCor(0) - offset < minX ? (*i)->GetCor(0) - offset : minX);
+		maxX = ((*i)->GetCor(2) + offset > maxX ? (*i)->GetCor(2) + offset : maxX);
+		minY = ((*i)->GetCor(1) - offset < minY ? (*i)->GetCor(1) - offset : minY);
+		maxY = ((*i)->GetCor(3) + offset > maxY ? (*i)->GetCor(3) + offset : maxY);
         (*i)->OnMove();
-		CPoint temp = camera.GetXY((*i)->GetCor(0), (*i)->GetCor(1));
-		(*i)->SetXY(temp.x, temp.y);
     }
+	int diffX = (maxX - minX < 800 ? 800 : maxX - minX), diffY = maxY - minY;
+	double size = SIZE_X / (double)(diffX);
+	camera.SetCameraXY(minX + diffX / 2, minY +diffY / 2);
+	camera.SetSize(size);
 }
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
@@ -142,6 +157,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     for (auto i = groundXY.begin(); i != groundXY.end(); i++)
     {
         Ground* ground = new Ground();
+		ground->AddCamera(&camera);
         ground->LoadBitmap();
         ground->SetXY(i->point.x, i->point.y);
         ground->SetSize(i->_size);
@@ -150,17 +166,20 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }//////////////////////////////////////////
 
     background.SetSize(1);
-    background.SetXY(-250, 0);
+    background.SetXY(-800, -400);
+	background.AddCamera(&camera);
     background.LoadBitmap(IDB_BACKGROUND, RGB(0, 0, 0));
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
     Player* player = new Player();
     player->LoadBitmap();
+	player->AddCamera(&camera);
     _players.push_back(player);				// Player1
     player = new Player();
     player->LoadBitmap();
+	player->AddCamera(&camera);
     _players.push_back(player);				// Player2
-    integer.LoadBitmap();				// time + life
+    integer.LoadBitmap();					// time + life
     ShowInitProgress(100);
 }
 
@@ -174,6 +193,7 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	Player* player = _players[1];
 	if (nChar == KEY_TROW && player->GetHoldWeapon()) {
 		Weapon* weapon = new Weapon();
+		weapon->AddCamera(&camera);
 		weapon->Initialize(_grounds, _players);
 		weapon->SetSize(0.04);
 		bool dir = player->GetDirection();
@@ -229,7 +249,7 @@ void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動�
 
 void BattleSystem::OnShow()
 {
-    background.OnShow();
+    background.OnShow(0.15);
     // Showing the remain time
     // Display minute
     int now_time = GetCurrentRemainTime();
@@ -267,7 +287,7 @@ void BattleSystem::OnShow()
     //------------------Test Text------------------//
     if (_PLAYER_DEBUG)
     {
-        char str[80], str2[80];
+        char str[80];
         ostringstream oss;
         oss << hex << currentKeydown;
         sprintf(str, "(%d, %d) KeyDown:%s", mousePoint.x, mousePoint.y, ("0x" + oss.str()).c_str());
@@ -282,17 +302,15 @@ void BattleSystem::OnShow()
         for (vector<Ground*>::iterator i = _grounds.begin(); i != _grounds.end(); i++)
         {
             sprintf(str, "                      , Ground%d (x1:%d, y1:%d, x2:%d, y2:%d)", i - _grounds.begin(), (*i)->GetCor(0), (*i)->GetCor(1), (*i)->GetCor(2), (*i)->GetCor(3));
-            OnShowText(str, 0, 36 + 12 * (i - _grounds.begin()), 10);
+            OnShowText(str, 0, 12 + 12 * _players.size() + 12 * (i - _grounds.begin()), 10);
         }
 
         for (auto i = _players.begin(); i != _players.end(); i++)
         {
+			int temp = (*i)->ShowAnimationState();
             sprintf(str, "%s", GetNameFromIDB((*i)->ShowAnimationState()).c_str());
-            OnShowText(str, 0 + 200 * (i - _players.begin()), SIZE_Y - 24, 20);
+            OnShowText(str, 0, 12 + 12 * _players.size() + 12 * _grounds.size() + 12 * (i - _players.begin()), 10);
         }
-
-        sprintf(str, "Remain Time : %s : %s\n", (GetCurrentRemainTime() / 600 == 0 ? ("0" + (string)str).c_str() : str), ((GetCurrentRemainTime() % 60) / 10 == 0 ? ("0" + (string)str2).c_str() : str2));
-        OnShowText(str, 650, 0, 30);
     }
 
     //------------------End of Test Text------------------//

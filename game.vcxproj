@@ -244,6 +244,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\battleSystem.cpp" />
+    <ClCompile Include="source\camera.cpp" />
     <ClCompile Include="Source\fimage.cpp" />
     <ClCompile Include="Source\gameComFunc.cpp" />
     <ClCompile Include="Source\ground.cpp" />
@@ -295,6 +296,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\battleSystem.h" />
+    <ClInclude Include="source\camera.h" />
     <ClInclude Include="Source\fImage.h" />
     <ClInclude Include="Source\gameComFunc.h" />
     <ClInclude Include="Source\ground.h" />

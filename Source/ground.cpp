@@ -58,8 +58,9 @@ void Ground::OnShow()
 {
     for (int i = 0; i < _length; i++)
     {
-        bmp.SetTopLeft(x + (int)((i * 100 - osX1) * _size), y - (int)(osX2 * _size));
-        bmp.ShowBitmap(_size);
+		CPoint cam = camera->GetXY(x + (int)((i * 100 - osX1) * _size), y - (int)(osX2 * _size));
+        bmp.SetTopLeft(cam.x, cam.y);
+        bmp.ShowBitmap(_size * camera->GetSize());
     }
 }
 }

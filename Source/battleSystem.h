@@ -10,28 +10,26 @@ namespace game_framework
 // BattleSystem class
 /////////////////////////////////////////////////////////////////////////////
 
+class Background : public Object
+{
+public:
+	void OnShow(double offset)
+	{
+		if (camera != nullptr) {
+			CPoint cam = camera->GetXY(x, y);
+			bmp.SetTopLeft((int)(cam.x * offset), (int)(cam.y * offset));
+			bmp.ShowBitmap(_size * (0.9 + 0.1 * camera->GetSize()));
+		}
+		else {
+			bmp.SetTopLeft(x, y);
+			bmp.ShowBitmap(_size);
+		}
+	}
+};
+
 extern map<string, int> idbList;
 extern map<int, string> fileList;
 extern map<int, ColArray> cArray;
-
-struct Camera {
-	Camera() {
-		x = SIZE_X / 2; y = SIZE_Y / 2;
-		size = 1;
-	}
-	Camera(int tx, int ty) {
-		x = tx; y = ty;
-		size = 1;
-	}
-	int x, y;
-	double size;
-	CPoint GetXY(int tx, int ty) {
-		CPoint temp;
-		temp.x = (int)( x + (tx - x) * size);
-		temp.y = (int)( y + (ty - y) * size);
-		return temp;
-	}
-};
 
 class BattleSystem : public CGameState
 {
@@ -59,7 +57,7 @@ class BattleSystem : public CGameState
         UINT currentKeydown;
         clock_t start, lastTime;
         int nextTimeGenerateWeapon;
-        Object background;
+        Background background;
         vector<Ground*> _grounds;
         vector<Player*> _players;
 		vector<Weapon*> _weapons;

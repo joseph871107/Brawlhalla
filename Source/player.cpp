@@ -9,6 +9,8 @@
 namespace game_framework
 {
 //-----------------CONSTANTS DEFINITIONS-----------------//
+const int PLAYER_INIT_X = 700;
+const int PLAYER_INIT_Y = 100;
 const int MAX_JUMP_COUNT = 2;
 const int MOVEMENT_UNIT = 6;
 const int GND_ATTACK_MOVEMENT_UNIT = 12;
@@ -96,10 +98,9 @@ Player::~Player()
 void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, vector<long> keysValue)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
-    //_x = (int)((groundPtrValue->GetCor(2) + groundPtrValue->GetCor(0)) / 2);
-    _x = 700;
-    _y = 100;
-    /*_size = 2.5;*/
+	Ground *_ground = groundsValue[(rand() * 100) % groundsValue.size()];								// Randomly choose one of the ground object
+	_x = (rand() * 1000) % (int)(_ground->GetWidth() * _ground->GetSize()) + _ground->GetCor(0);		// Randomly set x coordinate within Ground's width
+	_y = _ground->GetCor(1) - GetHeight();
     //
     ResetTriggeredAnimationVariables();
     //
@@ -347,7 +348,8 @@ void Player::OnShow()
     // For showing the "name tag" //
     if (_PLAYER_DEBUG || 1)
     {
-        OnShowText(_name.c_str(), GetCor(0) - 10, GetCor(3), 15, RGB(255, 255, 255));
+		CPoint cam = camera->GetXY(Round(_x - 4 * BITMAP_SIZE), Round(_y + _collision_box.Height() * BITMAP_SIZE));
+        OnShowText(_name.c_str(),cam.x ,cam.y , Round(15 * camera->GetSize()), RGB(255, 255, 255));
     }///////////////////////////////
 }
 
@@ -452,13 +454,17 @@ int Player::GetCor(int index)
 
 int Player::ShowAnimationState()
 {
-    return (*bmp_iter[currentAni])[ani[currentAni].GetCurrentBitmapNumber()];
+    return (_aniSelector ? _aniByWpn[_wpnID][_currentAniByWpn].GetCurrentBitmapNumber() : (ani.begin() + currentAni)->GetCurrentBitmapNumber());
 }
 
-void Player::SetXY(int x, int y)
+int Player::GetWidth()
 {
-	_x = x;
-	_y = y;
+	return GetCor(2) - GetCor(0);
+}
+
+int Player::GetHeight()
+{
+	return GetCor(3) - GetCor(1);
 }
 
 const string& Player::GetName() const
@@ -560,24 +566,29 @@ void Player::SetAnimationState(int num)
 
 void Player::ShowAnimation()
 {
+	if (_PLAYER_DEBUG)
+	{
+		CPoint cam = camera->GetXY(_x, _y);
+		_collision_box.SetTopLeft(cam.x, cam.y);		//actual player blocks
+		_collision_box.ShowBitmap(BITMAP_SIZE * camera->GetSize());
+	}
+
     if (_aniSelector) // If '_aniByWpn' is chosen for showing the animation
     {
         //Calculate and set the position of the player current animation in respect to the collision box's
-        _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
+		CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
+		_aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
+        _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(cam.x, cam.y);
         _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
     }
     else // If '_ani' is chosen for showing the animation
     {
         vector<CAnimation>::iterator ani_iter = ani.begin() + currentAni;
         //Calculate and set the position of the player current animation in respect to the collision box's
-        ani_iter->SetTopLeft(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
+		CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
+		ani_iter->SetSize(BITMAP_SIZE * camera->GetSize());
+        ani_iter->SetTopLeft(cam.x, cam.y);
         ani_iter->OnShow();
-    }
-
-    if (_PLAYER_DEBUG)
-    {
-        _collision_box.SetTopLeft(_x, _y);		//actual player blocks
-        _collision_box.ShowBitmap(BITMAP_SIZE);
     }
 }
 
@@ -1380,6 +1391,11 @@ void Player::SetCurrentNonTriggerAnimation()
         else   // Player is jumping
             SetAnimationStateLeftRight(ANI_ID_JUMP_LEFT);
     }
+}
+
+void Player::AddCamera(Camera * cam)
+{
+	camera = cam;
 }
 
 int Player::Round(double i)

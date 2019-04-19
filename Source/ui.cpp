@@ -83,10 +83,17 @@ void UI::Reset()
     {
 		(*i)->Reset();
 	}
+	for (int i = 0; i < (signed int)_pos.size(); i++) {
+		for (int j = 0;j < (signed int)_pos[0].size();j++) {
+			if (_pos[i][j] == 1) {
+				_pos[i][j] = 0;
+			}
+		}
+	}
+	first = true;
 }
 
 void UI::ChangeButton(int i, int j){
-	static bool first = true;
 	if (first) {
 		_pos[0][0] = 1;
 		first = false;

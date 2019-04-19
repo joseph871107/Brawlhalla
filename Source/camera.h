@@ -1,0 +1,27 @@
+#pragma   once
+#ifndef CAMERA_H
+#define CAMERA_H
+
+namespace game_framework
+{
+	/////////////////////////////////////////////////////////////////////////////
+	// Camera class
+	/////////////////////////////////////////////////////////////////////////////
+
+	class Camera
+	{
+	public:
+		Camera();
+		Camera(int tx, int ty);
+		void SetSize(double);
+		void SetCameraXY(int tx, int ty);
+		double GetSize();
+		CPoint GetXY(int tx, int ty);
+		CPoint GetCameraXY();
+	private:
+		int x, y;
+		double size;
+	};
+}
+
+#endif //define CAMERA_H

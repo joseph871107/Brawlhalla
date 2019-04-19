@@ -1,5 +1,6 @@
 #include "ground.h"
 #include "weapon.h"
+#include "camera.h"
 
 #define _PLAYER_DEBUG false
 
@@ -29,7 +30,9 @@ class Player
         bool GetDirection();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
         int ShowAnimationState();		// Return which CAnimation is playing
-		void SetXY(int, int);
+		int GetWidth();
+		int GetHeight();
+		void AddCamera(Camera *cam);	// Camera
 
         //Others - Bill
         const string& GetName() const;
@@ -187,6 +190,9 @@ class Player
 
         //Name
         string _name;
+
+		//Camera
+		Camera *camera;
 
         ///Comment for future devs: Unorganized member variables are declared below. They should be cleaned up in the near future
         //Required for triggered animation concept

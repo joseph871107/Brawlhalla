@@ -138,6 +138,7 @@ private:
 	vector<UI_Button*> _buttons;
 	vector< vector<int> > _pos;
 	void ChangeButton(int, int);
+	bool first = true;
 };
 }
 

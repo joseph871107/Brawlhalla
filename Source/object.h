@@ -1,6 +1,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 #include "gameComFunc.h"
+#include "camera.h"
 #include <map>
 
 #define GENERATE_COLLISION_ARRAY false
@@ -23,6 +24,7 @@ class Object
 		int GetHeight();
 		double GetSize();
 		bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
+		void AddCamera(Camera *cam);
         virtual void OnShow();									// 將圖形貼到畫面
         virtual void OnMove();									// 移動
 		virtual void LoadBitmap(int);					// 載入圖形
@@ -31,7 +33,7 @@ class Object
         int x, y;												// 物件的座標
         int width, height;										// 物件的長寬
         double _size;											// 物件的大小
-    private:
+		Camera *camera;
 		CMovingBitmap bmp;
 };
 }

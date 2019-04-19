@@ -85,20 +85,22 @@ bool Weapon::BeThrowen()
 
 void Weapon::OnShow()
 {
+	CPoint cam = camera->GetXY(x, y);
     if (_isThrowing && !_tDir)
     {
-        tl.SetTopLeft(x, y);
-        tl.ShowBitmap(_size);
+        tl.SetTopLeft(cam.x, cam.y);
+        tl.ShowBitmap(_size * camera->GetSize());
     }
     else if (_isThrowing && _tDir)
     {
-        tr.SetTopLeft(x, y);
-        tr.ShowBitmap(_size);
+        tr.SetTopLeft(cam.x, cam.y);
+        tr.ShowBitmap(_size * camera->GetSize());
     }
     else if (!_isHolding)
     {
-        bmp.SetTopLeft(x, y - (int)(height * _size));
-        bmp.ShowBitmap(_size);
+		cam = camera->GetXY(x, y - (int)(height * _size));
+        bmp.SetTopLeft(cam.x, cam.y);
+        bmp.ShowBitmap(_size * camera->GetSize());
     }
 }
 void Weapon::OnMove()
