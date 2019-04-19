@@ -71,6 +71,10 @@ CGameStateInit::CGameStateInit(CGame* g)
 {
 }
 
+CGameStateInit::~CGameStateInit() {
+	delete ui;
+}
+
 void CGameStateInit::OnInit()
 {
     ShowInitProgress(0);
@@ -172,7 +176,6 @@ void CGameStateInit::OnShow()
 	string chosenBut = ui->ChosenButton();
 	if (chosenBut == "start") {
 		CAudio::Instance()->Stop(IDS_MENU_MUSIC);
-		delete ui;
 		GotoGameState(GAME_STATE_RUN);
 	}
 	else if(chosenBut == "settings")

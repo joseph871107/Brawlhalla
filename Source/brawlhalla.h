@@ -60,6 +60,7 @@ class CGameStateInit : public CGameState
 {
     public:
         CGameStateInit(CGame* g);
+		~CGameStateInit();
         void OnInit();  								// 遊戲的初值及圖形設定
         void OnBeginState();							// 設定每次重玩所需的變數
 		void OnKeyDown(UINT, UINT, UINT);
