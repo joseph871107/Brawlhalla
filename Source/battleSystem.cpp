@@ -63,6 +63,7 @@ void BattleSystem::OnBeginState()
         sprintf(str, "%d", i - _players.begin() + 1);
         (*i)->Initialize(_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
     }
+	ResizeCamera();
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
@@ -99,27 +100,7 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 		delete (*erase); //Resolve memory leak of weapons
 		_flyingWeapons.erase(erase);
 	}
-
-	int totalX = 0, totalY = 0;
-	for (auto i = _players.begin(); i != _players.end(); i++)
-	{
-		totalX += (*i)->GetCor(0);
-		totalY += (*i)->GetCor(1);
-		(*i)->OnMove();
-	}
-	int minX = totalX / _players.size(), maxX = minX, minY = totalY / _players.size(), maxY = minY, offset = 400;
-    for (auto i = _players.begin(); i != _players.end(); i++)
-    {
-		minX = ((*i)->GetCor(0) - offset < minX ? (*i)->GetCor(0) - offset : minX);
-		maxX = ((*i)->GetCor(2) + offset > maxX ? (*i)->GetCor(2) + offset : maxX);
-		minY = ((*i)->GetCor(1) - offset < minY ? (*i)->GetCor(1) - offset : minY);
-		maxY = ((*i)->GetCor(3) + offset > maxY ? (*i)->GetCor(3) + offset : maxY);
-        (*i)->OnMove();
-    }
-	int diffX = (maxX - minX < 800 ? 800 : maxX - minX), diffY = maxY - minY;
-	double size = SIZE_X / (double)(diffX);
-	camera.SetCameraXY(minX + diffX / 2, minY +diffY / 2);
-	camera.SetSize(size);
+	ResizeCamera();
 }
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
@@ -143,7 +124,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
-	CAudio::Instance()->Load(IDS_PUNCH);	// 載入聲音
+	CAudio::Instance()->Load(IDS_PUNCH);
 	CAudio::Instance()->Load(IDS_BATTLE_MUSIC);
 	CAudio::Instance()->Load(IDS_DRAW_WEAPON);
 	CAudio::Instance()->Load(IDS_SWOOSH);
@@ -152,6 +133,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 	CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
     vector<GroundPARM> groundXY = _groundsXY;
 	camera = Camera();
+	camera.SetGradual(true);
 
     // Automatically generate ground objects //
     for (auto i = groundXY.begin(); i != groundXY.end(); i++)
@@ -314,6 +296,30 @@ void BattleSystem::OnShow()
     }
 
     //------------------End of Test Text------------------//
+}
+
+void BattleSystem::ResizeCamera()
+{
+	int totalX = 0, totalY = 0;
+	for (auto i = _players.begin(); i != _players.end(); i++)
+	{
+		totalX += (*i)->GetCor(0);
+		totalY += (*i)->GetCor(1);
+		(*i)->OnMove();
+	}
+	int minX = totalX / _players.size(), maxX = minX, minY = totalY / _players.size(), maxY = minY, offset = 400;
+	for (auto i = _players.begin(); i != _players.end(); i++)
+	{
+		minX = ((*i)->GetCor(0) - offset < minX ? (*i)->GetCor(0) - offset : minX);
+		maxX = ((*i)->GetCor(2) + offset > maxX ? (*i)->GetCor(2) + offset : maxX);
+		minY = ((*i)->GetCor(1) - offset < minY ? (*i)->GetCor(1) - offset : minY);
+		maxY = ((*i)->GetCor(3) + offset > maxY ? (*i)->GetCor(3) + offset : maxY);
+		(*i)->OnMove();
+	}
+	int diffX = (maxX - minX < 800 ? 800 : maxX - minX), diffY = maxY - minY;
+	double size = SIZE_X / (double)(diffX);
+	camera.SetCameraXY((minX + maxX) / 2, (minY + maxY) / 2);
+	camera.SetSize(size);
 }
 
 bool BattleSystem::IsGameOver()

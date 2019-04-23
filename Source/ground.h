@@ -32,7 +32,6 @@ class Ground: public Object
         int  GetCor(int);										// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
         void LoadBitmap();										// 載入圖形
     private:
-        CMovingBitmap bmp;
         int _length;												// 長度
         int _bmpID;
         COLORREF _color;

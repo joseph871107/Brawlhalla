@@ -43,6 +43,7 @@
 #include "battleSystem.h"
 #include "ui.h"
 #include "fImage.h"
+#include "window.h"
 
 namespace game_framework
 {
@@ -73,11 +74,8 @@ class CGameStateInit : public CGameState
 		void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
-		Object ui_title, ui_background, ui_info1, ui_info2, ui_info3, ui_info4;
-		CPoint _point;
-		UI *ui;
-		bool _lButton;
-		bool _key;
+		Window welcomeWindow;
+		Window settingWindow;
 };
 
 /////////////////////////////////////////////////////////////////////////////

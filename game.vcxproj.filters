@@ -59,6 +59,9 @@
     <Filter Include="Brawlhalla\Camera">
       <UniqueIdentifier>{985af613-1e23-4389-99d2-c1dbb27a9ad8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\Window">
+      <UniqueIdentifier>{8a43cae0-5cbc-4c8f-b7bc-84d724010cf6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
@@ -147,6 +150,9 @@
     <ClCompile Include="source\camera.cpp">
       <Filter>Brawlhalla\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\window.cpp">
+      <Filter>Brawlhalla\Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -202,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="source\camera.h">
       <Filter>Brawlhalla\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\window.h">
+      <Filter>Brawlhalla\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

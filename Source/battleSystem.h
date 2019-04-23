@@ -10,23 +10,6 @@ namespace game_framework
 // BattleSystem class
 /////////////////////////////////////////////////////////////////////////////
 
-class Background : public Object
-{
-public:
-	void OnShow(double offset)
-	{
-		if (camera != nullptr) {
-			CPoint cam = camera->GetXY(x, y);
-			bmp.SetTopLeft((int)(cam.x * offset), (int)(cam.y * offset));
-			bmp.ShowBitmap(_size * (0.9 + 0.1 * camera->GetSize()));
-		}
-		else {
-			bmp.SetTopLeft(x, y);
-			bmp.ShowBitmap(_size);
-		}
-	}
-};
-
 extern map<string, int> idbList;
 extern map<int, string> fileList;
 extern map<int, ColArray> cArray;
@@ -43,13 +26,14 @@ class BattleSystem : public CGameState
         void OnMouseMove(UINT, CPoint);					// 滑鼠移動
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
+		void ResizeCamera();
         bool IsGameOver();
         string GetGameResult();
 		void ResolveMemoryLeaksOnEndState();
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
-        void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue);
+        void ShowPlayerLife(const Player& player, int posXValue, int posYValue);
         int GetCurrentRemainTime();
         //-----------------VARIABLES DECLARATIONS-----------------//
         int _secPerRound;

@@ -67,92 +67,104 @@ namespace game_framework
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g)
+	: CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
 {
 }
 
 CGameStateInit::~CGameStateInit()
 {
-	delete ui;
 }
 
 void CGameStateInit::OnInit()
 {
     ShowInitProgress(0);
 
-	ui_title.LoadBitmap(IDB_UI_TITLE, RGB(0,255,0));
-	ui_title.SetSize(0.8);
-	ui_title.SetXY((SIZE_X - ui_title.GetWidth())/2, 0);
+	Object *uiPtr, *ui_info1, *ui_info2, *ui_info3, *ui_info4;
 
-	ui_background.LoadBitmap(IDB_UI_BACKGROUND);
-	ui_background.SetSize(ui_background.GetWidth()/ SIZE_X);
-	ui_background.SetXY((SIZE_X - ui_background.GetWidth()) / 2, 0);
+	uiPtr = new Object();
+	uiPtr->LoadBitmap(IDB_UI_BACKGROUND);
+	uiPtr->SetSize(uiPtr->GetWidth()/ SIZE_X);
+	uiPtr->SetXY((SIZE_X - uiPtr->GetWidth()) / 2, 0);
+	welcomeWindow.AddItem(uiPtr);
 
-	ui_info1.LoadBitmap(IDB_UI_INFO1);
-	ui_info1.SetSize(0.7);
-	ui_info2.LoadBitmap(IDB_UI_INFO2);
-	ui_info2.SetSize(ui_info1.GetSize());
-	ui_info3.LoadBitmap(IDB_UI_INFO3);
-	ui_info3.SetSize((float)(ui_info2.GetWidth()) / (float)(ui_info3.GetWidth()));
-	ui_info4.LoadBitmap(IDB_UI_INFO4);
-	ui_info4.SetSize((float)(ui_info1.GetWidth()) / (float)(ui_info4.GetWidth()));
-	int refX = (SIZE_X - ui_info1.GetWidth()) / 2, refY = 200;
-	ui_info1.SetXY(refX, refY);
-	ui_info2.SetXY(refX + ui_info1.GetWidth(), refY);
-	ui_info3.SetXY(refX + ui_info1.GetWidth(), refY + ui_info2.GetHeight());
-	ui_info4.SetXY(refX, refY + ui_info1.GetHeight());
+	uiPtr = new Object(0.8);
+	uiPtr->LoadBitmap(IDB_UI_TITLE, RGB(0, 255, 0));
+	uiPtr->SetXY((SIZE_X - uiPtr->GetWidth()) / 2, 0);
+	welcomeWindow.AddItem(uiPtr);
 
-	int butW = refX - (SIZE_X - ui_info2.GetCor(2)), butH = 80;
-	ui = new UI(1, 3);
-	ui->AddButton("start", refX - butW, refY, butW, butH, 0, 0);
-	ui->AddButton("settings", refX - butW, refY + butH, butW, butH, 0, 1);
-	ui->AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 0, 2);
+	ui_info1 = new Object(0.7);
+	ui_info1->LoadBitmap(IDB_UI_INFO1);
+	int refX = (SIZE_X - ui_info1->GetWidth()) / 2, refY = 200;
+	ui_info1->SetXY(refX, refY);
+	welcomeWindow.AddItem(ui_info1);
+	ui_info2 = new Object(ui_info1->GetSize());
+	ui_info2->SetXY(refX + ui_info1->GetWidth(), refY);
+	ui_info2->LoadBitmap(IDB_UI_INFO2);
+	welcomeWindow.AddItem(ui_info2);
+	ui_info3 = new Object();
+	ui_info3->LoadBitmap(IDB_UI_INFO3);
+	ui_info3->SetSize((float)(ui_info2->GetWidth()) / (float)(ui_info3->GetWidth()));
+	ui_info3->SetXY(refX + ui_info1->GetWidth(), refY + ui_info2->GetHeight());
+	welcomeWindow.AddItem(ui_info3);
+	ui_info4 = new Object();
+	ui_info4->LoadBitmap(IDB_UI_INFO4);
+	ui_info4->SetSize((float)(ui_info1->GetWidth()) / (float)(ui_info4->GetWidth()));
+	ui_info4->SetXY(refX, refY + ui_info1->GetHeight());
+	welcomeWindow.AddItem(ui_info4);
+
+	int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = 80;
+	welcomeWindow.Initialize(1, 3);
+	welcomeWindow.AddButton("start", refX - butW, refY, butW, butH, 0, 0);
+	welcomeWindow.AddButton("settings", refX - butW, refY + butH, butW, butH, 0, 1);
+	welcomeWindow.AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 0, 2);
+
+	settingWindow.Initialize(1, 1, false, false);
+	settingWindow.AddButton("settings", 0, 0, butH, butH, 0, 0);
 
 	ShowInitProgress(10);
 }
 
 void CGameStateInit::OnBeginState()
 {
-	_lButton = false;
-	_key = false;
-	_point.x = 0;
-	_point.y = 0;
 	static bool first = true;
 	if (first) {
 		first = false;
 	}
 	else {
-		ui->Reset();
+		welcomeWindow.Reset();
+		settingWindow.Reset();
 		CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
 	}
 }
 
 void CGameStateInit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	ui->OnKeyDown(nChar, nRepCnt, nFlags);
-	if (nChar == KEY_ENTER)
-		_key = true;
+	welcomeWindow.OnKeyDown(nChar, nRepCnt, nFlags);
+	settingWindow.OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	if (nChar == KEY_ENTER)
-		_key = false;
+	welcomeWindow.OnKeyUp(nChar, nRepCnt, nFlags);
+	settingWindow.OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	_lButton = true;
+	welcomeWindow.OnLButtonDown(nFlags, point);
+	settingWindow.OnLButtonDown(nFlags, point);
 }
 
 void CGameStateInit::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	_lButton = false;
+	welcomeWindow.OnLButtonUp(nFlags, point);
+	settingWindow.OnLButtonUp(nFlags, point);
 }
 
 void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 {
-	_point = point;
+	welcomeWindow.OnMouseMove(nFlags, point);
+	settingWindow.OnMouseMove(nFlags, point);
 }
 
 void CGameStateInit::OnRButtonDown(UINT nFlags, CPoint point)
@@ -165,29 +177,35 @@ void CGameStateInit::OnRButtonUp(UINT nFlags, CPoint point)
 
 void CGameStateInit::OnShow()
 {
+	welcomeWindow.OnShow();
+	settingWindow.OnShow();
 
-	ui_background.OnShow();
-	ui_title.OnShow();
-	ui->OnShow();
-	ui_info1.OnShow();
-	ui_info2.OnShow();
-	ui_info3.OnShow();
-	ui_info4.OnShow();
-
-	string chosenBut = ui->ChosenButton();
+	string chosenBut = welcomeWindow.ChosenButton();
 	if (chosenBut == "start") {
 		CAudio::Instance()->Stop(IDS_MENU_MUSIC);
 		GotoGameState(GAME_STATE_RUN);
 	}
-	else if(chosenBut == "settings")
-		;
-	else if(chosenBut == "exit")
+	else if (chosenBut == "settings") {
+		welcomeWindow.SetButtonEnable(false);
+		settingWindow.SetButtonEnable(true);
+		settingWindow.SetVisible(true);
+	}
+	else if (chosenBut == "exit")
 		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Ãö³¬¹CÀ¸
+
+	chosenBut = settingWindow.ChosenButton();
+	if (chosenBut == "settings") {
+		welcomeWindow.SetButtonEnable(true);
+		settingWindow.SetButtonEnable(false);
+		settingWindow.SetVisible(false);
+		settingWindow.Reset();
+	}
 }
 
 void CGameStateInit::OnMove()
 {
-	ui->SetButtonState(_lButton, _key, _point);
+	welcomeWindow.OnMove();
+	settingWindow.OnMove();
 }
 
 /////////////////////////////////////////////////////////////////////////////

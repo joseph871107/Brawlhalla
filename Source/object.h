@@ -19,9 +19,9 @@ class Object
         Object(double);
         void SetXY(int nx, int ny);								// 設定物件的座標
         void SetSize(double s);									// 設定物件大小
-        int  GetCor(int);										// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
-		int GetWidth();
-		int GetHeight();
+		virtual int  GetCor(int);								// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
+		virtual int GetWidth();
+		virtual int GetHeight();
 		double GetSize();
 		bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 		void AddCamera(Camera *cam);
@@ -36,6 +36,24 @@ class Object
 		Camera *camera;
 		CMovingBitmap bmp;
 };
+
+class Background : public Object
+{
+public:
+	void OnShow(double offset)
+	{
+		if (camera != nullptr) {
+			CPoint cam = camera->GetXY(x, y);
+			bmp.SetTopLeft((int)(cam.x * offset), (int)(cam.y * offset));
+			bmp.ShowBitmap(_size * (0.9 + 0.1 * camera->GetSize()));
+		}
+		else {
+			bmp.SetTopLeft(x, y);
+			bmp.ShowBitmap(_size);
+		}
+	}
+};
+
 }
 
 #endif															//define OBJECT_H
