@@ -122,7 +122,7 @@ class Player
 			vector<int>& gmal, vector<int>& gmar, vector<int>& sal, vector<int>& sar,
 			vector<int>& aal, vector<int>& aar, vector<int>& amal, vector<int>& amar,
 			vector<int>& adal, vector<int>& adar, vector<int>& sdl, vector<int>& sdr);
-        void AddCAnimationByWeapon(vector<CAnimation>& tempAniByWpn, vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
+        void AddCAnimationByWeapon(vector<CAnimation>& tempAniByWpn, vector<int>*, double = 1.0, int = 5, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
 
         //Key combination
         int GetKeyCombination();

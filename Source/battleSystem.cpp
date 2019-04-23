@@ -83,10 +83,14 @@ void BattleSystem::OnMove()							// 移動遊戲元素
         nextTimeGenerateWeapon = random(5, 8);
     }/////////////////////////////////////////////////////////////////
 
-    for (auto i = _weapons.begin(); i != _weapons.end(); i++)
+    for (auto weapon : _weapons)
     {
-        (*i)->OnMove();
+        weapon->OnMove();
     }
+	for (auto player : _players)
+	{
+		player->OnMove();
+	}
 	for (auto i : _flyingWeapons)
 		i->OnMove();
 	vector<Weapon*>::iterator erase = _flyingWeapons.end();
@@ -148,7 +152,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }//////////////////////////////////////////
 
     background.SetSize(1);
-    background.SetXY(-800, -400);
+    background.SetXY(-1200, -400);
 	background.AddCamera(&camera);
     background.LoadBitmap(IDB_BACKGROUND, RGB(0, 0, 0));
     ShowInitProgress(75);
@@ -303,22 +307,20 @@ void BattleSystem::ResizeCamera()
 	int totalX = 0, totalY = 0;
 	for (auto i = _players.begin(); i != _players.end(); i++)
 	{
-		totalX += (*i)->GetCor(1);
-		totalY += (*i)->GetCor(3);
-		(*i)->OnMove();
+		totalX += (*i)->GetCor(0);
+		totalY += (*i)->GetCor(1);
 	}
-	int minX = totalX / _players.size(), maxX = minX, minY = totalY / _players.size(), maxY = minY, offset = 400;
+	int minX = totalX / (signed int)_players.size(), maxX = minX, minY = totalY / (signed int)_players.size(), maxY = minY;
 	for (auto i = _players.begin(); i != _players.end(); i++)
 	{
-		minX = ((*i)->GetCor(0) - offset < minX ? (*i)->GetCor(0) - offset : minX);
-		maxX = ((*i)->GetCor(2) + offset > maxX ? (*i)->GetCor(2) + offset : maxX);
-		minY = ((*i)->GetCor(1) - offset < minY ? (*i)->GetCor(1) - offset : minY);
-		maxY = ((*i)->GetCor(3) + offset > maxY ? (*i)->GetCor(3) + offset : maxY);
-		(*i)->OnMove();
+		minX = ((*i)->GetCor(0) < minX ? (*i)->GetCor(0) - 500 : minX);
+		maxX = ((*i)->GetCor(2) > maxX ? (*i)->GetCor(2) : maxX);
+		minY = ((*i)->GetCor(1) < minY ? (*i)->GetCor(1) : minY);
+		maxY = ((*i)->GetCor(3) > maxY ? (*i)->GetCor(3) : maxY);
 	}
 	int diffX = (maxX - minX < 800 ? 800 : maxX - minX), diffY = maxY - minY;
 	double size = SIZE_X / (double)(diffX);
-	camera.SetCameraXY((minX + maxX) / 2, (minY + maxY) / 2);
+	camera.SetCameraXY(minX + diffX / 2, minY + diffY / 2);
 	camera.SetSize(size);
 }
 
