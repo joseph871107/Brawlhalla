@@ -303,8 +303,8 @@ void BattleSystem::ResizeCamera()
 	int totalX = 0, totalY = 0;
 	for (auto i = _players.begin(); i != _players.end(); i++)
 	{
-		totalX += (*i)->GetCor(0);
-		totalY += (*i)->GetCor(1);
+		totalX += (*i)->GetCor(1);
+		totalY += (*i)->GetCor(3);
 		(*i)->OnMove();
 	}
 	int minX = totalX / _players.size(), maxX = minX, minY = totalY / _players.size(), maxY = minY, offset = 400;

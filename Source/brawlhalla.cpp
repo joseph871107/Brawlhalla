@@ -112,14 +112,16 @@ void CGameStateInit::OnInit()
 	ui_info4->SetXY(refX, refY + ui_info1->GetHeight());
 	welcomeWindow.AddItem(ui_info4);
 
-	int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = 80;
+	int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() +ui_info4->GetHeight()) / 3;
 	welcomeWindow.Initialize(1, 3);
 	welcomeWindow.AddButton("start", refX - butW, refY, butW, butH, 0, 0);
 	welcomeWindow.AddButton("settings", refX - butW, refY + butH, butW, butH, 0, 1);
 	welcomeWindow.AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 0, 2);
 
-	settingWindow.Initialize(1, 1, false, false);
-	settingWindow.AddButton("settings", 0, 0, butH, butH, 0, 0);
+	settingWindow.Initialize(1, 2, false, false);
+	settingWindow.SetXY((SIZE_X - butH)/2, 300);
+	settingWindow.AddButton("empty", 0, 0, butH, butH, 0, 0);
+	settingWindow.AddButton("back", 0, butH, butH, butH, 0, 1);
 
 	ShowInitProgress(10);
 }
@@ -194,7 +196,7 @@ void CGameStateInit::OnShow()
 		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Ãö³¬¹CÀ¸
 
 	chosenBut = settingWindow.ChosenButton();
-	if (chosenBut == "settings") {
+	if (chosenBut == "back") {
 		welcomeWindow.SetButtonEnable(true);
 		settingWindow.SetButtonEnable(false);
 		settingWindow.SetVisible(false);

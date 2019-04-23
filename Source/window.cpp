@@ -91,7 +91,7 @@ namespace game_framework
 	{
 		if (_visible) {
 			for (auto item : items)
-				item->OnShow();
+				item->OnShow(x, y);
 			ui.OnShow();
 		}
 	}
@@ -100,6 +100,7 @@ namespace game_framework
 	{
 		if(_buttonEnable)
 			ui.SetButtonState(_lButton, _key, _point);
+		ui.SetXY(x, y);
 	}
 	void Window::Reset()
 	{
