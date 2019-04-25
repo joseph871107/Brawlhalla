@@ -29,22 +29,24 @@ namespace game_framework
 	}
 	void Camera::SetSize(double s)
 	{
-		if (gradual) {
-			static double gradient = s;
-			if (abs(gradient - s) >= CAMERA_SIZING_OFFSET) {
-				if (gradient > s)
-					gradient -= CAMERA_SIZING_OFFSET * CAMERA_ZOOMOUT;
-				else
-					gradient += CAMERA_SIZING_OFFSET * CAMERA_ZOOMIN;
-			}
-			size = gradient;
-		}else
-			size = s;
+		/// DEBUG: Temporarily disable the camera zoom for developing
+		//if (gradual) {
+		//	static double gradient = s;
+		//	if (abs(gradient - s) >= CAMERA_SIZING_OFFSET) {
+		//		if (gradient > s)
+		//			gradient -= CAMERA_SIZING_OFFSET * CAMERA_ZOOMOUT;
+		//		else
+		//			gradient += CAMERA_SIZING_OFFSET * CAMERA_ZOOMIN;
+		//	}
+		//	size = gradient;
+		//}else
+		//	size = s;
 	}
 	void Camera::SetCameraXY(int tx, int ty)
 	{
-		x = tx;
-		y = ty;
+		/// DEBUG: Temporarily disable the camera zoom for developing
+		//x = tx;
+		//y = ty;
 	}
 	void Camera::SetGradual(bool grad)
 	{

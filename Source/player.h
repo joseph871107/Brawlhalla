@@ -1,8 +1,9 @@
 #include "ground.h"
 #include "weapon.h"
 #include "camera.h"
+#include "Vector2.h"
 
-#define _PLAYER_DEBUG false
+#define _PLAYER_DEBUG true
 
 namespace game_framework
 {
@@ -16,7 +17,7 @@ class Player
         ~Player();						//Destructor
 
         //Required for Game Framework
-        void Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, vector<long> keysValue);
+        void Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue);
         void LoadBitmap();
         void OnMove();
         void OnShow();
@@ -25,7 +26,7 @@ class Player
 
         //Others - Joseph
         void SetHoldWeapon(bool);
-        void BeenAttacked(bool);
+        void BeenAttacked(Vector2 displaymentVector);
         bool GetHoldWeapon();
         bool GetDirection();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
@@ -71,9 +72,10 @@ class Player
         bool IsOutMapBorder();
 
         //Offsets
-        void InitiateOffsetUp();
-        void InitiateOffsetLeft();
-        void InitiateOffsetRight();
+        void InitiateOffsetUp(double initialOffsetVelocity);
+		void InitiateOffsetDown(double initialOffsetVelocity);
+        void InitiateOffsetLeft(double initialOffsetVelocity);
+        void InitiateOffsetRight(double initialOffsetVelocity);
 
         bool IsBeingOffsetHorizontally();
         void DoHorizontalOffset();
@@ -93,7 +95,8 @@ class Player
         //Attack
         void DoAttack();
         bool IsAttacking();
-        bool HitPlayer(Player*);
+        bool HitPlayer(Player* targetPlayer, bool attackDirection);
+		void PerformAttack(Player* targetPlayer);
 
         //Draw weapon
         bool IsDrawingWeapon();
@@ -130,7 +133,7 @@ class Player
 
         //Triggered animation concept
         void ResetTriggeredAnimationVariables();
-        void SetFirstThreeTriggeredAnimationVariables(int keyCombInt);
+        void SetFirstFourTriggeredAnimationVariables(int keyCombInt);
         void SetTriggeredAnimationVariables(int leftAnimationID);
         void GetAndSetTriggeredAnimation();
 
@@ -160,7 +163,7 @@ class Player
 
         //Offsets
         bool _isOffsetLeft, _isOffsetRight;
-        int _offsetVelocity;
+        double _offsetVelocity;
 
         //Movements
         bool _isPressingLeft, _isPressingRight, _isPressingDown;
@@ -180,7 +183,7 @@ class Player
         //Attack
         bool _isHoldingWeapon;
         bool _isTriggerAttack;
-        vector<Player*>* _player;
+        vector<Player*>* _playersPtr;
 
         //Grounds
         vector<Ground*> _grounds;
@@ -197,10 +200,30 @@ class Player
         ///Comment for future devs: Unorganized member variables are declared below. They should be cleaned up in the near future
         //Required for triggered animation concept
         bool _isTriggeredAni;
+		// False - these is no triggered animation, the player can perform non-triggered animations
+		// True - a triggered animation is activated, the player is constrained to perform the triggered animation
+
 		int _triggeredAniKeyID;
-		int _lastTriggeredAniKeyID;
+		// The "KeyID" (short for "ID of the combination of key pressed") of the triggered animation
+		// Its value is one of the constants starting with 'KEY_...'
+
         int _triggeredAniCount;
-        int _triggeredAniByWpnID; // the animation needed is defined by '_aniByWpn[_wpnID][_triggeredAniByWpnID]'
+		// The time counter for the display duration of a triggered animation (unit: frames - not seconds)
+		// For now, it is the same for all triggered animations, which is defined by the constant 'MAX_ANIMATION_DURATION'
+
+		bool _triggeredAniDir;
+		// The direction the player is facing when the triggered animation is activated
+		// Since the variable '_dir' is modified whenever a directional key is pressed, this variable is necessary for preserving the direction of the triggered animation
+		// false: player facing left, true: player facing right
+
+        int _triggeredAniByWpnID;
+		// The index of the triggered animation in the 2-dimensional vector '_aniByWpn[_wpnID][---index---]'.
+		// Its value is one of the constants starting with 'ANI_WPN_ID_...'
+		// It is defined this way because for now, most of the triggered animation is of "Animation By Weapon"
+		// Technically, the animation needed in 'OnShow()' is defined by '_aniByWpn[_wpnID][_triggeredAniByWpnID]'
+
+		int _lastTriggeredAniKeyID;
+
 		int _lastTriggeredAniByWpnID;
 
         //Weapon

@@ -62,6 +62,9 @@
     <Filter Include="Brawlhalla\Window">
       <UniqueIdentifier>{8a43cae0-5cbc-4c8f-b7bc-84d724010cf6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\Vector2">
+      <UniqueIdentifier>{1b5e61f6-30ea-4da1-8759-e9625cb2098d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
@@ -153,6 +156,9 @@
     <ClCompile Include="Source\window.cpp">
       <Filter>Brawlhalla\Window</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Vector2.cpp">
+      <Filter>Brawlhalla\Vector2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -211,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="Source\window.h">
       <Filter>Brawlhalla\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vector2.h">
+      <Filter>Brawlhalla\Vector2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

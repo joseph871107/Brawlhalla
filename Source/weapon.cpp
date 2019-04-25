@@ -128,7 +128,7 @@ void Weapon::OnMove()
         else if (_hitPlayer != nullptr && _hitPlayer != _throwHost)
         {
             _isThrowing = false;
-            _hitPlayer->BeenAttacked(_tDir);
+            //_hitPlayer->BeenAttacked(_tDir);
         }
 
         if (_tDir)

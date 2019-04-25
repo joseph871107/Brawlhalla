@@ -4,6 +4,7 @@
 #include <ddraw.h>
 #include "audio.h"
 #include "gamelib.h"
+//
 #include "player.h"
 
 namespace game_framework
@@ -95,12 +96,12 @@ Player::~Player()
     /* Body intentionally empty */
 }
 
-void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtrValue, string nameValue, vector<long> keysValue)
+void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
-	Ground *_ground = groundsValue[(rand() * 100) % groundsValue.size()];								// Randomly choose one of the ground object
-	_x = (rand() * 1000) % (int)(_ground->GetWidth() * _ground->GetSize()) + _ground->GetCor(0);		// Randomly set x coordinate within Ground's width
-	_y = _ground->GetCor(1) - GetHeight();
+    Ground* _ground = groundsValue[(rand() * 100) % groundsValue.size()];								// Randomly choose one of the ground object
+    _x = (rand() * 1000) % (int)(_ground->GetWidth() * _ground->GetSize()) + _ground->GetCor(0);		// Randomly set x coordinate within Ground's width
+    _y = _ground->GetCor(1) - GetHeight();
     //
     ResetTriggeredAnimationVariables();
     //
@@ -125,7 +126,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playerPtr
     _isDrawingWeapon = false;
     //
     _isHoldingWeapon = _isTriggerAttack = false;
-    _player = playerPtrValue;
+    _playersPtr = playersPtrValue;
     //
     _grounds = groundsValue;
     //
@@ -342,14 +343,14 @@ void Player::OnShow()
 
     // Show current animation
     ShowAnimation();
-	// Play current audio
-	PlayAudioByState();
+    // Play current audio
+    PlayAudioByState();
 
     // For showing the "name tag" //
     if (_PLAYER_DEBUG || 1)
     {
-		CPoint cam = camera->GetXY(Round(_x - 4 * BITMAP_SIZE), Round(_y + _collision_box.Height() * BITMAP_SIZE));
-        OnShowText(_name.c_str(),cam.x ,cam.y , Round(15 * camera->GetSize()), RGB(255, 255, 255));
+        CPoint cam = camera->GetXY(Round(_x - 4 * BITMAP_SIZE), Round(_y + _collision_box.Height() * BITMAP_SIZE));
+        OnShowText(_name.c_str(), cam.x, cam.y, Round(15 * camera->GetSize()), RGB(255, 255, 255));
     }///////////////////////////////
 }
 
@@ -411,14 +412,36 @@ void Player::SetHoldWeapon(bool isHolding)
     _isTriggerAttack = false; // We are picking weapon, not performing an attack
 }
 
-void Player::BeenAttacked(bool dir)
+void Player::BeenAttacked(Vector2 displacementVector)
 {
-    InitiateOffsetUp();
+    int displaceX = displacementVector.GetX();
+    int displaceY = displacementVector.GetY();
 
-    if (!dir)
-        InitiateOffsetLeft();
-    else
-        InitiateOffsetRight();
+    if (displaceY < 0)
+    {
+        InitiateOffsetUp(abs(displaceY));
+    }
+    else if (displaceY > 0)
+    {
+        InitiateOffsetDown(abs(displaceY));
+    }
+    else // displayY == 0
+    {
+        InitiateOffsetUp(10);
+    }
+
+    if (displaceX < 0)
+    {
+        InitiateOffsetLeft(abs(displaceX));
+    }
+    else if (displaceX > 0)
+    {
+        InitiateOffsetRight(abs(displaceX));
+    }
+    else // displayX == 0
+    {
+        /* Do nothing */
+    }
 }
 
 bool Player::GetHoldWeapon()
@@ -459,12 +482,12 @@ int Player::ShowAnimationState()
 
 int Player::GetWidth()
 {
-	return GetCor(2) - GetCor(0);
+    return GetCor(2) - GetCor(0);
 }
 
 int Player::GetHeight()
 {
-	return GetCor(3) - GetCor(1);
+    return GetCor(3) - GetCor(1);
 }
 
 const string& Player::GetName() const
@@ -566,18 +589,18 @@ void Player::SetAnimationState(int num)
 
 void Player::ShowAnimation()
 {
-	if (_PLAYER_DEBUG)
-	{
-		CPoint cam = camera->GetXY(_x, _y);
-		_collision_box.SetTopLeft(cam.x, cam.y);		//actual player blocks
-		_collision_box.ShowBitmap(BITMAP_SIZE * camera->GetSize());
-	}
+    if (_PLAYER_DEBUG)
+    {
+        CPoint cam = camera->GetXY(_x, _y);
+        _collision_box.SetTopLeft(cam.x, cam.y);		//actual player blocks
+        _collision_box.ShowBitmap(BITMAP_SIZE * camera->GetSize());
+    }
 
     if (_aniSelector) // If '_aniByWpn' is chosen for showing the animation
     {
         //Calculate and set the position of the player current animation in respect to the collision box's
-		CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
-		_aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
+        CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
+        _aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
         _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(cam.x, cam.y);
         _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
     }
@@ -585,8 +608,8 @@ void Player::ShowAnimation()
     {
         vector<CAnimation>::iterator ani_iter = ani.begin() + currentAni;
         //Calculate and set the position of the player current animation in respect to the collision box's
-		CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
-		ani_iter->SetSize(BITMAP_SIZE * camera->GetSize());
+        CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
+        ani_iter->SetSize(BITMAP_SIZE * camera->GetSize());
         ani_iter->SetTopLeft(cam.x, cam.y);
         ani_iter->OnShow();
     }
@@ -730,24 +753,29 @@ bool Player::IsOutMapBorder()
             ));
 }
 
-void Player::InitiateOffsetUp()
+void Player::InitiateOffsetUp(double initialOffsetVelocity)
 {
-    _velocity = -INITIAL_VELOCITY;
-    _y -= Round(INITIAL_VELOCITY); //Trick explaination: By intuition, '_y' of the player should not be
+    _velocity = -initialOffsetVelocity;
+    _y -= Round(initialOffsetVelocity); //Trick explaination: By intuition, '_y' of the player should not be
     // modified here, because it is expected to be modified whenever 'Player::OnMove()' is called. However,
     // since the player is currently on the ground, 'Player::OnMove()' will fix its '_y' onto the surface
     // instead of modifying it as expectation. Thus, '_y' must be altered here to set the player jump his ass up!!
 }
 
-void Player::InitiateOffsetLeft()
+void Player::InitiateOffsetDown(double initialOffsetVelocity)
 {
-    _offsetVelocity = OFFSET_INITIAL_VELOCITY;
+    _velocity = initialOffsetVelocity;
+}
+
+void Player::InitiateOffsetLeft(double initialOffsetVelocity)
+{
+    _offsetVelocity = initialOffsetVelocity;
     _isOffsetLeft = true;
 }
 
-void Player::InitiateOffsetRight()
+void Player::InitiateOffsetRight(double initialOffsetVelocity)
 {
-    _offsetVelocity = OFFSET_INITIAL_VELOCITY;
+    _offsetVelocity = initialOffsetVelocity;
     _isOffsetRight = true;
 }
 
@@ -763,7 +791,7 @@ void Player::DoHorizontalOffset()
         if (_offsetVelocity > 0)
         {
             _offsetVelocity--;
-            _x -= _offsetVelocity;
+            _x -= Round(_offsetVelocity);
         }
         else
         {
@@ -775,7 +803,7 @@ void Player::DoHorizontalOffset()
         if (_offsetVelocity > 0)
         {
             _offsetVelocity--;
-            _x += _offsetVelocity;
+            _x += Round(_offsetVelocity);
         }
         else
         {
@@ -803,7 +831,7 @@ void Player::DoJump()
 {
     if (_jumpCount > 0)   //If the player is able to jump more
     {
-        InitiateOffsetUp();
+        InitiateOffsetUp(INITIAL_VELOCITY);
         _jumpCount--; //Decrement the jumps available
     }
 }
@@ -819,26 +847,38 @@ void Player::InitiateWallJump()
     {
         if (IsOnLeftEdge())
         {
-            InitiateOffsetLeft();
+            InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
         }
         else if (IsOnRightEdge())
         {
-            InitiateOffsetRight();
+            InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
         }
     }
 }
 
+void Player::PerformAttack(Player* targetPlayer)
+{
+    Vector2 vectorAttackerToTargetPlayer;
+    vectorAttackerToTargetPlayer.SetXY(GetCor(0), GetCor(1), targetPlayer->GetCor(0), targetPlayer->GetCor(1));
+    int attackOffsetMagnitude = 30;
+    double multiplier = attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength();
+    Vector2 targetPlayerDisplacementVector(	Round(vectorAttackerToTargetPlayer.GetX() * multiplier),
+                                            Round(vectorAttackerToTargetPlayer.GetY() * multiplier));
+    targetPlayer->BeenAttacked(targetPlayerDisplacementVector);
+}
+
 void Player::DoAttack()
 {
-    for (auto i = _player->begin(); i != _player->end(); i++)
+    for (auto eachPlayerPtr : (*_playersPtr))
     {
-        if (*i != this && HitPlayer(*i))
+        if ((eachPlayerPtr != this) && (HitPlayer(eachPlayerPtr, _triggeredAniDir)))
         {
-			if (_isHoldingWeapon)
-				CAudio::Instance()->Play(IDS_SWOOSH);
-			else
-				CAudio::Instance()->Play(IDS_PUNCH);
-			(*i)->BeenAttacked(_dir);
+            if (_isHoldingWeapon)
+                CAudio::Instance()->Play(IDS_SWOOSH);
+            else
+                CAudio::Instance()->Play(IDS_PUNCH);
+
+            PerformAttack(eachPlayerPtr);
         }
     }
 }
@@ -848,10 +888,30 @@ bool Player::IsAttacking()
     return (_isTriggerAttack);
 }
 
-bool Player::HitPlayer(Player* player)
+bool Player::HitPlayer(Player* targetPlayer, bool attackDirection)
 {
-    int x1 = GetCor(0) - 50, y1 = GetCor(1), x2 = GetCor(2) + 50, y2 = GetCor(3);
-    return (player->GetCor(2) >= x1 && player->GetCor(0) <= x2 && player->GetCor(3) >= y1 && player->GetCor(1) <= y2);
+    int attackerX1 = GetCor(0);
+    int attackerY1 = GetCor(1);
+    int attackerX2 = GetCor(2);
+    int attackerY2 = GetCor(3);
+    int attackRangeX1, attackRangeY1, attackRangeX2, attackRangeY2;
+    attackRangeY1 = attackerY1;
+    attackRangeY2 = attackerY2;
+
+    if (attackDirection)   // Player in triggered animation is facing right
+    {
+        attackRangeX1 = (attackerX1 + attackerX2) / 2;
+        attackRangeX2 = attackerX2 + 50;
+    }
+    else   // Player in triggered animation is facing left
+    {
+        attackRangeX1 = attackerX1 - 50;
+        attackRangeX2 = (attackerX1 + attackerX2) / 2;
+    }
+
+    return (targetPlayer->GetCor(2) >= attackRangeX1 && targetPlayer->GetCor(0) <= attackRangeX2
+            &&
+            targetPlayer->GetCor(3) >= attackRangeY1 && targetPlayer->GetCor(1) <= attackRangeY2);
 }
 
 bool Player::IsDrawingWeapon()
@@ -872,48 +932,47 @@ void Player::DoThrowingWeapon()
 
 void Player::PlayAudioByState()
 {
-	int aboutToPlay = -1;
+    int aboutToPlay = -1;
 
-	if (WpnStateChanged() && _isTriggeredAni) {
-		switch (_triggeredAniByWpnID) {
+    if (WpnStateChanged() && _isTriggeredAni)
+    {
+        switch (_triggeredAniByWpnID)
+        {
+            case ANI_WPN_ID_DRAW_SWORD_LEFT:
+            case ANI_WPN_ID_DRAW_SWORD_RIGHT:
+                aboutToPlay = IDS_DRAW_WEAPON;
+                break;
 
-		case ANI_WPN_ID_DRAW_SWORD_LEFT:
-		case ANI_WPN_ID_DRAW_SWORD_RIGHT:
+            case ANI_WPN_ID_STAND_LEFT:
+            case ANI_WPN_ID_STAND_RIGHT:
+            case ANI_WPN_ID_ATTACK_LEFT:
+            case ANI_WPN_ID_ATTACK_RIGHT:
+            case ANI_WPN_ID_GND_MOVE_ATTACK_LEFT:
+            case ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT:
+            case ANI_WPN_ID_SLIDE_ATTACK_LEFT:
+            case ANI_WPN_ID_SLIDE_ATTACK_RIGHT:
+            case ANI_WPN_ID_AIR_ATTACK_LEFT:
+            case ANI_WPN_ID_AIR_ATTACK_RIGHT:
+            case ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT:
+            case ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT:
+            case ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT:
+            case ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT:
+                aboutToPlay = IDS_SWING_ATTACK;
+                break;
+        }
+    }
 
-			aboutToPlay = IDS_DRAW_WEAPON;
-			break;
+    if (StateChanged() && !_isTriggeredAni)
+    {
+        switch (GetKeyCombination())
+        {
+            case KEY_GND_IDLE:
+                break;
+        }
+    }
 
-		case ANI_WPN_ID_STAND_LEFT:
-		case ANI_WPN_ID_STAND_RIGHT:
-		case ANI_WPN_ID_ATTACK_LEFT:
-		case ANI_WPN_ID_ATTACK_RIGHT:
-		case ANI_WPN_ID_GND_MOVE_ATTACK_LEFT:
-		case ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT:
-		case ANI_WPN_ID_SLIDE_ATTACK_LEFT:
-		case ANI_WPN_ID_SLIDE_ATTACK_RIGHT:
-		case ANI_WPN_ID_AIR_ATTACK_LEFT:
-		case ANI_WPN_ID_AIR_ATTACK_RIGHT:
-		case ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT:
-		case ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT:
-		case ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT:
-		case ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT:
-
-			aboutToPlay = IDS_SWING_ATTACK;
-			break;
-
-		}
-	}
-
-	if (StateChanged() && !_isTriggeredAni) {
-		switch (GetKeyCombination()) {
-		case KEY_GND_IDLE:
-			break;
-
-		}
-	}
-
-	if (aboutToPlay != -1)
-		CAudio::Instance()->Play(aboutToPlay);
+    if (aboutToPlay != -1)
+        CAudio::Instance()->Play(aboutToPlay);
 }
 
 void Player::DoDead()
@@ -1023,9 +1082,9 @@ int Player::GetKeyCombination()
         keyCombString = keyCombString + "1";
 
     if (IsDrawingWeapon())
-		keyCombString = keyCombString + "3";
-	else if (IsAttacking())
-		keyCombString = keyCombString + "2";
+        keyCombString = keyCombString + "3";
+    else if (IsAttacking())
+        keyCombString = keyCombString + "2";
     else
         keyCombString = keyCombString + "1";
 
@@ -1070,18 +1129,20 @@ void Player::ProcessKeyCombinationOnMove()
 
 void Player::ResetTriggeredAnimationVariables()
 {
-	_isDrawingWeapon = false;
+    _isDrawingWeapon = false;
     _isTriggeredAni = false;
     _triggeredAniKeyID = 0;
     _triggeredAniCount = 0;
     _triggeredAniByWpnID = -1;
+    _triggeredAniDir = false;
 }
 
-void Player::SetFirstThreeTriggeredAnimationVariables(int keyCombInt)
+void Player::SetFirstFourTriggeredAnimationVariables(int keyCombInt)
 {
     _isTriggeredAni = true;
     _triggeredAniKeyID = keyCombInt;
     _triggeredAniCount = 0;
+    _triggeredAniDir = _dir;
 }
 
 void Player::SetTriggeredAnimationVariables(int keyCombInt)
@@ -1090,9 +1151,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
     {
         /* ON GROUND */
         case KEY_GND_ATTACK: // on ground, not move, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetFirstFourTriggeredAnimationVariables(keyCombInt);
 
-            if (_dir)
+            if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_ATTACK_RIGHT;
             else
                 _triggeredAniByWpnID = ANI_WPN_ID_ATTACK_LEFT;
@@ -1100,9 +1161,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetFirstFourTriggeredAnimationVariables(keyCombInt);
 
-            if (_dir)
+            if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
             else
                 _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
@@ -1110,9 +1171,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetFirstFourTriggeredAnimationVariables(keyCombInt);
 
-            if (_dir)
+            if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
             else
                 _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
@@ -1120,9 +1181,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetFirstFourTriggeredAnimationVariables(keyCombInt);
 
-            if (_dir)
+            if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_SLIDE_ATTACK_RIGHT;
             else
                 _triggeredAniByWpnID = ANI_WPN_ID_SLIDE_ATTACK_LEFT;
@@ -1131,9 +1192,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
 
         /* ON AIR */
         case KEY_AIR_ATTACK: // on air, not move, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetFirstFourTriggeredAnimationVariables(keyCombInt);
 
-            if (_dir)
+            if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_ATTACK_RIGHT;
             else
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_ATTACK_LEFT;
@@ -1141,9 +1202,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetFirstFourTriggeredAnimationVariables(keyCombInt);
 
-            if (_dir)
+            if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
             else
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
@@ -1151,9 +1212,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetFirstFourTriggeredAnimationVariables(keyCombInt);
 
-            if (_dir)
+            if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
             else
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
@@ -1161,24 +1222,24 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetFirstFourTriggeredAnimationVariables(keyCombInt);
 
-            if (_dir)
+            if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT;
             else
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT;
 
             break;
 
-		case KEY_DRAW_SWORD:
-			SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+        case KEY_DRAW_SWORD:
+            SetFirstFourTriggeredAnimationVariables(keyCombInt);
 
-			if (_dir) // If the player is facing right
-				_triggeredAniByWpnID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
-			else
-				_triggeredAniByWpnID = ANI_WPN_ID_DRAW_SWORD_LEFT;
+            if (_triggeredAniDir) // If the player is facing right
+                _triggeredAniByWpnID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
+            else
+                _triggeredAniByWpnID = ANI_WPN_ID_DRAW_SWORD_LEFT;
 
-			break;
+            break;
 
         default:
             // Do nothing
@@ -1203,19 +1264,19 @@ void Player::InitiateTriggeredAnimation()
 
         case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
             _isTriggerAttack = false;
-            InitiateOffsetRight();
+            InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
             break;
 
         case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
             _isTriggerAttack = false;
-            InitiateOffsetLeft();
+            InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
             break;
 
         case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
-            if (_dir)
-                InitiateOffsetRight();
+            if (_triggeredAniDir)
+                InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
             else
-                InitiateOffsetLeft();
+                InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
 
             _isTriggerAttack = false;
             break;
@@ -1227,12 +1288,12 @@ void Player::InitiateTriggeredAnimation()
 
         case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
             _isTriggerAttack = false;
-            InitiateOffsetRight();
+            InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
             break;
 
         case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
             _isTriggerAttack = false;
-            InitiateOffsetLeft();
+            InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
             break;
 
         case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
@@ -1367,7 +1428,7 @@ void Player::DoNonTriggeredAnimation()
 
 void Player::SetCurrentNonTriggerAnimation()
 {
-	if (IsOnGround()) // Player is on ground
+    if (IsOnGround()) // Player is on ground
     {
         if (_isPressingLeft || _isPressingRight) // Player is moving
             SetAnimationStateLeftRight(ANI_ID_RUN_LEFT);
@@ -1393,9 +1454,9 @@ void Player::SetCurrentNonTriggerAnimation()
     }
 }
 
-void Player::AddCamera(Camera * cam)
+void Player::AddCamera(Camera* cam)
 {
-	camera = cam;
+    camera = cam;
 }
 
 int Player::Round(double i)
@@ -1405,20 +1466,24 @@ int Player::Round(double i)
 
 bool Player::StateChanged()
 {
-	bool ret = false;
-	if (_lastTriggeredAniKeyID != GetKeyCombination())
-		ret = true;
-	_lastTriggeredAniKeyID = GetKeyCombination();
-	return ret;
+    bool ret = false;
+
+    if (_lastTriggeredAniKeyID != GetKeyCombination())
+        ret = true;
+
+    _lastTriggeredAniKeyID = GetKeyCombination();
+    return ret;
 }
 
 bool Player::WpnStateChanged()
 {
-	bool ret = false;
-	if (_lastTriggeredAniByWpnID != _triggeredAniByWpnID)
-		ret = true;
-	_lastTriggeredAniByWpnID = _triggeredAniByWpnID;
-	return ret;
+    bool ret = false;
+
+    if (_lastTriggeredAniByWpnID != _triggeredAniByWpnID)
+        ret = true;
+
+    _lastTriggeredAniByWpnID = _triggeredAniByWpnID;
+    return ret;
 }
 
 }
