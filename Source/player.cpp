@@ -998,7 +998,7 @@ void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
     Vector2 vectorAttackerToTargetPlayer;
     vectorAttackerToTargetPlayer.SetXY(GetCor(0), GetCor(1), targetPlayer->GetCor(0), targetPlayer->GetCor(1));
     //
-    targetPlayer->_takenDmg += 2; // increment the taken damage
+    targetPlayer->_takenDmg += 2; // increment the taken damage of the target player
     int attackOffsetMagnitude = targetPlayer->_takenDmg;
     //
     double multiplier = attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength();

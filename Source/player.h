@@ -42,6 +42,7 @@ class Player
         const long& GetAttackKey() const;
         void GenerateAndSetWeaponID();	// Called by 'Weapon::HitPlayer()' when the player picks up a weapon
         void ResetWeaponID();
+        void PerformAttack(Player* targetPlayer, bool attackDirection);
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -94,7 +95,6 @@ class Player
 
         //Attack
         void DoAttack();
-        void PerformAttack(Player* targetPlayer, bool attackDirection);
         bool HitPlayer(Player* targetPlayer, bool attackDirection);
 
         //Throw weapon
@@ -103,14 +103,14 @@ class Player
         //Audio management
         void PlayAudioByState();
 
-		//Unconscious state
-		void InitializeUnconsciousState(bool beingAttackedDirection);
-		void ConsciouslyOnMove();
-		void UnconsciouslyOnMove();
-		void SetConscious();
+        //Unconscious state
+        void InitializeUnconsciousState(bool beingAttackedDirection);
+        void ConsciouslyOnMove();
+        void UnconsciouslyOnMove();
+        void SetConscious();
 
-		//Bounce Off the Ground
-		void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
+        //Bounce Off the Ground
+        void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
 
         //Others
         void DoDead();
@@ -187,9 +187,9 @@ class Player
         //Attack
         bool _isHoldingWeapon;
         bool _isTriggerAttack;
-		int _takenDmg;
-		// The taken damage will determine how far the target player would fly 'attackOffsetMagnitude', and
-		// how long he would be in the unconscious state '_unconsciousFramesCount'
+        int _takenDmg;
+        // The taken damage will determine how far the target player would fly 'attackOffsetMagnitude', and
+        // how long he would be in the unconscious state '_unconsciousFramesCount'
 
         vector<Player*>* _playersPtr;
 
@@ -240,10 +240,10 @@ class Player
         int _currentAniByWpn;
         bool _aniSelector; // false - choose 'ani' for showing the animation, true - choose '_aniByWpn' for showing the animation
 
-		//Unconscious state
-		bool _isUnconscious;
-		int _unconsciousFramesCount;
-		bool _unconsciousAniDir;
+        //Unconscious state
+        bool _isUnconscious;
+        int _unconsciousFramesCount;
+        bool _unconsciousAniDir;
 
 };
 #endif
