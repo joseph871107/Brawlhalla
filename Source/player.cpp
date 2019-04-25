@@ -29,7 +29,6 @@ const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
 const int MAP_BORDER_Y2 = SIZE_Y + MAP_BORDER_OFFSET;
 const double BITMAP_SIZE = 2.5;
-const int MAX_ANIMATION_DURATION = 25;
 // Triggered Animation Key ID
 const int KEY_GND_ATTACK = 112;
 const int KEY_GND_MOVE_RIGHT_ATTACK = 122;
@@ -224,8 +223,8 @@ void Player::LoadBitmap()
     ar = vector<int> { IDB_P1_ATTACK0, IDB_P1_ATTACK1, IDB_P1_ATTACK2, IDB_P1_ATTACK3, IDB_P1_ATTACK4 };
     gmal = vector<int> { IDB_P1_GND_MOVE_ATTACK0M, IDB_P1_GND_MOVE_ATTACK1M, IDB_P1_GND_MOVE_ATTACK2M, IDB_P1_GND_MOVE_ATTACK3M, IDB_P1_GND_MOVE_ATTACK4M, IDB_P1_GND_MOVE_ATTACK5M };
     gmar = vector<int> { IDB_P1_GND_MOVE_ATTACK0, IDB_P1_GND_MOVE_ATTACK1, IDB_P1_GND_MOVE_ATTACK2, IDB_P1_GND_MOVE_ATTACK3, IDB_P1_GND_MOVE_ATTACK4, IDB_P1_GND_MOVE_ATTACK5 };
-    aal = vector<int> { IDB_P1_AIR_ATTACK0M, IDB_P1_AIR_ATTACK1M, IDB_P1_AIR_ATTACK2M };
-    aar = vector<int> { IDB_P1_AIR_ATTACK0, IDB_P1_AIR_ATTACK1, IDB_P1_AIR_ATTACK2 };
+    aal = vector<int> { IDB_P1_AIR_ATTACK0M, IDB_P1_AIR_ATTACK1M, IDB_P1_AIR_ATTACK2M , IDB_P1_AIR_ATTACK1M, IDB_P1_AIR_ATTACK2M };
+    aar = vector<int> { IDB_P1_AIR_ATTACK0, IDB_P1_AIR_ATTACK1, IDB_P1_AIR_ATTACK2, IDB_P1_AIR_ATTACK1, IDB_P1_AIR_ATTACK2 };
     amal = vector<int> { IDB_P1_AIR_MOVE_ATTACK0M, IDB_P1_AIR_MOVE_ATTACK1M, IDB_P1_AIR_MOVE_ATTACK2M, IDB_P1_AIR_MOVE_ATTACK3M };
     amar = vector<int> { IDB_P1_AIR_MOVE_ATTACK0, IDB_P1_AIR_MOVE_ATTACK1, IDB_P1_AIR_MOVE_ATTACK2, IDB_P1_AIR_MOVE_ATTACK3 };
     AddCollectionOfAnimationsByWeapon(
@@ -1112,7 +1111,6 @@ void Player::ProcessKeyCombinationOnMove()
     {
         if (!IsFinishedTriggeredAnimation()) // If an animation is triggered and the time duration dedicated for it has not elapsed, then increment '_triggeredAniCount' (representing the elapsed animation time) and finish doing the triggered animation
         {
-            _triggeredAniCount++;
             DoTriggeredAnimation();
         }
         else // If an animation is triggered and it has done its showcase, then thoroughly finish it and reset the triggered animation's variables
@@ -1132,16 +1130,14 @@ void Player::ResetTriggeredAnimationVariables()
     _isDrawingWeapon = false;
     _isTriggeredAni = false;
     _triggeredAniKeyID = 0;
-    _triggeredAniCount = 0;
     _triggeredAniByWpnID = -1;
     _triggeredAniDir = false;
 }
 
-void Player::SetFirstFourTriggeredAnimationVariables(int keyCombInt)
+void Player::SetFirstThreeTriggeredAnimationVariables(int keyCombInt)
 {
     _isTriggeredAni = true;
     _triggeredAniKeyID = keyCombInt;
-    _triggeredAniCount = 0;
     _triggeredAniDir = _dir;
 }
 
@@ -1151,7 +1147,7 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
     {
         /* ON GROUND */
         case KEY_GND_ATTACK: // on ground, not move, attack
-            SetFirstFourTriggeredAnimationVariables(keyCombInt);
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_ATTACK_RIGHT;
@@ -1161,7 +1157,7 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
-            SetFirstFourTriggeredAnimationVariables(keyCombInt);
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
@@ -1171,7 +1167,7 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
-            SetFirstFourTriggeredAnimationVariables(keyCombInt);
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
@@ -1181,7 +1177,7 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
-            SetFirstFourTriggeredAnimationVariables(keyCombInt);
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_SLIDE_ATTACK_RIGHT;
@@ -1192,7 +1188,7 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
 
         /* ON AIR */
         case KEY_AIR_ATTACK: // on air, not move, attack
-            SetFirstFourTriggeredAnimationVariables(keyCombInt);
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_ATTACK_RIGHT;
@@ -1202,7 +1198,7 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
-            SetFirstFourTriggeredAnimationVariables(keyCombInt);
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
@@ -1212,7 +1208,7 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
-            SetFirstFourTriggeredAnimationVariables(keyCombInt);
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
@@ -1222,7 +1218,7 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
-            SetFirstFourTriggeredAnimationVariables(keyCombInt);
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
                 _triggeredAniByWpnID = ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT;
@@ -1232,7 +1228,7 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_DRAW_SWORD:
-            SetFirstFourTriggeredAnimationVariables(keyCombInt);
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir) // If the player is facing right
                 _triggeredAniByWpnID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
@@ -1350,7 +1346,7 @@ void Player::DoTriggeredAnimation()
 
 bool Player::IsFinishedTriggeredAnimation()
 {
-	return _aniByWpn[_wpnID][_triggeredAniByWpnID].IsFinalBitmap();// (_triggeredAniCount > MAX_ANIMATION_DURATION);
+    return _aniByWpn[_wpnID][_triggeredAniByWpnID].IsFinalBitmap();// (_triggeredAniCount > MAX_ANIMATION_DURATION);
 }
 
 void Player::FinishTriggeredAnimation()

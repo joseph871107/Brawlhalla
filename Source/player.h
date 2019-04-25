@@ -3,7 +3,7 @@
 #include "camera.h"
 #include "Vector2.h"
 
-#define _PLAYER_DEBUG true
+#define _PLAYER_DEBUG false
 
 namespace game_framework
 {
@@ -31,9 +31,9 @@ class Player
         bool GetDirection();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
         int ShowAnimationState();		// Return which CAnimation is playing
-		int GetWidth();
-		int GetHeight();
-		void AddCamera(Camera *cam);	// Camera
+        int GetWidth();
+        int GetHeight();
+        void AddCamera(Camera* cam);	// Camera
 
         //Others - Bill
         const string& GetName() const;
@@ -73,7 +73,7 @@ class Player
 
         //Offsets
         void InitiateOffsetUp(double initialOffsetVelocity);
-		void InitiateOffsetDown(double initialOffsetVelocity);
+        void InitiateOffsetDown(double initialOffsetVelocity);
         void InitiateOffsetLeft(double initialOffsetVelocity);
         void InitiateOffsetRight(double initialOffsetVelocity);
 
@@ -96,7 +96,7 @@ class Player
         void DoAttack();
         bool IsAttacking();
         bool HitPlayer(Player* targetPlayer, bool attackDirection);
-		void PerformAttack(Player* targetPlayer);
+        void PerformAttack(Player* targetPlayer);
 
         //Draw weapon
         bool IsDrawingWeapon();
@@ -105,15 +105,15 @@ class Player
         //Throw weapon
         void DoThrowingWeapon(); /// Unused function
 
-		//Audio management
-		void PlayAudioByState();
+        //Audio management
+        void PlayAudioByState();
 
         //Others
         void DoDead();
         void DoRespawn();
         int Round(double i);
-		bool StateChanged();
-		bool WpnStateChanged();
+        bool StateChanged();
+        bool WpnStateChanged();
 
         ///Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
         //Weapon
@@ -121,10 +121,10 @@ class Player
 
         //Animation By Weapon
         void AddCollectionOfAnimationsByWeapon(
-			vector<int>& s2l, vector<int>& s2r, vector<int>& al, vector<int>& ar,
-			vector<int>& gmal, vector<int>& gmar, vector<int>& sal, vector<int>& sar,
-			vector<int>& aal, vector<int>& aar, vector<int>& amal, vector<int>& amar,
-			vector<int>& adal, vector<int>& adar, vector<int>& sdl, vector<int>& sdr);
+            vector<int>& s2l, vector<int>& s2r, vector<int>& al, vector<int>& ar,
+            vector<int>& gmal, vector<int>& gmar, vector<int>& sal, vector<int>& sar,
+            vector<int>& aal, vector<int>& aar, vector<int>& amal, vector<int>& amar,
+            vector<int>& adal, vector<int>& adar, vector<int>& sdl, vector<int>& sdr);
         void AddCAnimationByWeapon(vector<CAnimation>& tempAniByWpn, vector<int>*, double = 1.0, int = 5, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
 
         //Key combination
@@ -133,7 +133,7 @@ class Player
 
         //Triggered animation concept
         void ResetTriggeredAnimationVariables();
-        void SetFirstFourTriggeredAnimationVariables(int keyCombInt);
+        void SetFirstThreeTriggeredAnimationVariables(int keyCombInt);
         void SetTriggeredAnimationVariables(int leftAnimationID);
         void GetAndSetTriggeredAnimation();
 
@@ -194,47 +194,43 @@ class Player
         //Name
         string _name;
 
-		//Camera
-		Camera *camera;
+        //Camera
+        Camera* camera;
 
         ///Comment for future devs: Unorganized member variables are declared below. They should be cleaned up in the near future
         //Required for triggered animation concept
         bool _isTriggeredAni;
-		// False - these is no triggered animation, the player can perform non-triggered animations
-		// True - a triggered animation is activated, the player is constrained to perform the triggered animation
+        // False - these is no triggered animation, the player can perform non-triggered animations
+        // True - a triggered animation is activated, the player is constrained to perform the triggered animation
 
-		int _triggeredAniKeyID;
-		// The "KeyID" (short for "ID of the combination of key pressed") of the triggered animation
-		// Its value is one of the constants starting with 'KEY_...'
+        int _triggeredAniKeyID;
+        // The "KeyID" (short for "ID of the combination of key pressed") of the triggered animation
+        // Its value is one of the constants starting with 'KEY_...'
 
-        int _triggeredAniCount;
-		// The time counter for the display duration of a triggered animation (unit: frames - not seconds)
-		// For now, it is the same for all triggered animations, which is defined by the constant 'MAX_ANIMATION_DURATION'
-
-		bool _triggeredAniDir;
-		// The direction the player is facing when the triggered animation is activated
-		// Since the variable '_dir' is modified whenever a directional key is pressed, this variable is necessary for preserving the direction of the triggered animation
-		// false: player facing left, true: player facing right
+        bool _triggeredAniDir;
+        // The direction the player is facing when the triggered animation is activated
+        // Since the variable '_dir' is modified whenever a directional key is pressed, this variable is necessary for preserving the direction of the triggered animation
+        // false: player facing left, true: player facing right
 
         int _triggeredAniByWpnID;
-		// The index of the triggered animation in the 2-dimensional vector '_aniByWpn[_wpnID][---index---]'.
-		// Its value is one of the constants starting with 'ANI_WPN_ID_...'
-		// It is defined this way because for now, most of the triggered animation is of "Animation By Weapon"
-		// Technically, the animation needed in 'OnShow()' is defined by '_aniByWpn[_wpnID][_triggeredAniByWpnID]'
+        // The index of the triggered animation in the 2-dimensional vector '_aniByWpn[_wpnID][---index---]'.
+        // Its value is one of the constants starting with 'ANI_WPN_ID_...'
+        // It is defined this way because for now, most of the triggered animation is of "Animation By Weapon"
+        // Technically, the animation needed in 'OnShow()' is defined by '_aniByWpn[_wpnID][_triggeredAniByWpnID]'
 
-		int _lastTriggeredAniKeyID;
+        int _lastTriggeredAniKeyID;
 
-		int _lastTriggeredAniByWpnID;
+        int _lastTriggeredAniByWpnID;
 
         //Weapon
         int _wpnID; // 0 - punch (default), 1 - sword 1, 2 - sword 2
         int _roundPrevPickedUpWpnID; // The previously picked up weapon in the round. Values: 1 - sword 1, 2 - sword 2 (initialized as 2)
 
         //Animation By Weapons
-		/// Remark: Technically, if '_aniSelector' is true, '_aniByWpn' is displayed instead of the traditional 'ani', and vice versa.
+        /// Remark: Technically, if '_aniSelector' is true, '_aniByWpn' is displayed instead of the traditional 'ani', and vice versa.
         vector<vector<CAnimation>> _aniByWpn;
         int _currentAniByWpn;
-		bool _aniSelector; // false - choose 'ani' for showing the animation, true - choose '_aniByWpn' for showing the animation
+        bool _aniSelector; // false - choose 'ani' for showing the animation, true - choose '_aniByWpn' for showing the animation
 
 };
 #endif
