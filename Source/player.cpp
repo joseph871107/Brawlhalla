@@ -18,6 +18,7 @@ const int GND_ATTACK_MOVEMENT_UNIT = 12;
 const double INITIAL_VELOCITY = 18;
 const double INITIAL_ACCELERATION = 1.2;
 const double LANDING_ACCELERATION = 10;
+const double EDGE_SLIDING_ACCELERATION = 0.1;
 const int OFFSET_INITIAL_VELOCITY = 15;
 const double COLLISION_ERRORS = 1.0;
 const int _OFFSET_X = 20;
@@ -111,7 +112,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     //
     _keys = keysValue;
     //
-    _isPressingLeft = _isPressingRight = _dir = false;
+    _isPressingLeft = _isPressingRight = _dir = _isInitiatedOnEdgeVerticalVelocity = false;
     //
     _isPressingDown = false;
     //
@@ -292,9 +293,20 @@ void Player::ConsciouslyOnMove()
     ///	Thus, the function 'ProcessKeyCombinationOnMove()' affects the below codes regarding gravity and as a result must be placed here!!!
     ProcessKeyCombinationOnMove(); // Control 'triggeredAnimation' - animations that are triggered by pressing combination of keys
 
+    /// Comment for future devs: This part is poorly written and should be rectified in the near future
+    if (IsOnLeftEdge() || IsOnRightEdge())
+    {
+        DoOnEdge();
+    }
+    else
+    {
+        _isInitiatedOnEdgeVerticalVelocity = false;
+    }
+
     /*	~ VERTICAL OFFSET
     	~ Gravity
     */
+
     if (IsOnGround())
     {
         _verticalVelocity = 0.0;
@@ -414,14 +426,11 @@ void Player::OnMove()
         ResetAnimations(ANI_ID_JUMP_LEFT);
 
     //-----------------POSITION TRANSFORMATION SECTION-----------------//
+    /* CONSCIOUS/ UNCONSCIOUS */
     if (_isUnconscious)
-    {
         UnconsciouslyOnMove();
-    }
     else
-    {
         ConsciouslyOnMove();
-    }
 
     /* FALL OFF THE MAP */
     if (IsOutMapBorder())
@@ -780,18 +789,15 @@ void Player::DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, i
     {
         _x = groundX1 - _width;
     }
-
-    if (IsOnGroundRightEdge(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
+    else if (IsOnGroundRightEdge(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
     {
         _x = groundX2;
     }
-
-    if (IsOnGroundUnderside(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
+    else if (IsOnGroundUnderside(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
     {
         _y = groundY2;
     }
-
-    if (IsOnParticularGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
+    else if (IsOnParticularGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
     {
         _y = groundY1 - _height;
     }
@@ -943,6 +949,17 @@ void Player::DoMoveRight(int movementUnit)
 void Player::DoLand()
 {
     _acceleration = LANDING_ACCELERATION;
+}
+
+void Player::DoOnEdge()
+{
+    if (!_isInitiatedOnEdgeVerticalVelocity)
+    {
+        _verticalVelocity = 0; // Initiate vertical velocity
+        _isInitiatedOnEdgeVerticalVelocity = true;
+    }
+
+    _acceleration = EDGE_SLIDING_ACCELERATION;
 }
 
 void Player::DoJump()
@@ -1097,7 +1114,7 @@ void Player::DoRespawn()
     //If the player is out of the screen, then he will be set on the highest position
     _y = 0;
     _verticalVelocity = INITIAL_VELOCITY;
-    // Reset taken damages
+    // Reset taken damages and conscious state
     _takenDmg = 0;
     SetConscious();
 }
