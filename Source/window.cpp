@@ -25,6 +25,7 @@ namespace game_framework
 		{
 			delete element;
 		}
+		delete camera;
 	}
 
 	void Window::Initialize(int _buttonCol, int _buttonRow, bool buttonEnable, bool visible)
@@ -45,6 +46,7 @@ namespace game_framework
 
 	void Window::AddItem(Object *item)
 	{
+		item->AddCamera(camera);
 		items.push_back(item);
 	}
 
@@ -100,7 +102,11 @@ namespace game_framework
 	{
 		if(_buttonEnable)
 			ui.SetButtonState(_lButton, _key, _point);
-		ui.SetXY(x, y);
+		if (camera != nullptr) {
+			CPoint cam = camera->GetXY(x, y);
+			ui.SetXY(cam.x, cam.y);
+		}else
+			ui.SetXY(x, y);
 	}
 	void Window::Reset()
 	{

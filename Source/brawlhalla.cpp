@@ -69,6 +69,9 @@ namespace game_framework
 CGameStateInit::CGameStateInit(CGame* g)
 	: CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
 {
+	/*Camera *camera = new Camera(400,400);
+	camera->SetSize(0.5);
+	welcomeWindow.AddCamera(camera);*/
 }
 
 CGameStateInit::~CGameStateInit()

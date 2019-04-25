@@ -49,6 +49,31 @@ void DrawRectangle(int x, int y, int width, int height, COLORREF color)
 	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 }
 
+void DrawRectangleBlock(int x, int y, int width, int height, COLORREF color)
+{
+	CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
+	CPen* pp, p(PS_SOLID, 0, color);
+	pp = pDC->SelectObject(&p);
+	pDC->MoveTo(CPoint(x, y));
+	pDC->LineTo(CPoint(x + width, y));
+	pDC->LineTo(CPoint(x + width, y + height));
+	pDC->LineTo(CPoint(x, y + height));
+	pDC->LineTo(CPoint(x, y));
+	pDC->SelectObject(pp);						// 釋放 pen
+	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+}
+
+void DrawLine(int x1, int y1, int x2, int y2, COLORREF color)
+{
+	CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
+	CPen* pp, p(PS_SOLID, 0, color);
+	pp = pDC->SelectObject(&p);
+	pDC->MoveTo(CPoint(x1, y1));
+	pDC->LineTo(CPoint(x2, y2));
+	pDC->SelectObject(pp);						// 釋放 pen
+	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+}
+
 int ti(int i, double j)
 {
     return (int)(i * j);

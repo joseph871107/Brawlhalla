@@ -15,12 +15,13 @@ namespace game_framework
 		Camera(int tx, int ty);
 		void SetSize(double);
 		void SetCameraXY(int tx, int ty);
+		void SetCameraOffsetXY(int tx, int ty);
 		void SetGradual(bool);
 		double GetSize();
 		CPoint GetXY(int tx, int ty);
 		CPoint GetCameraXY();
 	private:
-		int x, y;
+		int x, y, offsetX, offsetY;
 		double size;
 		bool gradual;
 	};
