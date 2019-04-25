@@ -244,8 +244,12 @@
 #define IDB_P1_KNOCK_DOWN3M             525
 #define IDB_P1_KNOCK_DOWN5              526
 #define IDB_P1_KNOCK_DOWN4              527
-#define IDB_BITMAP6                     528
 #define IDB_P1_KNOCK_DOWN3              528
+#define IDB_P1_CROUCH1                  529
+#define IDB_P1_CROUCH1M                 530
+#define IDB_P1_CROUCH0                  531
+#define IDB_BITMAP4                     532
+#define IDB_P1_CROUCH0M                 532
 #define IDS_PUNCH                       750
 #define IDS_BATTLE_MUSIC                751
 #define IDS_DRAW_WEAPON                 752
@@ -282,7 +286,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        529
+#define _APS_NEXT_RESOURCE_VALUE        533
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

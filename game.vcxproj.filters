@@ -1041,6 +1041,18 @@
     <Image Include="RES\player1\Punch\adventurer-knock-dwn-03.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="RES\player1\adventurer-crouch-01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-crouch-01(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-crouch-00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-crouch-00(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\Menu.mp3" />

@@ -22,6 +22,8 @@ namespace game_framework
 	const long KEY_TROW = 0x56;
 	const long KEY_ENTER = 0x0d;
 	const long KEY_ESC = 0x1b;
+	const long KEY_F = 0x46;
+	const long KEY_PERIOD = 0xbe;
 
 struct ColArray
 {

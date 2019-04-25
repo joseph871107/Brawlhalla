@@ -66,8 +66,7 @@ namespace game_framework
 // 這個class為遊戲的遊戲開頭畫面物件
 /////////////////////////////////////////////////////////////////////////////
 
-/// DEBUG
-bool CGameStateInit::_cameraEnabled = false; //initialize
+bool CGameStateInit::_cameraEnabled = true; //initialize
 
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))

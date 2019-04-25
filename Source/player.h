@@ -85,7 +85,7 @@ class Player
         void DoMoveLeft(int movementUnit);
         void DoMoveRight(int movementUnit);
         void DoLand();
-		void DoOnEdge();
+        void DoOnEdge();
 
         //Jump
         void DoJump();
@@ -164,7 +164,7 @@ class Player
         int _width, _height;			// of the collision box
 
         //Keys
-        vector<long> _keys; // 0 - up, 1 - right, 2 - down, 3 - left, 4 - attack
+        vector<long> _keys; // 0 - up, 1 - right, 2 - down, 3 - left, 4 - attack, 5 - dodge
 
         //Offsets
         bool _isOffsetLeft, _isOffsetRight;
@@ -173,7 +173,7 @@ class Player
         //Movements
         bool _isPressingLeft, _isPressingRight, _isPressingDown;
         bool _dir; // false: player facing left, true: player facing right
-		bool _isInitiatedOnEdgeVerticalVelocity;
+        bool _isInitiatedOnEdgeVerticalVelocity;
 
         //Jump
         bool _isTriggerJump;
@@ -184,7 +184,7 @@ class Player
         double _acceleration;
 
         //Draw Weapon
-        bool _isDrawingWeapon;
+        bool _isTriggerDrawWeapon;
 
         //Attack
         bool _isHoldingWeapon;
@@ -194,6 +194,10 @@ class Player
         // how long he would be in the unconscious state '_unconsciousFramesCount'
 
         vector<Player*>* _playersPtr;
+
+        //Dodge
+        bool _isTriggerDodge;
+        bool _isDodging;
 
         //Grounds
         vector<Ground*> _grounds;
@@ -222,7 +226,7 @@ class Player
         // Since the variable '_dir' is modified whenever a directional key is pressed, this variable is necessary for preserving the direction of the triggered animation
         // false: player facing left, true: player facing right
 
-        int _triggeredAniByWpnID;
+        int _triggeredAniAnimationID;
         // The index of the triggered animation in the 2-dimensional vector '_aniByWpn[_wpnID][---index---]'.
         // Its value is one of the constants starting with 'ANI_WPN_ID_...'
         // It is defined this way because for now, most of the triggered animation is of "Animation By Weapon"

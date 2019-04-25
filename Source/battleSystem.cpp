@@ -56,7 +56,7 @@ void BattleSystem::OnBeginState()
     _weapons.clear();
     _secPerRound = MATCH_TIME;
     vector<GroundPARM> groundXY = _groundsXY;
-    vector<vector<long>> playerKeys = { {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C}, {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA} };
+    vector<vector<long>> playerKeys = { {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F}, {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD} };
 
     for (auto i = _players.begin(); i != _players.end(); i++)
     {

@@ -36,6 +36,7 @@ const int KEY_GND_MOVE_RIGHT_ATTACK = 122;
 const int KEY_GND_MOVE_LEFT_ATTACK = 132;
 const int KEY_GND_LAND_DOWN_ATTACK = 142;
 const int KEY_DRAW_SWORD = 113;
+const int KEY_DODGE = 114;
 const int KEY_AIR_ATTACK = 212;
 const int KEY_AIR_MOVE_RIGHT_ATTACK = 222;
 const int KEY_AIR_MOVE_LEFT_ATTACK = 232;
@@ -62,6 +63,8 @@ const int ANI_ID_LAND_FALL_LEFT = 8;
 const int ANI_ID_LAND_FALL_RIGHT = 9;
 const int ANI_ID_UNCONSCIOUS_FLYING_LEFT = 10;
 const int ANI_ID_UNCONSCIOUS_FLYING_RIGHT = 11;
+const int ANI_ID_DODGE_LEFT = 12;
+const int ANI_ID_DODGE_RIGHT = 13;
 //Animations ID of '_aniByWpn'
 const int ANI_WPN_ID_STAND_LEFT = 0;
 const int ANI_WPN_ID_STAND_RIGHT = 1;
@@ -125,11 +128,14 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     _verticalVelocity = INITIAL_VELOCITY;
     _acceleration = INITIAL_ACCELERATION;
     //
-    _isDrawingWeapon = false;
+    _isTriggerDrawWeapon = false;
     //
     _isHoldingWeapon = _isTriggerAttack = false;
     _takenDmg = 0;
     _playersPtr = playersPtrValue;
+    //
+    _isTriggerDodge = false;
+    _isDodging = false;
     //
     _grounds = groundsValue;
     //
@@ -162,6 +168,8 @@ void Player::LoadBitmap()
     vector<int> lfr;// bmps of landing falling right
     vector<int> ufl;// bmps of unconsciously flying left
     vector<int> ufr;// bmps of unconsciously flying right
+    vector<int> dgl;// bmps of dodging left
+    vector<int> dgr;// bmps of dodging right
     rl = vector<int> { IDB_P1_RUN0M, IDB_P1_RUN1M, IDB_P1_RUN2M, IDB_P1_RUN3M, IDB_P1_RUN4M, IDB_P1_RUN5M };
     rr = vector<int> { IDB_P1_RUN0, IDB_P1_RUN1, IDB_P1_RUN2, IDB_P1_RUN3, IDB_P1_RUN4, IDB_P1_RUN5 };
     jl = vector<int> { IDB_P1_JUMP0M, IDB_P1_JUMP1M, IDB_P1_JUMP2M, IDB_P1_JUMP3M };
@@ -174,6 +182,9 @@ void Player::LoadBitmap()
     lfr = vector<int> { IDB_P1_FALL0, IDB_P1_FALL1 };
     ufl = vector<int> { IDB_P1_KNOCK_DOWN3, IDB_P1_KNOCK_DOWN4, IDB_P1_KNOCK_DOWN5 };
     ufr = vector<int> { IDB_P1_KNOCK_DOWN3M, IDB_P1_KNOCK_DOWN4M, IDB_P1_KNOCK_DOWN5M };
+    /// Comment for future devs: I duplicate the bitmaps for longer animation duration, which is dirty, should be improved
+    dgl = vector<int> { IDB_P1_CROUCH0M, IDB_P1_CROUCH1M, IDB_P1_CROUCH0M, IDB_P1_CROUCH1M, IDB_P1_CROUCH0M, IDB_P1_CROUCH1M };
+    dgr = vector <int> { IDB_P1_CROUCH0, IDB_P1_CROUCH1, IDB_P1_CROUCH0, IDB_P1_CROUCH1, IDB_P1_CROUCH0, IDB_P1_CROUCH1 };
     AddCAnimation(&rl, BITMAP_SIZE); //ani[0] Run Left
     AddCAnimation(&rr, BITMAP_SIZE); //ani[1] Run Right
     AddCAnimation(&jl, BITMAP_SIZE, 3, false); //ani[2] Jump Left
@@ -186,6 +197,8 @@ void Player::LoadBitmap()
     AddCAnimation(&lfr, BITMAP_SIZE); //ani[9] Landing Falling Right
     AddCAnimation(&ufl, BITMAP_SIZE); //ani[10] Unconsciously Flying Left
     AddCAnimation(&ufr, BITMAP_SIZE); //ani[11] Unconsciously Flying Right
+    AddCAnimation(&dgl, BITMAP_SIZE); //ani[12] Dodging Left
+    AddCAnimation(&dgr, BITMAP_SIZE); //ani[13] Dodging Right
     _collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
     //-----------------ANIMATION BY WEAPONS-----------------//
     _aniByWpn = vector<vector<CAnimation>>();
@@ -496,6 +509,10 @@ void Player::OnKeyDown(const UINT& nChar)
     {
         _isTriggerAttack = true;
     }
+    else if (nChar == _keys[5])   //Dodge
+    {
+        _isTriggerDodge = true;
+    }
     else
     {
         // Do nothing
@@ -525,7 +542,7 @@ void Player::OnKeyUp(const UINT& nChar)
 void Player::SetHoldWeapon(bool isHolding)
 {
     _isHoldingWeapon = isHolding;
-    _isDrawingWeapon = isHolding;
+    _isTriggerDrawWeapon = isHolding;
     _isTriggerAttack = false; // We are picking weapon, not performing an attack
 }
 
@@ -997,8 +1014,9 @@ void Player::DoAttack()
     {
         if ((eachPlayerPtr != this) && (HitPlayer(eachPlayerPtr, _triggeredAniDir)))
         {
-            if (!eachPlayerPtr->_isUnconscious) // If the target player is conscious
+            if ((!eachPlayerPtr->_isUnconscious) && (!eachPlayerPtr->_isDodging)) // If the target player is conscious and is not dodging
             {
+				/// Comment for future devs: The target player is being hit multiple time, even if the conscious condition is taken into account
                 if (_isHoldingWeapon)
                     CAudio::Instance()->Play(IDS_SWOOSH);
                 else
@@ -1062,7 +1080,7 @@ void Player::PlayAudioByState()
 
     if (WpnStateChanged() && _isTriggeredAni)
     {
-        switch (_triggeredAniByWpnID)
+        switch (_triggeredAniAnimationID)
         {
             case ANI_WPN_ID_DRAW_SWORD_LEFT:
             case ANI_WPN_ID_DRAW_SWORD_RIGHT:
@@ -1214,9 +1232,13 @@ int Player::GetKeyCombination()
     else
         keyCombString = keyCombString + "1";
 
-    if (_isDrawingWeapon) // Special case: The player draws his weapon
+    if (_isTriggerDrawWeapon) // Special case: The player draws his weapon
     {
         keyCombString = "113";
+    }
+    else if (_isTriggerDodge) // Special case: The player dodges
+    {
+        keyCombString = "114";
     }
 
     return (stoi(keyCombString));
@@ -1236,6 +1258,11 @@ void Player::ProcessKeyCombinationOnMove()
         if (_isTriggeredAni) // If an animation is found to be triggered, then we firstly initiate it (there is no process here)
         {
             InitiateTriggeredAnimation();
+        }
+        else
+        {
+            /// Comment for future devs: 'aniSelector' is set here, super dirty, need rectification
+            _aniSelector = false;
         }
     }
 
@@ -1259,10 +1286,9 @@ void Player::ProcessKeyCombinationOnMove()
 
 void Player::ResetTriggeredAnimationVariables()
 {
-    _isDrawingWeapon = false;
     _isTriggeredAni = false;
     _triggeredAniKeyID = 0;
-    _triggeredAniByWpnID = -1;
+    _triggeredAniAnimationID = -1;
     _triggeredAniDir = false;
 }
 
@@ -1282,9 +1308,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
-                _triggeredAniByWpnID = ANI_WPN_ID_ATTACK_RIGHT;
+                _triggeredAniAnimationID = ANI_WPN_ID_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = ANI_WPN_ID_ATTACK_LEFT;
+                _triggeredAniAnimationID = ANI_WPN_ID_ATTACK_LEFT;
 
             break;
 
@@ -1292,9 +1318,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
-                _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
+                _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
+                _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
 
             break;
 
@@ -1302,9 +1328,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
-                _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
+                _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
+                _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
 
             break;
 
@@ -1312,9 +1338,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
-                _triggeredAniByWpnID = ANI_WPN_ID_SLIDE_ATTACK_RIGHT;
+                _triggeredAniAnimationID = ANI_WPN_ID_SLIDE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = ANI_WPN_ID_SLIDE_ATTACK_LEFT;
+                _triggeredAniAnimationID = ANI_WPN_ID_SLIDE_ATTACK_LEFT;
 
             break;
 
@@ -1322,9 +1348,19 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir) // If the player is facing right
-                _triggeredAniByWpnID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
+                _triggeredAniAnimationID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
             else
-                _triggeredAniByWpnID = ANI_WPN_ID_DRAW_SWORD_LEFT;
+                _triggeredAniAnimationID = ANI_WPN_ID_DRAW_SWORD_LEFT;
+
+            break;
+
+        case KEY_DODGE:
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+
+            if (_triggeredAniDir) //If the player is facing right
+                _triggeredAniAnimationID = ANI_ID_DODGE_RIGHT;
+            else
+                _triggeredAniAnimationID = ANI_ID_DODGE_LEFT;
 
             break;
 
@@ -1333,9 +1369,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
-                _triggeredAniByWpnID = ANI_WPN_ID_AIR_ATTACK_RIGHT;
+                _triggeredAniAnimationID = ANI_WPN_ID_AIR_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = ANI_WPN_ID_AIR_ATTACK_LEFT;
+                _triggeredAniAnimationID = ANI_WPN_ID_AIR_ATTACK_LEFT;
 
             break;
 
@@ -1343,9 +1379,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
-                _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
+                _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
+                _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
 
             break;
 
@@ -1353,9 +1389,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
-                _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
+                _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
+                _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
 
             break;
 
@@ -1363,9 +1399,9 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
 
             if (_triggeredAniDir)
-                _triggeredAniByWpnID = ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT;
+                _triggeredAniAnimationID = ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT;
             else
-                _triggeredAniByWpnID = ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT;
+                _triggeredAniAnimationID = ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT;
 
             break;
 
@@ -1383,21 +1419,25 @@ void Player::GetAndSetTriggeredAnimation()
 
 void Player::InitiateTriggeredAnimation()
 {
+    /// Comment for future devs: '_aniSelector' is now set here, need retification
     switch (_triggeredAniKeyID)
     {
         /* ON GROUND */
         case KEY_GND_ATTACK: // on ground, not move, attack
             _isTriggerAttack = false;
+            _aniSelector = true;
             break;
 
         case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
             _isTriggerAttack = false;
             InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
+            _aniSelector = true;
             break;
 
         case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
             _isTriggerAttack = false;
             InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
+            _aniSelector = true;
             break;
 
         case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
@@ -1407,29 +1447,41 @@ void Player::InitiateTriggeredAnimation()
                 InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
 
             _isTriggerAttack = false;
+            _aniSelector = true;
             break;
 
         case KEY_DRAW_SWORD:
-            // Do nothing
+            _isTriggerDrawWeapon = false;
+            _aniSelector = true;
+            break;
+
+        case KEY_DODGE:
+            _isTriggerDodge = false;
+            _aniSelector = false; // Special case
+            _isDodging = true;
             break;
 
         /* ON AIR */
         case KEY_AIR_ATTACK: // on air, not move, attack
             _isTriggerAttack = false;
+            _aniSelector = true;
             break;
 
         case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
             _isTriggerAttack = false;
             InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
+            _aniSelector = true;
             break;
 
         case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
             _isTriggerAttack = false;
             InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
+            _aniSelector = true;
             break;
 
         case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
             _isTriggerAttack = false;
+            _aniSelector = true;
             break;
 
         default:
@@ -1462,6 +1514,10 @@ void Player::DoTriggeredAnimation()
             // Do nothing
             break;
 
+        case KEY_DODGE:
+            // Do nothing
+            break;
+
         /* ON AIR */
         case KEY_AIR_ATTACK: // on air, not move, attack
             DoAttack();
@@ -1486,17 +1542,35 @@ void Player::DoTriggeredAnimation()
 
 bool Player::IsFinishedTriggeredAnimation()
 {
-    return _aniByWpn[_wpnID][_triggeredAniByWpnID].IsFinalBitmap();// (_triggeredAniCount > MAX_ANIMATION_DURATION);
+    if (_aniSelector)
+        return _aniByWpn[_wpnID][_triggeredAniAnimationID].IsFinalBitmap();// (_triggeredAniCount > MAX_ANIMATION_DURATION);
+    else
+        return ani[_triggeredAniAnimationID].IsFinalBitmap();
 }
 
 void Player::FinishTriggeredAnimation()
 {
-    _aniByWpn[_wpnID][_triggeredAniByWpnID].Reset();
+    if (_aniSelector)
+    {
+        _aniByWpn[_wpnID][_triggeredAniAnimationID].Reset();
+    }
+    else
+    {
+        ani[_triggeredAniAnimationID].Reset();
+
+        if (_triggeredAniAnimationID == ANI_ID_DODGE_LEFT || _triggeredAniAnimationID == ANI_ID_DODGE_RIGHT) // Special case: Dodge animation
+        {
+            _isDodging = false;
+        }
+    }
 }
 
 void Player::SetCurrentTriggeredAnimation()
 {
-    SetAnimationStateByWeapon(_triggeredAniByWpnID);
+    if (_aniSelector)
+        SetAnimationStateByWeapon(_triggeredAniAnimationID);
+    else
+        SetAnimationState(_triggeredAniAnimationID);
 }
 
 void Player::DoNonTriggeredAnimation()
@@ -1622,10 +1696,10 @@ bool Player::WpnStateChanged()
 {
     bool ret = false;
 
-    if (_lastTriggeredAniByWpnID != _triggeredAniByWpnID)
+    if (_lastTriggeredAniByWpnID != _triggeredAniAnimationID)
         ret = true;
 
-    _lastTriggeredAniByWpnID = _triggeredAniByWpnID;
+    _lastTriggeredAniByWpnID = _triggeredAniAnimationID;
     return ret;
 }
 

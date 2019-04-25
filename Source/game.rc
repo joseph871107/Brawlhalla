@@ -612,6 +612,14 @@ IDB_P1_KNOCK_DOWN4      BITMAP                  "..\\RES\\player1\\Punch\\advent
 
 IDB_P1_KNOCK_DOWN3      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-knock-dwn-03.bmp"
 
+IDB_P1_CROUCH1          BITMAP                  "..\\RES\\player1\\adventurer-crouch-01.bmp"
+
+IDB_P1_CROUCH1M         BITMAP                  "..\\RES\\player1\\adventurer-crouch-01(Mirrored).bmp"
+
+IDB_P1_CROUCH0          BITMAP                  "..\\RES\\player1\\adventurer-crouch-00.bmp"
+
+IDB_P1_CROUCH0M         BITMAP                  "..\\RES\\player1\\adventurer-crouch-00(Mirrored).bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

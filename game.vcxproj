@@ -403,6 +403,10 @@
     <Image Include="RES\player1\adventurer-attack3-04.bmp" />
     <Image Include="RES\player1\adventurer-attack3-05(Mirrored).bmp" />
     <Image Include="RES\player1\adventurer-attack3-05.bmp" />
+    <Image Include="RES\player1\adventurer-crouch-00(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-crouch-00.bmp" />
+    <Image Include="RES\player1\adventurer-crouch-01(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-crouch-01.bmp" />
     <Image Include="RES\player1\adventurer-fall-00(Mirrored).bmp" />
     <Image Include="RES\player1\adventurer-fall-00.bmp" />
     <Image Include="RES\player1\adventurer-fall-01(Mirrored).bmp" />
