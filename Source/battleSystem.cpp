@@ -305,32 +305,34 @@ int t(int k, double kk) { return (int)(k * kk); }
 
 void BattleSystem::ResizeCamera()
 {
-	int totalX = 0, totalY = 0;
-	for (auto i = _players.begin(); i != _players.end(); i++)
-	{
-		totalX += (*i)->GetCor(0);
-		totalY += (*i)->GetCor(1);
+	if (CGameStateInit::GetCameraEnable()) {
+		int totalX = 0, totalY = 0;
+		for (auto i = _players.begin(); i != _players.end(); i++)
+		{
+			totalX += (*i)->GetCor(0);
+			totalY += (*i)->GetCor(1);
+		}
+		int minX = totalX / (signed int)_players.size(), maxX = minX, \
+			minY = totalY / (signed int)_players.size(), maxY = minY, \
+			minWidth = 800, \
+			paddingX = 500, paddingY = 300, \
+			centerX = minX + (maxX - minX) / 2, centerY = minY + (maxY - minY) / 2;
+		for (auto i = _players.begin(); i != _players.end(); i++)
+		{
+			minX = ((*i)->GetCor(0) < minX ? (*i)->GetCor(0) : minX);
+			maxX = ((*i)->GetCor(2) > maxX ? (*i)->GetCor(2) : maxX);
+			minY = ((*i)->GetCor(1) < minY ? (*i)->GetCor(1) : minY);
+			maxY = ((*i)->GetCor(3) > maxY ? (*i)->GetCor(3) : maxY);
+		}
+		minX -= paddingX; maxX += paddingX; minY -= paddingY; maxY += paddingY;
+		int width = (maxX - minX < minWidth ? minWidth : maxX - minX), height = maxY - minY;
+		width = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? width : height * SIZE_X / SIZE_Y);
+		height = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? height : width * SIZE_Y / SIZE_X);
+		double sizeX = SIZE_X / (double)(width), sizeY = SIZE_Y / (double)(height);
+		double size = (sizeX < sizeY ? sizeX : sizeY);
+		camera.SetCameraXY(centerX, centerY);
+		camera.SetSize(size);
 	}
-	int minX = totalX / (signed int)_players.size(), maxX = minX,\
-		minY = totalY / (signed int)_players.size(), maxY = minY,\
-		minWidth = 800,\
-		paddingX = 500, paddingY = 300,\
-		centerX = minX + (maxX - minX) / 2, centerY = minY + (maxY - minY) / 2;
-	for (auto i = _players.begin(); i != _players.end(); i++)
-	{
-		minX = ((*i)->GetCor(0) < minX ? (*i)->GetCor(0) : minX);
-		maxX = ((*i)->GetCor(2) > maxX ? (*i)->GetCor(2) : maxX);
-		minY = ((*i)->GetCor(1) < minY ? (*i)->GetCor(1) : minY);
-		maxY = ((*i)->GetCor(3) > maxY ? (*i)->GetCor(3) : maxY);
-	}
-	minX -= paddingX; maxX += paddingX; minY -= paddingY; maxY += paddingY;
-	int width = (maxX - minX < minWidth ? minWidth : maxX - minX), height = maxY - minY;
-	width = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? width : height * SIZE_X / SIZE_Y);
-	height = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? height : width * SIZE_Y / SIZE_X);
-	double sizeX = SIZE_X / (double)(width), sizeY = SIZE_Y / (double)(height);
-	double size = (sizeX < sizeY ? sizeX : sizeY);
-	camera.SetCameraXY(centerX, centerY);
-	camera.SetSize(size);
 }
 
 bool BattleSystem::IsGameOver()

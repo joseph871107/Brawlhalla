@@ -50,10 +50,11 @@ void UI::SetButtonState(UINT nFlags, UINT nChar, CPoint point)
         (*i)->SetState(nFlags, nChar, CPoint(point.x - offsetX, point.y - offsetY), &_pos);
     }
 }
-void UI::AddButton(string name, int x, int y, int width, int height, int tpx, int tpy, int tri)
+void UI::AddButton(string name, int x, int y, int width, int height, int tpx, int tpy, string str, int tri)
 {
     UI_Button* button = new UI_Button(x, y, width, height, tri, tpx, tpy);
     button->name = name;
+	button->str = str;
     _buttons.push_back(button);
 	static bool first = true;
 	if (!first) {

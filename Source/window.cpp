@@ -39,11 +39,6 @@ namespace game_framework
 		_point.y = 0;
 	}
 
-	void Window::AddButton(string name, int x, int y, int width, int height, int tpx, int tpy, int tri)
-	{
-		ui.AddButton(name, x, y, width, height, tpx, tpy, tri);
-	}
-
 	void Window::AddItem(Object *item)
 	{
 		item->AddCamera(camera);
@@ -108,12 +103,8 @@ namespace game_framework
 		}else
 			ui.SetXY(x, y);
 	}
-	void Window::Reset()
+	UI * Window::GetUI()
 	{
-		ui.Reset();
-	}
-	string Window::ChosenButton()
-	{
-		return ui.ChosenButton();
+		return &ui;
 	}
 }

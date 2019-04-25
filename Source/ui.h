@@ -18,7 +18,7 @@ struct UI_Button
         state = isBitmapLoaded = _bounce = _bounce_key = 0;
         trigger = tri;
     }
-    string name;
+    string name, str;
     int x, y, width, height, state, trigger, pos_x, pos_y;
     UINT _bounce, _bounce_key, isBitmapLoaded;
     FImage* _outside, *_hover, *_click;
@@ -111,7 +111,8 @@ struct UI_Button
                     break;
             }
 
-            OnShowText(name, _x, _y, 10, RGB(255, 255, 255));
+			OnShowText(name, _x, _y, 10, RGB(255, 255, 255));
+			OnShowText(str, _x + (width - str.length() * 12) / 2, _y + (height - 12) / 2, 10, RGB(255, 255, 255));
         }
     }
     void Reset()
@@ -128,7 +129,7 @@ public:
 	string ChosenButton();
 	int GetButtonState(string name);
 	void SetButtonState(UINT nFlags, UINT nChar, CPoint point);
-	void AddButton(string name, int x = 0, int y = 0, int width = 50, int height = 50, int tpx = 0, int tpy = 0, int tri = BUTTON_RELEASE);
+	void AddButton(string name, int x = 0, int y = 0, int width = 50, int height = 50, int tpx = 0, int tpy = 0, string str = "", int tri = BUTTON_RELEASE);
 	void SetXY(int x, int y);
 	void DelButton(string name);
 	void OnShow();

@@ -66,6 +66,7 @@ namespace game_framework
 // 這個class為遊戲的遊戲開頭畫面物件
 /////////////////////////////////////////////////////////////////////////////
 
+bool CGameStateInit::_cameraEnabled = true; //initialize
 CGameStateInit::CGameStateInit(CGame* g)
 	: CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
 {
@@ -117,14 +118,14 @@ void CGameStateInit::OnInit()
 
 	int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() +ui_info4->GetHeight()) / 3;
 	welcomeWindow.Initialize(1, 3);
-	welcomeWindow.AddButton("start", refX - butW, refY, butW, butH, 0, 0);
-	welcomeWindow.AddButton("settings", refX - butW, refY + butH, butW, butH, 0, 1);
-	welcomeWindow.AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 0, 2);
+	welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, butW, butH, 0, 0);
+	welcomeWindow.GetUI()->AddButton("settings", refX - butW, refY + butH, butW, butH, 0, 1);
+	welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 0, 2);
 
 	settingWindow.Initialize(1, 2, false, false);
 	settingWindow.SetXY((SIZE_X - butH)/2, 300);
-	settingWindow.AddButton("empty", 0, 0, butH, butH, 0, 0);
-	settingWindow.AddButton("back", 0, butH, butH, butH, 0, 1);
+	settingWindow.GetUI()->AddButton("camera", 0, 0, butH, butH, 0, 0, "True");
+	settingWindow.GetUI()->AddButton("back", 0, butH, butH, butH, 0, 1);
 
 	ShowInitProgress(10);
 }
@@ -136,8 +137,8 @@ void CGameStateInit::OnBeginState()
 		first = false;
 	}
 	else {
-		welcomeWindow.Reset();
-		settingWindow.Reset();
+		welcomeWindow.GetUI()->Reset();
+		settingWindow.GetUI()->Reset();
 		CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
 	}
 }
@@ -184,8 +185,19 @@ void CGameStateInit::OnShow()
 {
 	welcomeWindow.OnShow();
 	settingWindow.OnShow();
+}
 
-	string chosenBut = welcomeWindow.ChosenButton();
+bool CGameStateInit::GetCameraEnable()
+{
+	return _cameraEnabled;
+}
+
+void CGameStateInit::OnMove()
+{
+	welcomeWindow.OnMove();
+	settingWindow.OnMove();
+
+	string chosenBut = welcomeWindow.GetUI()->ChosenButton();
 	if (chosenBut == "start") {
 		CAudio::Instance()->Stop(IDS_MENU_MUSIC);
 		GotoGameState(GAME_STATE_RUN);
@@ -198,19 +210,20 @@ void CGameStateInit::OnShow()
 	else if (chosenBut == "exit")
 		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
 
-	chosenBut = settingWindow.ChosenButton();
+	chosenBut = settingWindow.GetUI()->ChosenButton();
 	if (chosenBut == "back") {
 		welcomeWindow.SetButtonEnable(true);
 		settingWindow.SetButtonEnable(false);
 		settingWindow.SetVisible(false);
-		settingWindow.Reset();
+		settingWindow.GetUI()->Reset();
 	}
-}
-
-void CGameStateInit::OnMove()
-{
-	welcomeWindow.OnMove();
-	settingWindow.OnMove();
+	else if (chosenBut == "camera") {
+		if (_cameraEnabled)
+			_cameraEnabled = false;
+		else
+			_cameraEnabled = true;
+		(*settingWindow.GetUI()->Index("camera"))->str = (_cameraEnabled ? "True" : "False");
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////

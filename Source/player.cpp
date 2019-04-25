@@ -1289,7 +1289,7 @@ void Player::DoTriggeredAnimation()
 
 bool Player::IsFinishedTriggeredAnimation()
 {
-    return (_triggeredAniCount > MAX_ANIMATION_DURATION);
+	return _aniByWpn[_wpnID][_triggeredAniByWpnID].IsFinalBitmap();// (_triggeredAniCount > MAX_ANIMATION_DURATION);
 }
 
 void Player::FinishTriggeredAnimation()

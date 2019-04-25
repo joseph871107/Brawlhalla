@@ -17,7 +17,6 @@ namespace game_framework
 		Window(CGame* g, int _width = SIZE_X, int _height = SIZE_Y);
 		~Window();
 		void Initialize(int _buttonCol, int _buttonRow, bool buttonEnable = true, bool visible = true);
-		void AddButton(string name, int x, int y, int width, int height, int tpx, int tpy, int tri = BUTTON_RELEASE);
 		void AddItem(Object*);
 		void SetButtonEnable(bool enable);
 		void SetVisible(bool visible);
@@ -28,8 +27,7 @@ namespace game_framework
 		void OnMouseMove(UINT nFlags, CPoint point);
 		void OnShow();
 		void OnMove();
-		void Reset();
-		string ChosenButton();
+		UI *GetUI();
 	protected:
 		CPoint _point;
 		UI ui;

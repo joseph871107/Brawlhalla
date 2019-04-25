@@ -217,7 +217,7 @@ int CAnimation::Height()
 bool CAnimation::IsFinalBitmap()
 {
     GAME_ASSERT(bmp.size() != 0, "CAnimation: Bitmaps must be loaded first.");
-    return bmp_counter == (bmp.size() - 1);
+    return (bmp_counter == (bmp.size() - 1) && delay_counter <= 1);
 }
 
 int CAnimation::Left()
