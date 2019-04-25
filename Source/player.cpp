@@ -370,6 +370,13 @@ void Player::UnconsciouslyOnMove()
         ani[ANI_ID_UNCONSCIOUS_FLYING_RIGHT].Reset();
     }
 
+    /// Comment for future devs: '_aniSelector'
+    _aniSelector = false;
+	/// Comment for future devs: When the player is being hit, yet he is doing his triggered animation, then his triggered animation must be stopped. Put it in a better position
+	if (_isTriggeredAni) { //Thoroughly finish it and reset the triggered animation's variables
+		FinishTriggeredAnimation();
+		ResetTriggeredAnimationVariables();
+	}
     //-----------------POSITION TRANSFORMATION SECTION-----------------//
     /* Bounce Off the Grounds */
     int playerX1 = GetCor(0);
@@ -1016,7 +1023,7 @@ void Player::DoAttack()
         {
             if ((!eachPlayerPtr->_isUnconscious) && (!eachPlayerPtr->_isDodging)) // If the target player is conscious and is not dodging
             {
-				/// Comment for future devs: The target player is being hit multiple time, even if the conscious condition is taken into account
+                /// Comment for future devs: The target player is being hit multiple time, even if the conscious condition is taken into account
                 if (_isHoldingWeapon)
                     CAudio::Instance()->Play(IDS_SWOOSH);
                 else
