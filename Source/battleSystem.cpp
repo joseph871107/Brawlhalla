@@ -19,7 +19,11 @@ const int MATCH_TIME = 180;
 const int MAX_weapons = 5;
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 
+<<<<<<< HEAD
 const vector<GroundPARM> _groundsXY{ GroundPARM(0, 300, 1, 5), GroundPARM(0, 400, 1, 5), GroundPARM(0, 500, 1, 5), GroundPARM(500, 500, 1, 5), GroundPARM(1000, 500, 1, 5) };	// Define Ground position to automatically generate ground objects
+=======
+const vector<GroundPARM> _groundsXY{ GroundPARM(100, 200, 0.65, 5), GroundPARM(600, 400, 0.65, 5), GroundPARM(1100, 600, 0.65, 5) };	// Define Ground position to automatically generate ground objects
+>>>>>>> 0c838080a8cabcf1728bea1928a5a5b80e938756
 CInteger integer(2);																												// Used to show current remain time
 
 BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Background()), _grounds(vector<Ground*>()), _players(vector<Player*>()), _weapons(vector<Weapon*>())
@@ -63,7 +67,7 @@ void BattleSystem::OnBeginState()
         sprintf(str, "%d", i - _players.begin() + 1);
         (*i)->Initialize(_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
     }
-	ResizeCamera();
+	camera.Reset();
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
@@ -83,10 +87,14 @@ void BattleSystem::OnMove()							// 移動遊戲元素
         nextTimeGenerateWeapon = random(5, 8);
     }/////////////////////////////////////////////////////////////////
 
-    for (auto i = _weapons.begin(); i != _weapons.end(); i++)
+    for (auto weapon : _weapons)
     {
-        (*i)->OnMove();
+        weapon->OnMove();
     }
+	for (auto player : _players)
+	{
+		player->OnMove();
+	}
 	for (auto i : _flyingWeapons)
 		i->OnMove();
 	vector<Weapon*>::iterator erase = _flyingWeapons.end();
@@ -107,12 +115,10 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
 	InitializeNum();									// 初始化"resource.h"中點陣圖的資源編號
 	InitializeNum("IDS");									// 初始化"resource.h"中音效的資源編號
-    TRACE("idbList size : %d\n", idbList.size());
     ShowInitProgress(13);
     /*------------------------------INIT PROGRESS STAGE 2------------------------------*/
 	InitializeFile();									// 初始化"game.rc"中點陣圖的路徑
 	InitializeFile("SOUND");									// 初始化"game.rc"中音效的路徑
-    TRACE("fileList size : %d\n", fileList.size());
     ShowInitProgress(25);
 
     /*------------------------------INIT PROGRESS STAGE 3------------------------------*/
@@ -124,12 +130,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
-	CAudio::Instance()->Load(IDS_PUNCH);
-	CAudio::Instance()->Load(IDS_BATTLE_MUSIC);
-	CAudio::Instance()->Load(IDS_DRAW_WEAPON);
-	CAudio::Instance()->Load(IDS_SWOOSH);
-	CAudio::Instance()->Load(IDS_SWING_ATTACK);
-	CAudio::Instance()->Load(IDS_MENU_MUSIC);
+	InitializeLoadSound();
 	CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
     vector<GroundPARM> groundXY = _groundsXY;
 	camera = Camera();
@@ -147,10 +148,9 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
         _grounds.push_back(ground);
     }//////////////////////////////////////////
 
-    background.SetSize(1);
-    background.SetXY(-800, -400);
 	background.AddCamera(&camera);
     background.LoadBitmap(IDB_BACKGROUND, RGB(0, 0, 0));
+	background.SetXY( - background.GetWidth(),  - background.GetHeight());
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
     Player* player = new Player();
@@ -290,7 +290,7 @@ void BattleSystem::OnShow()
         for (auto i = _players.begin(); i != _players.end(); i++)
         {
 			int temp = (*i)->ShowAnimationState();
-            sprintf(str, "%s", GetNameFromIDB((*i)->ShowAnimationState()).c_str());
+            sprintf(str, "%s", GetNameFromResource((*i)->ShowAnimationState()).c_str());
             OnShowText(str, 0, 12 + 12 * _players.size() + 12 * _grounds.size() + 12 * (i - _players.begin()), 10);
         }
     }
@@ -298,28 +298,38 @@ void BattleSystem::OnShow()
     //------------------End of Test Text------------------//
 }
 
+int t(int k, double kk) { return (int)(k * kk); }
+
 void BattleSystem::ResizeCamera()
 {
-	int totalX = 0, totalY = 0;
-	for (auto i = _players.begin(); i != _players.end(); i++)
-	{
-		totalX += (*i)->GetCor(0);
-		totalY += (*i)->GetCor(1);
-		(*i)->OnMove();
+	if (CGameStateInit::GetCameraEnable()) {
+		int totalX = 0, totalY = 0;
+		for (auto i = _players.begin(); i != _players.end(); i++)
+		{
+			totalX += (*i)->GetCor(0);
+			totalY += (*i)->GetCor(1);
+		}
+		int minX = totalX / (signed int)_players.size(), maxX = minX, \
+			minY = totalY / (signed int)_players.size(), maxY = minY, \
+			minWidth = 800, \
+			paddingX = 500, paddingY = 300, \
+			centerX = minX + (maxX - minX) / 2, centerY = minY + (maxY - minY) / 2;
+		for (auto i = _players.begin(); i != _players.end(); i++)
+		{
+			minX = ((*i)->GetCor(0) < minX ? (*i)->GetCor(0) : minX);
+			maxX = ((*i)->GetCor(2) > maxX ? (*i)->GetCor(2) : maxX);
+			minY = ((*i)->GetCor(1) < minY ? (*i)->GetCor(1) : minY);
+			maxY = ((*i)->GetCor(3) > maxY ? (*i)->GetCor(3) : maxY);
+		}
+		minX -= paddingX; maxX += paddingX; minY -= paddingY; maxY += paddingY;
+		int width = (maxX - minX < minWidth ? minWidth : maxX - minX), height = maxY - minY;
+		width = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? width : height * SIZE_X / SIZE_Y);
+		height = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? height : width * SIZE_Y / SIZE_X);
+		double sizeX = SIZE_X / (double)(width), sizeY = SIZE_Y / (double)(height);
+		double size = (sizeX < sizeY ? sizeX : sizeY);
+		camera.SetCameraXY(centerX, centerY);
+		camera.SetSize(size);
 	}
-	int minX = totalX / _players.size(), maxX = minX, minY = totalY / _players.size(), maxY = minY, offset = 400;
-	for (auto i = _players.begin(); i != _players.end(); i++)
-	{
-		minX = ((*i)->GetCor(0) - offset < minX ? (*i)->GetCor(0) - offset : minX);
-		maxX = ((*i)->GetCor(2) + offset > maxX ? (*i)->GetCor(2) + offset : maxX);
-		minY = ((*i)->GetCor(1) - offset < minY ? (*i)->GetCor(1) - offset : minY);
-		maxY = ((*i)->GetCor(3) + offset > maxY ? (*i)->GetCor(3) + offset : maxY);
-		(*i)->OnMove();
-	}
-	int diffX = (maxX - minX < 800 ? 800 : maxX - minX), diffY = maxY - minY;
-	double size = SIZE_X / (double)(diffX);
-	camera.SetCameraXY((minX + maxX) / 2, (minY + maxY) / 2);
-	camera.SetSize(size);
 }
 
 bool BattleSystem::IsGameOver()

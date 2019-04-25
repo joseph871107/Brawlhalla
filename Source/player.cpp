@@ -13,7 +13,7 @@ namespace game_framework
 const int PLAYER_INIT_X = 700;
 const int PLAYER_INIT_Y = 100;
 const int MAX_JUMP_COUNT = 2;
-const int MOVEMENT_UNIT = 6;
+const int MOVEMENT_UNIT = 10;
 const int GND_ATTACK_MOVEMENT_UNIT = 12;
 const double INITIAL_VELOCITY = 18;
 const double INITIAL_ACCELERATION = 1.2;
@@ -167,8 +167,8 @@ void Player::LoadBitmap()
     lfr = vector<int> { IDB_P1_FALL0, IDB_P1_FALL1 };
     AddCAnimation(&rl, BITMAP_SIZE); //ani[0] Run Left
     AddCAnimation(&rr, BITMAP_SIZE); //ani[1] Run Right
-    AddCAnimation(&jl, BITMAP_SIZE, 5, false); //ani[2] Jump Left
-    AddCAnimation(&jr, BITMAP_SIZE, 5, false); //ani[3] Jump Right
+    AddCAnimation(&jl, BITMAP_SIZE, 3, false); //ani[2] Jump Left
+    AddCAnimation(&jr, BITMAP_SIZE, 3, false); //ani[3] Jump Right
     AddCAnimation(&sl, BITMAP_SIZE); //ani[4] Stand (Idle) Left
     AddCAnimation(&sr, BITMAP_SIZE); //ani[5] Stand (Idle) Right
     AddCAnimation(&ll, BITMAP_SIZE); //ani[6] Lean Left
@@ -1026,20 +1026,20 @@ void Player::AddCollectionOfAnimationsByWeapon(
     vector<CAnimation> tempAniByWpn = vector<CAnimation>();
     AddCAnimationByWeapon(tempAniByWpn, &s2l, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
     AddCAnimationByWeapon(tempAniByWpn, &s2r, BITMAP_SIZE); //ani[1] Stand (Idle) Right with sword
-    AddCAnimationByWeapon(tempAniByWpn, &al, BITMAP_SIZE, 4, false); //ani[2] Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &ar, BITMAP_SIZE, 4, false); //ani[3] Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &gmal, BITMAP_SIZE, 4, false); //ani[4] On-Ground-Moving Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &gmar, BITMAP_SIZE, 4, false); //ani[5] On-Ground-Moving Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &sal, BITMAP_SIZE, 4, false); //ani[6] Slide Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &sar, BITMAP_SIZE, 4, false); //ani[7] Slide Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &aal, BITMAP_SIZE, 4, false); //ani[8] Air Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &aar, BITMAP_SIZE, 4, false); //ani[9] Air Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &amal, BITMAP_SIZE, 4, false); //ani[10] On-Air-Moving Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &amar, BITMAP_SIZE, 4, false); //ani[11] On-Air-Moving Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &adal, BITMAP_SIZE, 4, false); //ani[12] On-Air-Down Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &adar, BITMAP_SIZE, 4, false); //ani[13] On-Air-Down Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &sdl, BITMAP_SIZE, 5, false); //ani[14] Draw sword Left
-    AddCAnimationByWeapon(tempAniByWpn, &sdr, BITMAP_SIZE, 5, false); //ani[15] Draw sword Right
+    AddCAnimationByWeapon(tempAniByWpn, &al, BITMAP_SIZE, 3, false); //ani[2] Attack Left
+    AddCAnimationByWeapon(tempAniByWpn, &ar, BITMAP_SIZE, 3, false); //ani[3] Attack Right
+    AddCAnimationByWeapon(tempAniByWpn, &gmal, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
+    AddCAnimationByWeapon(tempAniByWpn, &gmar, BITMAP_SIZE, 3, false); //ani[5] On-Ground-Moving Attack Right
+    AddCAnimationByWeapon(tempAniByWpn, &sal, BITMAP_SIZE, 3, false); //ani[6] Slide Attack Left
+    AddCAnimationByWeapon(tempAniByWpn, &sar, BITMAP_SIZE, 3, false); //ani[7] Slide Attack Right
+    AddCAnimationByWeapon(tempAniByWpn, &aal, BITMAP_SIZE, 3, false); //ani[8] Air Attack Left
+    AddCAnimationByWeapon(tempAniByWpn, &aar, BITMAP_SIZE, 3, false); //ani[9] Air Attack Right
+    AddCAnimationByWeapon(tempAniByWpn, &amal, BITMAP_SIZE, 3, false); //ani[10] On-Air-Moving Attack Left
+    AddCAnimationByWeapon(tempAniByWpn, &amar, BITMAP_SIZE, 3, false); //ani[11] On-Air-Moving Attack Right
+    AddCAnimationByWeapon(tempAniByWpn, &adal, BITMAP_SIZE, 3, false); //ani[12] On-Air-Down Attack Left
+    AddCAnimationByWeapon(tempAniByWpn, &adar, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
+    AddCAnimationByWeapon(tempAniByWpn, &sdl, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
+    AddCAnimationByWeapon(tempAniByWpn, &sdr, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
     _aniByWpn.push_back(tempAniByWpn);
 }
 
@@ -1350,7 +1350,7 @@ void Player::DoTriggeredAnimation()
 
 bool Player::IsFinishedTriggeredAnimation()
 {
-    return (_triggeredAniCount > MAX_ANIMATION_DURATION);
+	return _aniByWpn[_wpnID][_triggeredAniByWpnID].IsFinalBitmap();// (_triggeredAniCount > MAX_ANIMATION_DURATION);
 }
 
 void Player::FinishTriggeredAnimation()

@@ -98,7 +98,7 @@ void Object::SetSize(double s)
     _size = s;
 }
 
-void Object::OnShow()
+void Object::OnShow(int offsetX, int offsetY)
 {
 	if (camera != nullptr) {
 		CPoint cam = camera->GetXY(x, y);
@@ -106,7 +106,7 @@ void Object::OnShow()
 		bmp.ShowBitmap(_size * camera->GetSize());
 	}
 	else {
-		bmp.SetTopLeft(x, y);
+		bmp.SetTopLeft(x + offsetX, y + offsetY);
 		bmp.ShowBitmap(_size);
 	}
 }

@@ -25,7 +25,7 @@ class Object
 		double GetSize();
 		bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 		void AddCamera(Camera *cam);
-        virtual void OnShow();									// 將圖形貼到畫面
+        virtual void OnShow(int offsetX = 0, int offsetY = 0);									// 將圖形貼到畫面
         virtual void OnMove();									// 移動
 		virtual void LoadBitmap(int);					// 載入圖形
         virtual void LoadBitmap(int, COLORREF);					// 載入圖形

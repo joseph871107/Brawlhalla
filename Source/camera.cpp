@@ -11,19 +11,21 @@ namespace game_framework
 	/////////////////////////////////////////////////////////////////////////////
 	// Camera class
 	/////////////////////////////////////////////////////////////////////////////
-	const double CAMERA_SIZING_OFFSET = 0.01;
+	const double CAMERA_SIZING_OFFSET = 0.005;
 	const double CAMERA_ZOOMOUT = 1;
 	const double CAMERA_ZOOMIN = 0.75;
 
 	Camera::Camera()
 	{
 		x = SIZE_X / 2; y = SIZE_Y / 2;
+		offsetX = offsetY = 0;
 		size = 1;
 		gradual = false;
 	}
 	Camera::Camera(int tx, int ty)
 	{
 		x = tx; y = ty;
+		offsetX = offsetY = 0;
 		size = 1;
 		gradual = false;
 	}
@@ -48,6 +50,11 @@ namespace game_framework
 		//x = tx;
 		//y = ty;
 	}
+	void Camera::SetCameraOffsetXY(int tx, int ty)
+	{
+		offsetX = tx;
+		offsetY = ty;
+	}
 	void Camera::SetGradual(bool grad)
 	{
 		gradual = grad;
@@ -59,8 +66,8 @@ namespace game_framework
 	CPoint Camera::GetXY(int tx, int ty)
 	{
 		CPoint temp;
-		temp.x = (int)(x + (tx - x) * size);
-		temp.y = (int)(y + (ty - y) * size);
+		temp.x = (int)((tx - x) * size + SIZE_X / 2 + offsetX);
+		temp.y = (int)((ty - y) * size + SIZE_Y / 2 + offsetY);
 		return temp;
 	}
 	CPoint Camera::GetCameraXY()
@@ -69,5 +76,12 @@ namespace game_framework
 		temp.x = x;
 		temp.y = y;
 		return temp;
+	}
+	void Camera::Reset()
+	{
+		x = SIZE_X / 2; y = SIZE_Y / 2;
+		offsetX = offsetY = 0;
+		size = 1;
+		gradual = false;
 	}
 }

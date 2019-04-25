@@ -18,7 +18,7 @@ struct UI_Button
         state = isBitmapLoaded = _bounce = _bounce_key = 0;
         trigger = tri;
     }
-    string name;
+    string name, str;
     int x, y, width, height, state, trigger, pos_x, pos_y;
     UINT _bounce, _bounce_key, isBitmapLoaded;
     FImage* _outside, *_hover, *_click;
@@ -67,7 +67,7 @@ struct UI_Button
 		_bounce = nFlags;
 		_bounce_key = nChar;
     }
-    void OnShow()
+    void OnShow(int _x, int _y)
     {
         if (isBitmapLoaded)
         {
@@ -95,23 +95,24 @@ struct UI_Button
             switch (state)
             {
                 case BUTTON_OUTSIDE:
-                    DrawRectangle(x, y, width, height, RGB(255, 0, 0));
+                    DrawRectangle(_x, _y, width, height, RGB(255, 0, 0));
                     break;
 
                 case BUTTON_HOVER:
-                    DrawRectangle(x, y, width, height, RGB(0, 0, 255));
+                    DrawRectangle(_x, _y, width, height, RGB(0, 0, 255));
                     break;
 
                 case BUTTON_CLICK:
                 case BUTTON_RELEASE:
-                    DrawRectangle(x, y, width, height, RGB(0, 255, 0));
+                    DrawRectangle(_x, _y, width, height, RGB(0, 255, 0));
                     break;
 
                 default:
                     break;
             }
 
-            OnShowText(name, x, y, 10, RGB(255, 255, 255));
+			OnShowText(name, _x, _y, 10, RGB(255, 255, 255));
+			OnShowText(str, _x + (width - str.length() * 12) / 2, _y + (height - 12) / 2, 10, RGB(255, 255, 255));
         }
     }
     void Reset()
@@ -128,13 +129,15 @@ public:
 	string ChosenButton();
 	int GetButtonState(string name);
 	void SetButtonState(UINT nFlags, UINT nChar, CPoint point);
-	void AddButton(string name, int x = 0, int y = 0, int width = 50, int height = 50, int tpx = 0, int tpy = 0, int tri = BUTTON_RELEASE);
+	void AddButton(string name, int x = 0, int y = 0, int width = 50, int height = 50, int tpx = 0, int tpy = 0, string str = "", int tri = BUTTON_RELEASE);
+	void SetXY(int x, int y);
 	void DelButton(string name);
 	void OnShow();
 	void Reset();
 	void OnKeyDown(UINT, UINT, UINT);
 	vector<UI_Button*>::iterator Index(string name);
 private:
+	int offsetX, offsetY;
 	vector<UI_Button*> _buttons;
 	vector< vector<int> > _pos;
 	void ChangeButton(int, int);

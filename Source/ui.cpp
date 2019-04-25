@@ -47,18 +47,24 @@ void UI::SetButtonState(UINT nFlags, UINT nChar, CPoint point)
 {
     for (auto i = _buttons.begin(); i != _buttons.end(); i++)
     {
-        (*i)->SetState(nFlags, nChar, point, &_pos);
+        (*i)->SetState(nFlags, nChar, CPoint(point.x - offsetX, point.y - offsetY), &_pos);
     }
 }
-void UI::AddButton(string name, int x, int y, int width, int height, int tpx, int tpy, int tri)
+void UI::AddButton(string name, int x, int y, int width, int height, int tpx, int tpy, string str, int tri)
 {
     UI_Button* button = new UI_Button(x, y, width, height, tri, tpx, tpy);
     button->name = name;
+	button->str = str;
     _buttons.push_back(button);
 	static bool first = true;
 	if (!first) {
 		_pos[tpx][tpy] = 0;
 	}
+}
+void UI::SetXY(int x, int y)
+{
+	offsetX = x;
+	offsetY = y;
 }
 void UI::DelButton(string name)
 {
@@ -74,7 +80,7 @@ void UI::OnShow()
 {
     for (auto i = _buttons.begin(); i != _buttons.end(); i++)
     {
-        (*i)->OnShow();
+        (*i)->OnShow((*i)->x + offsetX, (*i)->y + offsetY);
     }
 }
 void UI::Reset()

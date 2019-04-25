@@ -11,7 +11,9 @@ namespace game_framework
 {
 
 map<string, int> idbList;
+map<string, int> idsList;
 map<int, string> fileList;
+map<int, string> soundList;
 map<int, ColBmp> colBmp;
 map<int, ColArray> cArray;
 
@@ -46,6 +48,31 @@ void DrawRectangle(int x, int y, int width, int height, COLORREF color)
 	pDC->Rectangle(x, y, x + width, y + height);
 	pDC->SelectObject(pp);						// 釋放 pen
 	pDC->SelectObject(pb);						// 釋放 brush
+	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+}
+
+void DrawRectangleBlock(int x, int y, int width, int height, COLORREF color)
+{
+	CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
+	CPen* pp, p(PS_SOLID, 0, color);
+	pp = pDC->SelectObject(&p);
+	pDC->MoveTo(CPoint(x, y));
+	pDC->LineTo(CPoint(x + width, y));
+	pDC->LineTo(CPoint(x + width, y + height));
+	pDC->LineTo(CPoint(x, y + height));
+	pDC->LineTo(CPoint(x, y));
+	pDC->SelectObject(pp);						// 釋放 pen
+	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+}
+
+void DrawLine(int x1, int y1, int x2, int y2, COLORREF color)
+{
+	CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
+	CPen* pp, p(PS_SOLID, 0, color);
+	pp = pDC->SelectObject(&p);
+	pDC->MoveTo(CPoint(x1, y1));
+	pDC->LineTo(CPoint(x2, y2));
+	pDC->SelectObject(pp);						// 釋放 pen
 	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 }
 
@@ -103,7 +130,7 @@ void GetCollideArray(int file, ColBmp* bmp)
 
     Ctemp.width = bmp->width;
     Ctemp.height = bmp->height;
-    Ctemp.fileName = GetNameFromIDB(file);
+    Ctemp.fileName = GetNameFromResource(file);
     cArray.insert(pair<int, ColArray>(file, Ctemp));
 }
 
@@ -112,9 +139,10 @@ void InitializeNum(string type, string file)
 {
 	TRACE(("Initializing map " + type + "...\n").c_str());
 	ifstream myfile;
-	map<string, int>* idblist = (map<string, int>*)malloc(sizeof(map<string, int>));
 	myfile.open(file.c_str());
 	string line;
+	int count = 0;
+	map<string, int>* list = (type == "IDB" ? &idbList : type == "IDS" ? &idsList : nullptr);
 
 	while (getline(myfile, line))
 	{
@@ -136,11 +164,12 @@ void InitializeNum(string type, string file)
 			}
 		}
 
-		if (flag)
-			idbList.insert(pair<string, int>(s_n, stoi(s)));
+		if (flag) {
+			count++;
+			list->insert(pair<string, int>(s_n, stoi(s)));
+		}
 	}
-
-	free(idblist);
+	TRACE("----Resource Number List size : %d\n", list->size());
 	myfile.close();
 }
 
@@ -149,6 +178,9 @@ void InitializeFile(string type, string file)
     TRACE("Initializing file...\n");
     ifstream myfile(file.c_str());
     string line;
+	int count = 0;
+	map<string, int>* list = (type == "BITMAP" ? &idbList : type == "SOUND" ? &idsList : nullptr);
+	map<int, string>* flist = (type == "BITMAP" ? &fileList : type == "SOUND" ? &soundList : nullptr);
 
     while (getline(myfile, line))
     {
@@ -159,9 +191,9 @@ void InitializeFile(string type, string file)
 
         while (iss >> s && !flag)
         {
-            it = idbList.find(s);
+            it = list->find(s);
 
-            if (it != idbList.end())
+            if (it != list->end())
             {
                 iss >> s;
 
@@ -174,12 +206,22 @@ void InitializeFile(string type, string file)
 
         if (flag)
         {
+			count++;
             s = s.substr(5, s.size() - 6);
-            fileList.insert(pair<int, string>(it->second, s));
+			flist->insert(pair<int, string>(it->second, s));
         }
     }
-
+	TRACE("----Resource File Path List size : %d\n", flist->size());
     myfile.close();
+}
+
+void InitializeLoadSound()
+{
+	for (auto i = idsList.begin(); i != idsList.end(); i++)
+	{
+		TRACE("---Loading sound effect %s...\n", i->first.c_str());
+		CAudio::Instance()->Load(i->second);
+	}
 }
 
 void InitializeCollideArray(bool trace)
@@ -196,24 +238,30 @@ void InitializeCollideArray(bool trace)
     }
 }
 
-string GetPathFromIDB(int file)
+string GetPathFromResource(int file, string type)
 {
-    return fileList.find(file)->second;
+	map<int, string>* list = (type == "IDB" ? &fileList : type == "IDS" ? &soundList : nullptr);
+	if (list != nullptr) {
+		return list->find(file)->second;
+	}
+	return "";
 }
 
-string GetNameFromIDB(int file)
+string GetNameFromResource(int file, string type)
 {
-    for (auto it = idbList.begin(); it != idbList.end(); ++it)
-        if (it->second == file)
-            return it->first;
-
+	map<string, int>* list = (type == "IDB" ? &idbList : type == "IDS" ? &idsList : nullptr);
+	if (list != nullptr) {
+		for (auto it = list->begin(); it != list->end(); ++it)
+			if (it->second == file)
+				return it->first;
+	}
     return "";
 }
 
 ColBmp readBMP(int file, int x_max, int y_max)
 {
     ColBmp tBmp;
-    HBITMAP hBmp = (HBITMAP)LoadImage(NULL, (LPCSTR) GetPathFromIDB(file).c_str(), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_DEFAULTSIZE | LR_LOADFROMFILE);
+    HBITMAP hBmp = (HBITMAP)LoadImage(NULL, (LPCSTR) GetPathFromResource(file).c_str(), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_DEFAULTSIZE | LR_LOADFROMFILE);
 	
     if (hBmp == NULL) return tBmp;
 

@@ -219,7 +219,7 @@ bool CAudio::Load(unsigned id)
 	//
 	// Make sure the audio file has not been loaded yet.
 	//
-	char *lpzFileName = ToCharPtr(GetPathFromIDB(id));
+	char *lpzFileName = ToCharPtr(GetPathFromResource(id, "IDS"));
 	map<int, Info>::iterator i = info.find(id);
 	if (i != info.end()) {
 		string str;
