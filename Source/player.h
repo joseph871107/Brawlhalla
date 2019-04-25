@@ -82,10 +82,9 @@ class Player
         void DoHorizontalOffset();
 
         //Movements
-        void DoMoveLeft();
-        void DoMoveRight();
+        void DoMoveLeft(int movementUnit);
+        void DoMoveRight(int movementUnit);
         void DoLand();
-        void DoInertia();
 
         //Jump
         void DoJump();
@@ -173,7 +172,6 @@ class Player
         //Movements
         bool _isPressingLeft, _isPressingRight, _isPressingDown;
         bool _dir; // false: player facing left, true: player facing right
-        double _movementVelocity;
 
         //Jump
         bool _isTriggerJump;
