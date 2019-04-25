@@ -111,12 +111,10 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
 	InitializeNum();									// 初始化"resource.h"中點陣圖的資源編號
 	InitializeNum("IDS");									// 初始化"resource.h"中音效的資源編號
-    TRACE("idbList size : %d\n", idbList.size());
     ShowInitProgress(13);
     /*------------------------------INIT PROGRESS STAGE 2------------------------------*/
 	InitializeFile();									// 初始化"game.rc"中點陣圖的路徑
 	InitializeFile("SOUND");									// 初始化"game.rc"中音效的路徑
-    TRACE("fileList size : %d\n", fileList.size());
     ShowInitProgress(25);
 
     /*------------------------------INIT PROGRESS STAGE 3------------------------------*/
@@ -128,12 +126,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
-	CAudio::Instance()->Load(IDS_PUNCH);
-	CAudio::Instance()->Load(IDS_BATTLE_MUSIC);
-	CAudio::Instance()->Load(IDS_DRAW_WEAPON);
-	CAudio::Instance()->Load(IDS_SWOOSH);
-	CAudio::Instance()->Load(IDS_SWING_ATTACK);
-	CAudio::Instance()->Load(IDS_MENU_MUSIC);
+	InitializeLoadSound();
 	CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
     vector<GroundPARM> groundXY = _groundsXY;
 	camera = Camera();
@@ -293,7 +286,7 @@ void BattleSystem::OnShow()
         for (auto i = _players.begin(); i != _players.end(); i++)
         {
 			int temp = (*i)->ShowAnimationState();
-            sprintf(str, "%s", GetNameFromIDB((*i)->ShowAnimationState()).c_str());
+            sprintf(str, "%s", GetNameFromResource((*i)->ShowAnimationState()).c_str());
             OnShowText(str, 0, 12 + 12 * _players.size() + 12 * _grounds.size() + 12 * (i - _players.begin()), 10);
         }
     }
