@@ -29,7 +29,6 @@ const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
 const int MAP_BORDER_Y2 = SIZE_Y + MAP_BORDER_OFFSET;
 const double BITMAP_SIZE = 2.5;
-const int MAX_UNCONSCIOUS_FRAMES = 30;
 // Triggered Animation Key ID
 const int KEY_GND_ATTACK = 112;
 const int KEY_GND_MOVE_RIGHT_ATTACK = 122;
@@ -128,6 +127,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     _isDrawingWeapon = false;
     //
     _isHoldingWeapon = _isTriggerAttack = false;
+    _takenDmg = 0;
     _playersPtr = playersPtrValue;
     //
     _grounds = groundsValue;
@@ -171,7 +171,7 @@ void Player::LoadBitmap()
     lr = vector<int> { IDB_P1_WALL0M, IDB_P1_WALL1M };
     lfl = vector<int> { IDB_P1_FALL0M, IDB_P1_FALL1M };
     lfr = vector<int> { IDB_P1_FALL0, IDB_P1_FALL1 };
-	ufl = vector<int>{ IDB_P1_KNOCK_DOWN3, IDB_P1_KNOCK_DOWN4, IDB_P1_KNOCK_DOWN5 };
+    ufl = vector<int> { IDB_P1_KNOCK_DOWN3, IDB_P1_KNOCK_DOWN4, IDB_P1_KNOCK_DOWN5 };
     ufr = vector<int> { IDB_P1_KNOCK_DOWN3M, IDB_P1_KNOCK_DOWN4M, IDB_P1_KNOCK_DOWN5M };
     AddCAnimation(&rl, BITMAP_SIZE); //ani[0] Run Left
     AddCAnimation(&rr, BITMAP_SIZE); //ani[1] Run Right
@@ -379,8 +379,12 @@ void Player::UnconsciouslyOnMove()
 
     //-----------------UNTITLED SECTION-----------------//
     _unconsciousFramesCount++; // increment the frames count
+    int maxFrames = 10;
 
-    if (_unconsciousFramesCount == MAX_UNCONSCIOUS_FRAMES)
+    if (_takenDmg > maxFrames)
+        maxFrames = _takenDmg;
+
+    if (_unconsciousFramesCount == maxFrames)
     {
         SetConscious();
     }
@@ -976,12 +980,15 @@ void Player::DoAttack()
     {
         if ((eachPlayerPtr != this) && (HitPlayer(eachPlayerPtr, _triggeredAniDir)))
         {
-            if (_isHoldingWeapon)
-                CAudio::Instance()->Play(IDS_SWOOSH);
-            else
-                CAudio::Instance()->Play(IDS_PUNCH);
+            if (!eachPlayerPtr->_isUnconscious) // If the target player is conscious
+            {
+                if (_isHoldingWeapon)
+                    CAudio::Instance()->Play(IDS_SWOOSH);
+                else
+                    CAudio::Instance()->Play(IDS_PUNCH);
 
-            PerformAttack(eachPlayerPtr, _triggeredAniDir);
+                PerformAttack(eachPlayerPtr, _triggeredAniDir);
+            }
         }
     }
 }
@@ -990,7 +997,10 @@ void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
 {
     Vector2 vectorAttackerToTargetPlayer;
     vectorAttackerToTargetPlayer.SetXY(GetCor(0), GetCor(1), targetPlayer->GetCor(0), targetPlayer->GetCor(1));
-    int attackOffsetMagnitude = 30;
+    //
+    targetPlayer->_takenDmg += 2; // increment the taken damage
+    int attackOffsetMagnitude = targetPlayer->_takenDmg;
+    //
     double multiplier = attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength();
     Vector2 targetPlayerDisplacementVector(Round(vectorAttackerToTargetPlayer.GetX() * multiplier),
                                            Round(vectorAttackerToTargetPlayer.GetY() * multiplier));
@@ -1087,6 +1097,9 @@ void Player::DoRespawn()
     //If the player is out of the screen, then he will be set on the highest position
     _y = 0;
     _verticalVelocity = INITIAL_VELOCITY;
+    // Reset taken damages
+    _takenDmg = 0;
+    SetConscious();
 }
 
 void Player::SetAnimationStateByWeapon(int num)
