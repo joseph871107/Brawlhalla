@@ -13,7 +13,6 @@ namespace game_framework
 const int PLAYER_INIT_X = 700;
 const int PLAYER_INIT_Y = 100;
 const int MAX_JUMP_COUNT = 2;
-const int MOVEMENT_UNIT = 10;
 const int GND_ATTACK_MOVEMENT_UNIT = 12;
 const double INITIAL_VELOCITY = 18;
 const double INITIAL_ACCELERATION = 1.2;
@@ -29,6 +28,8 @@ const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
 const int MAP_BORDER_Y2 = SIZE_Y + MAP_BORDER_OFFSET;
 const double BITMAP_SIZE = 2.5;
+const double MAX_MOVEMENT_VELOCITY = 10;
+const double MOVEMENT_ACCELERATION = 0.5;
 // Triggered Animation Key ID
 const int KEY_GND_ATTACK = 112;
 const int KEY_GND_MOVE_RIGHT_ATTACK = 122;
@@ -112,6 +113,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     _keys = keysValue;
     //
     _isPressingLeft = _isPressingRight = _dir = false;
+    _movementVelocity = 0;
     //
     _isPressingDown = false;
     //
@@ -930,14 +932,22 @@ void Player::DoHorizontalOffset()
     }
 }
 
-void Player::DoMoveLeft(int movementUnit)
+void Player::DoMoveLeft()
 {
-    _x -= movementUnit;
+    if (_movementVelocity > -MAX_MOVEMENT_VELOCITY)
+        _movementVelocity -= MOVEMENT_ACCELERATION;
+
+    _x += Round(_movementVelocity);
+    //_x -= movementUnit;
 }
 
-void Player::DoMoveRight(int movementUnit)
+void Player::DoMoveRight()
 {
-    _x += movementUnit;
+    if (_movementVelocity < MAX_MOVEMENT_VELOCITY)
+        _movementVelocity += MOVEMENT_ACCELERATION;
+
+    _x += Round(_movementVelocity);
+    //_x += movementUnit;
 }
 
 void Player::DoLand()
@@ -1482,6 +1492,26 @@ void Player::SetCurrentTriggeredAnimation()
     SetAnimationStateByWeapon(_triggeredAniByWpnID);
 }
 
+void Player::DoInertia()
+{
+    // Gradually set the movement velocity back to 0 to give the player some inertia
+    // Note that inertia only happen on the ground
+    if (_movementVelocity > 2)
+    {
+        _movementVelocity -= MOVEMENT_ACCELERATION * 2;
+        _x += Round(_movementVelocity);
+    }
+    else if (_movementVelocity < -2)
+    {
+        _movementVelocity += MOVEMENT_ACCELERATION * 2;
+        _x += Round(_movementVelocity);
+    }
+    else
+    {
+        _movementVelocity = 0;
+    }
+}
+
 void Player::DoNonTriggeredAnimation()
 {
     /*	~ Remarks:
@@ -1495,15 +1525,15 @@ void Player::DoNonTriggeredAnimation()
     {
         /* ON GROUND */
         case KEY_GND_IDLE: // on ground, not move, not attack
-            // Do nothing
+            DoInertia();
             break;
 
         case KEY_GND_MOVE_RIGHT: // on ground, move right, not attack
-            DoMoveRight(MOVEMENT_UNIT);
+            DoMoveRight();
             break;
 
         case KEY_GND_MOVE_LEFT: // on ground, move left, not attack
-            DoMoveLeft(MOVEMENT_UNIT);
+            DoMoveLeft();
             break;
 
         case KEY_GND_LAND_DOWN: // on ground, land down, not attack
@@ -1512,15 +1542,15 @@ void Player::DoNonTriggeredAnimation()
 
         /* ON AIR */
         case KEY_AIR_IDLE: // on air, not move, not attack
-            // Do nothing
+            _movementVelocity = 0; // reset the 'movementVelocity' to cancel inertia
             break;
 
         case KEY_AIR_MOVE_RIGHT: // on air, move right, not attack
-            DoMoveRight(MOVEMENT_UNIT);
+            DoMoveRight();
             break;
 
         case KEY_AIR_MOVE_LEFT: // on air, move left, not attack
-            DoMoveLeft(MOVEMENT_UNIT);
+            DoMoveLeft();
             break;
 
         case KEY_AIR_LAND_DOWN: // on air, land down, not attack
