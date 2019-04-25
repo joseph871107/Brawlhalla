@@ -75,4 +75,11 @@ namespace game_framework
 		temp.y = y;
 		return temp;
 	}
+	void Camera::Reset()
+	{
+		x = SIZE_X / 2; y = SIZE_Y / 2;
+		offsetX = offsetY = 0;
+		size = 1;
+		gradual = false;
+	}
 }

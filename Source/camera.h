@@ -20,6 +20,7 @@ namespace game_framework
 		double GetSize();
 		CPoint GetXY(int tx, int ty);
 		CPoint GetCameraXY();
+		void Reset();
 	private:
 		int x, y, offsetX, offsetY;
 		double size;

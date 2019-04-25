@@ -63,7 +63,7 @@ void BattleSystem::OnBeginState()
         sprintf(str, "%d", i - _players.begin() + 1);
         (*i)->Initialize(_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
     }
-	ResizeCamera();
+	camera.Reset();
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
