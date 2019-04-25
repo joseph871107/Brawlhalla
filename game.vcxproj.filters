@@ -1023,5 +1023,31 @@
     <Image Include="RES\player1\Sword2\adventurer-swrd-drw-03.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-05(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-04(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-03(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-05.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-04.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-03.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sounds\Menu.mp3" />
+    <Media Include="sounds\BattleMusic.mp3" />
+    <Media Include="sounds\SwingAttack.mp3" />
+    <Media Include="sounds\Punch.mp3" />
+    <Media Include="sounds\DrawWeapon.mp3" />
+    <Media Include="sounds\Swoosh.mp3" />
   </ItemGroup>
 </Project>

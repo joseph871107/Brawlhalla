@@ -26,7 +26,7 @@ class Player
 
         //Others - Joseph
         void SetHoldWeapon(bool);
-        void BeenAttacked(Vector2 displaymentVector);
+        void BeenAttacked(Vector2 displaymentVector, bool beingAttackedDirection);
         bool GetHoldWeapon();
         bool GetDirection();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
@@ -72,10 +72,10 @@ class Player
         bool IsOutMapBorder();
 
         //Offsets
-        void InitiateOffsetUp(double initialOffsetVelocity);
-        void InitiateOffsetDown(double initialOffsetVelocity);
-        void InitiateOffsetLeft(double initialOffsetVelocity);
-        void InitiateOffsetRight(double initialOffsetVelocity);
+        void InitiateOffsetUp(double initialOffsetVelocityMagnitude);
+        void InitiateOffsetDown(double initialOffsetVelocityMagnitude);
+        void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
+        void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
 
         bool IsBeingOffsetHorizontally();
         void DoHorizontalOffset();
@@ -94,19 +94,23 @@ class Player
 
         //Attack
         void DoAttack();
-        bool IsAttacking();
+        void PerformAttack(Player* targetPlayer, bool attackDirection);
         bool HitPlayer(Player* targetPlayer, bool attackDirection);
-        void PerformAttack(Player* targetPlayer);
-
-        //Draw weapon
-        bool IsDrawingWeapon();
-        bool IsFinishedDrawingAnimation();
 
         //Throw weapon
         void DoThrowingWeapon(); /// Unused function
 
         //Audio management
         void PlayAudioByState();
+
+		//Unconscious state
+		void InitializeUnconsciousState(bool beingAttackedDirection);
+		void ConsciouslyOnMove();
+		void UnconsciouslyOnMove();
+		void SetConscious();
+
+		//Bounce Off the Ground
+		void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
 
         //Others
         void DoDead();
@@ -163,7 +167,7 @@ class Player
 
         //Offsets
         bool _isOffsetLeft, _isOffsetRight;
-        double _offsetVelocity;
+        double _horizontalVelocity;
 
         //Movements
         bool _isPressingLeft, _isPressingRight, _isPressingDown;
@@ -174,7 +178,7 @@ class Player
         int _jumpCount;
 
         //Gravity
-        double _velocity;
+        double _verticalVelocity;
         double _acceleration;
 
         //Draw Weapon
@@ -231,6 +235,11 @@ class Player
         vector<vector<CAnimation>> _aniByWpn;
         int _currentAniByWpn;
         bool _aniSelector; // false - choose 'ani' for showing the animation, true - choose '_aniByWpn' for showing the animation
+
+		//Unconscious state
+		bool _isUnconscious;
+		int _unconsciousFramesCount;
+		bool _unconsciousAniDir;
 
 };
 #endif
