@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文 (繁體，台灣) resources
+// Chinese (Traditional, Taiwan) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
@@ -196,20 +196,24 @@ IDC_GAMECURSOR          CURSOR                  "..\\res\\gamecurs.cur"
 // SOUND
 //
 
-IDS_MENU_MUSIC			SOUND					"..\\sounds\\Menu.mp3"
-IDS_BATTLE_MUSIC		SOUND					"..\\sounds\\BattleMusic.mp3"
-IDS_SWING_ATTACK		SOUND					"..\\sounds\\SwingAttack.mp3"
-IDS_PUNCH				SOUND					"..\\sounds\\Punch.mp3"
-IDS_DRAW_WEAPON			SOUND					"..\\sounds\\DrawWeapon.mp3"
-IDS_SWOOSH				SOUND					"..\\sounds\\Swoosh.mp3"
+IDS_MENU_MUSIC          SOUND                   "..\\sounds\\Menu.mp3"
 
+IDS_BATTLE_MUSIC        SOUND                   "..\\sounds\\BattleMusic.mp3"
 
-#endif    // 中文 (繁體，台灣) resources
+IDS_SWING_ATTACK        SOUND                   "..\\sounds\\SwingAttack.mp3"
+
+IDS_PUNCH               SOUND                   "..\\sounds\\Punch.mp3"
+
+IDS_DRAW_WEAPON         SOUND                   "..\\sounds\\DrawWeapon.mp3"
+
+IDS_SWOOSH              SOUND                   "..\\sounds\\Swoosh.mp3"
+
+#endif    // Chinese (Traditional, Taiwan) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// 英文 (美國) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -596,6 +600,26 @@ IDB_P1_WPN2_DRAW2       BITMAP                  "..\\RES\\player1\\Sword2\\adven
 
 IDB_P1_WPN2_DRAW3       BITMAP                  "..\\RES\\player1\\Sword2\\adventurer-swrd-drw-03.bmp"
 
+IDB_P1_KNOCK_DOWN5M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-knock-dwn-05(Mirrored).bmp"
+
+IDB_P1_KNOCK_DOWN4M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-knock-dwn-04(Mirrored).bmp"
+
+IDB_P1_KNOCK_DOWN3M     BITMAP                  "..\\RES\\player1\\Punch\\adventurer-knock-dwn-03(Mirrored).bmp"
+
+IDB_P1_KNOCK_DOWN5      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-knock-dwn-05.bmp"
+
+IDB_P1_KNOCK_DOWN4      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-knock-dwn-04.bmp"
+
+IDB_P1_KNOCK_DOWN3      BITMAP                  "..\\RES\\player1\\Punch\\adventurer-knock-dwn-03.bmp"
+
+IDB_P1_CROUCH1          BITMAP                  "..\\RES\\player1\\adventurer-crouch-01.bmp"
+
+IDB_P1_CROUCH1M         BITMAP                  "..\\RES\\player1\\adventurer-crouch-01(Mirrored).bmp"
+
+IDB_P1_CROUCH0          BITMAP                  "..\\RES\\player1\\adventurer-crouch-00.bmp"
+
+IDB_P1_CROUCH0M         BITMAP                  "..\\RES\\player1\\adventurer-crouch-00(Mirrored).bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -881,7 +905,7 @@ BEGIN
     ID_BUTTON_UNITTEST      "Perform Unit Test"
 END
 
-#endif    // 英文 (美國) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

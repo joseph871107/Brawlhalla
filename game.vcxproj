@@ -294,6 +294,7 @@
     <ClCompile Include="Source\ui.cpp" />
     <ClCompile Include="Source\weapon.cpp" />
     <ClCompile Include="Source\window.cpp" />
+    <ClCompile Include="Source\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\battleSystem.h" />
@@ -315,6 +316,7 @@
     <ClInclude Include="Source\gamelib.h" />
     <ClInclude Include="Source\brawlhalla.h" />
     <ClInclude Include="Source\window.h" />
+    <ClInclude Include="Source\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\game.rc">
@@ -401,6 +403,10 @@
     <Image Include="RES\player1\adventurer-attack3-04.bmp" />
     <Image Include="RES\player1\adventurer-attack3-05(Mirrored).bmp" />
     <Image Include="RES\player1\adventurer-attack3-05.bmp" />
+    <Image Include="RES\player1\adventurer-crouch-00(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-crouch-00.bmp" />
+    <Image Include="RES\player1\adventurer-crouch-01(Mirrored).bmp" />
+    <Image Include="RES\player1\adventurer-crouch-01.bmp" />
     <Image Include="RES\player1\adventurer-fall-00(Mirrored).bmp" />
     <Image Include="RES\player1\adventurer-fall-00.bmp" />
     <Image Include="RES\player1\adventurer-fall-01(Mirrored).bmp" />
@@ -473,6 +479,12 @@
     <Image Include="RES\player1\Punch\adventurer-kick-06.bmp" />
     <Image Include="RES\player1\Punch\adventurer-kick-07(Mirrored).bmp" />
     <Image Include="RES\player1\Punch\adventurer-kick-07.bmp" />
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-03(Mirrored).bmp" />
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-03.bmp" />
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-04(Mirrored).bmp" />
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-04.bmp" />
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-05(Mirrored).bmp" />
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-05.bmp" />
     <Image Include="RES\player1\Punch\adventurer-punch-00(Mirrored).bmp" />
     <Image Include="RES\player1\Punch\adventurer-punch-00.bmp" />
     <Image Include="RES\player1\Punch\adventurer-punch-01(Mirrored).bmp" />
@@ -589,6 +601,14 @@
     <Image Include="RES\weapons\DefaultFallingSword\WeaponPickup.bmp" />
     <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L.bmp" />
     <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sounds\BattleMusic.mp3" />
+    <Media Include="sounds\DrawWeapon.mp3" />
+    <Media Include="sounds\Menu.mp3" />
+    <Media Include="sounds\Punch.mp3" />
+    <Media Include="sounds\SwingAttack.mp3" />
+    <Media Include="sounds\Swoosh.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

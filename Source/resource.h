@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 產生的 Include 檔案。
-// 由 game.rc 使用
+// Microsoft Visual C++ generated include file.
+// Used by game.rc
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_SOCKETS_INIT_FAILED         104
@@ -239,12 +239,23 @@
 #define IDB_P1_WPN2_DRAW2               519
 #define IDB_BITMAP8                     520
 #define IDB_P1_WPN2_DRAW3               520
+#define IDB_P1_KNOCK_DOWN5M             523
+#define IDB_P1_KNOCK_DOWN4M             524
+#define IDB_P1_KNOCK_DOWN3M             525
+#define IDB_P1_KNOCK_DOWN5              526
+#define IDB_P1_KNOCK_DOWN4              527
+#define IDB_P1_KNOCK_DOWN3              528
+#define IDB_P1_CROUCH1                  529
+#define IDB_P1_CROUCH1M                 530
+#define IDB_P1_CROUCH0                  531
+#define IDB_BITMAP4                     532
+#define IDB_P1_CROUCH0M                 532
 #define IDS_PUNCH                       750
 #define IDS_BATTLE_MUSIC                751
-#define IDS_DRAW_WEAPON                	752
-#define IDS_SWOOSH	                	753
-#define IDS_SWING_ATTACK	            754
-#define IDS_MENU_MUSIC		            755
+#define IDS_DRAW_WEAPON                 752
+#define IDS_SWOOSH                      753
+#define IDS_SWING_ATTACK                754
+#define IDS_MENU_MUSIC                  755
 #define IDB_NUM0                        1000
 #define IDB_NUM1                        1001
 #define IDB_NUM2                        1002
@@ -275,7 +286,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        523
+#define _APS_NEXT_RESOURCE_VALUE        533
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

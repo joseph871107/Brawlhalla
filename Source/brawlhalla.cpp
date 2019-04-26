@@ -67,8 +67,9 @@ namespace game_framework
 /////////////////////////////////////////////////////////////////////////////
 
 bool CGameStateInit::_cameraEnabled = true; //initialize
+
 CGameStateInit::CGameStateInit(CGame* g)
-	: CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
+    : CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
 {
 	/*camera.SetSize(0.5);
 	welcomeWindow.AddCamera(&camera);
@@ -82,95 +83,91 @@ CGameStateInit::~CGameStateInit()
 void CGameStateInit::OnInit()
 {
     ShowInitProgress(0);
-
-	Object *uiPtr, *ui_info1, *ui_info2, *ui_info3, *ui_info4;
-
-	uiPtr = new Object();
-	uiPtr->LoadBitmap(IDB_UI_BACKGROUND);
-	uiPtr->SetSize(uiPtr->GetWidth()/ SIZE_X);
-	uiPtr->SetXY((SIZE_X - uiPtr->GetWidth()) / 2, 0);
-	welcomeWindow.AddItem(uiPtr);
-
-	uiPtr = new Object(0.8);
-	uiPtr->LoadBitmap(IDB_UI_TITLE, RGB(0, 255, 0));
-	uiPtr->SetXY((SIZE_X - uiPtr->GetWidth()) / 2, 0);
-	welcomeWindow.AddItem(uiPtr);
-
-	ui_info1 = new Object(0.7);
-	ui_info1->LoadBitmap(IDB_UI_INFO1);
-	int refX = (SIZE_X - ui_info1->GetWidth()) / 2, refY = 200;
-	ui_info1->SetXY(refX, refY);
-	welcomeWindow.AddItem(ui_info1);
-	ui_info2 = new Object(ui_info1->GetSize());
-	ui_info2->SetXY(refX + ui_info1->GetWidth(), refY);
-	ui_info2->LoadBitmap(IDB_UI_INFO2);
-	welcomeWindow.AddItem(ui_info2);
-	ui_info3 = new Object();
-	ui_info3->LoadBitmap(IDB_UI_INFO3);
-	ui_info3->SetSize((float)(ui_info2->GetWidth()) / (float)(ui_info3->GetWidth()));
-	ui_info3->SetXY(refX + ui_info1->GetWidth(), refY + ui_info2->GetHeight());
-	welcomeWindow.AddItem(ui_info3);
-	ui_info4 = new Object();
-	ui_info4->LoadBitmap(IDB_UI_INFO4);
-	ui_info4->SetSize((float)(ui_info1->GetWidth()) / (float)(ui_info4->GetWidth()));
-	ui_info4->SetXY(refX, refY + ui_info1->GetHeight());
-	welcomeWindow.AddItem(ui_info4);
-
-	int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() +ui_info4->GetHeight()) / 3;
-	welcomeWindow.Initialize(1, 3);
-	welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, butW, butH, 0, 0);
-	welcomeWindow.GetUI()->AddButton("settings", refX - butW, refY + butH, butW, butH, 0, 1);
-	welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 0, 2);
-
-	settingWindow.Initialize(1, 2, false, false);
-	settingWindow.SetXY((SIZE_X - butH)/2, 300);
-	settingWindow.GetUI()->AddButton("camera", 0, 0, butH, butH, 0, 0, "True");
-	settingWindow.GetUI()->AddButton("back", 0, butH, butH, butH, 0, 1);
-
-	ShowInitProgress(10);
+    Object* uiPtr, *ui_info1, *ui_info2, *ui_info3, *ui_info4;
+    uiPtr = new Object();
+    uiPtr->LoadBitmap(IDB_UI_BACKGROUND);
+    uiPtr->SetSize(uiPtr->GetWidth() / SIZE_X);
+    uiPtr->SetXY((SIZE_X - uiPtr->GetWidth()) / 2, 0);
+    welcomeWindow.AddItem(uiPtr);
+    uiPtr = new Object(0.8);
+    uiPtr->LoadBitmap(IDB_UI_TITLE, RGB(0, 255, 0));
+    uiPtr->SetXY((SIZE_X - uiPtr->GetWidth()) / 2, 0);
+    welcomeWindow.AddItem(uiPtr);
+    ui_info1 = new Object(0.7);
+    ui_info1->LoadBitmap(IDB_UI_INFO1);
+    int refX = (SIZE_X - ui_info1->GetWidth()) / 2, refY = 200;
+    ui_info1->SetXY(refX, refY);
+    welcomeWindow.AddItem(ui_info1);
+    ui_info2 = new Object(ui_info1->GetSize());
+    ui_info2->SetXY(refX + ui_info1->GetWidth(), refY);
+    ui_info2->LoadBitmap(IDB_UI_INFO2);
+    welcomeWindow.AddItem(ui_info2);
+    ui_info3 = new Object();
+    ui_info3->LoadBitmap(IDB_UI_INFO3);
+    ui_info3->SetSize((float)(ui_info2->GetWidth()) / (float)(ui_info3->GetWidth()));
+    ui_info3->SetXY(refX + ui_info1->GetWidth(), refY + ui_info2->GetHeight());
+    welcomeWindow.AddItem(ui_info3);
+    ui_info4 = new Object();
+    ui_info4->LoadBitmap(IDB_UI_INFO4);
+    ui_info4->SetSize((float)(ui_info1->GetWidth()) / (float)(ui_info4->GetWidth()));
+    ui_info4->SetXY(refX, refY + ui_info1->GetHeight());
+    welcomeWindow.AddItem(ui_info4);
+    int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() + ui_info4->GetHeight()) / 3;
+    welcomeWindow.Initialize(1, 3);
+    welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, butW, butH, 0, 0);
+    welcomeWindow.GetUI()->AddButton("settings", refX - butW, refY + butH, butW, butH, 0, 1);
+    welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 0, 2);
+    settingWindow.Initialize(1, 2, false, false);
+    settingWindow.SetXY((SIZE_X - butH) / 2, 300);
+    settingWindow.GetUI()->AddButton("camera", 0, 0, butH, butH, 0, 0, "True");
+    settingWindow.GetUI()->AddButton("back", 0, butH, butH, butH, 0, 1);
+    ShowInitProgress(10);
 }
 
 void CGameStateInit::OnBeginState()
 {
-	static bool first = true;
-	if (first) {
-		first = false;
-	}
-	else {
-		welcomeWindow.GetUI()->Reset();
-		settingWindow.GetUI()->Reset();
-		CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
-	}
+    static bool first = true;
+
+    if (first)
+    {
+        first = false;
+    }
+    else
+    {
+        welcomeWindow.GetUI()->Reset();
+        settingWindow.GetUI()->Reset();
+        CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
+    }
 }
 
 void CGameStateInit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	welcomeWindow.OnKeyDown(nChar, nRepCnt, nFlags);
-	settingWindow.OnKeyDown(nChar, nRepCnt, nFlags);
+    welcomeWindow.OnKeyDown(nChar, nRepCnt, nFlags);
+    settingWindow.OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	welcomeWindow.OnKeyUp(nChar, nRepCnt, nFlags);
-	settingWindow.OnKeyUp(nChar, nRepCnt, nFlags);
+    welcomeWindow.OnKeyUp(nChar, nRepCnt, nFlags);
+    settingWindow.OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	welcomeWindow.OnLButtonDown(nFlags, point);
-	settingWindow.OnLButtonDown(nFlags, point);
+    welcomeWindow.OnLButtonDown(nFlags, point);
+    settingWindow.OnLButtonDown(nFlags, point);
 }
 
 void CGameStateInit::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	welcomeWindow.OnLButtonUp(nFlags, point);
-	settingWindow.OnLButtonUp(nFlags, point);
+    welcomeWindow.OnLButtonUp(nFlags, point);
+    settingWindow.OnLButtonUp(nFlags, point);
 }
 
 void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 {
-	welcomeWindow.OnMouseMove(nFlags, point);
-	settingWindow.OnMouseMove(nFlags, point);
+    welcomeWindow.OnMouseMove(nFlags, point);
+    settingWindow.OnMouseMove(nFlags, point);
 }
 
 void CGameStateInit::OnRButtonDown(UINT nFlags, CPoint point)
@@ -183,13 +180,13 @@ void CGameStateInit::OnRButtonUp(UINT nFlags, CPoint point)
 
 void CGameStateInit::OnShow()
 {
-	welcomeWindow.OnShow();
-	settingWindow.OnShow();
+    welcomeWindow.OnShow();
+    settingWindow.OnShow();
 }
 
 bool CGameStateInit::GetCameraEnable()
 {
-	return _cameraEnabled;
+    return _cameraEnabled;
 }
 
 void CGameStateInit::OnMove()
@@ -287,7 +284,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 {
     if (battleSystem.IsGameOver())								// Demo 關閉遊戲的方法
     {
-		CAudio::Instance()->Stop(IDS_BATTLE_MUSIC);
+        CAudio::Instance()->Stop(IDS_BATTLE_MUSIC);
         SetLegacyString(battleSystem.GetGameResult());
         battleSystem.ResolveMemoryLeaksOnEndState();
         GotoGameState(GAME_STATE_OVER);					// 關閉遊戲
@@ -301,9 +298,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
     battleSystem.OnInit();
-	/*test.LoadBitmap(IDB_GROUND,RGB(0,255,0));
-	test.SetAlpha(100);
-	test.SetTopLeft(0, 0);*/
+    /*test.LoadBitmap(IDB_GROUND,RGB(0,255,0));
+    test.SetAlpha(100);
+    test.SetTopLeft(0, 0);*/
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -339,11 +336,12 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnShow()
 {
-	if (!battleSystem.IsGameOver())
+    if (!battleSystem.IsGameOver())
         battleSystem.OnShow();
-	static int deg = 0;
-	/*test.Rotate(deg++);
-	test.ShowBitmap();*/
+
+    static int deg = 0;
+    /*test.Rotate(deg++);
+    test.ShowBitmap();*/
 }
 
 string CGameStateRun::GetLegacyString()

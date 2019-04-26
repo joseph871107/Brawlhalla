@@ -85,7 +85,8 @@ bool Weapon::BeThrowen()
 
 void Weapon::OnShow()
 {
-	CPoint cam = camera->GetXY(x, y);
+    CPoint cam = camera->GetXY(x, y);
+
     if (_isThrowing && !_tDir)
     {
         tl.SetTopLeft(cam.x, cam.y);
@@ -98,7 +99,7 @@ void Weapon::OnShow()
     }
     else if (!_isHolding)
     {
-		cam = camera->GetXY(x, y - (int)(height * _size));
+        cam = camera->GetXY(x, y - (int)(height * _size));
         bmp.SetTopLeft(cam.x, cam.y);
         bmp.ShowBitmap(_size * camera->GetSize());
     }
@@ -128,7 +129,7 @@ void Weapon::OnMove()
         else if (_hitPlayer != nullptr && _hitPlayer != _throwHost)
         {
             _isThrowing = false;
-            _hitPlayer->BeenAttacked(_tDir);
+            _throwHost->PerformAttack(_hitPlayer, _tDir);
         }
 
         if (_tDir)
