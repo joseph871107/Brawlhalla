@@ -71,9 +71,9 @@ bool CGameStateInit::_cameraEnabled = true; //initialize
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
 {
-	/*camera.SetSize(0.5);
+	camera.SetSize(0.5);
 	welcomeWindow.AddCamera(&camera);
-	settingWindow.AddCamera(&camera);*/
+	settingWindow.AddCamera(&camera);
 }
 
 CGameStateInit::~CGameStateInit()

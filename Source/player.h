@@ -118,9 +118,9 @@ class Player
         int Round(double i);
         bool StateChanged();
         bool WpnStateChanged();
-		void ModifyVerticalOffsetFunctions();
+        void ModifyVerticalOffsetFunctions();
 
-        ///Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
+        /// Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
         //Weapon
         void SetAnimationStateByWeapon(int num);
 
@@ -151,15 +151,20 @@ class Player
         void DoNonTriggeredAnimation();
         void SetCurrentNonTriggerAnimation();
 
-		//Edges
-		bool IsOnEdge();
-		bool IsFirstTimeOnEdge();
-		void InitializeOnEdge();
-		void DoOnEdge();
-		void DoLeaveEdge();
+        //Edges
+        bool IsOnEdge();
+        bool IsFirstTimeOnEdge();
+        void InitializeOnEdge();
+        void DoOnEdge();
+        void DoLeaveEdge();
 
-		//Ground
-		void DoOnGround();
+        //Ground
+        void DoOnGround();
+
+        //
+        void SetAnimationSelector();
+        void SetTriggeredAnimationSelector();
+        void SetNonTriggeredAnimationSelector();
 
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
@@ -221,7 +226,7 @@ class Player
         Camera* camera;
 
         ///Comment for future devs: Unorganized member variables are declared below. They should be cleaned up in the near future
-        //Required for triggered animation concept
+        //Triggered animation concept
         bool _isTriggeredAni;
         // False - these is no triggered animation, the player can perform non-triggered animations
         // True - a triggered animation is activated, the player is constrained to perform the triggered animation
@@ -236,10 +241,11 @@ class Player
         // false: player facing left, true: player facing right
 
         int _triggeredAniAnimationID;
-        // The index of the triggered animation in the 2-dimensional vector '_aniByWpn[_wpnID][---index---]'.
-        // Its value is one of the constants starting with 'ANI_WPN_ID_...'
-        // It is defined this way because for now, most of the triggered animation is of "Animation By Weapon"
-        // Technically, the animation needed in 'OnShow()' is defined by '_aniByWpn[_wpnID][_triggeredAniByWpnID]'
+        // The index of the triggered animation in the 1-dimensional vector 'ani[---index---]' or 2-dimensional vector '_aniByWpn[_wpnID][---index---]',
+        // depending on the value of '_aniSelector'
+        // Its value is one of the constants starting with 'ANI_ID_...' or 'ANI_WPN_ID_...'
+        // Technically, the animation needed in 'OnShow()' is defined by 'ani[_triggeredAniAnimationID]' or '_aniByWpn[_wpnID][_triggeredAniAnimationID]',
+        // depending on the value of '_aniSelector'
 
         int _lastTriggeredAniKeyID;
 
@@ -253,16 +259,18 @@ class Player
         /// Remark: Technically, if '_aniSelector' is true, '_aniByWpn' is displayed instead of the traditional 'ani', and vice versa.
         vector<vector<CAnimation>> _aniByWpn;
         int _currentAniByWpn;
-        bool _aniSelector; // false - choose 'ani' for showing the animation, true - choose '_aniByWpn' for showing the animation
+        bool _aniSelector;
+        // False - choose 'ani' for showing the animation
+        // True - choose '_aniByWpn' for showing the animation
+        // This variable is determined in 'Player::OnMove()'
 
         //Unconscious state
         bool _isUnconscious;
         int _unconsciousFramesCount;
         bool _unconsciousAniDir;
 
-
-		//Edges
-		bool _isFirstTimeOnEdge;
+        //Edges
+        bool _isFirstTimeOnEdge;
 };
 #endif
 }

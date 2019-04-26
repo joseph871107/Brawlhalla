@@ -409,16 +409,6 @@ void Player::UnconsciouslyOnMove()
         ani[ANI_ID_UNCONSCIOUS_FLYING_RIGHT].Reset();
     }
 
-    /// Comment for future devs: '_aniSelector'
-    _aniSelector = false;
-
-    /// Comment for future devs: When the player is being hit, yet he is doing his triggered animation, then his triggered animation must be stopped. Put it in a better position
-    if (_isTriggeredAni)   //Thoroughly finish it and reset the triggered animation's variables
-    {
-        FinishTriggeredAnimation();
-        ResetTriggeredAnimationVariables();
-    }
-
     //-----------------POSITION TRANSFORMATION SECTION-----------------//
     /* Bounce Off the Grounds */
     int playerX1 = GetCor(0);
@@ -464,17 +454,103 @@ void Player::UnconsciouslyOnMove()
     }
 }
 
+void Player::SetTriggeredAnimationSelector()
+{
+    switch (_triggeredAniKeyID)
+    {
+        /* ON GROUND */
+        case KEY_GND_ATTACK: // on ground, not move, attack
+            _aniSelector = true;
+            break;
+
+        case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
+            _aniSelector = true;
+            break;
+
+        case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
+            _aniSelector = true;
+            break;
+
+        case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
+            _aniSelector = true;
+            break;
+
+        /* ON AIR */
+        case KEY_AIR_ATTACK: // on air, not move, attack
+            _aniSelector = true;
+            break;
+
+        case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
+            _aniSelector = true;
+            break;
+
+        case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
+            _aniSelector = true;
+            break;
+
+        case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
+            _aniSelector = true;
+            break;
+
+        /* SPECIAL CASES*/
+        case KEY_DRAW_SWORD:
+            _aniSelector = true;
+            break;
+
+        case KEY_DODGE:
+            _aniSelector = false; // independent of '_aniByWpn'
+            break;
+
+        default:
+            break;
+    }
+}
+
+void Player::SetNonTriggeredAnimationSelector()
+{
+    _aniSelector = false;
+}
+
+void Player::SetAnimationSelector()
+{
+    if (_isUnconscious)
+        _aniSelector = false;
+    else
+    {
+        if (_isTriggeredAni)
+            SetTriggeredAnimationSelector();
+        else
+            SetNonTriggeredAnimationSelector();
+    }
+}
 void Player::OnMove()
 {
     //-----------------ANIMATIONS SECTION-----------------//
-    if (_aniSelector)
-        _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
-    else
-        ani[currentAni].OnMove();
+    /* SET ANIMATION SELECTOR */
+    SetAnimationSelector();
+
+    /*	~ UNCONSCIOUS ANIMATION
+    	~ When the player is being hit, yet he is doing his triggered animation,
+    	~ then his triggered animation must be stopped. Put it in a better position
+    */
+    if (_isUnconscious && _isTriggeredAni)
+    {
+        //Enforce to finish the triggered animation and reset the triggered animation's variables
+        FinishTriggeredAnimation();
+        ResetTriggeredAnimationVariables();
+    }
 
     /* JUMP ANIMATION */
     if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge() || (_isTriggerJump && _jumpCount > 0))
         ResetAnimations(ANI_ID_JUMP_LEFT);
+
+    /*	~ MOVE CURRENT ANIMATION
+    	~ Proceed to the next CMovingBitmap of the current animation
+    */
+    if (_aniSelector)
+        _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
+    else
+        ani[currentAni].OnMove();
 
     //-----------------POSITION TRANSFORMATION SECTION-----------------//
     /* CONSCIOUS/ UNCONSCIOUS */
@@ -496,18 +572,16 @@ void Player::OnMove()
         ResetJumpCount();
     }
 }
-
 void Player::OnShow()
 {
     // Set current animation
+    // It is not consistent with 'Player::OnMove()' here when we prioritize the condition '_isTriggeredAni' over '_aniSelector',
+    // but it makes it more tractable to set the animation of trigger animation and non trigger animation separately
+	/// Comment for future devs: inconsistent
     if (_isTriggeredAni)
-    {
         SetCurrentTriggeredAnimation();
-    }
     else
-    {
         SetCurrentNonTriggerAnimation();
-    }
 
     // Show current animation
     ShowAnimation();
@@ -521,7 +595,6 @@ void Player::OnShow()
         OnShowText(_name.c_str(), cam.x, cam.y, Round(15 * camera->GetSize()), RGB(255, 255, 255));
     }///////////////////////////////
 }
-
 void Player::OnKeyDown(const UINT& nChar)
 {
     if (nChar == _keys[0]) // Up
@@ -556,7 +629,6 @@ void Player::OnKeyDown(const UINT& nChar)
         // Do nothing
     }
 }
-
 void Player::OnKeyUp(const UINT& nChar)
 {
     if (nChar == _keys[1]) // Right
@@ -576,21 +648,18 @@ void Player::OnKeyUp(const UINT& nChar)
         // Do nothing
     }
 }
-
 void Player::SetHoldWeapon(bool isHolding)
 {
     _isHoldingWeapon = isHolding;
     _isTriggerDrawWeapon = isHolding;
     _isTriggerAttack = false; // We are picking weapon, not performing an attack
 }
-
 void Player::InitializeUnconsciousState(bool beingAttackedDirection)
 {
     _isUnconscious = true;
     _unconsciousFramesCount = 0;
     _unconsciousAniDir = beingAttackedDirection;
 }
-
 void Player::BeenAttacked(Vector2 displacementVector, bool beingAttackedDirection)
 {
     int displaceX = displacementVector.GetX();
@@ -624,17 +693,14 @@ void Player::BeenAttacked(Vector2 displacementVector, bool beingAttackedDirectio
 
     InitializeUnconsciousState(beingAttackedDirection);
 }
-
 bool Player::GetHoldWeapon()
 {
     return _isHoldingWeapon;
 }
-
 bool Player::GetDirection()
 {
     return _dir;
 }
-
 int Player::GetCor(int index)
 {
     switch (index)
@@ -655,42 +721,34 @@ int Player::GetCor(int index)
             return NULL;
     }
 }
-
 int Player::ShowAnimationState()
 {
     return (_aniSelector ? _aniByWpn[_wpnID][_currentAniByWpn].GetCurrentBitmapNumber() : (ani.begin() + currentAni)->GetCurrentBitmapNumber());
 }
-
 int Player::GetWidth()
 {
     return GetCor(2) - GetCor(0);
 }
-
 int Player::GetHeight()
 {
     return GetCor(3) - GetCor(1);
 }
-
 const string& Player::GetName() const
 {
     return (_name);
 }
-
 const int& Player::GetLife() const
 {
     return (_life);
 }
-
 const bool Player::IsOutOfLife() const
 {
     return (_life == 0);
 }
-
 const long& Player::GetAttackKey() const
 {
     return (_keys[4]);
 }
-
 void Player::GenerateAndSetWeaponID() // This function is intended to be called by 'Weapon::HitPlayer()'
 {
     // The player will pick his weapon alternatively through out the round
@@ -705,12 +763,10 @@ void Player::GenerateAndSetWeaponID() // This function is intended to be called 
         _wpnID = 1;
     }
 }
-
 void Player::ResetWeaponID()
 {
     _wpnID = 0; // reset to default weapon: punch
 }
-
 void Player::AddCAnimation(vector<int>* list, double size, int delay, bool repeat, int times)
 //void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1);
 {
@@ -724,15 +780,11 @@ void Player::AddCAnimation(vector<int>* list, double size, int delay, bool repea
     ani.push_back(temp);
     bmp_iter.push_back(list);
 }
-
-
-
 void Player::ResetAnimations(int leftAnimationID)
 {
     ani[leftAnimationID].Reset(); // Reset left animation
     ani[leftAnimationID + 1].Reset(); // Reset right animation
 }
-
 void Player::SetAnimationStateLeftRight(int leftAnimationID)
 {
     if (_dir) // Player is facing right
@@ -744,13 +796,10 @@ void Player::SetAnimationStateLeftRight(int leftAnimationID)
         SetAnimationState(leftAnimationID);
     }
 }
-
 void Player::SetAnimationState(int num)
 {
-    _aniSelector = false; // Choose '_ani' for showing the animation
     currentAni = num;
 }
-
 void Player::ShowAnimation()
 {
     if (_PLAYER_DEBUG)
@@ -778,50 +827,42 @@ void Player::ShowAnimation()
         ani_iter->OnShow();
     }
 }
-
 bool Player::IsIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
 {
     return (playerX2 >= groundX1 && playerX1 <= groundX2 && playerY2 >= groundY1 && playerY1 <= groundY2);
 }
-
 bool Player::IsExplicitlyVerticallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
 {
     return (!(playerY2 <= groundY1 || playerY1 >= groundY2));
 }
-
 bool Player::IsExplicitlyHorizontallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
 {
     return (!((playerX2 <= groundX1) || (playerX1 >= groundX2)));
 }
-
 bool Player::IsOnGroundLeftEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
 {
     return (IsExplicitlyVerticallyIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2)
             &&
             (playerX1 < groundX1 && groundX1 < playerX2 && playerX2 < groundX2));
 }
-
 bool Player::IsOnGroundRightEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
 {
     return (IsExplicitlyVerticallyIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2)
             &&
             (groundX1 < playerX1 && playerX1 < groundX2 && groundX2 < playerX2));
 }
-
 bool Player::IsOnGroundUnderside(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
 {
     return (IsExplicitlyHorizontallyIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2)
             &&
             (groundY1 < playerY1 && playerY1 <= groundY2 && groundY2 < playerY2));
 }
-
 bool Player::IsOnParticularGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
 {
     return (playerY1 < groundY1 && groundY1 <= playerY2 && playerY2 < groundY2
             &&
             groundX1 <= playerX1 && playerX2 <= groundX2);
 }
-
 void Player::DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
 {
     if (IsOnGroundLeftEdge(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
@@ -841,7 +882,6 @@ void Player::DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, i
         _y = groundY1 - _height;
     }
 }
-
 bool Player::IsOnGround()
 {
     int playerX1 = GetCor(0);
@@ -862,7 +902,6 @@ bool Player::IsOnGround()
 
     return false;
 }
-
 bool Player::IsOnLeftEdge()
 {
     int playerX1 = GetCor(0);
@@ -883,7 +922,6 @@ bool Player::IsOnLeftEdge()
 
     return false;
 }
-
 bool Player::IsOnRightEdge()
 {
     int playerX1 = GetCor(0);
@@ -904,7 +942,6 @@ bool Player::IsOnRightEdge()
 
     return false;
 }
-
 bool Player::IsOutMapBorder()
 {
     return (!(
@@ -913,7 +950,6 @@ bool Player::IsOutMapBorder()
                 ((MAP_BORDER_Y1 <= GetCor(1)/*y1*/) && (GetCor(3)/*y2*/ <= MAP_BORDER_Y2))
             ));
 }
-
 void Player::InitiateOffsetUp(double initialOffsetVelocityMagnitude)
 {
     _verticalVelocity = -initialOffsetVelocityMagnitude;
@@ -922,31 +958,26 @@ void Player::InitiateOffsetUp(double initialOffsetVelocityMagnitude)
     // since the player is currently on the ground, 'Player::OnMove()' will fix its '_y' onto the surface
     // instead of modifying it as expectation. Thus, '_y' must be altered here to set the player jump his ass up!!
 }
-
 void Player::InitiateOffsetDown(double initialOffsetVelocityMagnitude)
 {
     _verticalVelocity = initialOffsetVelocityMagnitude;
 }
-
 void Player::InitiateOffsetLeft(double initialOffsetVelocityMagnitude)
 {
     _horizontalVelocity = initialOffsetVelocityMagnitude;
     _isOffsetLeft = true;
     _isOffsetRight = false;
 }
-
 void Player::InitiateOffsetRight(double initialOffsetVelocityMagnitude)
 {
     _horizontalVelocity = initialOffsetVelocityMagnitude;
     _isOffsetRight = true;
     _isOffsetLeft = false;
 }
-
 bool Player::IsBeingOffsetHorizontally()
 {
     return (_isOffsetLeft || _isOffsetRight);
 }
-
 void Player::DoHorizontalOffset()
 {
     if (_isOffsetLeft)
@@ -974,22 +1005,18 @@ void Player::DoHorizontalOffset()
         }
     }
 }
-
 void Player::DoMoveLeft(int movementUnit)
 {
     _x -= movementUnit;
 }
-
 void Player::DoMoveRight(int movementUnit)
 {
     _x += movementUnit;
 }
-
 void Player::DoLand()
 {
     _verticalAcceleration = LANDING_ACCELERATION;
 }
-
 void Player::DoJump()
 {
     if (_jumpCount > 0)   //If the player is able to jump more
@@ -998,12 +1025,10 @@ void Player::DoJump()
         _jumpCount--; //Decrement the jumps available
     }
 }
-
 void Player::ResetJumpCount()
 {
     _jumpCount = MAX_JUMP_COUNT;
 }
-
 void Player::InitiateWallJump()
 {
     if (_jumpCount > 0) //If the player is able to jump more
@@ -1018,7 +1043,6 @@ void Player::InitiateWallJump()
         }
     }
 }
-
 void Player::DoAttack()
 {
     for (auto eachPlayerPtr : (*_playersPtr))
@@ -1038,7 +1062,6 @@ void Player::DoAttack()
         }
     }
 }
-
 void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
 {
     Vector2 vectorAttackerToTargetPlayer;
@@ -1052,7 +1075,6 @@ void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
                                            Round(vectorAttackerToTargetPlayer.GetY() * multiplier));
     targetPlayer->BeenAttacked(targetPlayerDisplacementVector, attackDirection);
 }
-
 bool Player::HitPlayer(Player* targetPlayer, bool attackDirection)
 {
     int attackerX1 = GetCor(0);
@@ -1078,13 +1100,11 @@ bool Player::HitPlayer(Player* targetPlayer, bool attackDirection)
             &&
             targetPlayer->GetCor(3) >= attackRangeY1 && targetPlayer->GetCor(1) <= attackRangeY2);
 }
-
 void Player::DoThrowingWeapon()
 {
     Weapon throwing;
     throwing.Initialize(vector<Ground*> {}, vector<Player*> {this});
 }
-
 void Player::PlayAudioByState()
 {
     int aboutToPlay = -1;
@@ -1129,7 +1149,6 @@ void Player::PlayAudioByState()
     if (aboutToPlay != -1)
         CAudio::Instance()->Play(aboutToPlay);
 }
-
 void Player::DoDead()
 {
     SetHoldWeapon(false);
@@ -1137,7 +1156,6 @@ void Player::DoDead()
     _life--;
     /// Activate dead effect
 }
-
 void Player::DoRespawn()
 {
     //If the player is out of the screen, then he will be set on the highest position
@@ -1147,13 +1165,10 @@ void Player::DoRespawn()
     _takenDmg = 0;
     SetConscious();
 }
-
 void Player::SetAnimationStateByWeapon(int num)
 {
-    _aniSelector = true; // Choose '_aniByWpn' for showing the animation
     _currentAniByWpn = num;
 }
-
 void Player::AddCollectionOfAnimationsByWeapon(
     vector<int>& s2l, vector<int>& s2r, vector<int>& al, vector<int>& ar,
     vector<int>& gmal, vector<int>& gmar, vector<int>& sal, vector<int>& sar,
@@ -1179,7 +1194,6 @@ void Player::AddCollectionOfAnimationsByWeapon(
     AddCAnimationByWeapon(tempAniByWpn, &sdr, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
     _aniByWpn.push_back(tempAniByWpn);
 }
-
 void Player::AddCAnimationByWeapon(vector<CAnimation>& tempAniByWpn, vector<int>* list, double size, int delay, bool repeat, int times)
 //void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1);
 {
@@ -1192,7 +1206,6 @@ void Player::AddCAnimationByWeapon(vector<CAnimation>& tempAniByWpn, vector<int>
     temp.SetDelayCount(delay);
     tempAniByWpn.push_back(temp);
 }
-
 int Player::GetKeyCombination()
 {
     /* Key combination structure:
@@ -1223,11 +1236,12 @@ int Player::GetKeyCombination()
     else
         keyCombString = keyCombString + "1";
 
-    if (_isTriggerDrawWeapon) // Special case: The player draws his weapon
+    /* SPECIAL CASES */
+    if (_isTriggerDrawWeapon) // The player draws his weapon
     {
         keyCombString = "113";
     }
-    else if (_isTriggerDodge) // Special case: The player dodges
+    else if (_isTriggerDodge) // The player dodges
     {
         keyCombString = "114";
     }
@@ -1250,16 +1264,11 @@ void Player::ProcessKeyCombinationOnMove()
         {
             InitiateTriggeredAnimation();
         }
-        else
-        {
-            /// Comment for future devs: 'aniSelector' is set here, super dirty, need rectification
-            _aniSelector = false;
-        }
     }
 
     if (_isTriggeredAni) // If an animation is triggered, then we process it (there is no initiation here)
     {
-        if (!IsFinishedTriggeredAnimation()) // If an animation is triggered and the time duration dedicated for it has not elapsed, then increment '_triggeredAniCount' (representing the elapsed animation time) and finish doing the triggered animation
+        if (!IsFinishedTriggeredAnimation()) // If an animation is triggered and has not finished, then do the forementioned animation
         {
             DoTriggeredAnimation();
         }
@@ -1274,7 +1283,6 @@ void Player::ProcessKeyCombinationOnMove()
         DoNonTriggeredAnimation();
     }
 }
-
 void Player::ResetTriggeredAnimationVariables()
 {
     _isTriggeredAni = false;
@@ -1282,14 +1290,12 @@ void Player::ResetTriggeredAnimationVariables()
     _triggeredAniAnimationID = -1;
     _triggeredAniDir = false;
 }
-
 void Player::SetFirstThreeTriggeredAnimationVariables(int keyCombInt)
 {
     _isTriggeredAni = true;
     _triggeredAniKeyID = keyCombInt;
     _triggeredAniDir = _dir;
 }
-
 void Player::SetTriggeredAnimationVariables(int keyCombInt)
 {
     switch (keyCombInt)
@@ -1335,26 +1341,6 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
 
             break;
 
-        case KEY_DRAW_SWORD:
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
-
-            if (_triggeredAniDir) // If the player is facing right
-                _triggeredAniAnimationID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_DRAW_SWORD_LEFT;
-
-            break;
-
-        case KEY_DODGE:
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
-
-            if (_triggeredAniDir) //If the player is facing right
-                _triggeredAniAnimationID = ANI_ID_DODGE_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_ID_DODGE_LEFT;
-
-            break;
-
         /* ON AIR */
         case KEY_AIR_ATTACK: // on air, not move, attack
             SetFirstThreeTriggeredAnimationVariables(keyCombInt);
@@ -1396,39 +1382,53 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
 
             break;
 
+        /* SPECIAL CASES */
+        case KEY_DRAW_SWORD:
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+
+            if (_triggeredAniDir) // If the player is facing right
+                _triggeredAniAnimationID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
+            else
+                _triggeredAniAnimationID = ANI_WPN_ID_DRAW_SWORD_LEFT;
+
+            break;
+
+        case KEY_DODGE:
+            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+
+            if (_triggeredAniDir) // If the player is facing right
+                _triggeredAniAnimationID = ANI_ID_DODGE_RIGHT;
+            else
+                _triggeredAniAnimationID = ANI_ID_DODGE_LEFT;
+
+            break;
+
         default:
-            // Do nothing
             break;
     }
 }
-
 void Player::GetAndSetTriggeredAnimation()
 {
     int keyCombInt = GetKeyCombination();
     SetTriggeredAnimationVariables(keyCombInt);
 }
-
 void Player::InitiateTriggeredAnimation()
 {
-    /// Comment for future devs: '_aniSelector' is now set here, need retification
     switch (_triggeredAniKeyID)
     {
         /* ON GROUND */
         case KEY_GND_ATTACK: // on ground, not move, attack
             _isTriggerAttack = false;
-            _aniSelector = true;
             break;
 
         case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
             _isTriggerAttack = false;
             InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
-            _aniSelector = true;
             break;
 
         case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
             _isTriggerAttack = false;
             InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
-            _aniSelector = true;
             break;
 
         case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
@@ -1438,48 +1438,41 @@ void Player::InitiateTriggeredAnimation()
                 InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
 
             _isTriggerAttack = false;
-            _aniSelector = true;
-            break;
-
-        case KEY_DRAW_SWORD:
-            _isTriggerDrawWeapon = false;
-            _aniSelector = true;
-            break;
-
-        case KEY_DODGE:
-            _isTriggerDodge = false;
-            _aniSelector = false; // Special case
-            _isDodging = true;
             break;
 
         /* ON AIR */
         case KEY_AIR_ATTACK: // on air, not move, attack
             _isTriggerAttack = false;
-            _aniSelector = true;
             break;
 
         case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
             _isTriggerAttack = false;
             InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
-            _aniSelector = true;
             break;
 
         case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
             _isTriggerAttack = false;
             InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
-            _aniSelector = true;
             break;
 
         case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
             _isTriggerAttack = false;
-            _aniSelector = true;
+            break;
+
+        /* SPECIAL CASES*/
+        case KEY_DRAW_SWORD:
+            _isTriggerDrawWeapon = false;
+            break;
+
+        case KEY_DODGE:
+            _isTriggerDodge = false;
+            _isDodging = true;
             break;
 
         default:
             break;
     }
 }
-
 void Player::DoTriggeredAnimation()
 {
     switch (_triggeredAniKeyID)
@@ -1501,14 +1494,6 @@ void Player::DoTriggeredAnimation()
             DoAttack();
             break;
 
-        case KEY_DRAW_SWORD:
-            // Do nothing
-            break;
-
-        case KEY_DODGE:
-            // Do nothing
-            break;
-
         /* ON AIR */
         case KEY_AIR_ATTACK: // on air, not move, attack
             DoAttack();
@@ -1526,11 +1511,19 @@ void Player::DoTriggeredAnimation()
             DoAttack();
             break;
 
+        /* SPECIAL CASES */
+        case KEY_DRAW_SWORD:
+            // Do nothing
+            break;
+
+        case KEY_DODGE:
+            // Do nothing
+            break;
+
         default:
             break;
     }
 }
-
 bool Player::IsFinishedTriggeredAnimation()
 {
     if (_aniSelector)
@@ -1538,24 +1531,64 @@ bool Player::IsFinishedTriggeredAnimation()
     else
         return ani[_triggeredAniAnimationID].IsFinalBitmap();
 }
-
 void Player::FinishTriggeredAnimation()
 {
+    // Reset the animation of the finished triggered animation
     if (_aniSelector)
-    {
         _aniByWpn[_wpnID][_triggeredAniAnimationID].Reset();
-    }
     else
-    {
         ani[_triggeredAniAnimationID].Reset();
 
-        if (_triggeredAniAnimationID == ANI_ID_DODGE_LEFT || _triggeredAniAnimationID == ANI_ID_DODGE_RIGHT) // Special case: Dodge animation
-        {
+    // Finish other logic regarding the triggered animation
+    switch (_triggeredAniKeyID)
+    {
+        /* ON GROUND */
+        case KEY_GND_ATTACK: // on ground, not move, attack
+            // Do nothing
+            break;
+
+        case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
+            // Do nothing
+            break;
+
+        case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
+            // Do nothing
+            break;
+
+        case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
+            // Do nothing
+            break;
+
+        /* ON AIR */
+        case KEY_AIR_ATTACK: // on air, not move, attack
+            // Do nothing
+            break;
+
+        case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
+            // Do nothing
+            break;
+
+        case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
+            // Do nothing
+            break;
+
+        case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
+            // Do nothing
+            break;
+
+        /* SPECIAL CASES */
+        case KEY_DRAW_SWORD:
+            // Do nothing
+            break;
+
+        case KEY_DODGE:
             _isDodging = false;
-        }
+            break;
+
+        default:
+            break;
     }
 }
-
 void Player::SetCurrentTriggeredAnimation()
 {
     if (_aniSelector)
@@ -1563,7 +1596,6 @@ void Player::SetCurrentTriggeredAnimation()
     else
         SetAnimationState(_triggeredAniAnimationID);
 }
-
 void Player::DoNonTriggeredAnimation()
 {
     /*	~ Remarks:
@@ -1626,10 +1658,9 @@ void Player::DoNonTriggeredAnimation()
         _isTriggerJump = false; // Turn off the jump trigger
     }
 }
-
 void Player::SetCurrentNonTriggerAnimation()
 {
-    if (_isUnconscious)
+    if (_isUnconscious) // Player is unconscious
     {
         if (_unconsciousAniDir)
             SetAnimationState(ANI_ID_UNCONSCIOUS_FLYING_RIGHT);
@@ -1661,17 +1692,14 @@ void Player::SetCurrentNonTriggerAnimation()
             SetAnimationStateLeftRight(ANI_ID_JUMP_LEFT);
     }
 }
-
 void Player::AddCamera(Camera* cam)
 {
     camera = cam;
 }
-
 int Player::Round(double i)
 {
     return (int)(i - 0.5);
 }
-
 bool Player::StateChanged()
 {
     bool ret = false;
@@ -1682,7 +1710,6 @@ bool Player::StateChanged()
     _lastTriggeredAniKeyID = GetKeyCombination();
     return ret;
 }
-
 bool Player::WpnStateChanged()
 {
     bool ret = false;
@@ -1693,12 +1720,10 @@ bool Player::WpnStateChanged()
     _lastTriggeredAniByWpnID = _triggeredAniAnimationID;
     return ret;
 }
-
 void Player::SetConscious()
 {
     _isUnconscious = false;
     _unconsciousFramesCount = 0;
     _unconsciousAniDir = false;
 }
-
 }
