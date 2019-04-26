@@ -575,14 +575,13 @@ void Player::OnMove()
 void Player::OnShow()
 {
     // Set current animation
+    // It is not consistent with 'Player::OnMove()' here when we prioritize the condition '_isTriggeredAni' over '_aniSelector',
+    // but it makes it more tractable to set the animation of trigger animation and non trigger animation separately
+	/// Comment for future devs: inconsistent
     if (_isTriggeredAni)
-    {
         SetCurrentTriggeredAnimation();
-    }
     else
-    {
         SetCurrentNonTriggerAnimation();
-    }
 
     // Show current animation
     ShowAnimation();
@@ -1661,7 +1660,7 @@ void Player::DoNonTriggeredAnimation()
 }
 void Player::SetCurrentNonTriggerAnimation()
 {
-    if (_isUnconscious)
+    if (_isUnconscious) // Player is unconscious
     {
         if (_unconsciousAniDir)
             SetAnimationState(ANI_ID_UNCONSCIOUS_FLYING_RIGHT);
