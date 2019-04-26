@@ -26,6 +26,11 @@ Object::Object(double s)
 	camera = nullptr;
 }
 
+CPoint Object::GetXY()
+{
+	return CPoint(x, y);
+}
+
 bool Object::HitRectangle(int tx1, int ty1, int tx2, int ty2)
 {
     int x1 = GetCor(0), y1 = GetCor(1), x2 = GetCor(2), y2 = GetCor(3);
@@ -100,15 +105,16 @@ void Object::SetSize(double s)
 
 void Object::OnShow(int offsetX, int offsetY)
 {
+	int _x = x + offsetX, _y = y + offsetY;
+	double size = _size;
 	if (camera != nullptr) {
 		CPoint cam = camera->GetXY(x, y);
-		bmp.SetTopLeft(cam.x, cam.y);
-		bmp.ShowBitmap(_size * camera->GetSize());
+		_x = cam.x;
+		_y = cam.y;
+		size = _size * camera->GetSize();
 	}
-	else {
-		bmp.SetTopLeft(x + offsetX, y + offsetY);
-		bmp.ShowBitmap(_size);
-	}
+	bmp.SetTopLeft(_x, _y);
+	bmp.ShowBitmap(size);
 }
 
 void Object::OnMove()

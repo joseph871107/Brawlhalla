@@ -77,6 +77,7 @@ class CGameStateInit : public CGameState
     private:
 		Window welcomeWindow;
 		Window settingWindow;
+		Camera camera;
 		static bool _cameraEnabled;
 };
 

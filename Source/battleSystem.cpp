@@ -64,6 +64,7 @@ void BattleSystem::OnBeginState()
         (*i)->Initialize(_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
     }
 	camera.Reset();
+	camera.SetGradual(true);
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素

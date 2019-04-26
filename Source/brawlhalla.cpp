@@ -70,9 +70,9 @@ bool CGameStateInit::_cameraEnabled = true; //initialize
 CGameStateInit::CGameStateInit(CGame* g)
 	: CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
 {
-	/*Camera *camera = new Camera(400,400);
-	camera->SetSize(0.5);
-	welcomeWindow.AddCamera(camera);*/
+	/*camera.SetSize(0.5);
+	welcomeWindow.AddCamera(&camera);
+	settingWindow.AddCamera(&camera);*/
 }
 
 CGameStateInit::~CGameStateInit()
@@ -222,7 +222,7 @@ void CGameStateInit::OnMove()
 			_cameraEnabled = false;
 		else
 			_cameraEnabled = true;
-		(*settingWindow.GetUI()->Index("camera"))->str = (_cameraEnabled ? "True" : "False");
+		(*settingWindow.GetUI()->Index("camera"))->SetStr(_cameraEnabled ? "True" : "False");
 	}
 }
 
