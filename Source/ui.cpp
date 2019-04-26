@@ -27,34 +27,40 @@ namespace game_framework
     {
         delete element;
     }
+	camera = nullptr;
 }
 
 string UI::ChosenButton()
 {
     for (auto i = _buttons.begin(); i != _buttons.end(); i++)
     {
-        if ((*i)->state == (*i)->trigger)
-            return (*i)->name;
+        if ((*i)->GetState() == (*i)->GetTrigger())
+            return (*i)->GetName();
     }
 
     return "empty";
 }
 int UI::GetButtonState(string name)
 {
-    return (*Index(name))->state;
+    return (*Index(name))->GetState();
 }
 void UI::SetButtonState(UINT nFlags, UINT nChar, CPoint point)
 {
     for (auto i = _buttons.begin(); i != _buttons.end(); i++)
     {
-        (*i)->SetState(nFlags, nChar, CPoint(point.x - offsetX, point.y - offsetY), &_pos);
+        (*i)->SetState(nFlags, nChar, CPoint(point.x, point.y), &_pos);
     }
+}
+void UI::AddCamera(Camera * cam)
+{
+	camera = cam;
 }
 void UI::AddButton(string name, int x, int y, int width, int height, int tpx, int tpy, string str, int tri)
 {
     UI_Button* button = new UI_Button(x, y, width, height, tri, tpx, tpy);
-    button->name = name;
-	button->str = str;
+    button->SetName(name);
+	button->SetStr(str);
+	button->AddCamera(camera);
     _buttons.push_back(button);
 	static bool first = true;
 	if (!first) {
@@ -76,11 +82,12 @@ void UI::DelButton(string name)
         _buttons.erase(erase);
     }
 }
-void UI::OnShow()
+void UI::OnShow(int offsetX, int offsetY)
 {
     for (auto i = _buttons.begin(); i != _buttons.end(); i++)
     {
-        (*i)->OnShow((*i)->x + offsetX, (*i)->y + offsetY);
+		(*i)->SetOffset(CPoint(offsetX, offsetY));
+        (*i)->OnShow();
     }
 }
 void UI::Reset()
@@ -142,10 +149,162 @@ vector<UI_Button*>::iterator UI::Index(string name)
 {
     for (auto i = _buttons.begin(); i != _buttons.end(); i++)
     {
-        if ((*i)->name == name)
+        if ((*i)->GetName() == name)
             return i;
     }
 
     return _buttons.begin();
+}
+UI_Button::UI_Button(int tx, int ty, int twidth, int theight, int tri, int tpos_x, int tpos_y)
+{
+	x = tx, y = ty, width = twidth, height = theight; pos_x = tpos_x; pos_y = tpos_y;
+	state = isBitmapLoaded = _bounce = _bounce_key = offsetX = offsetY = 0;
+	trigger = tri;
+}
+bool UI_Button::InRange(CPoint point)
+{
+	int _x = point.x + 3, _y = point.y + 3, x1 = x + offsetX, y1 = y + offsetY, x2 = x1 + width, y2 = y1 + height;
+	if (camera != nullptr) {
+		CPoint cam = camera->GetXY(x1, y1), cam2 = camera->GetCameraXY();
+		x1 = cam.x;
+		y1 = cam.y;
+		x2 = cam.x + (int)(GetWidth() * camera->GetSize());
+		y2 = cam.y + (int)(GetHeight() * camera->GetSize());
+	}
+	DrawRectangleBlock(x1, y1, x2 - x1, y2 - y1);
+	return (_x >= x1 && _x <= x2 && _y >= y1 && _y <= y2);
+}
+int UI_Button::GetTrigger()
+{
+	return trigger;
+}
+int UI_Button::GetState()
+{
+	return state;
+}
+void UI_Button::SetState(UINT nFlags, UINT nChar, CPoint point, vector<vector<int>>* _pos)
+{
+	_point = point;
+	if (nFlags)
+	{
+		if (InRange(point))
+			state = BUTTON_CLICK;
+	}
+	else
+	{
+		if (InRange(point) || (*_pos)[pos_x][pos_y] == 1)
+		{
+			if (_bounce && InRange(point))
+				state = BUTTON_RELEASE;
+			else {
+				state = BUTTON_HOVER;
+				for (auto &i : (*_pos)) {
+					for (auto &j : i) {
+						if (j == 1)
+							j = 0;
+					}
+				}
+				(*_pos)[pos_x][pos_y] = 1;
+			}
+		}
+		else
+			state = BUTTON_OUTSIDE;
+	}
+	if ((*_pos)[pos_x][pos_y] == 1) {
+		if (nChar) {
+			state = BUTTON_CLICK;
+		}
+		else {
+			if (_bounce_key)
+				state = BUTTON_RELEASE;
+		}
+	}
+
+	_bounce = nFlags;
+	_bounce_key = nChar;
+}
+string UI_Button::GetName()
+{
+	return name;
+}
+void UI_Button::AddCamera(Camera * cam)
+{
+	_outside.AddCamera(cam);
+	_hover.AddCamera(cam);
+	_click.AddCamera(cam);
+	camera = cam;
+}
+void UI_Button::SetOffset(CPoint point)
+{
+	offsetX = point.x;
+	offsetY = point.y;
+}
+void UI_Button::SetName(string _name)
+{
+	name = _name;
+}
+void UI_Button::SetStr(string _str)
+{
+	str = _str;
+}
+void UI_Button::OnShow()
+{
+	int _x = x + offsetX, _y = y + offsetY, _x2 = x + (GetWidth() - str.length() * 12) / 2 + offsetX, _y2 = y + (GetHeight() - 12) / 2 + offsetY;
+	double size = _size;
+	if (camera != nullptr) {
+		CPoint cam = camera->GetXY(_x, _y), cam2 = camera->GetXY(_x2, _y2);
+		_x = cam.x; _y = cam.y;
+		_x2 = cam2.x; _y2 = cam2.y;
+		size = _size * camera->GetSize();
+	}
+	if (isBitmapLoaded)
+	{
+		switch (state)
+		{
+		case BUTTON_OUTSIDE:
+			_outside.OnShow();
+			break;
+
+		case BUTTON_HOVER:
+			_hover.OnShow();
+			break;
+
+		case BUTTON_CLICK:
+		case BUTTON_RELEASE:
+			_click.OnShow();
+			break;
+
+		default:
+			break;
+		}
+	}
+	else
+	{
+		switch (state)
+		{
+		case BUTTON_OUTSIDE:
+			DrawRectangle(_x, _y, (int)(GetWidth() * (camera != nullptr ? camera->GetSize() : 1)), (int)(GetHeight() * (camera != nullptr ? camera->GetSize() : 1)), RGB(255, 0, 0));
+			break;
+
+		case BUTTON_HOVER:
+			DrawRectangle(_x, _y, (int)(GetWidth() * (camera != nullptr ? camera->GetSize() : 1)), (int)(GetHeight() * (camera != nullptr ? camera->GetSize() : 1)), RGB(0, 0, 255));
+			break;
+
+		case BUTTON_CLICK:
+		case BUTTON_RELEASE:
+			DrawRectangle(_x, _y, (int)(GetWidth() * (camera != nullptr ? camera->GetSize() : 1)), (int)(GetHeight() * (camera != nullptr ? camera->GetSize() : 1)), RGB(0, 255, 0));
+			break;
+
+		default:
+			break;
+		}
+		OnShowText(name, _x, _y, (int)(10 * (camera != nullptr ? camera->GetSize() : 1)), RGB(255, 255, 255));
+		OnShowText(str, _x2, _y2, (int)(10 * (camera != nullptr ? camera->GetSize() : 1)), RGB(255, 255, 255));
+	}
+	InRange(_point);
+}
+void UI_Button::Reset()
+{
+	state = _bounce = 0;
 }
 }

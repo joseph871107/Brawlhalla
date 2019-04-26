@@ -17,6 +17,7 @@ class Object
     public:
         Object();
         Object(double);
+		CPoint GetXY();
         void SetXY(int nx, int ny);								// 設定物件的座標
         void SetSize(double s);									// 設定物件大小
 		virtual int  GetCor(int);								// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y

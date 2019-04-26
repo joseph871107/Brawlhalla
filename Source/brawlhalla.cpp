@@ -71,9 +71,9 @@ bool CGameStateInit::_cameraEnabled = true; //initialize
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
 {
-    /*Camera *camera = new Camera(400,400);
-    camera->SetSize(0.5);
-    welcomeWindow.AddCamera(camera);*/
+	/*camera.SetSize(0.5);
+	welcomeWindow.AddCamera(&camera);
+	settingWindow.AddCamera(&camera);*/
 }
 
 CGameStateInit::~CGameStateInit()
@@ -191,42 +191,36 @@ bool CGameStateInit::GetCameraEnable()
 
 void CGameStateInit::OnMove()
 {
-    welcomeWindow.OnMove();
-    settingWindow.OnMove();
-    string chosenBut = welcomeWindow.GetUI()->ChosenButton();
+	welcomeWindow.OnMove();
+	settingWindow.OnMove();
 
-    if (chosenBut == "start")
-    {
-        CAudio::Instance()->Stop(IDS_MENU_MUSIC);
-        GotoGameState(GAME_STATE_RUN);
-    }
-    else if (chosenBut == "settings")
-    {
-        welcomeWindow.SetButtonEnable(false);
-        settingWindow.SetButtonEnable(true);
-        settingWindow.SetVisible(true);
-    }
-    else if (chosenBut == "exit")
-        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
+	string chosenBut = welcomeWindow.GetUI()->ChosenButton();
+	if (chosenBut == "start") {
+		CAudio::Instance()->Stop(IDS_MENU_MUSIC);
+		GotoGameState(GAME_STATE_RUN);
+	}
+	else if (chosenBut == "settings") {
+		welcomeWindow.SetButtonEnable(false);
+		settingWindow.SetButtonEnable(true);
+		settingWindow.SetVisible(true);
+	}
+	else if (chosenBut == "exit")
+		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
 
-    chosenBut = settingWindow.GetUI()->ChosenButton();
-
-    if (chosenBut == "back")
-    {
-        welcomeWindow.SetButtonEnable(true);
-        settingWindow.SetButtonEnable(false);
-        settingWindow.SetVisible(false);
-        settingWindow.GetUI()->Reset();
-    }
-    else if (chosenBut == "camera")
-    {
-        if (_cameraEnabled)
-            _cameraEnabled = false;
-        else
-            _cameraEnabled = true;
-
-        (*settingWindow.GetUI()->Index("camera"))->str = (_cameraEnabled ? "True" : "False");
-    }
+	chosenBut = settingWindow.GetUI()->ChosenButton();
+	if (chosenBut == "back") {
+		welcomeWindow.SetButtonEnable(true);
+		settingWindow.SetButtonEnable(false);
+		settingWindow.SetVisible(false);
+		settingWindow.GetUI()->Reset();
+	}
+	else if (chosenBut == "camera") {
+		if (_cameraEnabled)
+			_cameraEnabled = false;
+		else
+			_cameraEnabled = true;
+		(*settingWindow.GetUI()->Index("camera"))->SetStr(_cameraEnabled ? "True" : "False");
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -49,23 +49,23 @@ int random(int min, int max)
 
 void BattleSystem::OnBeginState()
 {
-    /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
-    CAudio::Instance()->Play(IDS_BATTLE_MUSIC, true);
-    start = lastTime = clock();
-    nextTimeGenerateWeapon = random(3, 10);
-    _weapons.clear();
-    _secPerRound = MATCH_TIME;
-    vector<GroundPARM> groundXY = _groundsXY;
-    vector<vector<long>> playerKeys = { {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F}, {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD} };
+	/*------------------------------INIT PROGRESS STAGE 1------------------------------*/
+	CAudio::Instance()->Play(IDS_BATTLE_MUSIC, true);
+	start = lastTime = clock();
+	nextTimeGenerateWeapon = random(3, 10);
+	_weapons.clear();
+	_secPerRound = MATCH_TIME;
+	vector<GroundPARM> groundXY = _groundsXY;
+	vector<vector<long>> playerKeys = { {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F}, {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD} };
 
-    for (auto i = _players.begin(); i != _players.end(); i++)
-    {
-        char str[80];
-        sprintf(str, "%d", i - _players.begin() + 1);
-        (*i)->Initialize(_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
-    }
-
-    camera.Reset();
+	for (auto i = _players.begin(); i != _players.end(); i++)
+	{
+		char str[80];
+		sprintf(str, "%d", i - _players.begin() + 1);
+		(*i)->Initialize(_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
+	}
+	camera.Reset();
+	camera.SetGradual(true);
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素

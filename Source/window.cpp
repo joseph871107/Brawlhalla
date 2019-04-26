@@ -25,12 +25,13 @@ namespace game_framework
 		{
 			delete element;
 		}
-		delete camera;
+		camera = nullptr;
 	}
 
 	void Window::Initialize(int _buttonCol, int _buttonRow, bool buttonEnable, bool visible)
 	{
 		ui = UI(_buttonCol, _buttonRow);
+		ui.AddCamera(camera);
 		_lButton = false;
 		_key = false;
 		_buttonEnable = buttonEnable;
@@ -89,7 +90,7 @@ namespace game_framework
 		if (_visible) {
 			for (auto item : items)
 				item->OnShow(x, y);
-			ui.OnShow();
+			ui.OnShow(x, y);
 		}
 	}
 
