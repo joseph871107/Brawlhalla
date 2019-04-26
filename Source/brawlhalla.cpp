@@ -228,16 +228,25 @@ void CGameStateInit::OnMove()
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateOver::CGameStateOver(CGame* g)
-    : CGameState(g)
+    : CGameState(g), settingWindow(Window(g))
 {
 }
 
 void CGameStateOver::OnMove()
 {
-    counter--;
+	settingWindow.OnMove();
 
-    if (counter < 0)
-        GotoGameState(GAME_STATE_INIT);
+	string chosenBut = settingWindow.GetUI()->ChosenButton();
+	if (chosenBut == "back") {
+		GotoGameState(GAME_STATE_INIT);
+	}
+	else if (chosenBut == "exit") {
+		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
+	}
+
+    if (counter > 0)
+		counter--;
+    //    GotoGameState(GAME_STATE_INIT);
 }
 
 void CGameStateOver::OnBeginState()
@@ -248,16 +257,50 @@ void CGameStateOver::OnBeginState()
 void CGameStateOver::OnInit()
 {
     ShowInitProgress(100);
+	int butH = 300;
+	settingWindow.Initialize(2, 1);
+	settingWindow.SetXY((SIZE_X - butH * 2) / 2, (SIZE_Y - butH) / 2);
+	settingWindow.GetUI()->AddButton("back", 0, 0, butH, butH, 0, 0);
+	settingWindow.GetUI()->AddButton("exit", butH, 0, butH, butH, 1, 0);
+}
+
+void CGameStateOver::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	settingWindow.OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	settingWindow.OnKeyUp(nChar, nRepCnt, nFlags);
+}
+
+void CGameStateOver::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	settingWindow.OnLButtonDown(nFlags, point);
+}
+
+void CGameStateOver::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	settingWindow.OnLButtonUp(nFlags, point);
+}
+
+void CGameStateOver::OnMouseMove(UINT nFlags, CPoint point)
+{
+	settingWindow.OnMouseMove(nFlags, point);
 }
 
 void CGameStateOver::OnShow()
 {
     char str[80];								// Demo 數字對字串的轉換
     sprintf(str, "Game Over ! (%d)", counter / 30);
-    OnShowText(str, 240, 210);
+	int textSize = 50;
+	SIZE strSize = GetStringSize(str, textSize);
+	OnShowText(str, (SIZE_X - strSize.cx) / 2, 210, textSize);
     char gameResultStr[80];
     sprintf(gameResultStr, CGameStateRun::GetLegacyString().c_str());
-    OnShowText(gameResultStr, 240, 300);
+	strSize = GetStringSize(gameResultStr, textSize);
+    OnShowText(gameResultStr, (SIZE_X - strSize.cx) / 2, 650, textSize);
+	settingWindow.OnShow();
 }
 
 /////////////////////////////////////////////////////////////////////////////

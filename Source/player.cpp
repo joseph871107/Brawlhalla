@@ -467,17 +467,6 @@ void Player::UnconsciouslyOnMove()
 void Player::OnMove()
 {
     //-----------------ANIMATIONS SECTION-----------------//
-    /// DEBUG
-    //for (auto i = ani.begin(); i != ani.end(); i++) //For all CAnimation objects in 'ani'
-    //    i->OnMove(); //Proceed to the next CMovingBitmap in the CAnimation 'i'
-
-    //for (unsigned int i = 0; i < _aniByWpn.size(); i++)
-    //{
-    //    for (unsigned int j = 0; j < _aniByWpn[i].size(); j++) //For all CAnimation objects in '_aniByWpn[i]'
-    //    {
-    //        _aniByWpn[i][j].OnMove(); //Proceed to the next CMovingBitmap in the CAnimation '_aniByWpn[i][j]'
-    //    }
-    //}
     if (_aniSelector)
         _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
     else
@@ -760,22 +749,6 @@ void Player::SetAnimationState(int num)
 {
     _aniSelector = false; // Choose '_ani' for showing the animation
     currentAni = num;
-    /// DEBUG
-    //for (auto i = ani.begin(); i != ani.end(); i++)
-    //{
-    //    if (i == ani.begin() + num)
-    //        i->SetPause(false);
-    //    else
-    //        i->SetPause(true);
-    //}
-    //// Pause everything of '_aniByWpn'
-    //for (unsigned int i = 0; i < _aniByWpn.size(); i++)
-    //{
-    //    for (unsigned int j = 0; j < _aniByWpn[i].size(); j++)
-    //    {
-    //        _aniByWpn[i][j].SetPause(true);
-    //    }
-    //}
 }
 
 void Player::ShowAnimation()
@@ -1179,26 +1152,6 @@ void Player::SetAnimationStateByWeapon(int num)
 {
     _aniSelector = true; // Choose '_aniByWpn' for showing the animation
     _currentAniByWpn = num;
-    /// DEBUG
-    //for (unsigned int i = 0; i < _aniByWpn.size(); i++)
-    //{
-    //    for (unsigned int j = 0; j < _aniByWpn[i].size(); j++)
-    //    {
-    //        if ((i == _wpnID) && (j == _currentAniByWpn))
-    //        {
-    //            _aniByWpn[i][j].SetPause(false);
-    //        }
-    //        else
-    //        {
-    //            _aniByWpn[i][j].SetPause(true);
-    //        }
-    //    }
-    //}
-    //// Pause everything of 'ani'
-    //for (auto i = ani.begin(); i != ani.end(); i++)
-    //{
-    //    i->SetPause(true);
-    //}
 }
 
 void Player::AddCollectionOfAnimationsByWeapon(

@@ -249,7 +249,9 @@ void UI_Button::SetStr(string _str)
 }
 void UI_Button::OnShow()
 {
-	int _x = x + offsetX, _y = y + offsetY, _x2 = x + (GetWidth() - str.length() * 12) / 2 + offsetX, _y2 = y + (GetHeight() - 12) / 2 + offsetY;
+	int textSize = 50;
+	SIZE strSize= GetStringSize(str, textSize);
+	int _x = x + offsetX, _y = y + offsetY, _x2 = (GetWidth() - strSize.cx) / 2 + offsetX, _y2 = (GetHeight() - strSize.cy) / 2 + offsetY;
 	double size = _size;
 	if (camera != nullptr) {
 		CPoint cam = camera->GetXY(_x, _y), cam2 = camera->GetXY(_x2, _y2);
@@ -298,8 +300,8 @@ void UI_Button::OnShow()
 		default:
 			break;
 		}
-		OnShowText(name, _x, _y, (int)(10 * (camera != nullptr ? camera->GetSize() : 1)), RGB(255, 255, 255));
-		OnShowText(str, _x2, _y2, (int)(10 * (camera != nullptr ? camera->GetSize() : 1)), RGB(255, 255, 255));
+		OnShowText(name, _x, _y, (int)(20 * (camera != nullptr ? camera->GetSize() : 1)));
+		OnShowText(str, _x2, _y2, (int)(textSize * (camera != nullptr ? camera->GetSize() : 1)));
 	}
 	InRange(_point);
 }
