@@ -115,7 +115,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     //
     _keys = keysValue;
     //
-    _isPressingLeft = _isPressingRight = _dir = _isInitiatedOnEdgeVerticalVelocity = false;
+    _isPressingLeft = _isPressingRight = _dir = false;
     //
     _isPressingDown = false;
     //
@@ -126,7 +126,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     _isOffsetLeft = _isOffsetRight = false;
     //
     _verticalVelocity = INITIAL_VELOCITY;
-    _acceleration = INITIAL_ACCELERATION;
+    _verticalAcceleration = INITIAL_ACCELERATION;
     //
     _isTriggerDrawWeapon = false;
     //
@@ -151,6 +151,8 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     _currentAniByWpn = 0;
     //
     SetConscious();
+    //
+    _isFirstTimeOnEdge = true;
 }
 
 void Player::LoadBitmap()
@@ -279,6 +281,62 @@ void Player::LoadBitmap()
         adal, adar, sdl, sdr);
 }
 
+bool Player::IsOnEdge()
+{
+    return (IsOnLeftEdge() || IsOnRightEdge());
+}
+
+bool Player::IsFirstTimeOnEdge()
+{
+    return (IsOnEdge() && _isFirstTimeOnEdge);
+}
+
+void Player::InitializeOnEdge()
+{
+    _isFirstTimeOnEdge = false;
+    _verticalVelocity = 0;
+}
+
+void Player::DoOnEdge()
+{
+    _verticalAcceleration = EDGE_SLIDING_ACCELERATION;
+}
+
+void Player::DoLeaveEdge()
+{
+    _isFirstTimeOnEdge = true;
+}
+
+void Player::DoOnGround()
+{
+    _verticalVelocity = 0;
+}
+
+void Player::ModifyVerticalOffsetFunctions()
+{
+    /*	~ Remark:
+    	~ Below are the functions that does modify the vertical offset variables,
+    	~ including '_verticalAcceleration' and '_verticalVelocity'
+    */
+    _verticalAcceleration = INITIAL_ACCELERATION;
+    // 'DoLand()' inside 'ProcessKeyCombinationOnMove()' modifies the member variable '_verticalAcceleration'.
+    ProcessKeyCombinationOnMove(); // Control 'triggeredAnimation' - animations that are triggered by pressing combination of keys
+
+    /* SLIDING ON EDGES */
+    // 'InitializeOnEdge()' modifies '_verticalVelocity', thus the function must be placed here
+    if (IsFirstTimeOnEdge())
+        InitializeOnEdge();
+
+    if (IsOnEdge())
+        DoOnEdge();
+    else
+        DoLeaveEdge();
+
+    /* STANDING ON GROUND */
+    if (IsOnGround())
+        DoOnGround();
+}
+
 void Player::ConsciouslyOnMove()
 {
     /* REPOSITION PLAYER ABOUT GROUNDS */
@@ -300,33 +358,14 @@ void Player::ConsciouslyOnMove()
         }
     }
 
-    /* INITIALIZATION FOR GRAVITY and PREPARATION FOR LANDING DOWN */
-    _acceleration = INITIAL_ACCELERATION;
-    ///	Warning: 'DoLand()' inside 'ProcessKeyCombinationOnMove()' modifies the member variable '_acceleration'.
-    ///	Thus, the function 'ProcessKeyCombinationOnMove()' affects the below codes regarding gravity and as a result must be placed here!!!
-    ProcessKeyCombinationOnMove(); // Control 'triggeredAnimation' - animations that are triggered by pressing combination of keys
-
-    /// Comment for future devs: This part is poorly written and should be rectified in the near future
-    if (IsOnLeftEdge() || IsOnRightEdge())
-    {
-        DoOnEdge();
-    }
-    else
-    {
-        _isInitiatedOnEdgeVerticalVelocity = false;
-    }
-
     /*	~ VERTICAL OFFSET
     	~ Gravity
     */
+    ModifyVerticalOffsetFunctions();
 
-    if (IsOnGround())
+    if (!IsOnGround())
     {
-        _verticalVelocity = 0.0;
-    }
-    else
-    {
-        _verticalVelocity += _acceleration;
+        _verticalVelocity += _verticalAcceleration;
         _y += Round(_verticalVelocity);
     }
 
@@ -372,11 +411,14 @@ void Player::UnconsciouslyOnMove()
 
     /// Comment for future devs: '_aniSelector'
     _aniSelector = false;
-	/// Comment for future devs: When the player is being hit, yet he is doing his triggered animation, then his triggered animation must be stopped. Put it in a better position
-	if (_isTriggeredAni) { //Thoroughly finish it and reset the triggered animation's variables
-		FinishTriggeredAnimation();
-		ResetTriggeredAnimationVariables();
-	}
+
+    /// Comment for future devs: When the player is being hit, yet he is doing his triggered animation, then his triggered animation must be stopped. Put it in a better position
+    if (_isTriggeredAni)   //Thoroughly finish it and reset the triggered animation's variables
+    {
+        FinishTriggeredAnimation();
+        ResetTriggeredAnimationVariables();
+    }
+
     //-----------------POSITION TRANSFORMATION SECTION-----------------//
     /* Bounce Off the Grounds */
     int playerX1 = GetCor(0);
@@ -972,18 +1014,7 @@ void Player::DoMoveRight(int movementUnit)
 
 void Player::DoLand()
 {
-    _acceleration = LANDING_ACCELERATION;
-}
-
-void Player::DoOnEdge()
-{
-    if (!_isInitiatedOnEdgeVerticalVelocity)
-    {
-        _verticalVelocity = 0; // Initiate vertical velocity
-        _isInitiatedOnEdgeVerticalVelocity = true;
-    }
-
-    _acceleration = EDGE_SLIDING_ACCELERATION;
+    _verticalAcceleration = LANDING_ACCELERATION;
 }
 
 void Player::DoJump()

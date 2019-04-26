@@ -85,7 +85,6 @@ class Player
         void DoMoveLeft(int movementUnit);
         void DoMoveRight(int movementUnit);
         void DoLand();
-        void DoOnEdge();
 
         //Jump
         void DoJump();
@@ -119,6 +118,7 @@ class Player
         int Round(double i);
         bool StateChanged();
         bool WpnStateChanged();
+		void ModifyVerticalOffsetFunctions();
 
         ///Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
         //Weapon
@@ -151,6 +151,16 @@ class Player
         void DoNonTriggeredAnimation();
         void SetCurrentNonTriggerAnimation();
 
+		//Edges
+		bool IsOnEdge();
+		bool IsFirstTimeOnEdge();
+		void InitializeOnEdge();
+		void DoOnEdge();
+		void DoLeaveEdge();
+
+		//Ground
+		void DoOnGround();
+
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
@@ -173,7 +183,6 @@ class Player
         //Movements
         bool _isPressingLeft, _isPressingRight, _isPressingDown;
         bool _dir; // false: player facing left, true: player facing right
-        bool _isInitiatedOnEdgeVerticalVelocity;
 
         //Jump
         bool _isTriggerJump;
@@ -181,7 +190,7 @@ class Player
 
         //Gravity
         double _verticalVelocity;
-        double _acceleration;
+        double _verticalAcceleration;
 
         //Draw Weapon
         bool _isTriggerDrawWeapon;
@@ -251,6 +260,9 @@ class Player
         int _unconsciousFramesCount;
         bool _unconsciousAniDir;
 
+
+		//Edges
+		bool _isFirstTimeOnEdge;
 };
 #endif
 }
