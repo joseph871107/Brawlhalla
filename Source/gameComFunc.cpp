@@ -31,7 +31,7 @@ void OnShowText(string msg, int x, int y, int size, COLORREF color, LPCTSTR font
     CFont f, *fp;
     f.CreatePointFont(size * 8, font);			// 產生 font f; 160表示16 point的字
     fp = pDC->SelectObject(&f);					// 選用 font f
-    pDC->SetBkColor(RGB(0, 0, 0));
+	pDC->SetBkMode(TRANSPARENT);
     pDC->SetTextColor(color);
     pDC->TextOut(x, y, msg.c_str());
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
@@ -74,6 +74,19 @@ void DrawLine(int x1, int y1, int x2, int y2, COLORREF color)
 	pDC->LineTo(CPoint(x2, y2));
 	pDC->SelectObject(pp);						// 釋放 pen
 	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+}
+
+SIZE GetStringSize(string str, int textSIze)
+{
+	SIZE size;
+	size.cx = 0;
+	size.cy = 0;
+	CDC *pDC = CDDraw::GetBackCDC();
+	GetTextExtentPoint32(pDC->GetSafeHdc(), str.c_str(), str.length(), &size);
+	CDDraw::ReleaseBackCDC();
+	size.cx = size.cx * textSIze / 16;
+	size.cy = size.cy * textSIze / 16;
+	return size;
 }
 
 int ti(int i, double j)
