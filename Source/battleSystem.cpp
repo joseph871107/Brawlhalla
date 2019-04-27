@@ -20,7 +20,7 @@ const int MAX_weapons = 5;
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 
 /// DEBUG
-const vector<GroundPARM> _groundsXY{ GroundPARM(0, 100, 1, 5), GroundPARM(0, 200, 1, 5), GroundPARM(0, 300, 1, 5), GroundPARM(0, 400, 1, 5), GroundPARM(0, 500, 1, 5), GroundPARM(500, 500, 1, 5), GroundPARM(1000, 500, 1, 5) };    // Define Ground position to automatically generate ground objects
+const vector<GroundPARM> _groundsXY{ GroundPARM(0, 500, 1, 5), GroundPARM(500, 500, 1, 5), GroundPARM(1000, 500, 1, 5) };    // Define Ground position to automatically generate ground objects
 CInteger integer(2);																												// Used to show current remain time
 
 BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Background()), _grounds(vector<Ground*>()), _players(vector<Player*>()), _weapons(vector<Weapon*>())

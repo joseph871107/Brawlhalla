@@ -234,6 +234,7 @@ class Player
         int _triggeredAniKeyID;
         // The "KeyID" (short for "ID of the combination of key pressed") of the triggered animation
         // Its value is one of the constants starting with 'KEY_...'
+		// Do note that this value is unique!!!
 
         bool _triggeredAniDir;
         // The direction the player is facing when the triggered animation is activated

@@ -523,25 +523,36 @@ void Player::SetAnimationSelector()
             SetNonTriggeredAnimationSelector();
     }
 }
+
 void Player::OnMove()
 {
     //-----------------ANIMATIONS SECTION-----------------//
     /* SET ANIMATION SELECTOR */
     SetAnimationSelector();
 
+    // Set current animation
+    // It is not consistent with 'Player::OnMove()' here when we prioritize the condition '_isTriggeredAni' over '_aniSelector',
+    // but it makes it more tractable to set the animation of trigger animation and non trigger animation separately
+    /// Comment for future devs: The logic of evaluating condition is inconsistent with 'Player::OnMove()'
+    /// In 'Player::OnMove()', we first consider '_aniSelector', then '_isTriggeredAni'
+    if (_isTriggeredAni)
+        SetCurrentTriggeredAnimation();
+    else
+        SetCurrentNonTriggerAnimation();
+
     /*	~ UNCONSCIOUS ANIMATION
     	~ When the player is being hit, yet he is doing his triggered animation,
-    	~ then his triggered animation must be stopped. Put it in a better position
+    	~ then his triggered animation must be stopped
     */
     if (_isUnconscious && _isTriggeredAni)
     {
-        //Enforce to finish the triggered animation and reset the triggered animation's variables
+        // Enforce to finish the triggered animation and reset the triggered animation's variables
         FinishTriggeredAnimation();
         ResetTriggeredAnimationVariables();
     }
 
     /* JUMP ANIMATION */
-    if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge() || (_isTriggerJump && _jumpCount > 0))
+    if (IsOnGround() || IsOnEdge() || (_isTriggerJump && _jumpCount > 0))
         ResetAnimations(ANI_ID_JUMP_LEFT);
 
     /*	~ MOVE CURRENT ANIMATION
@@ -568,21 +579,11 @@ void Player::OnMove()
 
     //-----------------UNTITLED SECTION-----------------//
     if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
-    {
         ResetJumpCount();
-    }
 }
+
 void Player::OnShow()
 {
-    // Set current animation
-    // It is not consistent with 'Player::OnMove()' here when we prioritize the condition '_isTriggeredAni' over '_aniSelector',
-    // but it makes it more tractable to set the animation of trigger animation and non trigger animation separately
-	/// Comment for future devs: inconsistent
-    if (_isTriggeredAni)
-        SetCurrentTriggeredAnimation();
-    else
-        SetCurrentNonTriggerAnimation();
-
     // Show current animation
     ShowAnimation();
     // Play current audio
@@ -1238,12 +1239,12 @@ int Player::GetKeyCombination()
 
     /* SPECIAL CASES */
     if (_isTriggerDrawWeapon) // The player draws his weapon
-    {
         keyCombString = "113";
-    }
     else if (_isTriggerDodge) // The player dodges
-    {
         keyCombString = "114";
+    else
+    {
+        // Do nothing
     }
 
     return (stoi(keyCombString));
@@ -1254,16 +1255,13 @@ void Player::ProcessKeyCombinationOnMove()
     /*	~ Remarks: Explaination of the triggered animation concept
     	~ When an animation is said to be "triggered", it prevails all other animations by means of depiction for a period of time;
     	~ that is, when an animation is triggered, it becomes the only animation being shown for a time interval.
-    	~ In this case, it is often the key combo (key combination of the attack button with one movement button) that triggers an animation
     */
     if (!_isTriggeredAni) // If there is no animation being triggered in the meantime, then detect should there be any
     {
         GetAndSetTriggeredAnimation();
 
         if (_isTriggeredAni) // If an animation is found to be triggered, then we firstly initiate it (there is no process here)
-        {
             InitiateTriggeredAnimation();
-        }
     }
 
     if (_isTriggeredAni) // If an animation is triggered, then we process it (there is no initiation here)
@@ -1526,10 +1524,16 @@ void Player::DoTriggeredAnimation()
 }
 bool Player::IsFinishedTriggeredAnimation()
 {
+    /// DEBUG
+
     if (_aniSelector)
-        return _aniByWpn[_wpnID][_triggeredAniAnimationID].IsFinalBitmap();// (_triggeredAniCount > MAX_ANIMATION_DURATION);
+        return (_currentAniByWpn == _triggeredAniAnimationID
+			&&
+			_aniByWpn[_wpnID][_currentAniByWpn].IsFinalBitmap());
     else
-        return ani[_triggeredAniAnimationID].IsFinalBitmap();
+        return (currentAni == _triggeredAniAnimationID
+			&&
+			ani[currentAni].IsFinalBitmap());
 }
 void Player::FinishTriggeredAnimation()
 {
@@ -1589,6 +1593,7 @@ void Player::FinishTriggeredAnimation()
             break;
     }
 }
+
 void Player::SetCurrentTriggeredAnimation()
 {
     if (_aniSelector)
@@ -1596,6 +1601,7 @@ void Player::SetCurrentTriggeredAnimation()
     else
         SetAnimationState(_triggeredAniAnimationID);
 }
+
 void Player::DoNonTriggeredAnimation()
 {
     /*	~ Remarks:
@@ -1672,7 +1678,9 @@ void Player::SetCurrentNonTriggerAnimation()
         if (_isPressingLeft || _isPressingRight) // Player is moving
             SetAnimationStateLeftRight(ANI_ID_RUN_LEFT);
         else // Player is idling
-            if (_isHoldingWeapon) // With sword
+
+            /// if (_isHoldingWeapon) // With sword
+            if (_aniSelector) // If '_aniByWpn' is chosen
                 if (_dir) // If the player is facing right
                     SetAnimationStateByWeapon(ANI_WPN_ID_STAND_RIGHT);
                 else
