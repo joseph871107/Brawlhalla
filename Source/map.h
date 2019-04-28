@@ -1,0 +1,21 @@
+#ifndef MAP_H
+#define MAP_H
+#include "gameComFunc.h"
+#include "camera.h"
+#include <map>
+
+#define GENERATE_COLLISION_ARRAY false
+
+namespace game_framework
+{
+	/////////////////////////////////////////////////////////////////////////////
+	// Map class
+	/////////////////////////////////////////////////////////////////////////////
+
+	class Map
+	{
+	};
+
+}
+
+#endif															//define OBJECT_H

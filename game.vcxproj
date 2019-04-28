@@ -248,6 +248,7 @@
     <ClCompile Include="Source\fimage.cpp" />
     <ClCompile Include="Source\gameComFunc.cpp" />
     <ClCompile Include="Source\ground.cpp" />
+    <ClCompile Include="Source\map.cpp" />
     <ClCompile Include="Source\object.cpp" />
     <ClCompile Include="Source\player.cpp" />
     <ClCompile Include="Source\audio.cpp" />
@@ -302,6 +303,7 @@
     <ClInclude Include="Source\fImage.h" />
     <ClInclude Include="Source\gameComFunc.h" />
     <ClInclude Include="Source\ground.h" />
+    <ClInclude Include="Source\map.h" />
     <ClInclude Include="Source\ui.h" />
     <ClInclude Include="Source\weapon.h" />
     <ClInclude Include="Source\object.h" />

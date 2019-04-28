@@ -41,7 +41,7 @@ class Object
 class Background : public Object
 {
 public:
-	void OnShow(double offset)
+	void OnShow()
 	{
 		if (camera != nullptr) {
 			CPoint cam = camera->GetXY(x, y);
@@ -53,6 +53,11 @@ public:
 			bmp.ShowBitmap(_size);
 		}
 	}
+	void SetOffset(double _offset) {
+		offset = _offset;
+	}
+private:
+	double offset;
 };
 
 }

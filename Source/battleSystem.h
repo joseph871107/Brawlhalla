@@ -29,7 +29,6 @@ class BattleSystem : public CGameState
 		void ResizeCamera();
         bool IsGameOver();
         string GetGameResult();
-		void ResolveMemoryLeaksOnEndState();
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//

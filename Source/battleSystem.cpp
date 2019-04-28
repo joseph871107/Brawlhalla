@@ -6,6 +6,7 @@
 #include "gamelib.h"
 #include "brawlhalla.h"
 #include "battleSystem.h"
+#include "map.h"
 
 namespace game_framework
 {
@@ -29,7 +30,10 @@ BattleSystem::BattleSystem(CGame* g) : CGameState(g), background(Background()), 
 
 BattleSystem::~BattleSystem()
 {
-    ResolveMemoryLeaksOnEndState();
+	for (auto element : _weapons)
+	{
+		delete element;
+	}
 
     for (auto element : _grounds)
     {
@@ -155,6 +159,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     background.AddCamera(&camera);
     background.LoadBitmap(IDB_BACKGROUND, RGB(0, 0, 0));
     background.SetXY( - background.GetWidth(),  - background.GetHeight());
+	background.SetOffset(0.15);
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
     Player* player = new Player();
@@ -240,7 +245,7 @@ void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動�
 
 void BattleSystem::OnShow()
 {
-    background.OnShow(0.15);
+    background.OnShow();
     // Showing the remain time
     // Display minute
     int now_time = GetCurrentRemainTime();
@@ -389,16 +394,6 @@ string BattleSystem::GetGameResult()
         return ("Draw.");
     else
         return (max->GetName() + " win.");
-}
-
-void BattleSystem::ResolveMemoryLeaksOnEndState()
-{
-    for (auto element : _weapons)
-    {
-        delete element;
-    }
-
-    _weapons.clear();
 }
 
 void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)

@@ -329,7 +329,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
     {
         CAudio::Instance()->Stop(IDS_BATTLE_MUSIC);
         SetLegacyString(battleSystem.GetGameResult());
-        battleSystem.ResolveMemoryLeaksOnEndState();
         GotoGameState(GAME_STATE_OVER);					// 關閉遊戲
     }
     else
