@@ -19,12 +19,15 @@ namespace game_framework
 	const long KEY_DOWN = 0x28;
 	const long KEY_C = 0x43;
 	const long KEY_COMMA = 0xbc;
-	const long KEY_TROW = 0x56;
+	const long KEY_V = 0x56;
+	const long KEY_X = 0x58;
+	const long KEY_M = 0x4d;
 	const long KEY_ENTER = 0x0d;
 	const long KEY_ESC = 0x1b;
 	const long KEY_F = 0x46;
 	const long KEY_PERIOD = 0xbe;
 
+class Ground;
 struct ColArray
 {
     int width;
@@ -73,12 +76,14 @@ void GetCollideArray(int file, ColBmp*);						// file 為IDB名稱
 /////////////////////////
 // 通用輔助副程式
 /////////////////////////
-void OnShowText(string, int, int, int = 20, COLORREF = RGB(255, 255, 255), LPCTSTR = "Times New Roman");	// 簡化原本Game Framework 的字串顯示
+void OnShowText(string, int, int, int = 20, COLORREF = RGB(255, 255, 255), COLORREF = RGB(255, 255, 255), LPCTSTR = "Times New Roman");	// 簡化原本Game Framework 的字串顯示
 void DrawRectangleBlock(int x, int y, int width, int height, COLORREF color = RGB(255, 255, 255));
 void DrawRectangle(int x, int y, int width, int height, COLORREF color = RGB(0, 0, 0));
 void DrawLine(int x1, int y1, int x2, int y2, COLORREF color = RGB(255, 255, 255));
 SIZE GetStringSize(string str, int textSize);
 char* ToCharPtr(string);
+int random(int min, int max);
+Ground* GetRandomGround(vector<Ground*> *ground);
 }
 
 #endif //define GAMECOMFUNC_H

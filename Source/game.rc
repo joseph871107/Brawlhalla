@@ -66,9 +66,13 @@ IDB_LOADING             BITMAP                  "..\\RES\\loading.bmp"
 
 IDB_CONTINUE            BITMAP                  "..\\RES\\continue.bmp"
 
-IDB_GROUND              BITMAP                  "..\\RES\\background\\ground1.bmp"
+IDB_GROUND1             BITMAP                  "..\\RES\\background\\ground1.bmp"
 
-IDB_BACKGROUND          BITMAP                  "..\\RES\\background\\forest.bmp"
+IDB_GROUND2             BITMAP                  "..\\RES\\background\\ground2.bmp"
+
+IDB_BACKGROUND1         BITMAP                  "..\\RES\\background\\BG_Fjord.bmp"
+
+IDB_BACKGROUND2         BITMAP                  "..\\RES\\background\\BG_Stadium.bmp"
 
 IDB_P1_RUN0             BITMAP                  "..\\RES\\player1\\adventurer-run-00.bmp"
 

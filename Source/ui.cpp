@@ -98,9 +98,7 @@ void UI::Reset()
 	}
 	for (int i = 0; i < (signed int)_pos.size(); i++) {
 		for (int j = 0;j < (signed int)_pos[0].size();j++) {
-			if (_pos[i][j] == 1) {
-				_pos[i][j] = 0;
-			}
+			_pos[i][j] = 0;
 		}
 	}
 	first = true;
@@ -132,16 +130,16 @@ void UI::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	switch (nChar) {
 	case KEY_UP:
-		ChangeButton(0, -1);
-		break;
-	case KEY_DOWN:
-		ChangeButton(0, 1);
-		break;
-	case KEY_LEFT:
 		ChangeButton(-1, 0);
 		break;
-	case KEY_RIGHT:
+	case KEY_DOWN:
 		ChangeButton(1, 0);
+		break;
+	case KEY_LEFT:
+		ChangeButton(0, -1);
+		break;
+	case KEY_RIGHT:
+		ChangeButton(0, 1);
 		break;
 	}
 }
@@ -198,12 +196,9 @@ void UI_Button::SetState(UINT nFlags, UINT nChar, CPoint point, vector<vector<in
 				state = BUTTON_RELEASE;
 			else {
 				state = BUTTON_HOVER;
-				for (auto &i : (*_pos)) {
-					for (auto &j : i) {
-						if (j == 1)
-							j = 0;
-					}
-				}
+				for (auto &i : (*_pos))
+					for (auto &j : i)
+						j = 0;
 				(*_pos)[pos_x][pos_y] = 1;
 			}
 		}
@@ -251,7 +246,7 @@ void UI_Button::OnShow()
 {
 	int textSize = 50;
 	SIZE strSize= GetStringSize(str, textSize);
-	int _x = x + offsetX, _y = y + offsetY, _x2 = (GetWidth() - strSize.cx) / 2 + offsetX, _y2 = (GetHeight() - strSize.cy) / 2 + offsetY;
+	int _x = x + offsetX, _y = y + offsetY, _x2 = x + (GetWidth() - strSize.cx) / 2 + offsetX, _y2 = y + (GetHeight() - strSize.cy) / 2 + offsetY;
 	double size = _size;
 	if (camera != nullptr) {
 		CPoint cam = camera->GetXY(_x, _y), cam2 = camera->GetXY(_x2, _y2);

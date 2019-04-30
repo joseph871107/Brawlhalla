@@ -2,7 +2,6 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 #include "ground.h"
-#include "player.h"
 #include "weapon.h"
 
 namespace game_framework
@@ -11,6 +10,7 @@ namespace game_framework
 // Weapon class
 /////////////////////////////////////////////////////////////////////////////
 
+class Player;
 class Weapon : public Object
 {
     public:

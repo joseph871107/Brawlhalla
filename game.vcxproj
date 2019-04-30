@@ -343,8 +343,11 @@
     <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-01(Mirrored).bmp" />
     <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-01.bmp" />
     <Image Include="player1\Punch\adventurer-punch-11(Mirrored).bmp" />
+    <Image Include="RES\background\BG_Fjord.bmp" />
+    <Image Include="RES\background\BG_Stadium.bmp" />
     <Image Include="RES\background\forest.bmp" />
     <Image Include="res\background\ground1.bmp" />
+    <Image Include="RES\background\ground2.bmp" />
     <Image Include="res\brawlhalla.ico" />
     <Image Include="RES\Numbers\0.bmp" />
     <Image Include="RES\Numbers\1.bmp" />

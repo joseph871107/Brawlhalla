@@ -74,11 +74,16 @@ class CGameStateInit : public CGameState
 		void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
 		static bool GetCameraEnable();
+		static bool GetFullscreenEnabled();
+		static Map *GetMap();
     private:
 		Window welcomeWindow;
 		Window settingWindow;
 		Camera camera;
+		static bool _fullscreenEnabled;
 		static bool _cameraEnabled;
+		static int _mapSelected;
+		static vector<Map*> maps;
 };
 
 /////////////////////////////////////////////////////////////////////////////

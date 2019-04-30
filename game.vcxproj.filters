@@ -1071,6 +1071,15 @@
     <Image Include="RES\weapons\DefaultFallingSword\WeaponPickup.bmp">
       <Filter>Resource Files\Bitmap</Filter>
     </Image>
+    <Image Include="RES\background\BG_Fjord.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\background\BG_Stadium.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\background\ground2.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\BattleMusic.mp3">

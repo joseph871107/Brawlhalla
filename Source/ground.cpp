@@ -14,9 +14,11 @@ namespace game_framework
 
 Ground::Ground()
 {
-    _length = 1;
+    _lengthX = _lengthY = 1;
     osX1 = osY1 = osX2 = osY2 = 4;
-    _bmpID = IDB_GROUND;
+	_lenOffsetX = 100;
+	_lenOffsetY = 100;
+    _bmpID = IDB_GROUND1;
     _color = RGB(0, 255, 0);
 }
 
@@ -41,26 +43,74 @@ int Ground::GetCor(int index)
     }
 }
 
+void Ground::SetID(int id)
+{
+	_bmpID = id;
+}
+
+void Ground::SetLenOffset(int offset, int dimension)
+{
+	if (dimension)
+		_lenOffsetY = offset;
+	else
+		_lenOffsetX = offset;
+	_UpdateWH();
+}
+
+void Ground::SetOffset(int i)
+{
+	osX1 = osY1 = osX2 = osY2 = i;
+	_UpdateWH();
+}
+
 void Ground::LoadBitmap()
 {
     bmp.LoadBitmap(_bmpID, _color);	// 載入地圖的圖形
-    width = bmp.Width() + (_length - 1) * 100;
-    height = bmp.Height();
+	_UpdateWH();
 }
 
-void Ground::SetLen(int len)
+void Ground::_UpdateWH()
 {
-    _length = len;
-    width = bmp.Width() + (_length - 1) * 100;
+	width = bmp.Width() + (_lengthX - 1) * _lenOffsetX;
+	height = bmp.Height() + (_lengthY - 1) * _lenOffsetY;
+}
+
+void Ground::SetLen(int len, int dimension)
+{
+	if (dimension)
+		_lengthY = len;
+	else
+		_lengthX = len;
+	_UpdateWH();
 }
 
 void Ground::OnShow()
 {
-    for (int i = 0; i < _length; i++)
+    for (int i = 0; i < _lengthX; i++)
     {
-		CPoint cam = camera->GetXY(x + (int)((i * 100 - osX1) * _size), y - (int)(osX2 * _size));
-        bmp.SetTopLeft(cam.x, cam.y);
-        bmp.ShowBitmap(_size * camera->GetSize());
+		for (int j = 0; j < _lengthY; j++) {
+			int _x = x + (int)((i * _lenOffsetX - osX1) * _size), _y = y + (int)((j * _lenOffsetY - osY1) * _size);
+			double size = _size;
+			if (camera != nullptr) {
+				CPoint cam = camera->GetXY(_x, _y);
+				_x = cam.x;
+				_y = cam.y;
+				size = _size * camera->GetSize();
+			}
+			bmp.SetTopLeft(_x, _y);
+			bmp.ShowBitmap(size);
+		}
     }
+}
+GroundPARM::GroundPARM(int x, int y, double size, int lengthX, int lengthY, int id, int offset, int lenOffsetX, int lenOffsetY)
+{
+	point = CPoint(x, y);
+	_size = size;
+	_lengthX = lengthX;
+	_lengthY = lengthY;
+	_id = id;
+	_offset = offset;
+	_lenOffsetX = lenOffsetX;
+	_lenOffsetY = lenOffsetY;
 }
 }

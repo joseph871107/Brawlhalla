@@ -24,7 +24,7 @@ const double COLLISION_ERRORS = 1.0;
 const int _OFFSET_X = 20;
 const int _OFFSET_Y = 7;
 const int MAX_LIFE = 3;
-const int MAP_BORDER_OFFSET = 300;
+const int MAP_BORDER_OFFSET = 1000;
 const int MAP_BORDER_X1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
@@ -104,9 +104,9 @@ Player::~Player()
 void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
-    Ground* _ground = groundsValue[(rand() * 100) % groundsValue.size()];								// Randomly choose one of the ground object
-    _x = (rand() * 1000) % (int)(_ground->GetWidth() * _ground->GetSize()) + _ground->GetCor(0);		// Randomly set x coordinate within Ground's width
-    _y = _ground->GetCor(1) - GetHeight();
+	Ground* g = GetRandomGround(&groundsValue);		// Randomly select Ground
+	_x = random(g->GetCor(0), g->GetCor(2) - GetWidth());		// Randomly set x coordinate within Ground's width
+    _y = g->GetCor(1) - GetHeight();
     //
     ResetTriggeredAnimationVariables();
     //
@@ -153,6 +153,8 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     SetConscious();
     //
     _isFirstTimeOnEdge = true;
+	//
+	_flyingWeapon = nullptr;
 }
 
 void Player::LoadBitmap()
@@ -580,6 +582,14 @@ void Player::OnMove()
     //-----------------UNTITLED SECTION-----------------//
     if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
         ResetJumpCount();
+
+	if (_flyingWeapon != nullptr) {
+		_flyingWeapon->OnMove();
+		if (!_flyingWeapon->BeThrowen()) {
+			delete _flyingWeapon;
+			_flyingWeapon = nullptr;
+		}
+	}
 }
 
 void Player::OnShow()
@@ -588,6 +598,9 @@ void Player::OnShow()
     ShowAnimation();
     // Play current audio
     PlayAudioByState();
+	// Show throwing weapons
+	if (_flyingWeapon != nullptr)
+		_flyingWeapon->OnShow();
 
     // For showing the "name tag" //
     if (_PLAYER_DEBUG || 1)
@@ -621,10 +634,31 @@ void Player::OnKeyDown(const UINT& nChar)
     {
         _isTriggerAttack = true;
     }
-    else if (nChar == _keys[5])   //Dodge
+    else if (nChar == _keys[5]) //Dodge
     {
         _isTriggerDodge = true;
-    }
+	}
+	else if (nChar == _keys[6])	//Trow
+	{
+		if (GetHoldWeapon()) {
+
+			Weapon* weapon = new Weapon();
+			weapon->AddCamera(camera);
+			weapon->Initialize(_grounds, *_playersPtr);
+			weapon->SetSize(0.04);
+			bool dir = GetDirection();
+
+			if (!dir)
+				weapon->SetXY(GetCor(0) - 100, GetCor(1) + 10);
+			else
+				weapon->SetXY(GetCor(2) + 20, GetCor(1) + 10);
+
+			weapon->Throw(GetDirection(), this);
+			_flyingWeapon = weapon;
+			SetHoldWeapon(false);
+			ResetWeaponID();
+		}
+	}
     else
     {
         // Do nothing
@@ -721,10 +755,6 @@ int Player::GetCor(int index)
         default:
             return NULL;
     }
-}
-int Player::ShowAnimationState()
-{
-    return (_aniSelector ? _aniByWpn[_wpnID][_currentAniByWpn].GetCurrentBitmapNumber() : (ani.begin() + currentAni)->GetCurrentBitmapNumber());
 }
 int Player::GetWidth()
 {
@@ -1071,7 +1101,7 @@ void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
     targetPlayer->_takenDmg += 2; // increment the taken damage of the target player
     int attackOffsetMagnitude = targetPlayer->_takenDmg;
     //
-    double multiplier = attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength();
+    double multiplier = (vectorAttackerToTargetPlayer.GetLength() == 0 ? attackOffsetMagnitude : attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength());
     Vector2 targetPlayerDisplacementVector(Round(vectorAttackerToTargetPlayer.GetX() * multiplier),
                                            Round(vectorAttackerToTargetPlayer.GetY() * multiplier));
     targetPlayer->BeenAttacked(targetPlayerDisplacementVector, attackDirection);
