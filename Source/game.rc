@@ -268,9 +268,37 @@ IDB_NUM_MINUS           BITMAP                  "..\\RES\\Numbers\\minus.bmp"
 
 IDB_WEAPON_FALLING      BITMAP                  "..\\RES\\weapons\\DefaultFallingSword\\WeaponPickup.bmp"
 
-IDB_WEAPON_THROWING_L   BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L.bmp"
+IDB_WEAPON_ROT_L   		BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L.bmp"
 
-IDB_WEAPON_THROWING_R   BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R.bmp"
+IDB_WEAPON_ROT_L_45 	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L_45.bmp"
+
+IDB_WEAPON_ROT_L_90 	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L_90.bmp"
+
+IDB_WEAPON_ROT_L_135 	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L_135.bmp"
+
+IDB_WEAPON_ROT_L_180 	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L_180.bmp"
+
+IDB_WEAPON_ROT_L_225 	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L_225.bmp"
+
+IDB_WEAPON_ROT_L_270 	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L_270.bmp"
+
+IDB_WEAPON_ROT_L_315 	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_L_315.bmp"
+
+IDB_WEAPON_ROT_R   		BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R.bmp"
+
+IDB_WEAPON_ROT_R_45		BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R_45.bmp"
+
+IDB_WEAPON_ROT_R_90		BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R_90.bmp"
+
+IDB_WEAPON_ROT_R_135	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R_135.bmp"
+
+IDB_WEAPON_ROT_R_180	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R_180.bmp"
+
+IDB_WEAPON_ROT_R_225	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R_225.bmp"
+
+IDB_WEAPON_ROT_R_270	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R_270.bmp"
+
+IDB_WEAPON_ROT_R_315	BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R_315.bmp"
 
 IDB_P1_FALL1            BITMAP                  "..\\RES\\player1\\adventurer-fall-01.bmp"
 

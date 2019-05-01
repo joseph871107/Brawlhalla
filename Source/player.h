@@ -203,7 +203,10 @@ class Player
         bool _isHoldingWeapon;
         bool _isTriggerAttack;
         int _takenDmg;
+
+		//Trow weapon
 		Weapon *_flyingWeapon;
+		void DeleteFlyingWeapon();
         // The taken damage will determine how far the target player would fly 'attackOffsetMagnitude', and
         // how long he would be in the unconscious state '_unconsciousFramesCount'
 

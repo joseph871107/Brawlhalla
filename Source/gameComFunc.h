@@ -43,6 +43,11 @@ struct ColBmp
     vector< vector<COLORREF>> pixel;
 };
 
+class CRAnimation : public CAnimation {
+public:
+	void NextPtr();
+	void PreviousPtr();
+};
 
 /////////////////////////
 // ¸I¼²¯x°}¥þ°ìÅÜ¼Æ

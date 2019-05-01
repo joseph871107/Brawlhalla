@@ -272,11 +272,11 @@ void CAnimation::SetTopLeft(int nx, int ny)
     bmp_iter->SetTopLeft(x, y);
 }
 
-void CAnimation::OnShow()
+void CAnimation::OnShow(double _size)
 {
     GAME_ASSERT(bmp.size() != 0, "CAnimation: Bitmaps must be loaded before they are shown.");
     bmp_iter->SetTopLeft(x, y);
-    bmp_iter->ShowBitmap(size);
+    bmp_iter->ShowBitmap((_size == 0 ? size : _size));
 }
 
 int CAnimation::Top()

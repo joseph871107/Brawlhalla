@@ -22,17 +22,18 @@ class Weapon : public Object
         void Initialize(vector<Ground*>, vector<Player*>);
 		void Throw(bool, Player*);
         Player* HitPlayer();
+		void SetState(long state);
 		bool HasTaken();
-		bool BeThrowen();
+		bool BeThrown();
     private:
-        CMovingBitmap bmp,tl, tr;
-        int _bmpID, _throwLID, _throwRID, _flyingDistance;
-        COLORREF _color;
-        double _velocity;
+		CRAnimation bmp, tl, tr, *sbmp;
+		clock_t start;
+        double _velocityX, _velocityY;
         Ground* _ground;
         vector<Player*> _player;
-        bool _isHolding, _isThrowing, _tDir;
 		Player* _throwHost;
+        bool _tDir;
+		long _state;
 };
 }
 

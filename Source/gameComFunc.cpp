@@ -332,4 +332,16 @@ Ground * GetRandomGround(vector<Ground*>* ground)
 	}
 	return *finalSelect;
 }
+void CRAnimation::NextPtr()
+{
+	bmp_iter++;
+	if (bmp_iter == bmp.end())
+		bmp_iter = bmp.begin();
+}
+void CRAnimation::PreviousPtr()
+{
+	bmp_iter--;
+	if (bmp_iter == bmp.begin())
+		bmp_iter = bmp.end();
+}
 }

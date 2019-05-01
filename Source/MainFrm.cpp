@@ -76,6 +76,11 @@ CMainFrame::CMainFrame()
 	isStatusBarVisible = true;
 }
 
+int CMainFrame::IsFullScreen()
+{
+	return isFullScreen;
+}
+
 CMainFrame::~CMainFrame()
 {
 }

@@ -229,6 +229,9 @@ Map * CGameStateInit::GetMap()
 
 void CGameStateInit::OnMove()
 {
+	CMainFrame* pMainWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;	// Get MainFrm instance
+	_fullscreenEnabled = pMainWnd->IsFullScreen();					// Fix state of _fullscreenEnabled was not changed after ctrl+F (afx btn event triggered fullscreen)
+
 	welcomeWindow.OnMove();
 	settingWindow.OnMove();
 
@@ -243,7 +246,7 @@ void CGameStateInit::OnMove()
 		settingWindow.SetVisible(true);
 	}
 	else if (chosenBut == "exit")
-		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Ãö³¬¹CÀ¸
+		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Closing
 
 	chosenBut = settingWindow.GetUI()->ChosenButton();
 	if (chosenBut == "back") {
@@ -272,10 +275,13 @@ void CGameStateInit::OnMove()
 			_fullscreenEnabled = false;
 		else
 			_fullscreenEnabled = true;
-		(*settingWindow.GetUI()->Index("fullScreen"))->SetStr(_fullscreenEnabled ? "True " : "False");
-		CMainFrame* pMainWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;	// Get MainFrm instance
-		pMainWnd->SetFullScreen(_fullscreenEnabled);					// Implemente actull fullscreen that hide toolbar and menu
 	}
+	static bool _fullscreenEnabledLast = _fullscreenEnabled;
+	if (_fullscreenEnabledLast != _fullscreenEnabled) {													// _fullscreenEnabled changed state
+		(*settingWindow.GetUI()->Index("fullScreen"))->SetStr(_fullscreenEnabled ? "True " : "False");
+		pMainWnd->SetFullScreen(_fullscreenEnabled);													// Implemente actull fullscreen that hide toolbar and menu etc
+	}
+	_fullscreenEnabledLast = _fullscreenEnabled;
 }
 
 /////////////////////////////////////////////////////////////////////////////

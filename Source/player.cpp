@@ -99,6 +99,7 @@ Player::Player() :
 Player::~Player()
 {
     /* Body intentionally empty */
+	delete _flyingWeapon;
 }
 
 void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue)
@@ -513,6 +514,16 @@ void Player::SetNonTriggeredAnimationSelector()
     _aniSelector = false;
 }
 
+void Player::DeleteFlyingWeapon()
+{
+	if (_flyingWeapon != nullptr) {
+		if (_flyingWeapon->HasTaken()) {
+			delete _flyingWeapon;
+			_flyingWeapon = nullptr;
+		}
+	}
+}
+
 void Player::SetAnimationSelector()
 {
     if (_isUnconscious)
@@ -583,24 +594,20 @@ void Player::OnMove()
     if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
         ResetJumpCount();
 
-	if (_flyingWeapon != nullptr) {
+	if (_flyingWeapon != nullptr)
 		_flyingWeapon->OnMove();
-		if (!_flyingWeapon->BeThrowen()) {
-			delete _flyingWeapon;
-			_flyingWeapon = nullptr;
-		}
-	}
+	DeleteFlyingWeapon();
 }
 
 void Player::OnShow()
 {
+	// Show throwing weapons
+	if (_flyingWeapon != nullptr)
+		_flyingWeapon->OnShow();
     // Show current animation
     ShowAnimation();
     // Play current audio
     PlayAudioByState();
-	// Show throwing weapons
-	if (_flyingWeapon != nullptr)
-		_flyingWeapon->OnShow();
 
     // For showing the "name tag" //
     if (_PLAYER_DEBUG || 1)
@@ -633,6 +640,9 @@ void Player::OnKeyDown(const UINT& nChar)
     else if (nChar == _keys[4]) //Attack
     {
         _isTriggerAttack = true;
+		if(_flyingWeapon != nullptr)
+			_flyingWeapon->OnKeyDown(nChar);
+		DeleteFlyingWeapon();
     }
     else if (nChar == _keys[5]) //Dodge
     {
@@ -641,11 +651,9 @@ void Player::OnKeyDown(const UINT& nChar)
 	else if (nChar == _keys[6])	//Trow
 	{
 		if (GetHoldWeapon()) {
-
 			Weapon* weapon = new Weapon();
 			weapon->AddCamera(camera);
 			weapon->Initialize(_grounds, *_playersPtr);
-			weapon->SetSize(0.04);
 			bool dir = GetDirection();
 
 			if (!dir)

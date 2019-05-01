@@ -34,6 +34,7 @@ protected: // create from serialization only
 
 // Attributes
 public:
+	int IsFullScreen();
 private:
 	bool isFullScreen;
 	int  isToolBarVisible;
