@@ -109,7 +109,8 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
 	_x = random(g->GetCor(0), g->GetCor(2) - GetWidth());		// Randomly set x coordinate within Ground's width
     _y = g->GetCor(1) - GetHeight();
     //
-    ResetTriggeredAnimationVariables();
+    ResetTriggeredAnimationVariablesAnimationLogic();
+    ResetTriggeredAnimationVariablesGameLogic();
     //
     _width = (int)(_collision_box.Width() * BITMAP_SIZE);
     _height = (int)(_collision_box.Height() * BITMAP_SIZE);
@@ -294,7 +295,7 @@ bool Player::IsFirstTimeOnEdge()
     return (IsOnEdge() && _isFirstTimeOnEdge);
 }
 
-void Player::InitializeOnEdge()
+void Player::InitiateOnEdge()
 {
     _isFirstTimeOnEdge = false;
     _verticalVelocity = 0;
@@ -315,32 +316,37 @@ void Player::DoOnGround()
     _verticalVelocity = 0;
 }
 
-void Player::ModifyVerticalOffsetFunctions()
+void Player::ModifyVerticalOffsetVariablesFunctions()
 {
     /*	~ Remark:
-    	~ Below are the functions that does modify the vertical offset variables,
-    	~ including '_verticalAcceleration' and '_verticalVelocity'
+    	~ All the codes and functions below modify the vertical offset variables
+    	~ '_verticalAcceleration' and '_verticalVelocity'
     */
+    //-----------------INITIALIZE VERTICAL ACCELERATION-----------------//
     _verticalAcceleration = INITIAL_ACCELERATION;
-    // 'DoLand()' inside 'ProcessKeyCombinationOnMove()' modifies the member variable '_verticalAcceleration'.
-    ProcessKeyCombinationOnMove(); // Control 'triggeredAnimation' - animations that are triggered by pressing combination of keys
+    //-----------------PROCESS CURRENT KEY COMBINATION GAME LOGIC-----------------//
+    /*	~ Remark:
+    	~ Perform the game logic of the player based on the current key pressed '_currentKeyID',
+    	~ which consists of 2 parts: Triggered Animation and Non-Triggered Animation
+    */
+    ProcessCurrentKeyCombinationGameLogic();
 
-    /* SLIDING ON EDGES */
+    //-----------------SLIDE ON EDGES-----------------//
     // 'InitializeOnEdge()' modifies '_verticalVelocity', thus the function must be placed here
     if (IsFirstTimeOnEdge())
-        InitializeOnEdge();
+        InitiateOnEdge();
 
     if (IsOnEdge())
         DoOnEdge();
     else
         DoLeaveEdge();
 
-    /* STANDING ON GROUND */
+    //-----------------STAND ON GROUND-----------------//
     if (IsOnGround())
         DoOnGround();
 }
 
-void Player::ConsciouslyOnMove()
+void Player::ConsciouslyOnMoveGameLogic()
 {
     /* REPOSITION PLAYER ABOUT GROUNDS */
     int playerX1 = GetCor(0);
@@ -356,16 +362,16 @@ void Player::ConsciouslyOnMove()
         int groundY2 = groundPtr->GetCor(3);
 
         if (IsIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-        {
             DoRepositionAboutGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2);
-        }
     }
 
-    /*	~ VERTICAL OFFSET
-    	~ Gravity
-    */
-    ModifyVerticalOffsetFunctions();
+    /* VERTICAL OFFSET */
+    // First, we must implement the codes and functions that does modify the vertical offset
+    // variables! Note that these functions not only configure vertical offset variables,
+    // they also do a miscellaneous collection of other tasks
+    ModifyVerticalOffsetVariablesFunctions();
 
+    // Secondly, we do the vertical offset (in this case, gravity)
     if (!IsOnGround())
     {
         _verticalVelocity += _verticalAcceleration;
@@ -402,18 +408,10 @@ void Player::DoBounceOffGround(int playerX1, int playerY1, int playerX2, int pla
 }
 
 
-void Player::UnconsciouslyOnMove()
+void Player::UnconsciouslyOnMoveGameLogic()
 {
-    //-----------------ANIMATIONS SECTION-----------------//
-    if (ani[ANI_ID_UNCONSCIOUS_FLYING_LEFT].IsFinalBitmap() || ani[ANI_ID_UNCONSCIOUS_FLYING_RIGHT].IsFinalBitmap())
-    {
-        // Continuously running the animation until '_unconsciousFramesCount' reaches its maximum value
-        ani[ANI_ID_UNCONSCIOUS_FLYING_LEFT].Reset();
-        ani[ANI_ID_UNCONSCIOUS_FLYING_RIGHT].Reset();
-    }
-
     //-----------------POSITION TRANSFORMATION SECTION-----------------//
-    /* Bounce Off the Grounds */
+    /* PLAYER BOUNCES OFF THE GROUNDS */
     int playerX1 = GetCor(0);
     int playerY1 = GetCor(1);
     int playerX2 = GetCor(2);
@@ -427,9 +425,7 @@ void Player::UnconsciouslyOnMove()
         int groundY2 = groundPtr->GetCor(3);
 
         if (IsIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-        {
             DoBounceOffGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2);
-        }
     }
 
     /*	~ VERTICAL OFFSET
@@ -439,27 +435,31 @@ void Player::UnconsciouslyOnMove()
     _y += Round(_verticalVelocity);
 
     /*	~ HORIZONTAL OFFSET
-    	~ Being Hit
+    	~ Horizontal offset by being hit
     */
     if (IsBeingOffsetHorizontally())
         DoHorizontalOffset(); // Modify the x-coordinate of the player
 
-    //-----------------UNTITLED SECTION-----------------//
-    _unconsciousFramesCount++; // increment the frames count
-    int maxFrames = 10;
+    //-----------------CONSCIOUS STATE RESOLVE SECTION-----------------//
+    /*	~ SET MAX UNCONSCIOUS FRAMES
+    	~ Determine the maximum duration for the unconscious state of the player
+    	~ when he gets hit, based on '_takenDmg' - the total damages he has taken.
+    */
+    int maxUnconsciousFrames = 10;
 
-    if (_takenDmg > maxFrames)
-        maxFrames = _takenDmg;
+    if (_takenDmg > maxUnconsciousFrames)
+        maxUnconsciousFrames = _takenDmg;
 
-    if (_unconsciousFramesCount == maxFrames)
-    {
+    /* ESTIMATE CURRENT UNCONSCIOUS FRAMES COUNT */
+    _unconsciousFramesCount++; // Increment the current unconscious frames count
+
+    if (_unconsciousFramesCount == maxUnconsciousFrames)
         SetConscious();
-    }
 }
 
 void Player::SetTriggeredAnimationSelector()
 {
-    switch (_triggeredAniKeyID)
+    switch (_currentKeyID)
     {
         /* ON GROUND */
         case KEY_GND_ATTACK: // on ground, not move, attack
@@ -511,7 +511,10 @@ void Player::SetTriggeredAnimationSelector()
 
 void Player::SetNonTriggeredAnimationSelector()
 {
-    _aniSelector = false;
+    if (_currentKeyID == KEY_GND_IDLE && _isHoldingWeapon) // Special case: Player is idling on the ground with his weapon
+        _aniSelector = true;
+    else
+        _aniSelector = false;
 }
 
 void Player::DeleteFlyingWeapon()
@@ -524,64 +527,232 @@ void Player::DeleteFlyingWeapon()
 	}
 }
 
-void Player::SetAnimationSelector()
+void Player::SetCurrentTriggeredAnimationByWeapon()
 {
-    if (_isUnconscious)
-        _aniSelector = false;
-    else
-    {
-        if (_isTriggeredAni)
-            SetTriggeredAnimationSelector();
-        else
-            SetNonTriggeredAnimationSelector();
-    }
+    /*	~ Remark:
+    	~ The player is performing a trigger animation
+    	~ The animation is dependent on the weapon (decided by the actual sprite of the player)
+    */
+    SetAnimationStateByWeapon(_triggeredAniAnimationID);
 }
 
-void Player::OnMove()
+void Player::SetCurrentTriggeredAnimation()
 {
-    //-----------------ANIMATIONS SECTION-----------------//
-    /* SET ANIMATION SELECTOR */
-    SetAnimationSelector();
+    /*	~ Remark:
+    	~ The player is performing a trigger animation
+    	~ The animation is NOT dependent on the weapon (decided by the actual sprite of the player)
+    */
+    SetAnimationState(_triggeredAniAnimationID);
+}
 
-    // Set current animation
-    // It is not consistent with 'Player::OnMove()' here when we prioritize the condition '_isTriggeredAni' over '_aniSelector',
-    // but it makes it more tractable to set the animation of trigger animation and non trigger animation separately
-    /// Comment for future devs: The logic of evaluating condition is inconsistent with 'Player::OnMove()'
-    /// In 'Player::OnMove()', we first consider '_aniSelector', then '_isTriggeredAni'
+void Player::SetCurrentAniByWeapon()
+{
+    if (_isTriggeredAni)
+        SetCurrentTriggeredAnimationByWeapon();
+    else
+        SetCurrentNonTriggeredAnimationByWeapon();
+}
+
+void Player::SetCurrentAni()
+{
     if (_isTriggeredAni)
         SetCurrentTriggeredAnimation();
     else
-        SetCurrentNonTriggerAnimation();
+        SetCurrentNonTriggeredAnimation();
+}
 
-    /*	~ UNCONSCIOUS ANIMATION
-    	~ When the player is being hit, yet he is doing his triggered animation,
-    	~ then his triggered animation must be stopped
+void Player::SetCurrentAnimation()
+{
+    if (_aniSelector)
+        SetCurrentAniByWeapon();
+    else
+        SetCurrentAni();
+}
+
+void Player::SetAnimationSelector(bool newAniSelector)
+{
+    _aniSelector = newAniSelector;
+}
+
+void Player::UnconsciouslyOnMoveAnimationLogic()
+{
+    /*	~ RESET UNCONSCIOUSLY FLYING ANIMATION
+    	~ Continuously running the animation until '_unconsciousFramesCount' reaches its maximum value
     */
-    if (_isUnconscious && _isTriggeredAni)
+    /// Comment for future devs: This should be written as "if ani[currentAni].IsFinalBitmap() { ... }" for better clarification
+    /// However, by normal logic, since we haven't set the animation selector, we should not refer 'ani[currentAni]'
+    if (ani[ANI_ID_UNCONSCIOUS_FLYING_LEFT].IsFinalBitmap() || ani[ANI_ID_UNCONSCIOUS_FLYING_RIGHT].IsFinalBitmap())
     {
-        // Enforce to finish the triggered animation and reset the triggered animation's variables
-        FinishTriggeredAnimation();
-        ResetTriggeredAnimationVariables();
+        ani[ANI_ID_UNCONSCIOUS_FLYING_LEFT].Reset();
+        ani[ANI_ID_UNCONSCIOUS_FLYING_RIGHT].Reset();
     }
 
-    /* JUMP ANIMATION */
-    if (IsOnGround() || IsOnEdge() || (_isTriggerJump && _jumpCount > 0))
-        ResetAnimations(ANI_ID_JUMP_LEFT);
-
-    /*	~ MOVE CURRENT ANIMATION
-    	~ Proceed to the next CMovingBitmap of the current animation
+    /*	~ OVERRIDE TRIGGERED ANIMATION
+    	~ If the player is hit and changes his state to unconscious,
+    	~ then his triggered animation (if any) must be forced to stop.
     */
+    if (_isTriggeredAni)
+        FinishTriggeredAnimationAnimationLogic(); // Compel the triggered animation to finish
+
+    /*	~ SET ANIMATION SELECTOR
+    	~ Set the animation selector to 'false'
+    */
+    /// Comment for future devs: Unconscious animation should be defined as a new animation vector;
+    /// that is, it should not be mixed with other conscious animation in 'ani'
+    SetAnimationSelector(false);
+}
+
+void Player::FinishTriggeredAnimationAnimationLogic()
+{
+    // Reset the animation of the finished triggered animation
+    if (_aniSelector)
+        _aniByWpn[_wpnID][_triggeredAniAnimationID].Reset();
+    else
+        ani[_triggeredAniAnimationID].Reset();
+
+    // Mark that the trigger animation has finished
+    ResetTriggeredAnimationVariablesAnimationLogic();
+}
+
+void Player::ResetTriggeredAnimationVariablesGameLogic()
+{
+    // Reset triggered animation variables, except for '_isTriggeredAni'
+    _triggeredAniKeyID = 0;
+    _triggeredAniAnimationID = -1;
+    _triggeredAniDir = false;
+    _isInitiatedTriggeredAni = false;
+}
+
+void Player::FinishTriggeredAnimationGameLogic()
+{
+    // Finish other logic regarding the triggered animation
+    switch (_triggeredAniKeyID)
+    {
+        /* ON GROUND */
+        case KEY_GND_ATTACK: // on ground, not move, attack
+            // Do nothing
+            break;
+
+        case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
+            // Do nothing
+            break;
+
+        case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
+            // Do nothing
+            break;
+
+        case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
+            // Do nothing
+            break;
+
+        /* ON AIR */
+        case KEY_AIR_ATTACK: // on air, not move, attack
+            // Do nothing
+            break;
+
+        case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
+            // Do nothing
+            break;
+
+        case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
+            // Do nothing
+            break;
+
+        case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
+            // Do nothing
+            break;
+
+        /* SPECIAL CASES */
+        case KEY_DRAW_SWORD:
+            // Do nothing
+            break;
+
+        case KEY_DODGE:
+            _isDodging = false;
+            break;
+
+        default:
+            break;
+    }
+
+    ResetTriggeredAnimationVariablesGameLogic();
+}
+
+void Player::ConsciouslyOnMoveAnimationLogic()
+{
+    /*	~ DETECT TRIGGERED ANIMATION
+    	~ If there is no animation being triggered in the meantime,
+    	~ then detect should there be any
+    */
+    if (!_isTriggeredAni)
+        SetTriggeredAnimationVariablesAnimationLogic(_currentKeyID);
+
+    /*	~ SET ANIMATION SELECTOR
+    	~ The '_aniSelector' decides the currently displayed animation
+    */
+    if (_isTriggeredAni)
+        SetTriggeredAnimationSelector();
+    else
+        SetNonTriggeredAnimationSelector();
+
+    /*	~ ESTIMATE FINISH OF TRIGGERED ANIMATION
+    	~ This estimation is independent of the current animation, but relies
+    	~ on the '_aniSelector' and '_triggeredAniAnimationId'.
+    */
+    if (_isTriggeredAni && _isInitiatedTriggeredAni && IsFinishedTriggeredAnimation())
+        FinishTriggeredAnimationAnimationLogic();
+}
+
+void Player::MoveCurrentAnimation()
+{
     if (_aniSelector)
         _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
     else
         ani[currentAni].OnMove();
+}
 
-    //-----------------POSITION TRANSFORMATION SECTION-----------------//
-    /* CONSCIOUS/ UNCONSCIOUS */
+void Player::OnMoveAnimationLogic()
+{
+    /*	~ Remark:
+    	~ This function is responsible for the animation logic of the player.
+    	~ Its primary task is to set and "move" the player's current animation.
+    */
+
+    //-----------------UNCONSCIOUS/ CONSCIOUS SECTION-----------------//
     if (_isUnconscious)
-        UnconsciouslyOnMove();
+        UnconsciouslyOnMoveAnimationLogic();
     else
-        ConsciouslyOnMove();
+        ConsciouslyOnMoveAnimationLogic();
+
+    //-----------------COMMON SECTION-----------------//
+
+    /*	~ RESET JUMP ANIMATION
+    	~ Reset the jump animation for the player
+    */
+    /// Comment for future devs: Reset jump animation is not well placed here and should be re-accomodate in the near future
+    if (IsOnGround() || IsOnEdge() || (_isTriggerJump && _jumpCount > 0))
+        ResetAnimations(ANI_ID_JUMP_LEFT);
+}
+
+void Player::OnMoveGameLogic()
+{
+    /*	~ Remark:
+    	~ This function is responsible for the game logic of the player,
+    	~ including his positioning and the way he interacts with other
+    	~ objects (such as grounds, other players, etc.)
+    */
+
+    //-----------------UNCONSCIOUS/ CONSCIOUS SECTION-----------------//
+    if (_isUnconscious)
+        UnconsciouslyOnMoveGameLogic();
+    else
+        ConsciouslyOnMoveGameLogic();
+
+    //-----------------COMMON SECTION-----------------//
+
+    /* ESTIMATE FINISH OF TRIGGERED ANIMATION */
+    if (!_isTriggeredAni) // If the "Triggered Animation" is finished (done by 'FinishTriggeredAnimationAnimationLogic()')
+        FinishTriggeredAnimationGameLogic();
 
     /* FALL OFF THE MAP */
     if (IsOutMapBorder())
@@ -590,7 +761,9 @@ void Player::OnMove()
         DoRespawn();
     }
 
-    //-----------------UNTITLED SECTION-----------------//
+    /*	~ RESET JUMP COUNT
+    	~ Reset the jump count of the player, so that he can jump when eligible
+    */
     if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
         ResetJumpCount();
 
@@ -599,13 +772,30 @@ void Player::OnMove()
 	DeleteFlyingWeapon();
 }
 
+void Player::OnMove()
+{
+    _currentKeyID = GetKeyCombination(); // Get the current key combination to re-use in 'OnMoveAnimationLogic()' and 'OnMoveGameLogic()'
+    OnMoveAnimationLogic();
+    OnMoveGameLogic();
+    /*	~ SET CURRENT ANIMATION
+    	~ Set the current animation based on '_aniSelector',
+    	~ which is defined in 'OnMoveAnimationLogic()'
+    */
+    SetCurrentAnimation();
+    /*	~ MOVE CURRENT ANIMATION
+    	~ Proceed to the next CMovingBitmap of the current animation,
+    	~ which is determined by '_aniSelector'
+    */
+    MoveCurrentAnimation();
+}
+
 void Player::OnShow()
 {
 	// Show throwing weapons
 	if (_flyingWeapon != nullptr)
 		_flyingWeapon->OnShow();
     // Show current animation
-    ShowAnimation();
+    ShowCurrentAnimation();
     // Play current audio
     PlayAudioByState();
 
@@ -839,7 +1029,7 @@ void Player::SetAnimationState(int num)
 {
     currentAni = num;
 }
-void Player::ShowAnimation()
+void Player::ShowCurrentAnimation()
 {
     if (_PLAYER_DEBUG)
     {
@@ -1178,7 +1368,7 @@ void Player::PlayAudioByState()
 
     if (StateChanged() && !_isTriggeredAni)
     {
-        switch (GetKeyCombination())
+        switch (_currentKeyID)
         {
             case KEY_GND_IDLE:
                 break;
@@ -1288,43 +1478,42 @@ int Player::GetKeyCombination()
     return (stoi(keyCombString));
 }
 
-void Player::ProcessKeyCombinationOnMove()
+void Player::ProcessCurrentKeyCombinationGameLogic()
 {
-    /*	~ Remarks: Explaination of the triggered animation concept
-    	~ When an animation is said to be "triggered", it prevails all other animations by means of depiction for a period of time;
-    	~ that is, when an animation is triggered, it becomes the only animation being shown for a time interval.
+    /*	~ Remark:
+    	~ To begin with, the current key combination '_currentKeyID' has already defined
+    	~ the action to be performed by the player as either "Triggered Animation" or
+    	~ "Non-Triggered Animation" in the function 'OnMoveAnimationLogic()'.
+    	~
+    	~ Thus, in this function, we process the game logic for the player based on either
+    	~ the selected "Triggered Animation" or "Non-Triggered Animation".
+    	~
+    	~ Explanation of the "Triggered Animation" concept:
+    	~ When an animation is said to be "triggered", it prevails all other animations by
+    	~ means of depiction; that is, when an animation is triggered, it becomes the only
+    	~ animation being shown.
     */
-    if (!_isTriggeredAni) // If there is no animation being triggered in the meantime, then detect should there be any
+    if (_isTriggeredAni)
     {
-        GetAndSetTriggeredAnimation();
-
-        if (_isTriggeredAni) // If an animation is found to be triggered, then we firstly initiate it (there is no process here)
+        // Initiate the triggered animation variables and the animation itself (if haven't)
+        if (!_isInitiatedTriggeredAni)
+        {
+            SetTriggeredAnimationVariablesGameLogic(_currentKeyID);
             InitiateTriggeredAnimation();
-    }
+            _isInitiatedTriggeredAni = true; // Mark that the triggered animation has been triggered
+        }
 
-    if (_isTriggeredAni) // If an animation is triggered, then we process it (there is no initiation here)
-    {
+        // Process the triggered animation
         if (!IsFinishedTriggeredAnimation()) // If an animation is triggered and has not finished, then do the forementioned animation
-        {
             DoTriggeredAnimation();
-        }
-        else // If an animation is triggered and it has done its showcase, then thoroughly finish it and reset the triggered animation's variables
-        {
-            FinishTriggeredAnimation();
-            ResetTriggeredAnimationVariables();
-        }
     }
-    else // If there is no triggered animation in the meantime, then do the other animations
-    {
+    else // If there is no "Triggered Animation" in the meantime, then do the other "Non-Triggered Animation(s)"
         DoNonTriggeredAnimation();
-    }
 }
-void Player::ResetTriggeredAnimationVariables()
+
+void Player::ResetTriggeredAnimationVariablesAnimationLogic()
 {
     _isTriggeredAni = false;
-    _triggeredAniKeyID = 0;
-    _triggeredAniAnimationID = -1;
-    _triggeredAniDir = false;
 }
 void Player::SetFirstThreeTriggeredAnimationVariables(int keyCombInt)
 {
@@ -1332,13 +1521,82 @@ void Player::SetFirstThreeTriggeredAnimationVariables(int keyCombInt)
     _triggeredAniKeyID = keyCombInt;
     _triggeredAniDir = _dir;
 }
-void Player::SetTriggeredAnimationVariables(int keyCombInt)
+
+void Player::SetTriggeredAnimation(bool newIsTriggeredAni)
+{
+    _isTriggeredAni = newIsTriggeredAni;
+}
+
+void Player::SetTriggeredAnimationVariablesAnimationLogic(int keyCombInt)
 {
     switch (keyCombInt)
     {
         /* ON GROUND */
         case KEY_GND_ATTACK: // on ground, not move, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimation(true);
+            break;
+
+        case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
+            SetTriggeredAnimation(true);
+            break;
+
+        case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
+            SetTriggeredAnimation(true);
+            break;
+
+        case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
+            SetTriggeredAnimation(true);
+            break;
+
+        /* ON AIR */
+        case KEY_AIR_ATTACK: // on air, not move, attack
+            SetTriggeredAnimation(true);
+            break;
+
+        case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
+            SetTriggeredAnimation(true);
+            break;
+
+        case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
+            SetTriggeredAnimation(true);
+            break;
+
+        case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
+            SetTriggeredAnimation(true);
+            break;
+
+        /* SPECIAL CASES */
+        case KEY_DRAW_SWORD:
+            SetTriggeredAnimation(true);
+            break;
+
+        case KEY_DODGE:
+            SetTriggeredAnimation(true);
+            break;
+
+        default:
+            break;
+    }
+}
+
+void Player::SetTriggeredAnimationKeyID(int newTriggeredAniKeyID)
+{
+    _triggeredAniKeyID = newTriggeredAniKeyID;
+}
+
+void Player::SetTriggeredAnimationDir(bool newTriggeredAniDir)
+{
+    _triggeredAniDir = newTriggeredAniDir;
+}
+
+void Player::SetTriggeredAnimationVariablesGameLogic(int keyCombInt)
+{
+    switch (keyCombInt)
+    {
+        /* ON GROUND */
+        case KEY_GND_ATTACK: // on ground, not move, attack
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir)
                 _triggeredAniAnimationID = ANI_WPN_ID_ATTACK_RIGHT;
@@ -1348,7 +1606,8 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir)
                 _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
@@ -1358,7 +1617,8 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir)
                 _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
@@ -1368,7 +1628,8 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir)
                 _triggeredAniAnimationID = ANI_WPN_ID_SLIDE_ATTACK_RIGHT;
@@ -1379,7 +1640,8 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
 
         /* ON AIR */
         case KEY_AIR_ATTACK: // on air, not move, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir)
                 _triggeredAniAnimationID = ANI_WPN_ID_AIR_ATTACK_RIGHT;
@@ -1389,7 +1651,8 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir)
                 _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
@@ -1399,7 +1662,8 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir)
                 _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
@@ -1409,7 +1673,8 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir)
                 _triggeredAniAnimationID = ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT;
@@ -1420,7 +1685,8 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
 
         /* SPECIAL CASES */
         case KEY_DRAW_SWORD:
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir) // If the player is facing right
                 _triggeredAniAnimationID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
@@ -1430,7 +1696,8 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
             break;
 
         case KEY_DODGE:
-            SetFirstThreeTriggeredAnimationVariables(keyCombInt);
+            SetTriggeredAnimationKeyID(keyCombInt);
+            SetTriggeredAnimationDir(_dir);
 
             if (_triggeredAniDir) // If the player is facing right
                 _triggeredAniAnimationID = ANI_ID_DODGE_RIGHT;
@@ -1442,11 +1709,6 @@ void Player::SetTriggeredAnimationVariables(int keyCombInt)
         default:
             break;
     }
-}
-void Player::GetAndSetTriggeredAnimation()
-{
-    int keyCombInt = GetKeyCombination();
-    SetTriggeredAnimationVariables(keyCombInt);
 }
 void Player::InitiateTriggeredAnimation()
 {
@@ -1498,6 +1760,7 @@ void Player::InitiateTriggeredAnimation()
         /* SPECIAL CASES*/
         case KEY_DRAW_SWORD:
             _isTriggerDrawWeapon = false;
+			_isTriggerAttack = false; // We are drawing weapon, not attacking
             break;
 
         case KEY_DODGE:
@@ -1562,16 +1825,10 @@ void Player::DoTriggeredAnimation()
 }
 bool Player::IsFinishedTriggeredAnimation()
 {
-    /// DEBUG
-
     if (_aniSelector)
-        return (_currentAniByWpn == _triggeredAniAnimationID
-			&&
-			_aniByWpn[_wpnID][_currentAniByWpn].IsFinalBitmap());
+        return (_aniByWpn[_wpnID][_triggeredAniAnimationID].IsFinalBitmap());
     else
-        return (currentAni == _triggeredAniAnimationID
-			&&
-			ani[currentAni].IsFinalBitmap());
+        return (ani[_triggeredAniAnimationID].IsFinalBitmap());
 }
 void Player::FinishTriggeredAnimation()
 {
@@ -1632,14 +1889,6 @@ void Player::FinishTriggeredAnimation()
     }
 }
 
-void Player::SetCurrentTriggeredAnimation()
-{
-    if (_aniSelector)
-        SetAnimationStateByWeapon(_triggeredAniAnimationID);
-    else
-        SetAnimationState(_triggeredAniAnimationID);
-}
-
 void Player::DoNonTriggeredAnimation()
 {
     /*	~ Remarks:
@@ -1647,9 +1896,7 @@ void Player::DoNonTriggeredAnimation()
     ~ That is, only the key combinations ending with '1' are taken into account
     ~ Jump is a special case and thus is added into the bottom of the function
     */
-    int keyCombInt = GetKeyCombination();
-
-    switch (keyCombInt)
+    switch (_currentKeyID)
     {
         /* ON GROUND */
         case KEY_GND_IDLE: // on ground, not move, not attack
@@ -1695,16 +1942,18 @@ void Player::DoNonTriggeredAnimation()
         DoJump();
 
         if (IsOnLeftEdge() || IsOnRightEdge())
-        {
             InitiateWallJump();
-        }
 
         _isTriggerJump = false; // Turn off the jump trigger
     }
 }
-void Player::SetCurrentNonTriggerAnimation()
+void Player::SetCurrentNonTriggeredAnimation()
 {
-    if (_isUnconscious) // Player is unconscious
+    /*	~ Remark:
+    	~ The player is NOT performing a trigger animation
+    	~ The animation is NOT dependent on the weapon (decided by the actual sprite of the player)
+    */
+    if (_isUnconscious) /// Comment for future devs: This special case overrides the others where the player is unconscious should be separated as another animation vector, not being put in 'ani'
     {
         if (_unconsciousAniDir)
             SetAnimationState(ANI_ID_UNCONSCIOUS_FLYING_RIGHT);
@@ -1716,15 +1965,7 @@ void Player::SetCurrentNonTriggerAnimation()
         if (_isPressingLeft || _isPressingRight) // Player is moving
             SetAnimationStateLeftRight(ANI_ID_RUN_LEFT);
         else // Player is idling
-
-            /// if (_isHoldingWeapon) // With sword
-            if (_aniSelector) // If '_aniByWpn' is chosen
-                if (_dir) // If the player is facing right
-                    SetAnimationStateByWeapon(ANI_WPN_ID_STAND_RIGHT);
-                else
-                    SetAnimationStateByWeapon(ANI_WPN_ID_STAND_LEFT);
-            else // Without sword
-                SetAnimationStateLeftRight(ANI_ID_STAND_LEFT);
+            SetAnimationStateLeftRight(ANI_ID_STAND_LEFT);
     }
     else // Player is NOT on ground
     {
@@ -1738,6 +1979,20 @@ void Player::SetCurrentNonTriggerAnimation()
             SetAnimationStateLeftRight(ANI_ID_JUMP_LEFT);
     }
 }
+
+void Player::SetCurrentNonTriggeredAnimationByWeapon()
+{
+    /*	~ Remark:
+    	~ The player is NOT performing a trigger animation
+    	~ The animation is dependent on the weapon (decided by the actual sprite of the player)
+    */
+    if (_currentKeyID == KEY_GND_IDLE) // Player is idling on the ground
+        if (_dir) // If the player is facing right
+            SetAnimationStateByWeapon(ANI_WPN_ID_STAND_RIGHT);
+        else
+            SetAnimationStateByWeapon(ANI_WPN_ID_STAND_LEFT);
+}
+
 void Player::AddCamera(Camera* cam)
 {
     camera = cam;
@@ -1750,10 +2005,10 @@ bool Player::StateChanged()
 {
     bool ret = false;
 
-    if (_lastTriggeredAniKeyID != GetKeyCombination())
+    if (_lastTriggeredAniKeyID != _currentKeyID)
         ret = true;
 
-    _lastTriggeredAniKeyID = GetKeyCombination();
+    _lastTriggeredAniKeyID = _currentKeyID;
     return ret;
 }
 bool Player::WpnStateChanged()

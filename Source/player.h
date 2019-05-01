@@ -51,7 +51,7 @@ class Player
 
         void SetAnimationStateLeftRight(int leftAnimationId);
         void SetAnimationState(int);	// Set which CAnimation is going to play
-        void ShowAnimation();			// Show CAnimation by currentAni
+        void ShowCurrentAnimation();			// Show CAnimation by currentAni
 
         //Reposition about the grounds
         bool IsIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
@@ -104,8 +104,8 @@ class Player
 
         //Unconscious state
         void InitializeUnconsciousState(bool beingAttackedDirection);
-        void ConsciouslyOnMove();
-        void UnconsciouslyOnMove();
+        void ConsciouslyOnMoveGameLogic();
+        void UnconsciouslyOnMoveGameLogic();
         void SetConscious();
 
         //Bounce Off the Ground
@@ -117,7 +117,7 @@ class Player
         int Round(double i);
         bool StateChanged();
         bool WpnStateChanged();
-        void ModifyVerticalOffsetFunctions();
+        void ModifyVerticalOffsetVariablesFunctions();
 
         /// Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
         //Weapon
@@ -133,27 +133,28 @@ class Player
 
         //Key combination
         int GetKeyCombination();
-        void ProcessKeyCombinationOnMove();
+        void ProcessCurrentKeyCombinationGameLogic();
 
         //Triggered animation concept
-        void ResetTriggeredAnimationVariables();
+        void ResetTriggeredAnimationVariablesAnimationLogic();
         void SetFirstThreeTriggeredAnimationVariables(int keyCombInt);
-        void SetTriggeredAnimationVariables(int leftAnimationID);
-        void GetAndSetTriggeredAnimation();
+		void SetTriggeredAnimation(bool newIsTriggeredAni);
+		void SetTriggeredAnimationVariablesAnimationLogic(int keyCombInt);
+		void SetTriggeredAnimationKeyID(int newTriggeredAniKeyID);
+		void SetTriggeredAnimationDir(bool newTriggeredAniDir);
+		void SetTriggeredAnimationVariablesGameLogic(int keyCombInt);
 
         void InitiateTriggeredAnimation();
         void DoTriggeredAnimation();
         bool IsFinishedTriggeredAnimation();
         void FinishTriggeredAnimation();
-        void SetCurrentTriggeredAnimation();
 
         void DoNonTriggeredAnimation();
-        void SetCurrentNonTriggerAnimation();
 
         //Edges
         bool IsOnEdge();
         bool IsFirstTimeOnEdge();
-        void InitializeOnEdge();
+        void InitiateOnEdge();
         void DoOnEdge();
         void DoLeaveEdge();
 
@@ -161,9 +162,24 @@ class Player
         void DoOnGround();
 
         //
-        void SetAnimationSelector();
+        void SetAnimationSelector(bool newAniSelector);
         void SetTriggeredAnimationSelector();
         void SetNonTriggeredAnimationSelector();
+        void SetCurrentAnimation();
+		void UnconsciouslyOnMoveAnimationLogic();
+		void FinishTriggeredAnimationAnimationLogic();
+		void ResetTriggeredAnimationVariablesGameLogic();
+		void FinishTriggeredAnimationGameLogic();
+		void ConsciouslyOnMoveAnimationLogic();
+		void MoveCurrentAnimation();
+		void OnMoveAnimationLogic();
+		void OnMoveGameLogic();
+        void SetCurrentNonTriggeredAnimationByWeapon();
+        void SetCurrentTriggeredAnimationByWeapon();
+        void SetCurrentTriggeredAnimation();
+		void SetCurrentAniByWeapon();
+		void SetCurrentAni();
+        void SetCurrentNonTriggeredAnimation();
 
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
@@ -237,7 +253,7 @@ class Player
         int _triggeredAniKeyID;
         // The "KeyID" (short for "ID of the combination of key pressed") of the triggered animation
         // Its value is one of the constants starting with 'KEY_...'
-		// Do note that this value is unique!!!
+        // Do note that this value is unique!!!
 
         bool _triggeredAniDir;
         // The direction the player is facing when the triggered animation is activated
@@ -250,6 +266,8 @@ class Player
         // Its value is one of the constants starting with 'ANI_ID_...' or 'ANI_WPN_ID_...'
         // Technically, the animation needed in 'OnShow()' is defined by 'ani[_triggeredAniAnimationID]' or '_aniByWpn[_wpnID][_triggeredAniAnimationID]',
         // depending on the value of '_aniSelector'
+
+        bool _isInitiatedTriggeredAni;
 
         int _lastTriggeredAniKeyID;
 
@@ -275,6 +293,12 @@ class Player
 
         //Edges
         bool _isFirstTimeOnEdge;
+
+		// Others
+		int _currentKeyID;
+		// The current "KeyID" (short for "ID of the combination of key pressed") being activated by the user
+		// Its value is one of the constants starting with 'KEY_...'
+		// Do note that this value is unique!!!
 };
 #endif
 }
