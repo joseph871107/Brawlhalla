@@ -1752,6 +1752,7 @@ void Player::InitiateTriggeredAnimation()
         /* SPECIAL CASES*/
         case KEY_DRAW_SWORD:
             _isTriggerDrawWeapon = false;
+			_isTriggerAttack = false; // We are drawing weapon, not attacking
             break;
 
         case KEY_DODGE:
