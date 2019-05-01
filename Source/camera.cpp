@@ -70,10 +70,7 @@ double Camera::GetSize()
 }
 CPoint Camera::GetXY(int tx, int ty)
 {
-    CPoint temp;
-    temp.x = (int)((tx - x) * size + SIZE_X / 2 + offsetX);
-    temp.y = (int)((ty - y) * size + SIZE_Y / 2 + offsetY);
-    return temp;
+    return CPoint ((int)((tx - x) * size + SIZE_X / 2 + offsetX), (int)((ty - y) * size + SIZE_Y / 2 + offsetY));
 }
 CPoint Camera::GetCameraXY()
 {

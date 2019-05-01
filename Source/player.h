@@ -30,7 +30,6 @@ class Player
         bool GetHoldWeapon();
         bool GetDirection();
         int GetCor(int);				// 物件座標 0:左上X, 1:左上Y, 2:右下X, 3:右下Y
-        int ShowAnimationState();		// Return which CAnimation is playing
         int GetWidth();
         int GetHeight();
         void AddCamera(Camera* cam);	// Camera
@@ -220,6 +219,7 @@ class Player
         bool _isHoldingWeapon;
         bool _isTriggerAttack;
         int _takenDmg;
+		Weapon *_flyingWeapon;
         // The taken damage will determine how far the target player would fly 'attackOffsetMagnitude', and
         // how long he would be in the unconscious state '_unconsciousFramesCount'
 

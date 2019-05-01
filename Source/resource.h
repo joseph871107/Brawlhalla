@@ -9,8 +9,10 @@
 #define IDC_GAMECURSOR                  153
 #define IDB_LOADING                     156
 #define IDB_CONTINUE                    158
-#define IDB_GROUND                      162
-#define IDB_BACKGROUND                  168
+#define IDB_GROUND1                     162
+#define IDB_GROUND2                     163
+#define IDB_BACKGROUND1                 168
+#define IDB_BACKGROUND2                 169
 #define IDB_P1_RUN0                     279
 #define IDB_P1_RUN1                     280
 #define IDB_P1_RUN2                     281

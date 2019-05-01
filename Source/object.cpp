@@ -83,6 +83,7 @@ void Object::LoadBitmap(int resource)
 	bmp.LoadBitmap(resource);
 	width = bmp.Width();
 	height = bmp.Height();
+	loaded++;
 }
 
 void Object::LoadBitmap(int resource, COLORREF color)
@@ -90,6 +91,7 @@ void Object::LoadBitmap(int resource, COLORREF color)
     bmp.LoadBitmap(resource, color);
 	width = bmp.Width();
 	height = bmp.Height();
+	loaded++;
 }
 
 void Object::SetXY(int nx, int ny)
@@ -114,7 +116,8 @@ void Object::OnShow(int offsetX, int offsetY)
 		size = _size * camera->GetSize();
 	}
 	bmp.SetTopLeft(_x, _y);
-	bmp.ShowBitmap(size);
+	if(loaded > 0)
+		bmp.ShowBitmap(size);
 }
 
 void Object::OnMove()

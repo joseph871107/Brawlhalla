@@ -5,6 +5,7 @@
 #include "audio.h"
 #include "gamelib.h"
 #include "brawlhalla.h"
+#include "ground.h"
 #include "gameComFunc.h"
 
 namespace game_framework
@@ -25,13 +26,16 @@ void InitializeAll(bool trace, string file1, string file2)
 	InitializeFile("SOUND");
     InitializeCollideArray(trace);
 }
-void OnShowText(string msg, int x, int y, int size, COLORREF color, LPCTSTR font)
+void OnShowText(string msg, int x, int y, int size, COLORREF color, COLORREF bgcolor, LPCTSTR font)
 {
     CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
     CFont f, *fp;
     f.CreatePointFont(size * 8, font);			// 產生 font f; 160表示16 point的字
     fp = pDC->SelectObject(&f);					// 選用 font f
-	pDC->SetBkMode(TRANSPARENT);
+	if (color == bgcolor)
+		pDC->SetBkMode(TRANSPARENT);
+	else
+		pDC->SetBkColor(bgcolor);
     pDC->SetTextColor(color);
     pDC->TextOut(x, y, msg.c_str());
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
@@ -308,5 +312,24 @@ char* ToCharPtr(string str) {
 	static char ptr[128];
 	strcpy(ptr, str.c_str());
 	return ptr;
+}
+int random(int min, int max)
+{
+	return rand() % (max - min + 1) + min;
+}
+Ground * GetRandomGround(vector<Ground*>* ground)
+{
+	int total = 0, current = 0, last = 0;
+	double selected = rand() / (double)RAND_MAX;
+	vector<Ground*>::iterator finalSelect = ground->begin();
+	for (auto g : *ground)
+		total += g->GetWidth();
+	for (auto i = ground->begin(); i != ground->end(); i++) {																// Randomly choose one of the ground object
+		current += (*i)->GetWidth();
+		if (selected >= last / (double)total && selected < current / (double)total)
+			finalSelect = i;
+		last = current;
+	}
+	return *finalSelect;
 }
 }

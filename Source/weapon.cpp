@@ -4,6 +4,7 @@
 #include <ddraw.h>
 #include "audio.h"
 #include "gamelib.h"
+#include "player.h"
 #include "weapon.h"
 
 namespace game_framework
@@ -36,9 +37,9 @@ void Weapon::LoadBitmap()
 
 void Weapon::Initialize(vector<Ground*> ground, vector<Player*> player)
 {
-    _ground = ground[(rand() * 100) % ground.size()];												// Randomly choose one of the ground object
-    x = (rand() * 1000) % (int)(_ground->GetWidth() * _ground->GetSize()) + _ground->GetCor(0);		// Randomly set x coordinate within Ground's width
-    y = _ground->GetCor(1) - 400;																	// Set y with Ground's top adding 400 pixels
+	_ground = GetRandomGround(&ground);		// Randomly select Ground
+    x = random(_ground->GetCor(0), _ground->GetCor(2) - width);		// Randomly set x coordinate within Ground's width
+    y = _ground->GetCor(1) - 400;						// Set y with Ground's top adding 400 pixels
     _player = player;
     _flyingDistance = 0;
 }

@@ -17,12 +17,6 @@
     <Filter Include="Brawlhalla\BattleSystem">
       <UniqueIdentifier>{dc6cbd24-8642-41e1-8a14-8122c6ce5015}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\Ground">
-      <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Object">
-      <UniqueIdentifier>{d45bce58-2fb6-4d4b-abd5-1dbe4d1fadde}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Animation">
       <UniqueIdentifier>{fc9b157f-9907-4561-81f4-5f88255d1b29}</UniqueIdentifier>
     </Filter>
@@ -41,64 +35,82 @@
     <Filter Include="Animation\Player1\jumpM">
       <UniqueIdentifier>{8790d827-3de7-4b78-ba4f-aa98b676a320}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\GameComFunc">
-      <UniqueIdentifier>{95e22aca-2741-44d0-8213-e4a98de43e1e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Player">
       <UniqueIdentifier>{eedfae59-751c-4f3c-9e55-9614b166dac8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Weapon">
-      <UniqueIdentifier>{418f50f4-226b-4692-b861-52f39d442a2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\UI">
-      <UniqueIdentifier>{f46e6c8d-3b0d-44a2-b992-0d6f80a81215}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\FImage">
-      <UniqueIdentifier>{e4e80621-2001-439d-b1ef-c56a1fc939da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Camera">
-      <UniqueIdentifier>{985af613-1e23-4389-99d2-c1dbb27a9ad8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Brawlhalla\Window">
       <UniqueIdentifier>{8a43cae0-5cbc-4c8f-b7bc-84d724010cf6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\Vector2">
+    <Filter Include="Resource Files\Bitmap">
+      <UniqueIdentifier>{20debdb7-5f9e-4f40-91b5-8276736af4d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\SoundEffect">
+      <UniqueIdentifier>{d19df318-3f90-4022-a479-73509e815fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Window\Camera">
+      <UniqueIdentifier>{985af613-1e23-4389-99d2-c1dbb27a9ad8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Basic">
+      <UniqueIdentifier>{1d9c79c0-0078-428f-9bb7-8c4ffd4a9d86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Basic\Object">
+      <UniqueIdentifier>{d45bce58-2fb6-4d4b-abd5-1dbe4d1fadde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Basic\GameComFunc">
+      <UniqueIdentifier>{95e22aca-2741-44d0-8213-e4a98de43e1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Basic\FImage">
+      <UniqueIdentifier>{e4e80621-2001-439d-b1ef-c56a1fc939da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Window\UI">
+      <UniqueIdentifier>{f46e6c8d-3b0d-44a2-b992-0d6f80a81215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\Weapon">
+      <UniqueIdentifier>{418f50f4-226b-4692-b861-52f39d442a2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\Vector2">
       <UniqueIdentifier>{1b5e61f6-30ea-4da1-8759-e9625cb2098d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Map">
+      <UniqueIdentifier>{91b11b4f-1bf2-4c0c-9542-ee1c534e3f7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Map\Ground">
+      <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="Res\corner.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="res\game.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="res\game.rc2">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="RES\gamecurs.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="res\gameDoc.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="RES\loading.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\Toolbar.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="res\player11.bin">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="res\sound1.bin">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="res\sound2.bin">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
+    </None>
+    <None Include="res\Toolbar.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -127,37 +139,40 @@
       <Filter>Brawlhalla</Filter>
     </ClCompile>
     <ClCompile Include="Source\gameComFunc.cpp">
-      <Filter>Brawlhalla\GameComFunc</Filter>
+      <Filter>Brawlhalla\Basic\GameComFunc</Filter>
     </ClCompile>
     <ClCompile Include="Source\object.cpp">
-      <Filter>Brawlhalla\Object</Filter>
+      <Filter>Brawlhalla\Basic\Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\player.cpp">
       <Filter>Brawlhalla\Player</Filter>
     </ClCompile>
     <ClCompile Include="Source\ground.cpp">
-      <Filter>Brawlhalla\Ground</Filter>
+      <Filter>Brawlhalla\Map\Ground</Filter>
     </ClCompile>
     <ClCompile Include="Source\battleSystem.cpp">
       <Filter>Brawlhalla\BattleSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\weapon.cpp">
-      <Filter>Brawlhalla\Weapon</Filter>
+      <Filter>Brawlhalla\Player\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="Source\ui.cpp">
-      <Filter>Brawlhalla\UI</Filter>
+      <Filter>Brawlhalla\Window\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\fimage.cpp">
-      <Filter>Brawlhalla\FImage</Filter>
+      <Filter>Brawlhalla\Basic\FImage</Filter>
     </ClCompile>
     <ClCompile Include="source\camera.cpp">
-      <Filter>Brawlhalla\Camera</Filter>
+      <Filter>Brawlhalla\Window\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\window.cpp">
       <Filter>Brawlhalla\Window</Filter>
     </ClCompile>
     <ClCompile Include="Source\Vector2.cpp">
-      <Filter>Brawlhalla\Vector2</Filter>
+      <Filter>Brawlhalla\Player\Vector2</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\map.cpp">
+      <Filter>Brawlhalla\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,37 +204,40 @@
       <Filter>Brawlhalla</Filter>
     </ClInclude>
     <ClInclude Include="Source\object.h">
-      <Filter>Brawlhalla\Object</Filter>
+      <Filter>Brawlhalla\Basic\Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\battleSystem.h">
       <Filter>Brawlhalla\BattleSystem</Filter>
     </ClInclude>
     <ClInclude Include="Source\gameComFunc.h">
-      <Filter>Brawlhalla\GameComFunc</Filter>
+      <Filter>Brawlhalla\Basic\GameComFunc</Filter>
     </ClInclude>
     <ClInclude Include="Source\ground.h">
-      <Filter>Brawlhalla\Ground</Filter>
+      <Filter>Brawlhalla\Map\Ground</Filter>
     </ClInclude>
     <ClInclude Include="Source\player.h">
       <Filter>Brawlhalla\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\weapon.h">
-      <Filter>Brawlhalla\Weapon</Filter>
+      <Filter>Brawlhalla\Player\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Source\ui.h">
-      <Filter>Brawlhalla\UI</Filter>
+      <Filter>Brawlhalla\Window\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\fImage.h">
-      <Filter>Brawlhalla\FImage</Filter>
+      <Filter>Brawlhalla\Basic\FImage</Filter>
     </ClInclude>
     <ClInclude Include="source\camera.h">
-      <Filter>Brawlhalla\Camera</Filter>
+      <Filter>Brawlhalla\Window\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\window.h">
       <Filter>Brawlhalla\Window</Filter>
     </ClInclude>
     <ClInclude Include="Source\Vector2.h">
-      <Filter>Brawlhalla\Vector2</Filter>
+      <Filter>Brawlhalla\Player\Vector2</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\map.h">
+      <Filter>Brawlhalla\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -276,790 +294,811 @@
     <Image Include="RES\player1\adventurer-run-05%28Mirrored%29.bmp">
       <Filter>Animation\Player1\runM</Filter>
     </Image>
-    <Image Include="RES\player1\adventurer-jump-00%28Mirrored%29.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-jump-01%28Mirrored%29.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-jump-02%28Mirrored%29.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-jump-03%28Mirrored%29.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\brawlhalla.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\background\forest.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\background\ground1.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\player\player.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\player1\bitmap1.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\RES\player1\adventurer-idle-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\RES\player1\adventurer-idle-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\RES\player1\adventurer-idle-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\tests\lean_left.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\tests\lean_right.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-wall-slide-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-wall-slide-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-wall-slide-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-wall-slide-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-fall-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-fall-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-fall-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-fall-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-04.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack1-04(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-swrd-drw-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-swrd-drw-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-swrd-drw-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-swrd-drw-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-swrd-drw-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-swrd-drw-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-swrd-drw-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-swrd-drw-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-2-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-2-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-2-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-2-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-2-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-2-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-2-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-idle-2-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\player1_collision.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="RES\Numbers\0.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\Numbers\1.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\Numbers\2.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\Numbers\3.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\Numbers\4.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\Numbers\5.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\Numbers\6.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\Numbers\7.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\Numbers\8.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\Numbers\9.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\Numbers\minus.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\weapons\DefaultFallingSword\WeaponPickup.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\player1\bitmap1.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-slide-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-slide-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-slide-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-slide-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack1-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack1-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack1-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack1-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack1-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack1-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack1-00.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-air-attack1-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack2-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack2-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack2-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack2-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack2-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack2-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-04(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-04.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-05(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-attack3-05.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack3-rdy-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack3-rdy-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack3-loop-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack3-loop-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack3-loop-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack3-loop-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack-3-end-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack-3-end-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack-3-end-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack-3-end-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack-3-end-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\adventurer-air-attack-3-end-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\ui\brawlhalla-logo.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-07(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-06(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-05(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-04(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-07.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-06.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-05.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-04.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-kick-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\ui\UIBackgroundBitmap.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\ui\largetile.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\ui\faitmidtile.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\ui\newstile.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\ui\communitytourneynew.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-12(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-11(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-10(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-09(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-08(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-07(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-06(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-05(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-04(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-12.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-11.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-10.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-09.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-08.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-07.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-06.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-05.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-04.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-punch-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="player1\Punch\adventurer-punch-11(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-06(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-05(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-04(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-06.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-05.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-04.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Punch\adventurer-run-punch-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-04(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack1-04.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-05(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-04(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-03.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-04.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-attack3-05.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack2-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack2-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack2-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack2-00.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack2-01.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack2-02.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack1-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack1-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack1-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\Sword2\adventurer-air-attack1-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\Sword2\adventurer-air-attack1-00.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack1-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack1-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack1-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack1-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\Sword2\adventurer-air-attack1-01.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack1-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack1-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\Sword2\adventurer-air-attack1-02.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack1-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack1-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack1-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\Sword2\adventurer-air-attack1-03.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack3-rdy-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack1-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack3-loop-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack2-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack3-loop-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack2-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack3-loop-00.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack2-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack3-loop-01.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack2-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack3-rdy-00.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack2-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack-3-end-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack2-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-air-attack-3-end-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack2-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack2-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack2-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack2-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack2-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack2-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\Sword2\adventurer-air-attack-3-end-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack-3-end-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack-3-end-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\Sword2\adventurer-air-attack-3-end-00.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack-3-end-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack-3-end-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\Sword2\adventurer-air-attack-3-end-01.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack-3-end-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-air-attack-3-end-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack-3-end-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\Sword2\adventurer-air-attack-3-end-02.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-idle-2-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack-3-end-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-idle-2-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack3-loop-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-idle-2-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack3-loop-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-idle-2-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack3-loop-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-idle-2-00.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack3-loop-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-idle-2-01.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack3-loop-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-idle-2-02.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack3-loop-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-idle-2-03.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack3-loop-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack3-loop-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-02(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack3-rdy-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack3-rdy-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-air-attack3-rdy-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-00.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-air-attack3-rdy-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-01.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-attack1-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-02.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-03.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Punch\adventurer-knock-dwn-05(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-attack1-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Punch\adventurer-knock-dwn-04(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Punch\adventurer-knock-dwn-03(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-attack1-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Punch\adventurer-knock-dwn-05.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-attack1-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Punch\adventurer-knock-dwn-04.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\Punch\adventurer-knock-dwn-03.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-attack1-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\adventurer-crouch-01.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\adventurer-crouch-01(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
-    <Image Include="RES\player1\adventurer-crouch-00.bmp">
-      <Filter>Resource Files</Filter>
+    <Image Include="RES\player1\adventurer-attack1-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack1-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack1-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack1-04(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-04(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack1-04.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack1-04.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-04(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-04(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-04.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-04.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-05(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-05(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-attack3-05.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-attack3-05.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-crouch-00(Mirrored).bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-crouch-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-crouch-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-crouch-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-fall-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-fall-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-fall-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\RES\player1\adventurer-fall-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-fall-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\RES\player1\adventurer-idle-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\RES\player1\adventurer-idle-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\RES\player1\adventurer-idle-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\Source\RES\player1\adventurer-idle-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-2-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-2-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-2-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-2-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-2-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-2-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-2-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-idle-2-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-idle-2-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-jump-00%28Mirrored%29.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-jump-01%28Mirrored%29.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-jump-02%28Mirrored%29.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-jump-03%28Mirrored%29.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-04(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-04.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-05(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-05.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-06(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-06.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-07(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-kick-07.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-04(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-04.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-05(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-knock-dwn-05.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-04(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-04.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-05(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-05.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-06(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-06.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-07(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-07.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-08(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-08.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-09(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-09.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-10(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-10.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="player1\Punch\adventurer-punch-11(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-11(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-11.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-12(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-punch-12.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-04(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-04.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-05(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-05.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-06(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Punch\adventurer-run-punch-06.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-slide-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-slide-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-slide-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-slide-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-swrd-drw-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-swrd-drw-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-swrd-drw-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-swrd-drw-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-swrd-drw-02(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-swrd-drw-02.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-swrd-drw-03(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\Sword2\adventurer-swrd-drw-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-swrd-drw-03.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-wall-slide-00(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-wall-slide-00.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-wall-slide-01(Mirrored).bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\adventurer-wall-slide-01.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\player1\bitmap1.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Google Drive(t106590011%40ntut.org.tw)\Class\107-2\OOP\Brawlhalla\res\player1\bitmap1.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\brawlhalla.ico">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\ui\brawlhalla-logo.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\ui\communitytourneynew.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\ui\faitmidtile.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\background\forest.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\background\ground1.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\ui\largetile.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\tests\lean_left.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\tests\lean_right.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Numbers\minus.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\ui\newstile.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\player\player.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\player1\player1_collision.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\ui\UIBackgroundBitmap.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultFallingSword\WeaponPickup.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\background\BG_Fjord.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\background\BG_Stadium.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\background\ground2.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="sounds\Menu.mp3" />
-    <Media Include="sounds\BattleMusic.mp3" />
-    <Media Include="sounds\SwingAttack.mp3" />
-    <Media Include="sounds\Punch.mp3" />
-    <Media Include="sounds\DrawWeapon.mp3" />
-    <Media Include="sounds\Swoosh.mp3" />
+    <Media Include="sounds\BattleMusic.mp3">
+      <Filter>Resource Files\SoundEffect</Filter>
+    </Media>
+    <Media Include="sounds\DrawWeapon.mp3">
+      <Filter>Resource Files\SoundEffect</Filter>
+    </Media>
+    <Media Include="sounds\Menu.mp3">
+      <Filter>Resource Files\SoundEffect</Filter>
+    </Media>
+    <Media Include="sounds\Punch.mp3">
+      <Filter>Resource Files\SoundEffect</Filter>
+    </Media>
+    <Media Include="sounds\SwingAttack.mp3">
+      <Filter>Resource Files\SoundEffect</Filter>
+    </Media>
+    <Media Include="sounds\Swoosh.mp3">
+      <Filter>Resource Files\SoundEffect</Filter>
+    </Media>
   </ItemGroup>
 </Project>
