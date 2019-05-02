@@ -6,6 +6,17 @@
 #include "gamelib.h"
 //
 #include "player.h"
+#include "TriggeredAnimation.h"
+#include "AirAttackTriggeredAnimation.h"
+#include "AirLandDownAttackTriggeredAnimation.h"
+#include "AirMoveLeftAttackTriggeredAnimation.h"
+#include "AirMoveRightAttackTriggeredAnimation.h"
+#include "DodgeTriggeredAnimation.h"
+#include "DrawSwordTriggeredAnimation.h"
+#include "GroundAttackTriggeredAnimation.h"
+#include "GroundLandDownAttackTriggeredAnimation.h"
+#include "GroundMoveLeftAttackTriggeredAnimation.h"
+#include "GroundMoveRightAttackTriggeredAnimation.h"
 
 namespace game_framework
 {
@@ -98,8 +109,29 @@ Player::Player() :
 
 Player::~Player()
 {
-    /* Body intentionally empty */
     delete _flyingWeapon;
+
+    for (auto elementPtr : _triggeredAnis)
+    {
+        delete elementPtr;
+    }
+}
+
+void Player::InitializeTriggeredAnimations()
+{
+    /* ATTACK ON GROUND */
+    _triggeredAnis.push_back((TriggeredAnimation*) new GroundAttackTriggeredAnimation(this, KEY_GND_ATTACK));
+    _triggeredAnis.push_back((TriggeredAnimation*) new GroundMoveRightAttackTriggeredAnimation(this, KEY_GND_MOVE_RIGHT_ATTACK));
+    _triggeredAnis.push_back((TriggeredAnimation*) new GroundMoveLeftAttackTriggeredAnimation(this, KEY_GND_MOVE_LEFT_ATTACK));
+    _triggeredAnis.push_back((TriggeredAnimation*) new GroundLandDownAttackTriggeredAnimation(this, KEY_GND_LAND_DOWN_ATTACK));
+    /* ATTACK ON AIR */
+    _triggeredAnis.push_back((TriggeredAnimation*) new AirAttackTriggeredAnimation(this, KEY_AIR_ATTACK));
+    _triggeredAnis.push_back((TriggeredAnimation*) new AirMoveRightAttackTriggeredAnimation(this, KEY_AIR_MOVE_RIGHT_ATTACK));
+    _triggeredAnis.push_back((TriggeredAnimation*) new AirMoveLeftAttackTriggeredAnimation(this, KEY_AIR_MOVE_LEFT_ATTACK));
+    _triggeredAnis.push_back((TriggeredAnimation*) new AirLandDownAttackTriggeredAnimation(this, KEY_AIR_LAND_DOWN_ATTACK));
+    /* OTHERS */
+    _triggeredAnis.push_back((TriggeredAnimation*) new DrawSwordTriggeredAnimation(this, KEY_DRAW_SWORD));
+    _triggeredAnis.push_back((TriggeredAnimation*) new DodgeTriggeredAnimation(this, KEY_DODGE));
 }
 
 void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue)
@@ -157,6 +189,8 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     _isFirstTimeOnEdge = true;
     //
     _flyingWeapon = nullptr;
+    //
+    InitializeTriggeredAnimations();
 }
 
 void Player::LoadBitmap()
@@ -459,54 +493,9 @@ void Player::UnconsciouslyOnMoveGameLogic()
 
 void Player::SetTriggeredAnimationSelector()
 {
-    switch (_triggeredAniKeyID)
-    {
-        /* ON GROUND */
-        case KEY_GND_ATTACK: // on ground, not move, attack
-            SetAnimationSelector(true);
-            break;
-
-        case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
-            SetAnimationSelector(true);
-            break;
-
-        case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
-            SetAnimationSelector(true);
-            break;
-
-        case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
-            SetAnimationSelector(true);
-            break;
-
-        /* ON AIR */
-        case KEY_AIR_ATTACK: // on air, not move, attack
-            SetAnimationSelector(true);
-            break;
-
-        case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
-            SetAnimationSelector(true);
-            break;
-
-        case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
-            SetAnimationSelector(true);
-            break;
-
-        case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
-            SetAnimationSelector(true);
-            break;
-
-        /* SPECIAL CASES*/
-        case KEY_DRAW_SWORD:
-            SetAnimationSelector(true);
-            break;
-
-        case KEY_DODGE:
-            SetAnimationSelector(false); // independent of '_aniByWpn'
-            break;
-
-        default:
-            break;
-    }
+    for (auto elementPtr : _triggeredAnis)
+        if (elementPtr->GetKeyID() == _triggeredAniKeyID)
+            elementPtr->SetTriggeredAnimationSelector();
 }
 
 void Player::SetNonTriggeredAnimationSelector()
@@ -622,55 +611,10 @@ void Player::FinishTriggeredAnimationGameLogic()
 {
     // Finish other logic regarding the triggered animation
     // Since '_triggeredAniKeyID' has already been reset in 'OnMoveAnimationLogic()'
-    // once the triggered animatin is finished, we use '_lastTriggeredAniKeyID' for our estimation
-    switch (_finishedTriggeredAniKeyID)
-    {
-        /* ON GROUND */
-        case KEY_GND_ATTACK: // on ground, not move, attack
-            // Do nothing
-            break;
-
-        case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
-            // Do nothing
-            break;
-
-        case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
-            // Do nothing
-            break;
-
-        case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
-            // Do nothing
-            break;
-
-        /* ON AIR */
-        case KEY_AIR_ATTACK: // on air, not move, attack
-            // Do nothing
-            break;
-
-        case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
-            // Do nothing
-            break;
-
-        case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
-            // Do nothing
-            break;
-
-        case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
-            // Do nothing
-            break;
-
-        /* SPECIAL CASES */
-        case KEY_DRAW_SWORD:
-            // Do nothing
-            break;
-
-        case KEY_DODGE:
-            _isDodging = false;
-            break;
-
-        default:
-            break;
-    }
+    // once the triggered animatin is finished, we use '_finishedTriggeredAniKeyID' for our estimation
+    for (auto elementPtr : _triggeredAnis)
+        if (elementPtr->GetKeyID() == _finishedTriggeredAniKeyID)
+            elementPtr->FinishTriggeredAnimationGameLogic();
 }
 
 void Player::ConsciouslyOnMoveAnimationLogic()
@@ -1505,15 +1449,15 @@ void Player::ProcessCurrentKeyCombinationGameLogic()
         // Initiate the triggered action (if haven't)
         if (!_isInitiatedTriggeredAni)
         {
-            InitiateTriggeredAnimation();
+            InitiateTriggeredAction();
             _isInitiatedTriggeredAni = true; // Mark that the triggered animation has been triggered
         }
 
         // Process the triggered animation
-        DoTriggeredAnimation();
+        DoTriggeredAction();
     }
     else // If there is no "Triggered Animation" in the meantime, then do the other "Non-Triggered Animation(s)"
-        DoNonTriggeredAnimation();
+        DoNonTriggeredAction();
 }
 
 void Player::ResetTriggeredAnimationVariables()
@@ -1521,14 +1465,8 @@ void Player::ResetTriggeredAnimationVariables()
     SetTriggeredAnimation(false);
     SetTriggeredAnimationKeyID(0);
     SetTriggeredAnimationDir(false);
-    _triggeredAniAnimationID = -1;
+    SetTriggeredAnimationAnimationID(-1);
     _isInitiatedTriggeredAni = false;
-}
-void Player::SetFirstThreeTriggeredAnimationVariables(int keyCombInt)
-{
-    _isTriggeredAni = true;
-    _triggeredAniKeyID = keyCombInt;
-    _triggeredAniDir = _dir;
 }
 
 void Player::SetTriggeredAnimation(bool newIsTriggeredAni)
@@ -1548,250 +1486,25 @@ void Player::SetTriggeredAnimationDir(bool newTriggeredAniDir)
 
 void Player::SetTriggeredAnimationVariables(int keyCombInt)
 {
-    switch (keyCombInt)
-    {
-        /* ON GROUND */
-        case KEY_GND_ATTACK: // on ground, not move, attack
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir)
-                _triggeredAniAnimationID = ANI_WPN_ID_ATTACK_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_ATTACK_LEFT;
-
-            break;
-
-        case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir)
-                _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
-
-            break;
-
-        case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir)
-                _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_GND_MOVE_ATTACK_LEFT;
-
-            break;
-
-        case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir)
-                _triggeredAniAnimationID = ANI_WPN_ID_SLIDE_ATTACK_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_SLIDE_ATTACK_LEFT;
-
-            break;
-
-        /* ON AIR */
-        case KEY_AIR_ATTACK: // on air, not move, attack
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir)
-                _triggeredAniAnimationID = ANI_WPN_ID_AIR_ATTACK_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_AIR_ATTACK_LEFT;
-
-            break;
-
-        case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir)
-                _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
-
-            break;
-
-        case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir)
-                _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT;
-
-            break;
-
-        case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir)
-                _triggeredAniAnimationID = ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT;
-
-            break;
-
-        /* SPECIAL CASES */
-        case KEY_DRAW_SWORD:
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir) // If the player is facing right
-                _triggeredAniAnimationID = ANI_WPN_ID_DRAW_SWORD_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_WPN_ID_DRAW_SWORD_LEFT;
-
-            break;
-
-        case KEY_DODGE:
-            SetTriggeredAnimation(true);
-            SetTriggeredAnimationKeyID(keyCombInt);
-            SetTriggeredAnimationDir(_dir);
-
-            if (_triggeredAniDir) // If the player is facing right
-                _triggeredAniAnimationID = ANI_ID_DODGE_RIGHT;
-            else
-                _triggeredAniAnimationID = ANI_ID_DODGE_LEFT;
-
-            break;
-
-        default:
-            // Do nothing
-            break;
-    }
+    for (auto elementPtr : _triggeredAnis)
+        if (elementPtr->GetKeyID() == keyCombInt)
+            elementPtr->SetTriggeredAnimationVariables();
 }
-void Player::InitiateTriggeredAnimation()
+
+void Player::InitiateTriggeredAction()
 {
-    switch (_triggeredAniKeyID)
-    {
-        /* ON GROUND */
-        case KEY_GND_ATTACK: // on ground, not move, attack
-            _isTriggerAttack = false;
-            break;
-
-        case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
-            _isTriggerAttack = false;
-            InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
-            break;
-
-        case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
-            _isTriggerAttack = false;
-            InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
-            break;
-
-        case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
-            _isTriggerAttack = false;
-
-            if (_triggeredAniDir)
-                InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
-            else
-                InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
-
-            break;
-
-        /* ON AIR */
-        case KEY_AIR_ATTACK: // on air, not move, attack
-            _isTriggerAttack = false;
-            break;
-
-        case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
-            _isTriggerAttack = false;
-            InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
-            break;
-
-        case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
-            _isTriggerAttack = false;
-            InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
-            break;
-
-        case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
-            _isTriggerAttack = false;
-            break;
-
-        /* SPECIAL CASES*/
-        case KEY_DRAW_SWORD:
-            _isTriggerAttack = false; // We are drawing weapon, not attacking
-            _isTriggerDrawWeapon = false;
-            break;
-
-        case KEY_DODGE:
-            _isTriggerDodge = false;
-            _isDodging = true; // Mark that the player starts his dodging ability
-            break;
-
-        default:
-            break;
-    }
+    for (auto elementPtr : _triggeredAnis)
+        if (elementPtr->GetKeyID() == _triggeredAniKeyID)
+            elementPtr->InitiateTriggeredAction();
 }
-void Player::DoTriggeredAnimation()
+
+void Player::DoTriggeredAction()
 {
-    switch (_triggeredAniKeyID)
-    {
-        /* ON GROUND */
-        case KEY_GND_ATTACK: // on ground, not move, attack
-            DoAttack();
-            break;
-
-        case KEY_GND_MOVE_RIGHT_ATTACK: // on ground, move right, attack
-            DoAttack();
-            break;
-
-        case KEY_GND_MOVE_LEFT_ATTACK: // on ground, move left, attack
-            DoAttack();
-            break;
-
-        case KEY_GND_LAND_DOWN_ATTACK: // on ground, land down, attack
-            DoAttack();
-            break;
-
-        /* ON AIR */
-        case KEY_AIR_ATTACK: // on air, not move, attack
-            DoAttack();
-            break;
-
-        case KEY_AIR_MOVE_RIGHT_ATTACK: // on air, move right, attack
-            DoAttack();
-            break;
-
-        case KEY_AIR_MOVE_LEFT_ATTACK: // on air, move left, attack
-            DoAttack();
-            break;
-
-        case KEY_AIR_LAND_DOWN_ATTACK: // on air, land down, attack
-            DoAttack();
-            break;
-
-        /* SPECIAL CASES */
-        case KEY_DRAW_SWORD:
-            // Do nothing
-            break;
-
-        case KEY_DODGE:
-            // Do nothing
-            break;
-
-        default:
-            break;
-    }
+    for (auto elementPtr : _triggeredAnis)
+        if (elementPtr->GetKeyID() == _triggeredAniKeyID)
+            elementPtr->DoTriggeredAction();
 }
+
 bool Player::IsFinishedTriggeredAnimation()
 {
     if (_aniSelector)
@@ -1800,7 +1513,7 @@ bool Player::IsFinishedTriggeredAnimation()
         return (ani[_triggeredAniAnimationID].IsFinalBitmap());
 }
 
-void Player::DoNonTriggeredAnimation()
+void Player::DoNonTriggeredAction()
 {
     /*	~ Remarks:
     ~ We care only about key combinations that does NOT determine the attack button is pressed and the player is holding a weapon
@@ -1937,5 +1650,35 @@ void Player::SetConscious()
     _isUnconscious = false;
     _unconsciousFramesCount = 0;
     _unconsciousAniDir = false;
+}
+
+const bool& Player::GetTriggeredAnimationDirection() const
+{
+    return (_triggeredAniDir);
+}
+
+void Player::SetTriggeredAnimationAnimationID(const int& newTriggeredAniAnimationID)
+{
+    _triggeredAniAnimationID = newTriggeredAniAnimationID;
+}
+
+void Player::SetIsTriggerAttack(const bool& newIsTriggerAttack)
+{
+    _isTriggerAttack = newIsTriggerAttack;
+}
+
+void Player::SetIsDodging(const bool& newIsDodging)
+{
+    _isDodging = newIsDodging;
+}
+
+void Player::SetIsTriggerDodge(const bool& newIsTriggerDodge)
+{
+    _isTriggerDodge = newIsTriggerDodge;
+}
+
+void Player::SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon)
+{
+    _isTriggerDrawWeapon = newIsTriggerDrawWeapon;
 }
 }

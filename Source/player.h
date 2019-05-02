@@ -9,12 +9,15 @@ namespace game_framework
 {
 #ifndef PLAYER_H
 #define PLAYER_H
+class TriggeredAnimation;
 class Player
 {
     public:
         //Essential functions for C++ class
         Player();						//Default constructor
         ~Player();						//Destructor
+
+
 
         //Required for Game Framework
         void Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue);
@@ -42,6 +45,21 @@ class Player
         void GenerateAndSetWeaponID();	// Called by 'Weapon::HitPlayer()' when the player picks up a weapon
         void ResetWeaponID();
         void PerformAttack(Player* targetPlayer, bool attackDirection);
+
+        // Used by Triggered Animation classes
+        void SetAnimationSelector(bool newAniSelector);
+        void SetTriggeredAnimation(bool newIsTriggeredAni);
+        void SetTriggeredAnimationKeyID(int newTriggeredAniKeyID);
+        void SetTriggeredAnimationDir(bool newTriggeredAniDir);
+        const bool& GetTriggeredAnimationDirection() const;
+        void SetTriggeredAnimationAnimationID(const int& newTriggeredAniAnimationID);
+        void DoAttack();
+		void SetIsTriggerAttack(const bool& newIsTriggerAttack);
+		void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
+		void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
+		void SetIsDodging(const bool& newIsDodging);
+		void SetIsTriggerDodge(const bool& newIsTriggerDodge);
+		void SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon);
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -74,8 +92,6 @@ class Player
         //Offsets
         void InitiateOffsetUp(double initialOffsetVelocityMagnitude);
         void InitiateOffsetDown(double initialOffsetVelocityMagnitude);
-        void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
-        void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
 
         bool IsBeingOffsetHorizontally();
         void DoHorizontalOffset();
@@ -93,7 +109,6 @@ class Player
         void InitiateWallJump();
 
         //Attack
-        void DoAttack();
         bool HitPlayer(Player* targetPlayer, bool attackDirection);
 
         //Throw weapon
@@ -137,17 +152,13 @@ class Player
 
         //Triggered animation concept
         void ResetTriggeredAnimationVariables();
-        void SetFirstThreeTriggeredAnimationVariables(int keyCombInt);
-		void SetTriggeredAnimation(bool newIsTriggeredAni);
-		void SetTriggeredAnimationKeyID(int newTriggeredAniKeyID);
-		void SetTriggeredAnimationDir(bool newTriggeredAniDir);
-		void SetTriggeredAnimationVariables(int keyCombInt);
+        void SetTriggeredAnimationVariables(int keyCombInt);
 
-        void InitiateTriggeredAnimation();
-        void DoTriggeredAnimation();
+        void InitiateTriggeredAction();
+        void DoTriggeredAction();
         bool IsFinishedTriggeredAnimation();
 
-        void DoNonTriggeredAnimation();
+        void DoNonTriggeredAction();
 
         //Edges
         bool IsOnEdge();
@@ -160,23 +171,24 @@ class Player
         void DoOnGround();
 
         //
-        void SetAnimationSelector(bool newAniSelector);
         void SetTriggeredAnimationSelector();
         void SetNonTriggeredAnimationSelector();
         void SetCurrentAnimation();
-		void UnconsciouslyOnMoveAnimationLogic();
-		void FinishTriggeredAnimationAnimationLogic();
-		void FinishTriggeredAnimationGameLogic();
-		void ConsciouslyOnMoveAnimationLogic();
-		void MoveCurrentAnimation();
-		void OnMoveAnimationLogic();
-		void OnMoveGameLogic();
+        void UnconsciouslyOnMoveAnimationLogic();
+        void FinishTriggeredAnimationAnimationLogic();
+        void FinishTriggeredAnimationGameLogic();
+        void ConsciouslyOnMoveAnimationLogic();
+        void MoveCurrentAnimation();
+        void OnMoveAnimationLogic();
+        void OnMoveGameLogic();
         void SetCurrentNonTriggeredAnimationByWeapon();
         void SetCurrentTriggeredAnimationByWeapon();
         void SetCurrentTriggeredAnimation();
-		void SetCurrentAniByWeapon();
-		void SetCurrentAni();
+        void SetCurrentAniByWeapon();
+        void SetCurrentAni();
         void SetCurrentNonTriggeredAnimation();
+
+        void InitializeTriggeredAnimations();
 
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
@@ -217,9 +229,9 @@ class Player
         bool _isTriggerAttack;
         int _takenDmg;
 
-		//Trow weapon
-		Weapon *_flyingWeapon;
-		void DeleteFlyingWeapon();
+        //Trow weapon
+        Weapon* _flyingWeapon;
+        void DeleteFlyingWeapon();
         // The taken damage will determine how far the target player would fly 'attackOffsetMagnitude', and
         // how long he would be in the unconscious state '_unconsciousFramesCount'
 
@@ -270,7 +282,7 @@ class Player
 
         int _lastTriggeredAniByWpnID;
 
-		int _finishedTriggeredAniKeyID;
+        int _finishedTriggeredAniKeyID;
 
         //Weapon
         int _wpnID; // 0 - punch (default), 1 - sword 1, 2 - sword 2
@@ -293,11 +305,14 @@ class Player
         //Edges
         bool _isFirstTimeOnEdge;
 
-		// Others
-		int _currentKeyID;
-		// The current "KeyID" (short for "ID of the combination of key pressed") being activated by the user
-		// Its value is one of the constants starting with 'KEY_...'
-		// Do note that this value is unique!!!
+        // Others
+        int _currentKeyID;
+        // The current "KeyID" (short for "ID of the combination of key pressed") being activated by the user
+        // Its value is one of the constants starting with 'KEY_...'
+        // Do note that this value is unique!!!
+
+        // Triggered animations
+        vector<TriggeredAnimation*> _triggeredAnis;
 };
 #endif
 }

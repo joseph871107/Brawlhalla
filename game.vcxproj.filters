@@ -77,6 +77,18 @@
     <Filter Include="Brawlhalla\Map\Ground">
       <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\Player\TriggeredAnimation">
+      <UniqueIdentifier>{b21da1f6-fd96-43a6-a2df-2adb57d41fcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\TriggeredAnimation\Attack on Ground">
+      <UniqueIdentifier>{67f1b096-65ce-4c42-8d75-58522b68c06b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\TriggeredAnimation\Attack on Air">
+      <UniqueIdentifier>{02672f95-6cbd-41b0-a918-79769bc6cbf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\TriggeredAnimation\Others">
+      <UniqueIdentifier>{c30da535-c1d8-4fd4-af9b-82f605e4b59a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
@@ -174,6 +186,39 @@
     <ClCompile Include="Source\map.cpp">
       <Filter>Brawlhalla\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AirAttackTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AirLandDownAttackTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AirMoveLeftAttackTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AirMoveRightAttackTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DodgeTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DrawSwordTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GroundAttackTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GroundLandDownAttackTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GroundMoveLeftAttackTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GroundMoveRightAttackTriggeredAnimation.cpp">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -238,6 +283,39 @@
     </ClInclude>
     <ClInclude Include="Source\map.h">
       <Filter>Brawlhalla\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AirAttackTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AirLandDownAttackTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AirMoveLeftAttackTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AirMoveRightAttackTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DodgeTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DrawSwordTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GroundAttackTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GroundLandDownAttackTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GroundMoveLeftAttackTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GroundMoveRightAttackTriggeredAnimation.h">
+      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
