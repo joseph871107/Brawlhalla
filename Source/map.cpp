@@ -27,20 +27,15 @@ namespace game_framework
 	Map::~Map()
 	{
 		for (auto element : _weapons)
-		{
 			delete element;
-		}
 
 		for (auto element : _grounds)
-		{
 			delete element;
-		}
 	}
 	void Map::OnBeginState()
 	{
 		start = lastTime = clock();
 		nextTimeGenerateWeapon = random(3, 10);
-		_weapons.clear();
 		if(camera != nullptr)
 			camera->Reset();
 	}

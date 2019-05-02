@@ -75,7 +75,7 @@ class CGameStateInit : public CGameState
         void OnShow();									// 顯示這個狀態的遊戲畫面
 		static bool GetCameraEnable();
 		static bool GetFullscreenEnabled();
-		static Map *GetMap();
+		static shared_ptr<Map> GetMap();
     private:
 		Window welcomeWindow;
 		Window settingWindow;
@@ -83,7 +83,7 @@ class CGameStateInit : public CGameState
 		static bool _fullscreenEnabled;
 		static bool _cameraEnabled;
 		static int _mapSelected;
-		static vector<Map*> maps;
+		static vector<shared_ptr<Map>> maps;
 };
 
 /////////////////////////////////////////////////////////////////////////////

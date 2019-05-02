@@ -77,7 +77,7 @@ namespace game_framework
 bool CGameStateInit::_fullscreenEnabled = OPEN_AS_FULLSCREEN;
 bool CGameStateInit::_cameraEnabled = true;
 int CGameStateInit::_mapSelected = 0;
-vector<Map*> CGameStateInit::maps;
+vector<shared_ptr<Map>> CGameStateInit::maps;
 
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
@@ -89,15 +89,13 @@ CGameStateInit::CGameStateInit(CGame* g)
 
 CGameStateInit::~CGameStateInit()
 {
-	for (auto i : maps)
-		delete i;
 }
 
 void CGameStateInit::OnInit()
 {
 	// Automatically generate ground objects //
 	for (auto map : _mapP) {
-		Map *tmap = new Map();
+		shared_ptr<Map> tmap(new Map());
 		for (auto ground : map._groundsP)
 			tmap->AddGround(&ground);
 		tmap->AddBackground(&map._bkP);
@@ -222,7 +220,7 @@ bool CGameStateInit::GetFullscreenEnabled()
 	return _fullscreenEnabled;
 }
 
-Map * CGameStateInit::GetMap()
+shared_ptr<Map> CGameStateInit::GetMap()
 {
 	return maps[CGameStateInit::_mapSelected];
 }

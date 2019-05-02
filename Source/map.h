@@ -13,10 +13,8 @@ namespace game_framework
 		{
 			va_list ap;
 			va_start(ap, groundNum);
-			for (int i = 0; i < groundNum; i++) {
-				GroundPARM tgPARM = va_arg(ap, GroundPARM);
-				_groundsP.push_back(tgPARM);
-			}
+			for (int i = 0; i < groundNum; i++)
+				_groundsP.push_back(va_arg(ap, GroundPARM));
 			va_end(ap);
 		}
 		BkPARM _bkP;

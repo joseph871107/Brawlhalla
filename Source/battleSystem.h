@@ -19,7 +19,7 @@ class BattleSystem : public CGameState
 {
     public:
         BattleSystem(CGame* g);
-		BattleSystem(CGame* g, Map *m);
+		BattleSystem(CGame* g, shared_ptr<Map> m);
         ~BattleSystem();
         void OnBeginState();							// 設定每次重玩所需的變數
         void OnInit();  								// 遊戲的初值及圖形設定
@@ -29,7 +29,7 @@ class BattleSystem : public CGameState
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
 		void ResizeCamera();
-		void AddMap(Map *m);
+		void AddMap(shared_ptr<Map> m);
         bool IsGameOver();
         string GetGameResult();
 
@@ -48,7 +48,7 @@ class BattleSystem : public CGameState
         vector<Player*> _players;
 		vector<Weapon*>* _weapons;
 		Camera camera;
-		Map *map;
+		shared_ptr<Map> map;
 };
 
 }

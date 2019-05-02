@@ -31,7 +31,7 @@ BattleSystem::BattleSystem(CGame* g) : CGameState(g)
 	_weapons = map->GetWeapons();
 }
 
-BattleSystem::BattleSystem(CGame * g, Map * m) : CGameState(g)
+BattleSystem::BattleSystem(CGame * g, shared_ptr<Map> m) : CGameState(g)
 {
 	map = m;
 }
@@ -217,7 +217,7 @@ void BattleSystem::ResizeCamera()
     }
 }
 
-void BattleSystem::AddMap(Map * m)
+void BattleSystem::AddMap(shared_ptr<Map> m)
 {
 	map = m;
 }
