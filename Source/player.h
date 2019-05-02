@@ -136,18 +136,16 @@ class Player
         void ProcessCurrentKeyCombinationGameLogic();
 
         //Triggered animation concept
-        void ResetTriggeredAnimationVariablesAnimationLogic();
+        void ResetTriggeredAnimationVariables();
         void SetFirstThreeTriggeredAnimationVariables(int keyCombInt);
 		void SetTriggeredAnimation(bool newIsTriggeredAni);
-		void SetTriggeredAnimationVariablesAnimationLogic(int keyCombInt);
 		void SetTriggeredAnimationKeyID(int newTriggeredAniKeyID);
 		void SetTriggeredAnimationDir(bool newTriggeredAniDir);
-		void SetTriggeredAnimationVariablesGameLogic(int keyCombInt);
+		void SetTriggeredAnimationVariables(int keyCombInt);
 
         void InitiateTriggeredAnimation();
         void DoTriggeredAnimation();
         bool IsFinishedTriggeredAnimation();
-        void FinishTriggeredAnimation();
 
         void DoNonTriggeredAnimation();
 
@@ -168,7 +166,6 @@ class Player
         void SetCurrentAnimation();
 		void UnconsciouslyOnMoveAnimationLogic();
 		void FinishTriggeredAnimationAnimationLogic();
-		void ResetTriggeredAnimationVariablesGameLogic();
 		void FinishTriggeredAnimationGameLogic();
 		void ConsciouslyOnMoveAnimationLogic();
 		void MoveCurrentAnimation();
@@ -272,6 +269,8 @@ class Player
         int _lastTriggeredAniKeyID;
 
         int _lastTriggeredAniByWpnID;
+
+		int _finishedTriggeredAniKeyID;
 
         //Weapon
         int _wpnID; // 0 - punch (default), 1 - sword 1, 2 - sword 2
