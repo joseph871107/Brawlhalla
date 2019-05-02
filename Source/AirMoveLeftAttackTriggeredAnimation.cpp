@@ -49,7 +49,7 @@ void AirMoveLeftAttackTriggeredAnimation::SetTriggeredAnimationSelector()
 
 void AirMoveLeftAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
-    // Do nothing
+	_playerPtr->EmptyHitTargetPlayers();
 }
 
 void AirMoveLeftAttackTriggeredAnimation::SetTriggeredAnimationVariables()

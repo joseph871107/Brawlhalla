@@ -53,13 +53,14 @@ class Player
         void SetTriggeredAnimationDir(bool newTriggeredAniDir);
         const bool& GetTriggeredAnimationDirection() const;
         void SetTriggeredAnimationAnimationID(const int& newTriggeredAniAnimationID);
-        void DoAttack();
+		void DoAttack();
 		void SetIsTriggerAttack(const bool& newIsTriggerAttack);
 		void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
 		void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
 		void SetIsDodging(const bool& newIsDodging);
 		void SetIsTriggerDodge(const bool& newIsTriggerDodge);
 		void SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon);
+		void EmptyHitTargetPlayers();
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -190,6 +191,8 @@ class Player
 
         void InitializeTriggeredAnimations();
 
+		bool IsAttackable(Player* potentialTargetPlayer);
+
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
@@ -313,6 +316,9 @@ class Player
 
         // Triggered animations
         vector<TriggeredAnimation*> _triggeredAnis;
+
+		// Hit only once
+		vector<Player*> _hitTargetPlayers;
 };
 #endif
 }

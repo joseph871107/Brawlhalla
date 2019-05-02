@@ -191,6 +191,8 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     _flyingWeapon = nullptr;
     //
     InitializeTriggeredAnimations();
+    //
+    _hitTargetPlayers = vector<Player*>();
 }
 
 void Player::LoadBitmap()
@@ -1223,34 +1225,48 @@ void Player::InitiateWallJump()
         }
     }
 }
+
+bool Player::IsAttackable(Player* potentialTargetPlayer)
+{
+    for (auto elementPtr : _hitTargetPlayers)
+        if (elementPtr == potentialTargetPlayer) // If the potential target player has already been attacked by "this" player in his attack duration
+            return (false);
+
+    return ((potentialTargetPlayer != this) // Not the "this" player himself
+            &&
+            (!potentialTargetPlayer->_isDodging) // The potential target player is not dodging
+            &&
+            (HitPlayer(potentialTargetPlayer, _triggeredAniDir)) // The potential player is in hit range
+           );
+}
+
 void Player::DoAttack()
 {
     for (auto eachPlayerPtr : (*_playersPtr))
     {
-        if ((eachPlayerPtr != this) && (HitPlayer(eachPlayerPtr, _triggeredAniDir)))
+        if (IsAttackable(eachPlayerPtr))
         {
-            if ((!eachPlayerPtr->_isUnconscious) && (!eachPlayerPtr->_isDodging)) // If the target player is conscious and is not dodging
-            {
-                /// Comment for future devs: The target player is being hit multiple time, even if the conscious condition is taken into account
-                if (_isHoldingWeapon)
-                    CAudio::Instance()->Play(IDS_SWOOSH);
-                else
-                    CAudio::Instance()->Play(IDS_PUNCH);
+            if (_isHoldingWeapon)
+                CAudio::Instance()->Play(IDS_SWOOSH);
+            else
+                CAudio::Instance()->Play(IDS_PUNCH);
 
-                PerformAttack(eachPlayerPtr, _triggeredAniDir);
-            }
+            PerformAttack(eachPlayerPtr, _triggeredAniDir);
         }
     }
 }
 void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
 {
+    // Put the target player in the list, so as not to advertently hit him in a repeated manner
+    _hitTargetPlayers.push_back(targetPlayer);
+    //
     Vector2 vectorAttackerToTargetPlayer;
     vectorAttackerToTargetPlayer.SetXY(GetCor(0), GetCor(1), targetPlayer->GetCor(0), targetPlayer->GetCor(1));
     //
     targetPlayer->_takenDmg += 2; // increment the taken damage of the target player
     int attackOffsetMagnitude = targetPlayer->_takenDmg;
     //
-    double multiplier = (vectorAttackerToTargetPlayer.GetLength() == 0 ? attackOffsetMagnitude : attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength());
+    double multiplier = (vectorAttackerToTargetPlayer.GetLength() == 0 ? attackOffsetMagnitude : attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength()); // Avoid division by 0
     Vector2 targetPlayerDisplacementVector(Round(vectorAttackerToTargetPlayer.GetX() * multiplier),
                                            Round(vectorAttackerToTargetPlayer.GetY() * multiplier));
     targetPlayer->BeenAttacked(targetPlayerDisplacementVector, attackDirection);
@@ -1680,5 +1696,10 @@ void Player::SetIsTriggerDodge(const bool& newIsTriggerDodge)
 void Player::SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon)
 {
     _isTriggerDrawWeapon = newIsTriggerDrawWeapon;
+}
+
+void Player::EmptyHitTargetPlayers()
+{
+    _hitTargetPlayers.clear();
 }
 }

@@ -49,7 +49,7 @@ void AirLandDownAttackTriggeredAnimation::SetTriggeredAnimationSelector()
 
 void AirLandDownAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
-    // Do nothing
+	_playerPtr->EmptyHitTargetPlayers();
 }
 
 void AirLandDownAttackTriggeredAnimation::SetTriggeredAnimationVariables()

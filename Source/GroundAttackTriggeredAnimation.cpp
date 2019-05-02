@@ -49,7 +49,7 @@ void GroundAttackTriggeredAnimation::SetTriggeredAnimationSelector()
 
 void GroundAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
-    // Do nothing
+	_playerPtr->EmptyHitTargetPlayers();
 }
 
 void GroundAttackTriggeredAnimation::SetTriggeredAnimationVariables()
