@@ -41,6 +41,9 @@ const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
 const int MAP_BORDER_Y2 = SIZE_Y + MAP_BORDER_OFFSET;
 const double BITMAP_SIZE = 2.5;
+const double MOVE_ACCELERATION = 0.5;
+const double STOP_ACCELERATION = 1;
+const double MAX_MOVE_VELOCITY = 10;
 // Triggered Animation Key ID
 const int KEY_GND_ATTACK = 112;
 const int KEY_GND_MOVE_RIGHT_ATTACK = 122;
@@ -193,6 +196,8 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     InitializeTriggeredAnimations();
     //
     _hitTargetPlayers = vector<Player*>();
+    //
+    ResetMovementVelocity();
 }
 
 void Player::LoadBitmap()
@@ -1445,6 +1450,11 @@ int Player::GetKeyCombination()
     return (stoi(keyCombString));
 }
 
+void Player::ResetMovementVelocity()
+{
+    _moveVelocity = 0;
+}
+
 void Player::ProcessCurrentKeyCombinationGameLogic()
 {
     /*	~ Remark:
@@ -1471,6 +1481,8 @@ void Player::ProcessCurrentKeyCombinationGameLogic()
 
         // Process the triggered animation
         DoTriggeredAction();
+        // Reset all movement inertia
+        ResetMovementVelocity();
     }
     else // If there is no "Triggered Animation" in the meantime, then do the other "Non-Triggered Animation(s)"
         DoNonTriggeredAction();
@@ -1529,6 +1541,22 @@ bool Player::IsFinishedTriggeredAnimation()
         return (ani[_triggeredAniAnimationID].IsFinalBitmap());
 }
 
+void Player::DoMoveLeftWithAcceleration()
+{
+    if (_moveVelocity > -MAX_MOVE_VELOCITY)
+        _moveVelocity -= MOVE_ACCELERATION;
+
+    _x += Round(_moveVelocity);
+}
+
+void Player::DoMoveRightWithAcceleration()
+{
+    if (_moveVelocity < MAX_MOVE_VELOCITY)
+        _moveVelocity += MOVE_ACCELERATION;
+
+    _x += Round(_moveVelocity);
+}
+
 void Player::DoNonTriggeredAction()
 {
     /*	~ Remarks:
@@ -1544,11 +1572,11 @@ void Player::DoNonTriggeredAction()
             break;
 
         case KEY_GND_MOVE_RIGHT: // on ground, move right, not attack
-            DoMoveRight(MOVEMENT_UNIT);
+            DoMoveRightWithAcceleration();
             break;
 
         case KEY_GND_MOVE_LEFT: // on ground, move left, not attack
-            DoMoveLeft(MOVEMENT_UNIT);
+            DoMoveLeftWithAcceleration();
             break;
 
         case KEY_GND_LAND_DOWN: // on ground, land down, not attack
@@ -1585,6 +1613,29 @@ void Player::DoNonTriggeredAction()
             InitiateWallJump();
 
         _isTriggerJump = false; // Turn off the jump trigger
+    }
+
+    /* MOVEMENT INERTIA */
+    if (_currentKeyID == KEY_GND_IDLE)
+    {
+        if (_moveVelocity > 2)
+        {
+            _moveVelocity -= STOP_ACCELERATION;
+            _x += Round(_moveVelocity);
+        }
+        else if (_moveVelocity < -2)
+        {
+            _moveVelocity += STOP_ACCELERATION;
+            _x += Round(_moveVelocity);
+        }
+        else // -2 <= _moveVelocity <= 2
+        {
+            ResetMovementVelocity();
+        }
+    }
+    else if (!((_currentKeyID == KEY_GND_MOVE_LEFT) || (_currentKeyID == KEY_GND_MOVE_RIGHT)))
+    {
+        ResetMovementVelocity();
     }
 }
 void Player::SetCurrentNonTriggeredAnimation()

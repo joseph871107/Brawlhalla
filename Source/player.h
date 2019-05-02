@@ -149,6 +149,7 @@ class Player
 
         //Key combination
         int GetKeyCombination();
+
         void ProcessCurrentKeyCombinationGameLogic();
 
         //Triggered animation concept
@@ -158,6 +159,8 @@ class Player
         void InitiateTriggeredAction();
         void DoTriggeredAction();
         bool IsFinishedTriggeredAnimation();
+
+
 
         void DoNonTriggeredAction();
 
@@ -193,6 +196,11 @@ class Player
 
 		bool IsAttackable(Player* potentialTargetPlayer);
 
+		void DoMoveLeftWithAcceleration();
+
+		void DoMoveRightWithAcceleration();
+
+		void ResetMovementVelocity();
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
@@ -319,6 +327,9 @@ class Player
 
 		// Hit only once
 		vector<Player*> _hitTargetPlayers;
+
+		// Inertia
+		double _moveVelocity;
 };
 #endif
 }
