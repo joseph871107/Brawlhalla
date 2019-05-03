@@ -1615,7 +1615,10 @@ void Player::DoNonTriggeredAction()
         _isTriggerJump = false; // Turn off the jump trigger
     }
 
-    /* MOVEMENT INERTIA */
+    /*	~ MOVEMENT INERTIA
+    	~ The movement inertia of the player happens only when the player
+    	~ stops after running, or turns running direction
+    */
     if (_currentKeyID == KEY_GND_IDLE)
     {
         if (_moveVelocity > 2)
@@ -1630,12 +1633,12 @@ void Player::DoNonTriggeredAction()
         }
         else // -2 <= _moveVelocity <= 2
         {
-            ResetMovementVelocity();
+            ResetMovementVelocity(); // Reset all movement inertia
         }
     }
     else if (!((_currentKeyID == KEY_GND_MOVE_LEFT) || (_currentKeyID == KEY_GND_MOVE_RIGHT)))
     {
-        ResetMovementVelocity();
+        ResetMovementVelocity(); // Reset all movement inertia
     }
 }
 void Player::SetCurrentNonTriggeredAnimation()
