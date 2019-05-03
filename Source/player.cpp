@@ -402,8 +402,8 @@ void Player::ConsciouslyOnMoveGameLogic()
         int groundX2 = groundPtr->GetCor(2);
         int groundY2 = groundPtr->GetCor(3);
 
-        if (IsIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-            DoRepositionAboutGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2);
+        if (groundPtr->IsIntersectGround(playerX1, playerY1, playerX2, playerY2))
+            DoRepositionAboutGround(playerX1, playerY1, playerX2, playerY2, groundPtr);
     }
 
     /* VERTICAL OFFSET */
@@ -426,28 +426,6 @@ void Player::ConsciouslyOnMoveGameLogic()
         DoHorizontalOffset(); // Modify the x-coordinate of the player
 }
 
-void Player::DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
-{
-    if (IsOnGroundLeftEdge(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-    {
-        InitiateOffsetLeft(abs(_horizontalVelocity));
-        _unconsciousAniDir = false; // left
-    }
-    else if (IsOnGroundRightEdge(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-    {
-        InitiateOffsetRight(abs(_horizontalVelocity));
-        _unconsciousAniDir = true; // right
-    }
-    else if (IsOnGroundUnderside(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-    {
-        InitiateOffsetDown(abs(_verticalVelocity));
-    }
-    else if (IsOnParticularGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-    {
-        InitiateOffsetUp(abs(_verticalVelocity));
-    }
-}
-
 
 void Player::UnconsciouslyOnMoveGameLogic()
 {
@@ -465,8 +443,8 @@ void Player::UnconsciouslyOnMoveGameLogic()
         int groundX2 = groundPtr->GetCor(2);
         int groundY2 = groundPtr->GetCor(3);
 
-        if (IsIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-            DoBounceOffGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2);
+        if (groundPtr->IsIntersectGround(playerX1, playerY1, playerX2, playerY2))
+            DoBounceOffGround(playerX1, playerY1, playerX2, playerY2, groundPtr);
     }
 
     /*	~ VERTICAL OFFSET
@@ -1014,81 +992,8 @@ void Player::ShowCurrentAnimation()
         ani_iter->OnShow();
     }
 }
-bool Player::IsIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
-{
-    return (playerX2 >= groundX1 && playerX1 <= groundX2 && playerY2 >= groundY1 && playerY1 <= groundY2);
-}
-bool Player::IsExplicitlyVerticallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
-{
-    return (!(playerY2 <= groundY1 || playerY1 >= groundY2));
-}
-bool Player::IsExplicitlyHorizontallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
-{
-    return (!((playerX2 <= groundX1) || (playerX1 >= groundX2)));
-}
-bool Player::IsOnGroundLeftEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
-{
-    return (IsExplicitlyVerticallyIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2)
-            &&
-            (playerX1 < groundX1 && groundX1 < playerX2 && playerX2 < groundX2));
-}
-bool Player::IsOnGroundRightEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
-{
-    return (IsExplicitlyVerticallyIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2)
-            &&
-            (groundX1 < playerX1 && playerX1 < groundX2 && groundX2 < playerX2));
-}
-bool Player::IsOnGroundUnderside(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
-{
-    return (IsExplicitlyHorizontallyIntersectGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2)
-            &&
-            (groundY1 < playerY1 && playerY1 <= groundY2 && groundY2 < playerY2));
-}
-bool Player::IsOnParticularGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
-{
-    return (playerY1 < groundY1 && groundY1 <= playerY2 && playerY2 < groundY2
-            &&
-            groundX1 <= playerX1 && playerX2 <= groundX2);
-}
-void Player::DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2)
-{
-    if (IsOnGroundLeftEdge(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-    {
-        _x = groundX1 - _width;
-    }
-    else if (IsOnGroundRightEdge(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-    {
-        _x = groundX2;
-    }
-    else if (IsOnGroundUnderside(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-    {
-        _y = groundY2;
-    }
-    else if (IsOnParticularGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-    {
-        _y = groundY1 - _height;
-    }
-}
-bool Player::IsOnGround()
-{
-    int playerX1 = GetCor(0);
-    int playerY1 = GetCor(1);
-    int playerX2 = GetCor(2);
-    int playerY2 = GetCor(3);
 
-    for (auto groundPtr : _grounds)
-    {
-        int groundX1 = groundPtr->GetCor(0);
-        int groundY1 = groundPtr->GetCor(1);
-        int groundX2 = groundPtr->GetCor(2);
-        int groundY2 = groundPtr->GetCor(3);
 
-        if (IsOnParticularGround(playerX1, playerY1, playerX2, playerY2, groundX1, groundY1, groundX2, groundY2))
-            return true;
-    }
-
-    return false;
-}
 bool Player::IsOnLeftEdge()
 {
     int playerX1 = GetCor(0);
@@ -1756,4 +1661,85 @@ void Player::EmptyHitTargetPlayers()
 {
     _hitTargetPlayers.clear();
 }
+
+void Player::SetX(const int& newX)
+{
+    _x = newX;
+}
+
+void Player::SetY(const int& newY)
+{
+    _y = newY;
+}
+
+
+void Player::DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr)
+{
+    int groundX1 = groundPtr->GetCor(0);
+    int groundY1 = groundPtr->GetCor(1);
+    int groundX2 = groundPtr->GetCor(2);
+    int groundY2 = groundPtr->GetCor(3);
+
+    if (groundPtr->IsOnGroundLeftEdge(playerX1, playerY1, playerX2, playerY2))
+    {
+        _x = groundX1 - _width;
+    }
+    else if (groundPtr->IsOnGroundRightEdge(playerX1, playerY1, playerX2, playerY2))
+    {
+        _x = groundX2;
+    }
+    else if (groundPtr->IsOnGroundUnderside(playerX1, playerY1, playerX2, playerY2))
+    {
+        _y = groundY2;
+    }
+    else if (groundPtr->IsOnGround(playerX1, playerY1, playerX2, playerY2))
+    {
+        _y = groundY1 - _height;
+    }
+}
+
+bool Player::IsOnGround()
+{
+    int playerX1 = GetCor(0);
+    int playerY1 = GetCor(1);
+    int playerX2 = GetCor(2);
+    int playerY2 = GetCor(3);
+
+    for (auto groundPtr : _grounds)
+    {
+        int groundX1 = groundPtr->GetCor(0);
+        int groundY1 = groundPtr->GetCor(1);
+        int groundX2 = groundPtr->GetCor(2);
+        int groundY2 = groundPtr->GetCor(3);
+
+        if (groundPtr->IsOnGround(playerX1, playerY1, playerX2, playerY2))
+            return true;
+    }
+
+    return false;
+}
+
+
+void Player::DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr)
+{
+    if (groundPtr->IsOnGroundLeftEdge(playerX1, playerY1, playerX2, playerY2))
+    {
+        InitiateOffsetLeft(abs(_horizontalVelocity));
+        _unconsciousAniDir = false; // left
+    }
+    else if (groundPtr->IsOnGroundRightEdge(playerX1, playerY1, playerX2, playerY2))
+    {
+        InitiateOffsetRight(abs(_horizontalVelocity));
+        _unconsciousAniDir = true; // right
+    }
+    else if (groundPtr->IsOnGroundUnderside(playerX1, playerY1, playerX2, playerY2))
+    {
+        InitiateOffsetDown(abs(_verticalVelocity));
+    }
+    else if (groundPtr->IsOnGround(playerX1, playerY1, playerX2, playerY2))
+    {
+        InitiateOffsetUp(abs(_verticalVelocity));
+    }
+}
+
 }
