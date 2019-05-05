@@ -55,14 +55,18 @@ class Player
         void SetTriggeredAnimationDir(bool newTriggeredAniDir);
         const bool& GetTriggeredAnimationDirection() const;
         void SetTriggeredAnimationAnimationID(const int& newTriggeredAniAnimationID);
-		void DoAttack();
-		void SetIsTriggerAttack(const bool& newIsTriggerAttack);
-		void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
-		void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
-		void SetIsDodging(const bool& newIsDodging);
-		void SetIsTriggerDodge(const bool& newIsTriggerDodge);
-		void SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon);
-		void EmptyHitTargetPlayers();
+        void DoAttack();
+        void SetIsTriggerAttack(const bool& newIsTriggerAttack);
+        void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
+        void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
+        void SetIsDodging(const bool& newIsDodging);
+        void SetIsTriggerDodge(const bool& newIsTriggerDodge);
+        void SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon);
+        void EmptyHitTargetPlayers();
+
+        // Used by Ground
+        void SetX(const int& newX);
+        void SetY(const int& newY);
 
     protected:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -74,20 +78,7 @@ class Player
         void SetAnimationState(int);	// Set which CAnimation is going to play
         void ShowCurrentAnimation();			// Show CAnimation by currentAni
 
-        //Reposition about the grounds
-        bool IsIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
-        bool IsExplicitlyVerticallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
-        bool IsExplicitlyHorizontallyIntersectGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
-
-        bool IsOnGroundLeftEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
-        bool IsOnGroundRightEdge(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
-        bool IsOnGroundUnderside(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
-        bool IsOnParticularGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
-
-        void DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
-
         //Position
-        bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
         bool IsOnLeftEdge();
         bool IsOnRightEdge();
         bool IsOutMapBorder();
@@ -125,9 +116,6 @@ class Player
         void ConsciouslyOnMoveGameLogic();
         void UnconsciouslyOnMoveGameLogic();
         void SetConscious();
-
-        //Bounce Off the Ground
-        void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, int groundX1, int groundY1, int groundX2, int groundY2);
 
         //Others
         void DoDead();
@@ -175,6 +163,9 @@ class Player
 
         //Ground
         void DoOnGround();
+        void DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
+        bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
+		void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
 
         //
         void SetTriggeredAnimationSelector();
@@ -196,13 +187,13 @@ class Player
 
         void InitializeTriggeredAnimations();
 
-		bool IsAttackable(Player* potentialTargetPlayer);
+        bool IsAttackable(Player* potentialTargetPlayer);
 
-		void DoMoveLeftWithAcceleration();
+        void DoMoveLeftWithAcceleration();
 
-		void DoMoveRightWithAcceleration();
+        void DoMoveRightWithAcceleration();
 
-		void ResetMovementVelocity();
+        void ResetMovementVelocity();
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
@@ -328,11 +319,11 @@ class Player
         // Triggered animations
         vector<TriggeredAnimation*> _triggeredAnis;
 
-		// Hit only once
-		vector<Player*> _hitTargetPlayers;
+        // Hit only once
+        vector<Player*> _hitTargetPlayers;
 
-		// Inertia
-		double _moveVelocity;
+        // Inertia
+        double _moveVelocity;
 };
 #endif
 }
