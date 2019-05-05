@@ -332,6 +332,10 @@ Ground * GetRandomGround(vector<Ground*>* ground)
 	}
 	return *finalSelect;
 }
+bool IsCollide(int x1, int y1, int x2, int y2, int tx1, int ty1, int tx2, int ty2)
+{
+	return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
+}
 void CRAnimation::NextPtr()
 {
 	bmp_iter++;

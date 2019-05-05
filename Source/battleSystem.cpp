@@ -6,6 +6,7 @@
 #include "gamelib.h"
 #include "brawlhalla.h"
 #include "battleSystem.h"
+#include "enemy.h"
 #include "map.h"
 
 namespace game_framework
@@ -64,13 +65,16 @@ void BattleSystem::OnBeginState()
 	player->LoadBitmap();
 	player->AddCamera(&camera);
 	_players.push_back(player);				// Player1
-	player = new Player();
+	player = new Enemy();
 	player->LoadBitmap();
 	player->AddCamera(&camera);
-	_players.push_back(player);				// Player2
+	_players.push_back(player);				// Enemy
 	map->AddPlayers(&_players);
 
-	vector<vector<long>> playerKeys = { {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}, {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M} };
+	vector<vector<long>> playerKeys = {
+		{KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M},
+		{KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
+	};
 	for (auto i = _players.begin(); i != _players.end(); i++)
 	{
 		char str[80];
@@ -84,7 +88,7 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 	map->OnMove();
     for (auto player : _players)
     {
-        player->OnMove();
+		player->OnMove();
     }
 
     ResizeCamera();
@@ -121,7 +125,8 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	map->OnKeyDown(nChar);
     for (auto i : _players)
     {
-        i->OnKeyDown(nChar);
+		if (i->IsPlayer())
+			i->OnKeyDown(nChar);
     }
     currentKeydown = nChar;
 }
@@ -136,7 +141,8 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
     for (auto i : _players)
     {
-        i->OnKeyUp(nChar);
+		if (i->IsPlayer())
+			i->OnKeyUp(nChar);
     }
 }
 

@@ -89,6 +89,9 @@
     <Filter Include="Brawlhalla\Player\TriggeredAnimation\Others">
       <UniqueIdentifier>{c30da535-c1d8-4fd4-af9b-82f605e4b59a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\Enemy">
+      <UniqueIdentifier>{427d87f5-bc90-42f6-994a-5b66b01feca3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
@@ -219,6 +222,9 @@
     <ClCompile Include="Source\GroundMoveRightAttackTriggeredAnimation.cpp">
       <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClCompile>
+    <ClCompile Include="Source\enemy.cpp">
+      <Filter>Brawlhalla\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -316,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="Source\GroundMoveRightAttackTriggeredAnimation.h">
       <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\enemy.h">
+      <Filter>Brawlhalla\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

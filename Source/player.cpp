@@ -105,7 +105,7 @@ Player::Player() :
     _isPressingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
     _horizontalVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()),
     _verticalVelocity(double()), _grounds(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
-    _name(string()) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
+    _name(string()), _isPlayer(true) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
 {
     /* Body intentionally empty */
 }
@@ -150,7 +150,10 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     _width = (int)(_collision_box.Width() * BITMAP_SIZE);
     _height = (int)(_collision_box.Height() * BITMAP_SIZE);
     //
-    _keys = keysValue;
+	if (!keysValue.size())
+		_keys = { KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X };
+	else
+		_keys = keysValue;
     //
     _isPressingLeft = _isPressingRight = _dir = false;
     //
@@ -168,7 +171,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     _isTriggerDrawWeapon = false;
     //
     _isHoldingWeapon = _isTriggerAttack = false;
-    _takenDmg = 0;
+    _takenDmg = 10;
     _playersPtr = playersPtrValue;
     //
     _isTriggerDodge = false;
@@ -196,7 +199,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     InitializeTriggeredAnimations();
     //
     _hitTargetPlayers = vector<Player*>();
-    //
+	//
     ResetMovementVelocity();
 }
 
@@ -1687,6 +1690,14 @@ void Player::SetCurrentNonTriggeredAnimationByWeapon()
 void Player::AddCamera(Camera* cam)
 {
     camera = cam;
+}
+void Player::SetPlayer(bool tri)
+{
+	_isPlayer = tri;
+}
+bool Player::IsPlayer()
+{
+	return _isPlayer;
 }
 int Player::Round(double i)
 {

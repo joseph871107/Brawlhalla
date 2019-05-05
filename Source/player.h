@@ -22,7 +22,7 @@ class Player
         //Required for Game Framework
         void Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue);
         void LoadBitmap();
-        void OnMove();
+        virtual void OnMove();
         void OnShow();
         void OnKeyDown(const UINT& nChar);
         void OnKeyUp(const UINT& nChar);
@@ -36,6 +36,8 @@ class Player
         int GetWidth();
         int GetHeight();
         void AddCamera(Camera* cam);	// Camera
+		void SetPlayer(bool tri);
+		bool IsPlayer();
 
         //Others - Bill
         const string& GetName() const;
@@ -62,7 +64,7 @@ class Player
 		void SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon);
 		void EmptyHitTargetPlayers();
 
-    private:
+    protected:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
         //Animations
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
@@ -247,6 +249,7 @@ class Player
         // how long he would be in the unconscious state '_unconsciousFramesCount'
 
         vector<Player*>* _playersPtr;
+		bool _isPlayer;
 
         //Dodge
         bool _isTriggerDodge;

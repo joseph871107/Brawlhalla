@@ -38,10 +38,14 @@ namespace game_framework
 		nextTimeGenerateWeapon = random(3, 10);
 		if(camera != nullptr)
 			camera->Reset();
+		for (auto element : _weapons)
+			delete element;
+		_weapons.clear();
 	}
 
 	void Map::OnInit()
 	{
+		OnBeginState();
 	}
 
 	void Map::OnKeyDown(UINT nChar)
