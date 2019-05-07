@@ -178,6 +178,7 @@ class Player
         void MoveCurrentAnimation();
         void OnMoveAnimationLogic();
         void OnMoveGameLogic();
+		
         void SetCurrentNonTriggeredAnimationByWeapon();
         void SetCurrentTriggeredAnimationByWeapon();
         void SetCurrentTriggeredAnimation();
@@ -194,6 +195,8 @@ class Player
         void DoMoveRightWithAcceleration();
 
         void ResetMovementVelocity();
+
+		void DoParseKeyPressed();
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
@@ -214,7 +217,7 @@ class Player
         double _horizontalVelocity;
 
         //Movements
-        bool _isPressingLeft, _isPressingRight, _isPressingDown;
+        bool _isPressingLeft, _isPressingRight, _isPressingDown, _isTriggerPressingLeft;
         bool _dir; // false: player facing left, true: player facing right
 
         //Jump

@@ -45,6 +45,7 @@ namespace game_framework
 		vector<Weapon*> *GetWeapons();
 		Background background;
 	private:
+		void ProcessWeaponOutOfMap();
 		//-----------------VARIABLES DECLARATIONS-----------------//
 		clock_t start, lastTime;
 		int nextTimeGenerateWeapon, maxWeapons;

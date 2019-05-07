@@ -18,77 +18,76 @@ namespace game_framework
 
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MATCH_TIME = 180;
-const int MAX_weapons = 5;
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 
-/// DEBUG
 CInteger integer(2);																												// Used to show current remain time
 
 BattleSystem::BattleSystem(CGame* g) : CGameState(g)
 {
-	map = nullptr;
-	background = &map->background;
-	_grounds = map->GetGrounds();
-	_weapons = map->GetWeapons();
+    map = nullptr;
+    background = &map->background;
+    _grounds = map->GetGrounds();
+    _weapons = map->GetWeapons();
 }
 
-BattleSystem::BattleSystem(CGame * g, shared_ptr<Map> m) : CGameState(g)
+BattleSystem::BattleSystem(CGame* g, shared_ptr<Map> m) : CGameState(g)
 {
-	map = m;
+    map = m;
 }
 
 BattleSystem::~BattleSystem()
 {
-	ClearPlayers();
+    ClearPlayers();
 }
 
 void BattleSystem::OnBeginState()
 {
-	/*------------------------------INIT PROGRESS STAGE 1------------------------------*/
-	ClearPlayers();
-	map = CGameStateInit::GetMap();
-	_grounds = map->GetGrounds();
-	_weapons = map->GetWeapons();
-	CAudio::Instance()->Play(IDS_BATTLE_MUSIC, true);
-	_secPerRound = MATCH_TIME;
+    /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
+    ClearPlayers();
+    map = CGameStateInit::GetMap();
+    _grounds = map->GetGrounds();
+    _weapons = map->GetWeapons();
+    CAudio::Instance()->Play(IDS_BATTLE_MUSIC, true);
+    _secPerRound = MATCH_TIME;
+    camera = Camera();
+    camera.SetGradual(true);
+    map->AddCamera(&camera);
 
-	camera = Camera();
-	camera.SetGradual(true);
-	map->AddCamera(&camera);
-	for (auto ground : *_grounds)
-		ground->AddCamera(&camera);
+    for (auto ground : *_grounds)
+        ground->AddCamera(&camera);
 
-	background = &map->background;
-	background->AddCamera(&camera);
+    background = &map->background;
+    background->AddCamera(&camera);
+    Player* player = new Player();
+    player->LoadBitmap();
+    player->AddCamera(&camera);
+    _players.push_back(player);				// Player1
+    player = new Enemy();
+    player->LoadBitmap();
+    player->AddCamera(&camera);
+    _players.push_back(player);				// Enemy
+    map->AddPlayers(&_players);
+    vector<vector<long>> playerKeys =
+    {
+        {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M},
+        {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
+    };
 
-	Player* player = new Player();
-	player->LoadBitmap();
-	player->AddCamera(&camera);
-	_players.push_back(player);				// Player1
-	player = new Enemy();
-	player->LoadBitmap();
-	player->AddCamera(&camera);
-	_players.push_back(player);				// Enemy
-	map->AddPlayers(&_players);
-
-	vector<vector<long>> playerKeys = {
-		{KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M},
-		{KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
-	};
-	for (auto i = _players.begin(); i != _players.end(); i++)
-	{
-		char str[80];
-		sprintf(str, "%d", i - _players.begin() + 1);
-		(*i)->Initialize(*_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
-	}
+    for (auto i = _players.begin(); i != _players.end(); i++)
+    {
+        char str[80];
+        sprintf(str, "%d", i - _players.begin() + 1);
+        (*i)->Initialize(*_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
+    }
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
 {
-	map->OnMove();
+    map->OnMove();
+
     for (auto player : _players)
     {
-		player->OnMove();
+        player->OnMove();
     }
 
     ResizeCamera();
@@ -103,17 +102,18 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     InitializeFile();										// 初始化"game.rc"中點陣圖的路徑
     InitializeFile("SOUND");								// 初始化"game.rc"中音效的路徑
     ShowInitProgress(25);
+
     /*------------------------------INIT PROGRESS STAGE 3------------------------------*/
     if (GENERATE_COLLISION_ARRAY)
     {
         InitializeCollideArray();							// 初始化所有點陣圖的布林碰撞矩陣
         TRACE("cArray size : %d\n", cArray.size());
     }
+
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
     InitializeLoadSound();
     CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
-	ShowInitProgress(50);
-
+    ShowInitProgress(50);
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
     integer.LoadBitmap();					// time + life
@@ -122,12 +122,14 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 
 void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	map->OnKeyDown(nChar);
+    map->OnKeyDown(nChar);
+
     for (auto i : _players)
     {
-		if (i->IsPlayer())
-			i->OnKeyDown(nChar);
+        if (i->IsPlayer())
+            i->OnKeyDown(nChar);
     }
+
     currentKeydown = nChar;
 }
 
@@ -141,8 +143,8 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
     for (auto i : _players)
     {
-		if (i->IsPlayer())
-			i->OnKeyUp(nChar);
+        if (i->IsPlayer())
+            i->OnKeyUp(nChar);
     }
 }
 
@@ -152,8 +154,7 @@ void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動�
 
 void BattleSystem::OnShow()
 {
-	map->OnShow();
-
+    map->OnShow();
     // Showing the remain time
     // Display minute
     int now_time = GetCurrentRemainTime();
@@ -198,12 +199,15 @@ void BattleSystem::ResizeCamera()
     if (CGameStateInit::GetCameraEnable())
     {
         int totalX = 0, totalY = 0;
+
         for (auto i : _players) // Find average position among players
         {
             totalX += i->GetCor(0);
             totalY += i->GetCor(1);
         }
+
         int minX = totalX / (signed int)_players.size(), maxX = minX, minY = totalY / (signed int)_players.size(), maxY = minY, minWidth = 800, paddingX = 500, paddingY = 300, centerX = minX + (maxX - minX) / 2, centerY = minY + (maxY - minY) / 2;
+
         for (auto i : _players) // Find max and minimum position among players
         {
             minX = (i->GetCor(0) < minX ? i->GetCor(0) : minX);
@@ -211,8 +215,11 @@ void BattleSystem::ResizeCamera()
             minY = (i->GetCor(1) < minY ? i->GetCor(1) : minY);
             maxY = (i->GetCor(3) > maxY ? i->GetCor(3) : maxY);
         }
-        minX -= paddingX; maxX += paddingX; // Enlarge view horizentally
-        minY -= paddingY; maxY += paddingY; // Enlarge view vertically
+
+        minX -= paddingX;
+        maxX += paddingX; // Enlarge view horizentally
+        minY -= paddingY;
+        maxY += paddingY; // Enlarge view vertically
         int width = (maxX - minX < minWidth ? minWidth : maxX - minX), height = maxY - minY;
         width = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? width : height * SIZE_X / SIZE_Y);
         height = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? height : width * SIZE_Y / SIZE_X);
@@ -225,14 +232,15 @@ void BattleSystem::ResizeCamera()
 
 void BattleSystem::AddMap(shared_ptr<Map> m)
 {
-	map = m;
+    map = m;
 }
 
 bool BattleSystem::IsGameOver()
 {
     for (auto i : _players)
-		if (i->IsOutOfLife())
+        if (i->IsOutOfLife())
             return true;
+
     return (GetCurrentRemainTime() == 0);
 }
 
@@ -257,11 +265,12 @@ string BattleSystem::GetGameResult()
 
 void BattleSystem::ClearPlayers()
 {
-	for (auto element : _players)
-	{
-		delete element;
-	}
-	_players.clear();
+    for (auto element : _players)
+    {
+        delete element;
+    }
+
+    _players.clear();
 }
 
 void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)

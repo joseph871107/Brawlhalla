@@ -67,12 +67,15 @@ namespace game_framework
 // 這個class為遊戲的遊戲開頭畫面物件
 /////////////////////////////////////////////////////////////////////////////
 
-	const vector<MapPARM> _mapP{ 
-		// Define Grounds of Map Default
-		MapPARM(BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1, GroundPARM(0, 500, 1, 15, 1, IDB_GROUND1)),
-		// Define Grounds of Map Test
-		MapPARM(BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 2, GroundPARM(560, 500, 0.174, 2, 1, IDB_GROUND2, 0, 900, 900), GroundPARM(400, 340, 0.174, 1, 2, IDB_GROUND2, 0, 900, 900))
-	};
+const vector<MapPARM> _mapP
+{
+    // Define Grounds of Map Default
+    MapPARM(BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1, GroundPARM(0, 500, 1, 15, 1, IDB_GROUND1)),
+    // Define Grounds of Map Test
+    MapPARM(BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 2, GroundPARM(560, 500, 0.174, 2, 1, IDB_GROUND2, 0, 900, 900), GroundPARM(400, 340, 0.174, 1, 2, IDB_GROUND2, 0, 900, 900)),
+    // Define 3 Grounds
+    MapPARM(BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3, GroundPARM(0, 300, 1, 3, 1, IDB_GROUND1), GroundPARM(500, 400, 1, 3, 1, IDB_GROUND1), GroundPARM(1000, 500, 1, 3, 1, IDB_GROUND1))
+};
 // Initialize static variable
 bool CGameStateInit::_fullscreenEnabled = OPEN_AS_FULLSCREEN;
 bool CGameStateInit::_cameraEnabled = true;
@@ -82,9 +85,9 @@ vector<shared_ptr<Map>> CGameStateInit::maps;
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g))
 {
-	/*camera.SetSize(0.5);
-	welcomeWindow.AddCamera(&camera);
-	settingWindow.AddCamera(&camera);*/
+    /*camera.SetSize(0.5);
+    welcomeWindow.AddCamera(&camera);
+    settingWindow.AddCamera(&camera);*/
 }
 
 CGameStateInit::~CGameStateInit()
@@ -93,16 +96,20 @@ CGameStateInit::~CGameStateInit()
 
 void CGameStateInit::OnInit()
 {
-	// Automatically generate ground objects //
-	for (auto map : _mapP) {
-		shared_ptr<Map> tmap(new Map());
-		for (auto ground : map._groundsP)
-			tmap->AddGround(&ground);
-		tmap->AddBackground(&map._bkP);
-		maps.push_back(tmap);
-	}
-	for (auto map : maps)
-		map->OnInit();
+    // Automatically generate ground objects //
+    for (auto map : _mapP)
+    {
+        shared_ptr<Map> tmap(new Map());
+
+        for (auto ground : map._groundsP)
+            tmap->AddGround(&ground);
+
+        tmap->AddBackground(&map._bkP);
+        maps.push_back(tmap);
+    }
+
+    for (auto map : maps)
+        map->OnInit();
 
     ShowInitProgress(0);
     Object* uiPtr, *ui_info1, *ui_info2, *ui_info3, *ui_info4;
@@ -141,17 +148,18 @@ void CGameStateInit::OnInit()
     welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 2, 0);
     settingWindow.Initialize(2, 2, false, false);
     settingWindow.SetXY((SIZE_X - butH * 2) / 2, 300);
-	settingWindow.GetUI()->AddButton("camera", 0, 0, butH, butH, 0, 0, "True ");
-	settingWindow.GetUI()->AddButton("maps", butH, 0, butH, butH, 0, 1, "0");
-	settingWindow.GetUI()->AddButton("fullScreen", 0, butH, butH, butH, 1, 0, (OPEN_AS_FULLSCREEN ? "True " : "False"));
+    settingWindow.GetUI()->AddButton("camera", 0, 0, butH, butH, 0, 0, "True ");
+    settingWindow.GetUI()->AddButton("maps", butH, 0, butH, butH, 0, 1, "0");
+    settingWindow.GetUI()->AddButton("fullScreen", 0, butH, butH, butH, 1, 0, (OPEN_AS_FULLSCREEN ? "True " : "False"));
     settingWindow.GetUI()->AddButton("back", butH, butH, butH, butH, 1, 1);
     ShowInitProgress(10);
 }
 
 void CGameStateInit::OnBeginState()
 {
-	for (auto map : maps)
-		map->OnBeginState();
+    for (auto map : maps)
+        map->OnBeginState();
+
     static bool first = true;
 
     if (first)
@@ -217,69 +225,82 @@ bool CGameStateInit::GetCameraEnable()
 
 bool CGameStateInit::GetFullscreenEnabled()
 {
-	return _fullscreenEnabled;
+    return _fullscreenEnabled;
 }
 
 shared_ptr<Map> CGameStateInit::GetMap()
 {
-	return maps[CGameStateInit::_mapSelected];
+    return maps[CGameStateInit::_mapSelected];
 }
 
 void CGameStateInit::OnMove()
 {
-	CMainFrame* pMainWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;	// Get MainFrm instance
-	_fullscreenEnabled = pMainWnd->IsFullScreen();					// Fix state of _fullscreenEnabled was not changed after ctrl+F (afx btn event triggered fullscreen)
+    CMainFrame* pMainWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;	// Get MainFrm instance
+    _fullscreenEnabled = pMainWnd->IsFullScreen();					// Fix state of _fullscreenEnabled was not changed after ctrl+F (afx btn event triggered fullscreen)
+    welcomeWindow.OnMove();
+    settingWindow.OnMove();
+    string chosenBut = welcomeWindow.GetUI()->ChosenButton();
 
-	welcomeWindow.OnMove();
-	settingWindow.OnMove();
+    if (chosenBut == "start")
+    {
+        CAudio::Instance()->Stop(IDS_MENU_MUSIC);
+        GotoGameState(GAME_STATE_RUN);
+    }
+    else if (chosenBut == "settings")
+    {
+        welcomeWindow.SetButtonEnable(false);
+        settingWindow.SetButtonEnable(true);
+        settingWindow.SetVisible(true);
+    }
+    else if (chosenBut == "exit")
+        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Closing
 
-	string chosenBut = welcomeWindow.GetUI()->ChosenButton();
-	if (chosenBut == "start") {
-		CAudio::Instance()->Stop(IDS_MENU_MUSIC);
-		GotoGameState(GAME_STATE_RUN);
-	}
-	else if (chosenBut == "settings") {
-		welcomeWindow.SetButtonEnable(false);
-		settingWindow.SetButtonEnable(true);
-		settingWindow.SetVisible(true);
-	}
-	else if (chosenBut == "exit")
-		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Closing
+    chosenBut = settingWindow.GetUI()->ChosenButton();
 
-	chosenBut = settingWindow.GetUI()->ChosenButton();
-	if (chosenBut == "back") {
-		welcomeWindow.SetButtonEnable(true);
-		settingWindow.SetButtonEnable(false);
-		settingWindow.SetVisible(false);
-		settingWindow.GetUI()->Reset();
-	}
-	else if (chosenBut == "camera") {
-		if (_cameraEnabled)
-			_cameraEnabled = false;
-		else
-			_cameraEnabled = true;
-		(*settingWindow.GetUI()->Index("camera"))->SetStr(_cameraEnabled ? "True " : "False");
-	}
-	else if (chosenBut == "maps") {
-		_mapSelected++;
-		if (_mapSelected == (signed int)maps.size())
-			_mapSelected = 0;
-		char buf[10];
-		sprintf(buf, "%d", _mapSelected);
-		(*settingWindow.GetUI()->Index("maps"))->SetStr(buf);
-	}
-	else if (chosenBut == "fullScreen") {
-		if (_fullscreenEnabled)
-			_fullscreenEnabled = false;
-		else
-			_fullscreenEnabled = true;
-	}
-	static bool _fullscreenEnabledLast = _fullscreenEnabled;
-	if (_fullscreenEnabledLast != _fullscreenEnabled) {													// _fullscreenEnabled changed state
-		(*settingWindow.GetUI()->Index("fullScreen"))->SetStr(_fullscreenEnabled ? "True " : "False");
-		pMainWnd->SetFullScreen(_fullscreenEnabled);													// Implemente actull fullscreen that hide toolbar and menu etc
-	}
-	_fullscreenEnabledLast = _fullscreenEnabled;
+    if (chosenBut == "back")
+    {
+        welcomeWindow.SetButtonEnable(true);
+        settingWindow.SetButtonEnable(false);
+        settingWindow.SetVisible(false);
+        settingWindow.GetUI()->Reset();
+    }
+    else if (chosenBut == "camera")
+    {
+        if (_cameraEnabled)
+            _cameraEnabled = false;
+        else
+            _cameraEnabled = true;
+
+        (*settingWindow.GetUI()->Index("camera"))->SetStr(_cameraEnabled ? "True " : "False");
+    }
+    else if (chosenBut == "maps")
+    {
+        _mapSelected++;
+
+        if (_mapSelected == (signed int)maps.size())
+            _mapSelected = 0;
+
+        char buf[10];
+        sprintf(buf, "%d", _mapSelected);
+        (*settingWindow.GetUI()->Index("maps"))->SetStr(buf);
+    }
+    else if (chosenBut == "fullScreen")
+    {
+        if (_fullscreenEnabled)
+            _fullscreenEnabled = false;
+        else
+            _fullscreenEnabled = true;
+    }
+
+    static bool _fullscreenEnabledLast = _fullscreenEnabled;
+
+    if (_fullscreenEnabledLast != _fullscreenEnabled)  													// _fullscreenEnabled changed state
+    {
+        (*settingWindow.GetUI()->Index("fullScreen"))->SetStr(_fullscreenEnabled ? "True " : "False");
+        pMainWnd->SetFullScreen(_fullscreenEnabled);													// Implemente actull fullscreen that hide toolbar and menu etc
+    }
+
+    _fullscreenEnabledLast = _fullscreenEnabled;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -293,18 +314,21 @@ CGameStateOver::CGameStateOver(CGame* g)
 
 void CGameStateOver::OnMove()
 {
-	settingWindow.OnMove();
+    settingWindow.OnMove();
+    string chosenBut = settingWindow.GetUI()->ChosenButton();
 
-	string chosenBut = settingWindow.GetUI()->ChosenButton();
-	if (chosenBut == "back") {
-		GotoGameState(GAME_STATE_INIT);
-	}
-	else if (chosenBut == "exit") {
-		PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
-	}
+    if (chosenBut == "back")
+    {
+        GotoGameState(GAME_STATE_INIT);
+    }
+    else if (chosenBut == "exit")
+    {
+        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
+    }
 
     if (counter > 0)
-		counter--;
+        counter--;
+
     //    GotoGameState(GAME_STATE_INIT);
 }
 
@@ -315,54 +339,54 @@ void CGameStateOver::OnBeginState()
 
 void CGameStateOver::OnInit()
 {
-	Object* uiPtr = new Object();
-	uiPtr->LoadBitmap(IDB_UI_BACKGROUND);
-	uiPtr->SetSize(uiPtr->GetWidth() / SIZE_X);
-	uiPtr->SetXY((SIZE_X - uiPtr->GetWidth()) / 2, 0);
-	settingWindow.AddItem(uiPtr);
-	int butH = 300, x = (SIZE_X - butH * 2) / 2, y = (SIZE_Y - butH) / 2;
-	settingWindow.Initialize(1, 2);
-	settingWindow.GetUI()->AddButton("back", x, y, butH, butH, 0, 0);
-	settingWindow.GetUI()->AddButton("exit", x + butH, y, butH, butH, 0, 1);
-	ShowInitProgress(100);
+    Object* uiPtr = new Object();
+    uiPtr->LoadBitmap(IDB_UI_BACKGROUND);
+    uiPtr->SetSize(uiPtr->GetWidth() / SIZE_X);
+    uiPtr->SetXY((SIZE_X - uiPtr->GetWidth()) / 2, 0);
+    settingWindow.AddItem(uiPtr);
+    int butH = 300, x = (SIZE_X - butH * 2) / 2, y = (SIZE_Y - butH) / 2;
+    settingWindow.Initialize(1, 2);
+    settingWindow.GetUI()->AddButton("back", x, y, butH, butH, 0, 0);
+    settingWindow.GetUI()->AddButton("exit", x + butH, y, butH, butH, 0, 1);
+    ShowInitProgress(100);
 }
 
 void CGameStateOver::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	settingWindow.OnKeyDown(nChar, nRepCnt, nFlags);
+    settingWindow.OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateOver::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	settingWindow.OnKeyUp(nChar, nRepCnt, nFlags);
+    settingWindow.OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateOver::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	settingWindow.OnLButtonDown(nFlags, point);
+    settingWindow.OnLButtonDown(nFlags, point);
 }
 
 void CGameStateOver::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	settingWindow.OnLButtonUp(nFlags, point);
+    settingWindow.OnLButtonUp(nFlags, point);
 }
 
 void CGameStateOver::OnMouseMove(UINT nFlags, CPoint point)
 {
-	settingWindow.OnMouseMove(nFlags, point);
+    settingWindow.OnMouseMove(nFlags, point);
 }
 
 void CGameStateOver::OnShow()
 {
-	settingWindow.OnShow();
+    settingWindow.OnShow();
     char str[80];								// Demo 數字對字串的轉換
     sprintf(str, "Game Over ! (%d)", counter / 30);
-	int textSize = 50;
-	SIZE strSize = GetStringSize(str, textSize);
-	OnShowText(str, (SIZE_X - strSize.cx) / 2, 210, textSize);
+    int textSize = 50;
+    SIZE strSize = GetStringSize(str, textSize);
+    OnShowText(str, (SIZE_X - strSize.cx) / 2, 210, textSize);
     char gameResultStr[80];
     sprintf(gameResultStr, CGameStateRun::GetLegacyString().c_str());
-	strSize = GetStringSize(gameResultStr, textSize);
+    strSize = GetStringSize(gameResultStr, textSize);
     OnShowText(gameResultStr, (SIZE_X - strSize.cx) / 2, 650, textSize);
 }
 
@@ -444,7 +468,7 @@ void CGameStateRun::OnShow()
     if (!battleSystem.IsGameOver())
         battleSystem.OnShow();
 
-	/*static int deg = 0;
+    /*static int deg = 0;
     test.Rotate(deg++);
     test.ShowBitmap();*/
 }
