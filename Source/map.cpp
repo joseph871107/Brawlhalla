@@ -115,6 +115,9 @@ void Map::ProcessWeaponOutOfMap()
 void Map::OnMove()
 {
     // After certain amount of time, generates Weapon automatically //
+    /// DEBUG: It's better to have this condition here instead of nesting it inside
+    /// if ((clock() - lastTime) / CLOCKS_PER_SEC > nextTimeGenerateWeapon)
+    /// because it would not have to re-calculate the 'lastTime' clock so many times
     if ((signed int)_weapons.size() < maxWeapons)
     {
         if ((clock() - lastTime) / CLOCKS_PER_SEC > nextTimeGenerateWeapon)
