@@ -49,26 +49,27 @@ void GroundLandDownAttackTriggeredAnimation::SetTriggeredAnimationSelector()
 
 void GroundLandDownAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
-	_playerPtr->EmptyHitTargetPlayers();
+    _playerPtr->EmptyHitTargetPlayers();
 }
 
 void GroundLandDownAttackTriggeredAnimation::SetTriggeredAnimationVariables()
 {
-	TriggeredAnimation::SetTriggeredAnimationVariables();
+    TriggeredAnimation::SetTriggeredAnimationVariables();
 
     if (_playerPtr->GetTriggeredAnimationDirection())
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_SLIDE_ATTACK_RIGHT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_SLIDE_ATTACK_RIGHT);
     else
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_SLIDE_ATTACK_LEFT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_SLIDE_ATTACK_LEFT);
 }
 
 void GroundLandDownAttackTriggeredAnimation::InitiateTriggeredAction()
 {
     _playerPtr->SetIsTriggerAttack(false);
-	if (_playerPtr->GetTriggeredAnimationDirection())
-		_playerPtr->InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
-	else
-		_playerPtr->InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
+
+    if (_playerPtr->GetTriggeredAnimationDirection())
+        _playerPtr->InitiateOffsetRight(Player::OFFSET_INITIAL_VELOCITY);
+    else
+        _playerPtr->InitiateOffsetLeft(Player::OFFSET_INITIAL_VELOCITY);
 }
 
 void GroundLandDownAttackTriggeredAnimation::DoTriggeredAction()

@@ -49,23 +49,23 @@ void DodgeTriggeredAnimation::SetTriggeredAnimationSelector()
 
 void DodgeTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
-	_playerPtr->SetIsDodging(false);
+    _playerPtr->SetIsDodging(false);
 }
 
 void DodgeTriggeredAnimation::SetTriggeredAnimationVariables()
 {
-	TriggeredAnimation::SetTriggeredAnimationVariables();
+    TriggeredAnimation::SetTriggeredAnimationVariables();
 
     if (_playerPtr->GetTriggeredAnimationDirection())
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_ID_DODGE_RIGHT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_ID_DODGE_RIGHT);
     else
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_ID_DODGE_LEFT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_ID_DODGE_LEFT);
 }
 
 void DodgeTriggeredAnimation::InitiateTriggeredAction()
 {
-	_playerPtr->SetIsTriggerDodge(false);
-	_playerPtr->SetIsDodging(true);
+    _playerPtr->SetIsTriggerDodge(false);
+    _playerPtr->SetIsDodging(true);
 }
 
 void DodgeTriggeredAnimation::DoTriggeredAction()

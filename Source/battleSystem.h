@@ -3,6 +3,7 @@
 #include "player.h"
 #include "weapon.h"
 #include "map.h"
+#include "GameEffect.h"
 #include <chrono>
 #include "window.h"
 
@@ -35,6 +36,7 @@ class BattleSystem : public CGameState
 		void AddMap(shared_ptr<Map> m);
         bool IsGameOver();
         string GetGameResult();
+		void InitializeExplosionEffect(Player* deadPlayer);
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -42,6 +44,8 @@ class BattleSystem : public CGameState
         void ShowPlayerLife(const Player& player, int posXValue, int posYValue);
         int GetCurrentRemainTime();
 		void OnInitLoadSound();
+		void GetExplosionEffectPosition(Player * deadPlayer, int * posXPtr, int * posYPtr);
+		int DoubleToInteger(double mDouble);
         //-----------------VARIABLES DECLARATIONS-----------------//
         int _secPerRound;
         CPoint mousePoint;
@@ -54,6 +58,9 @@ class BattleSystem : public CGameState
 		Camera camera;
 		shared_ptr<Map> map;
 		Window settingWindow;
+		GameEffect _gameEffect;
+		bool _isShowingGameEffect;
+
 };
 
 }

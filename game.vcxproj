@@ -250,6 +250,7 @@
     <ClCompile Include="Source\DodgeTriggeredAnimation.cpp" />
     <ClCompile Include="Source\DrawSwordTriggeredAnimation.cpp" />
     <ClCompile Include="Source\enemy.cpp" />
+    <ClCompile Include="Source\GameEffect.cpp" />
     <ClCompile Include="Source\GroundAttackTriggeredAnimation.cpp" />
     <ClCompile Include="Source\GroundLandDownAttackTriggeredAnimation.cpp" />
     <ClCompile Include="Source\GroundMoveLeftAttackTriggeredAnimation.cpp" />
@@ -317,6 +318,7 @@
     <ClInclude Include="Source\DodgeTriggeredAnimation.h" />
     <ClInclude Include="Source\DrawSwordTriggeredAnimation.h" />
     <ClInclude Include="Source\enemy.h" />
+    <ClInclude Include="Source\GameEffect.h" />
     <ClInclude Include="Source\GroundAttackTriggeredAnimation.h" />
     <ClInclude Include="Source\battleSystem.h" />
     <ClInclude Include="source\camera.h" />
@@ -373,6 +375,22 @@
     <Image Include="res\background\ground1.bmp" />
     <Image Include="RES\background\ground2.bmp" />
     <Image Include="res\brawlhalla.ico" />
+    <Image Include="RES\Effects\Explosion\explo_down0.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_down1.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_down2.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_down3.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_left0.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_left1.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_left2.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_left3.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_right0.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_right1.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_right2.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_right3.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_up0.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_up1.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_up2.bmp" />
+    <Image Include="RES\Effects\Explosion\explo_up3.bmp" />
     <Image Include="RES\Numbers\0.bmp" />
     <Image Include="RES\Numbers\1.bmp" />
     <Image Include="RES\Numbers\2.bmp" />
@@ -622,6 +640,9 @@
     <Image Include="RES\tests\lean_left.bmp" />
     <Image Include="RES\tests\lean_right.bmp" />
     <Image Include="res\ui\brawlhalla-logo.bmp" />
+    <Image Include="res\ui\button\start_clk.bmp" />
+    <Image Include="res\ui\button\start_hov.bmp" />
+    <Image Include="res\ui\button\start_out.bmp" />
     <Image Include="res\ui\communitytourneynew.bmp" />
     <Image Include="res\ui\faitmidtile.bmp" />
     <Image Include="res\ui\largetile.bmp" />
@@ -629,7 +650,21 @@
     <Image Include="res\ui\UIBackgroundBitmap.bmp" />
     <Image Include="RES\weapons\DefaultFallingSword\WeaponPickup.bmp" />
     <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_135.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_180.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_225.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_270.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_315.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_45.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_90.bmp" />
     <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_135.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_180.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_225.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_270.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_315.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_45.bmp" />
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_90.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\BattleMusic.mp3" />

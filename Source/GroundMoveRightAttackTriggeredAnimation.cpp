@@ -57,15 +57,15 @@ void GroundMoveRightAttackTriggeredAnimation::SetTriggeredAnimationVariables()
     TriggeredAnimation::SetTriggeredAnimationVariables();
 
     if (_playerPtr->GetTriggeredAnimationDirection())
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT);
     else
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_GND_MOVE_ATTACK_LEFT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_GND_MOVE_ATTACK_LEFT);
 }
 
 void GroundMoveRightAttackTriggeredAnimation::InitiateTriggeredAction()
 {
     _playerPtr->SetIsTriggerAttack(false);
-    _playerPtr->InitiateOffsetRight(OFFSET_INITIAL_VELOCITY);
+    _playerPtr->InitiateOffsetRight(Player::OFFSET_INITIAL_VELOCITY);
 }
 
 void GroundMoveRightAttackTriggeredAnimation::DoTriggeredAction()

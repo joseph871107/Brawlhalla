@@ -49,23 +49,23 @@ void AirMoveLeftAttackTriggeredAnimation::SetTriggeredAnimationSelector()
 
 void AirMoveLeftAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
-	_playerPtr->EmptyHitTargetPlayers();
+    _playerPtr->EmptyHitTargetPlayers();
 }
 
 void AirMoveLeftAttackTriggeredAnimation::SetTriggeredAnimationVariables()
 {
-	TriggeredAnimation::SetTriggeredAnimationVariables();
+    TriggeredAnimation::SetTriggeredAnimationVariables();
 
     if (_playerPtr->GetTriggeredAnimationDirection())
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT);
     else
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT);
 }
 
 void AirMoveLeftAttackTriggeredAnimation::InitiateTriggeredAction()
 {
     _playerPtr->SetIsTriggerAttack(false);
-	_playerPtr->InitiateOffsetLeft(OFFSET_INITIAL_VELOCITY);
+    _playerPtr->InitiateOffsetLeft(Player::OFFSET_INITIAL_VELOCITY);
 }
 
 void AirMoveLeftAttackTriggeredAnimation::DoTriggeredAction()

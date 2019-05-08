@@ -18,6 +18,7 @@ namespace game_framework
 
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MATCH_TIME = 180;
+
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 bool enemyPause = false;
 CInteger integer(2);																												// Used to show current remain time
@@ -42,7 +43,10 @@ BattleSystem::~BattleSystem()
 
 void BattleSystem::OnBeginState()
 {
-    /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
+    /*	~ Remark:
+    	~ This function is called whenever the game state turns into 'CGameStateRun';
+    	~ thus, it serves as the initialization of each game match
+    */
     ClearPlayers();
     map = CGameStateInit::GetMap();
     _grounds = map->GetGrounds();
@@ -58,14 +62,17 @@ void BattleSystem::OnBeginState()
 
     background = &map->background;
     background->AddCamera(&camera);
+    // Player
     Player* player = new Player();
     player->LoadBitmap();
     player->AddCamera(&camera);
     _players.push_back(player);				// Player1
+    // Enemy
     player = new Enemy();
     player->LoadBitmap();
     player->AddCamera(&camera);
     _players.push_back(player);				// Enemy
+    //
     map->AddPlayers(&_players);
     vector<vector<long>> playerKeys =
     {
@@ -77,11 +84,88 @@ void BattleSystem::OnBeginState()
     {
         char str[80];
         sprintf(str, "%d", i - _players.begin() + 1);
-        (*i)->Initialize(*_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
+        (*i)->Initialize(this, *_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
     }
 
     settingWindow.GetUI()->Reset();
+    // Game Effect
+    _isShowingGameEffect = false;
+    _gameEffect.AddCamera(&camera);
 }
+
+void BattleSystem::GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, int* posYPtr)
+{
+    /*	~ Remark:
+    	~ Set the effect position based on the selected current animation for '_gameEffect'
+    */
+    int playerX1 = deadPlayer->GetCor(0);
+    int playerY1 = deadPlayer->GetCor(1);
+    int playerX2 = deadPlayer->GetCor(2);
+    int playerY2 = deadPlayer->GetCor(3);
+    // Offset variables that makes the position more realistic
+    int offsetY = 50;
+    int offsetX = 50;
+
+    switch (_gameEffect.GetCurrentAni())
+    {
+        case GameEffect::ANI_ID_EXPLO_UP:
+            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - _gameEffect.GetCurrentAnimationWidth() / 2.0);
+            *posYPtr = 0 - offsetY;
+            break;
+
+        case GameEffect::ANI_ID_EXPLO_RIGHT:
+            *posXPtr = DoubleToInteger(SIZE_X - _gameEffect.GetCurrentAnimationWidth() - offsetX);
+            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - _gameEffect.GetCurrentAnimationHeight() / 2.0);
+            break;
+
+        case GameEffect::ANI_ID_EXPLO_DOWN:
+            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - _gameEffect.GetCurrentAnimationWidth() / 2.0);
+            *posYPtr = DoubleToInteger(SIZE_Y - _gameEffect.GetCurrentAnimationHeight() - offsetY);
+            break;
+
+        case GameEffect::ANI_ID_EXPLO_LEFT:
+            *posXPtr = 0 - offsetX;
+            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - _gameEffect.GetCurrentAnimationHeight() / 2.0);
+            break;
+
+        default:
+            break;
+    }
+}
+
+int BattleSystem::DoubleToInteger(double mDouble)
+{
+    return ((int)(mDouble + 0.5));
+}
+
+void BattleSystem::InitializeExplosionEffect(Player* deadPlayer)
+{
+    // Trigger the game effect
+    _isShowingGameEffect = true;
+    // Set the proper explosion effect direction
+    int playerX = deadPlayer->GetCor(0);
+    int playerY = deadPlayer->GetCor(1);
+    int distanceError = 100;
+
+    if (abs(playerY - MAP_BORDER_Y1) < distanceError)
+        _gameEffect.SetCurrentAni(GameEffect::ANI_ID_EXPLO_UP);
+    else if (abs(playerY - MAP_BORDER_Y2) < distanceError)
+        _gameEffect.SetCurrentAni(GameEffect::ANI_ID_EXPLO_DOWN);
+    else if (abs(playerX - MAP_BORDER_X1) < distanceError)
+        _gameEffect.SetCurrentAni(GameEffect::ANI_ID_EXPLO_LEFT);
+    else if (abs(playerX - MAP_BORDER_X2) < distanceError)
+        _gameEffect.SetCurrentAni(GameEffect::ANI_ID_EXPLO_RIGHT);
+    else
+    {
+        /* Do nothing */
+    }
+
+    //
+    int posX, posY;
+    GetExplosionEffectPosition(deadPlayer, &posX, &posY);
+    _gameEffect.SetXY(posX, posY);
+}
+
 
 void BattleSystem::OnMove()							// 移動遊戲元素
 {
@@ -106,19 +190,28 @@ void BattleSystem::OnMove()							// 移動遊戲元素
     }
 
     ResizeCamera();
+
+    // Game Effect
+    if (_isShowingGameEffect)
+        _gameEffect.OnMove();
+
+    if (_gameEffect.IsCurrentAniFinalBitmap())
+        _isShowingGameEffect = false;
 }
 
-void BattleSystem::OnInitLoadSound() {
-	CAudio::Instance()->Load(AUDIO_BATTLE_MUSIC, "sounds\\BattleMusic.mp3");
-	CAudio::Instance()->Load(AUDIO_DRAW_WEAPON, "sounds\\DrawWeapon.mp3");
-	CAudio::Instance()->Load(AUDIO_MENU_MUSIC, "sounds\\Menu.mp3");
-	CAudio::Instance()->Load(AUDIO_PUNCH, "sounds\\Punch.mp3");
-	CAudio::Instance()->Load(AUDIO_SWING_ATTACK, "sounds\\SwingAttack.mp3");
-	CAudio::Instance()->Load(AUDIO_SWOOSH, "sounds\\Swoosh.mp3");                
+void BattleSystem::OnInitLoadSound()
+{
+    CAudio::Instance()->Load(AUDIO_BATTLE_MUSIC, "sounds\\BattleMusic.mp3");
+    CAudio::Instance()->Load(AUDIO_DRAW_WEAPON, "sounds\\DrawWeapon.mp3");
+    CAudio::Instance()->Load(AUDIO_MENU_MUSIC, "sounds\\Menu.mp3");
+    CAudio::Instance()->Load(AUDIO_PUNCH, "sounds\\Punch.mp3");
+    CAudio::Instance()->Load(AUDIO_SWING_ATTACK, "sounds\\SwingAttack.mp3");
+    CAudio::Instance()->Load(AUDIO_SWOOSH, "sounds\\Swoosh.mp3");
 }
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
+    /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
     InitializeNum();										// 初始化"resource.h"中點陣圖的資源編號
     InitializeNum("IDS");									// 初始化"resource.h"中音效的資源編號
     ShowInitProgress(13);
@@ -135,16 +228,22 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
-	OnInitLoadSound();
+    OnInitLoadSound(); // Load all the soundtracks required
     CAudio::Instance()->Play(AUDIO_MENU_MUSIC, true);
     ShowInitProgress(50);
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
-    integer.LoadBitmap();					// time + life
+    // Integer (for displaying time and life count)
+    integer.LoadBitmap();
+    // Setting Window (for controlling the CPU player a.k.a Enemy)
     settingWindow.Initialize(1, 1);
     settingWindow.SetXY(0, 0);
     settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, (enemyPause ? "PAUSE" : "RESUME"));
     settingWindow.SetSize(0.5);
+    // Game Effect
+    _gameEffect = GameEffect();
+    _gameEffect.LoadBitmap();
+    //
     ShowInitProgress(100);
 }
 
@@ -215,6 +314,10 @@ void BattleSystem::OnShow()
     }
 
     settingWindow.OnShow();
+
+    // Game Effect
+    if (_isShowingGameEffect)
+        _gameEffect.OnShow();
 
     //------------------Test Text------------------//
     if (_PLAYER_DEBUG)

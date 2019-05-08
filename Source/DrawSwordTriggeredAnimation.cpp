@@ -57,9 +57,9 @@ void DrawSwordTriggeredAnimation::SetTriggeredAnimationVariables()
     TriggeredAnimation::SetTriggeredAnimationVariables();
 
     if (_playerPtr->GetTriggeredAnimationDirection())
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_DRAW_SWORD_RIGHT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_DRAW_SWORD_RIGHT);
     else
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_DRAW_SWORD_LEFT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_DRAW_SWORD_LEFT);
 }
 
 void DrawSwordTriggeredAnimation::InitiateTriggeredAction()

@@ -10,15 +10,18 @@ namespace game_framework
 #ifndef PLAYER_H
 #define PLAYER_H
 class TriggeredAnimation;
+class BattleSystem;
+
 class Player
 {
     public:
+        //-----------------FUNCTIONS DECLARATIONS-----------------//
         //Essential functions for C++ class
         Player();						//Default constructor
         ~Player();						//Destructor
 
         //Required for Game Framework
-        void Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue);
+        void Initialize(BattleSystem* battleSystemValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue);
         void LoadBitmap();
         virtual void OnMove();
         void OnShow();
@@ -65,6 +68,42 @@ class Player
         // Used by Ground
         void SetX(const int& newX);
         void SetY(const int& newY);
+
+        //-----------------STATIC VARIABLES DECLARATIONS-----------------//
+        // Animations ID of 'ani'
+        static const int ANI_ID_RUN_LEFT = 0;
+        static const int ANI_ID_RUN_RIGHT = 1;
+        static const int ANI_ID_JUMP_LEFT = 2;
+        static const int ANI_ID_JUMP_RIGHT = 3;
+        static const int ANI_ID_STAND_LEFT = 4;
+        static const int ANI_ID_STAND_RIGHT = 5;
+        static const int ANI_ID_LEAN_LEFT = 6;
+        static const int ANI_ID_LEAN_RIGHT = 7;
+        static const int ANI_ID_LAND_FALL_LEFT = 8;
+        static const int ANI_ID_LAND_FALL_RIGHT = 9;
+        static const int ANI_ID_UNCONSCIOUS_FLYING_LEFT = 10;
+        static const int ANI_ID_UNCONSCIOUS_FLYING_RIGHT = 11;
+        static const int ANI_ID_DODGE_LEFT = 12;
+        static const int ANI_ID_DODGE_RIGHT = 13;
+        // Animations ID of '_aniByWpn'
+        static const int ANI_WPN_ID_STAND_LEFT = 0;
+        static const int ANI_WPN_ID_STAND_RIGHT = 1;
+        static const int ANI_WPN_ID_ATTACK_LEFT = 2;
+        static const int ANI_WPN_ID_ATTACK_RIGHT = 3;
+        static const int ANI_WPN_ID_GND_MOVE_ATTACK_LEFT = 4;
+        static const int ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT = 5;
+        static const int ANI_WPN_ID_SLIDE_ATTACK_LEFT = 6;
+        static const int ANI_WPN_ID_SLIDE_ATTACK_RIGHT = 7;
+        static const int ANI_WPN_ID_AIR_ATTACK_LEFT = 8;
+        static const int ANI_WPN_ID_AIR_ATTACK_RIGHT = 9;
+        static const int ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT = 10;
+        static const int ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT = 11;
+        static const int ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT = 12;
+        static const int ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT = 13;
+        static const int ANI_WPN_ID_DRAW_SWORD_LEFT = 14;
+        static const int ANI_WPN_ID_DRAW_SWORD_RIGHT = 15;
+        // Others
+        static const int OFFSET_INITIAL_VELOCITY = 15;
 
     protected:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -118,6 +157,7 @@ class Player
         //Others
         void DoDead();
         void DoRespawn();
+        void InitializeOnRespawn();
         int Round(double i);
         bool StateChanged();
         bool WpnStateChanged();
@@ -325,6 +365,9 @@ class Player
 
         // Inertia
         double _moveVelocity;
+
+        // Game Effect
+        BattleSystem* _battleSystem;
 };
 #endif
 }

@@ -49,17 +49,17 @@ void AirAttackTriggeredAnimation::SetTriggeredAnimationSelector()
 
 void AirAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
-	_playerPtr->EmptyHitTargetPlayers();
+    _playerPtr->EmptyHitTargetPlayers();
 }
 
 void AirAttackTriggeredAnimation::SetTriggeredAnimationVariables()
 {
-	TriggeredAnimation::SetTriggeredAnimationVariables();
+    TriggeredAnimation::SetTriggeredAnimationVariables();
 
     if (_playerPtr->GetTriggeredAnimationDirection())
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_AIR_ATTACK_RIGHT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_AIR_ATTACK_RIGHT);
     else
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_AIR_ATTACK_LEFT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_AIR_ATTACK_LEFT);
 }
 
 void AirAttackTriggeredAnimation::InitiateTriggeredAction()
