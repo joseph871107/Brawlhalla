@@ -263,7 +263,7 @@ void UI_Button::SetStr(string _str)
 }
 void UI_Button::OnShow()
 {
-	int textSize = 50;
+	int textSize = 20;
 	SIZE strSize= GetStringSize(str, textSize);
 	int _x = x + offsetX, _y = y + offsetY, _x2 = x + (GetWidth() - strSize.cx) / 2 + offsetX, _y2 = y + (GetHeight() - strSize.cy) / 2 + offsetY;
 	double size = _size;
@@ -317,9 +317,9 @@ void UI_Button::OnShow()
 		default:
 			break;
 		}
-		OnShowText(name, _x, _y, (int)(20 * (camera != nullptr ? camera->GetSize() : 1)));
-		OnShowText(str, _x2, _y2, (int)(textSize * (camera != nullptr ? camera->GetSize() : 1)));
 	}
+	//OnShowText(name, _x, _y, (int)(20 * (camera != nullptr ? camera->GetSize() : 1)));
+	OnShowText(str, _x2, _y2, (int)(textSize * (camera != nullptr ? camera->GetSize() : 1)));
 }
 void UI_Button::Reset()
 {

@@ -240,11 +240,29 @@ IDB_UI_INFO3            BITMAP                  "..\\res\\ui\\newstile.bmp"
 
 IDB_UI_INFO4            BITMAP                  "..\\res\\ui\\communitytourneynew.bmp"
 
+IDB_UI_BUTTON0_OUT      BITMAP                  "..\\res\\ui\\button\\button_out.bmp"
+
+IDB_UI_BUTTON0_HOV      BITMAP                  "..\\res\\ui\\button\\button_hov.bmp"
+
+IDB_UI_BUTTON0_CLK      BITMAP                  "..\\res\\ui\\button\\button_clk.bmp"
+
 IDB_UI_BUTTON1_OUT      BITMAP                  "..\\res\\ui\\button\\start_out.bmp"
 
 IDB_UI_BUTTON1_HOV      BITMAP                  "..\\res\\ui\\button\\start_hov.bmp"
 
 IDB_UI_BUTTON1_CLK      BITMAP                  "..\\res\\ui\\button\\start_clk.bmp"
+
+IDB_UI_BUTTON2_OUT      BITMAP                  "..\\res\\ui\\button\\setting_out.bmp"
+
+IDB_UI_BUTTON2_HOV      BITMAP                  "..\\res\\ui\\button\\setting_hov.bmp"
+
+IDB_UI_BUTTON2_CLK      BITMAP                  "..\\res\\ui\\button\\setting_clk.bmp"
+
+IDB_UI_BUTTON3_OUT      BITMAP                  "..\\res\\ui\\button\\close_out.bmp"
+
+IDB_UI_BUTTON3_HOV      BITMAP                  "..\\res\\ui\\button\\close_hov.bmp"
+
+IDB_UI_BUTTON3_CLK      BITMAP                  "..\\res\\ui\\button\\close_clk.bmp"
 
 IDR_MAINFRAME           BITMAP                  "..\\res\\Toolbar.bmp"
 

@@ -100,10 +100,9 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 
     if (chosenBut == "enemy stop")
     {
-        TRACE("Enemy : %s", (!enemyPause ? "True " : "False"));
         enemyPause = !enemyPause;
         settingWindow.GetUI()->Reset();
-        (*settingWindow.GetUI()->Index("enemy stop"))->SetStr(!enemyPause ? "True " : "False");
+        (*settingWindow.GetUI()->Index("enemy stop"))->SetStr(enemyPause ? "PAUSE" : "RESUME");
     }
 
     ResizeCamera();
@@ -144,7 +143,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     integer.LoadBitmap();					// time + life
     settingWindow.Initialize(1, 1);
     settingWindow.SetXY(0, 0);
-    settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_GROUND1, IDB_GROUND1, IDB_GROUND1, 0, 0);
+    settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, (enemyPause ? "PAUSE" : "RESUME"));
     settingWindow.SetSize(0.5);
     ShowInitProgress(100);
 }
@@ -248,7 +247,7 @@ void BattleSystem::ResizeCamera()
             totalY += i->GetCor(1);
         }
 
-        int minX = totalX / (signed int)_players.size(), maxX = minX, minY = totalY / (signed int)_players.size(), maxY = minY, minWidth = 800, paddingX = 500, paddingY = 300, centerX = minX + (maxX - minX) / 2, centerY = minY + (maxY - minY) / 2;
+        int minX = totalX / (signed int)_players.size(), maxX = minX, minY = totalY / (signed int)_players.size(), maxY = minY, minWidth = 800, maxWidth = 2000, paddingX = 500, paddingY = 300, centerX = minX + (maxX - minX) / 2, centerY = minY + (maxY - minY) / 2;
 
         for (auto i : _players) // Find max and minimum position among players
         {
@@ -262,7 +261,7 @@ void BattleSystem::ResizeCamera()
         maxX += paddingX; // Enlarge view horizentally
         minY -= paddingY;
         maxY += paddingY; // Enlarge view vertically
-        int width = (maxX - minX < minWidth ? minWidth : maxX - minX), height = maxY - minY;
+        int width = (maxX - minX < minWidth ? minWidth : maxX - minX > maxWidth ? maxWidth : maxX - minX), height = maxY - minY;
         width = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? width : height * SIZE_X / SIZE_Y);
         height = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? height : width * SIZE_Y / SIZE_X);
         double sizeX = SIZE_X / (double)(width), sizeY = SIZE_Y / (double)(height);

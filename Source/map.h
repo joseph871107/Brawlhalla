@@ -9,14 +9,16 @@ namespace game_framework
 {
 
 	struct MapPARM {
-		MapPARM(BkPARM bk, int groundNum, GroundPARM n_grounds, ...) : _bkP(bk)
+		MapPARM(string name, BkPARM bk, int groundNum, GroundPARM n_grounds, ...) : _bkP(bk)
 		{
+			_name = name;
 			va_list ap;
 			va_start(ap, groundNum);
 			for (int i = 0; i < groundNum; i++)
 				_groundsP.push_back(va_arg(ap, GroundPARM));
 			va_end(ap);
 		}
+		string _name;
 		BkPARM _bkP;
 		vector<GroundPARM> _groundsP;
 	};
