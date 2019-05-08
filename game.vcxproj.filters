@@ -92,6 +92,9 @@
     <Filter Include="Brawlhalla\Enemy">
       <UniqueIdentifier>{427d87f5-bc90-42f6-994a-5b66b01feca3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\GameEffect">
+      <UniqueIdentifier>{34624e8c-9fbc-408f-80ae-46042f364aa0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
@@ -225,6 +228,9 @@
     <ClCompile Include="Source\enemy.cpp">
       <Filter>Brawlhalla\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameEffect.cpp">
+      <Filter>Brawlhalla\GameEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -325,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="Source\enemy.h">
       <Filter>Brawlhalla\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameEffect.h">
+      <Filter>Brawlhalla\GameEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1165,6 +1174,105 @@
       <Filter>Resource Files\Bitmap</Filter>
     </Image>
     <Image Include="RES\background\ground2.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_down0.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_down1.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_down2.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_down3.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_left0.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_left1.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_left2.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_left3.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_right0.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_right1.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_right2.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_right3.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_up0.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_up1.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_up2.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Effects\Explosion\explo_up3.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_45.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_90.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_135.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_180.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_225.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_270.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_L_315.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_45.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_90.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_135.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_180.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_225.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_270.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\weapons\DefaultThrowingSword\Jade_Sword_R_315.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\ui\button\start_clk.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\ui\button\start_hov.bmp">
+      <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="res\ui\button\start_out.bmp">
       <Filter>Resource Files\Bitmap</Filter>
     </Image>
   </ItemGroup>

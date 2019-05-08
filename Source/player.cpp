@@ -17,12 +17,11 @@
 #include "GroundLandDownAttackTriggeredAnimation.h"
 #include "GroundMoveLeftAttackTriggeredAnimation.h"
 #include "GroundMoveRightAttackTriggeredAnimation.h"
+#include "BattleSystem.h"
 
 namespace game_framework
 {
 //-----------------CONSTANTS DEFINITIONS-----------------//
-const int PLAYER_INIT_X = 700;
-const int PLAYER_INIT_Y = 100;
 const int MAX_JUMP_COUNT = 2;
 const int MOVEMENT_UNIT = 10;
 const int GND_ATTACK_MOVEMENT_UNIT = 12;
@@ -30,7 +29,6 @@ const double INITIAL_VELOCITY = 18;
 const double INITIAL_ACCELERATION = 1.2;
 const double LANDING_ACCELERATION = 5;
 const double EDGE_SLIDING_ACCELERATION = 0.1;
-const int OFFSET_INITIAL_VELOCITY = 15;
 const double COLLISION_ERRORS = 1.0;
 const int _OFFSET_X = 20;
 const int _OFFSET_Y = 7;
@@ -39,6 +37,8 @@ const double BITMAP_SIZE = 2.5;
 const double MOVE_ACCELERATION = 0.5;
 const double STOP_ACCELERATION = 1;
 const double MAX_MOVE_VELOCITY = 10;
+const int INITIAL_TAKEN_DAMAGE = 10;
+const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 2;
 // Triggered Animation Key ID
 const int KEY_GND_ATTACK = 112;
 const int KEY_GND_MOVE_RIGHT_ATTACK = 122;
@@ -59,38 +59,6 @@ const int KEY_AIR_IDLE = 211;
 const int KEY_AIR_MOVE_RIGHT = 221;
 const int KEY_AIR_MOVE_LEFT = 231;
 const int KEY_AIR_LAND_DOWN = 241;
-//Animations ID of '_ani'
-const int ANI_ID_RUN_LEFT = 0;
-const int ANI_ID_RUN_RIGHT = 1;
-const int ANI_ID_JUMP_LEFT = 2;
-const int ANI_ID_JUMP_RIGHT = 3;
-const int ANI_ID_STAND_LEFT = 4;
-const int ANI_ID_STAND_RIGHT = 5;
-const int ANI_ID_LEAN_LEFT = 6;
-const int ANI_ID_LEAN_RIGHT = 7;
-const int ANI_ID_LAND_FALL_LEFT = 8;
-const int ANI_ID_LAND_FALL_RIGHT = 9;
-const int ANI_ID_UNCONSCIOUS_FLYING_LEFT = 10;
-const int ANI_ID_UNCONSCIOUS_FLYING_RIGHT = 11;
-const int ANI_ID_DODGE_LEFT = 12;
-const int ANI_ID_DODGE_RIGHT = 13;
-//Animations ID of '_aniByWpn'
-const int ANI_WPN_ID_STAND_LEFT = 0;
-const int ANI_WPN_ID_STAND_RIGHT = 1;
-const int ANI_WPN_ID_ATTACK_LEFT = 2;
-const int ANI_WPN_ID_ATTACK_RIGHT = 3;
-const int ANI_WPN_ID_GND_MOVE_ATTACK_LEFT = 4;
-const int ANI_WPN_ID_GND_MOVE_ATTACK_RIGHT = 5;
-const int ANI_WPN_ID_SLIDE_ATTACK_LEFT = 6;
-const int ANI_WPN_ID_SLIDE_ATTACK_RIGHT = 7;
-const int ANI_WPN_ID_AIR_ATTACK_LEFT = 8;
-const int ANI_WPN_ID_AIR_ATTACK_RIGHT = 9;
-const int ANI_WPN_ID_AIR_MOVE_ATTACK_LEFT = 10;
-const int ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT = 11;
-const int ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT = 12;
-const int ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT = 13;
-const int ANI_WPN_ID_DRAW_SWORD_LEFT = 14;
-const int ANI_WPN_ID_DRAW_SWORD_RIGHT = 15;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 Player::Player() :
@@ -132,15 +100,12 @@ void Player::InitializeTriggeredAnimations()
     _triggeredAnis.push_back((TriggeredAnimation*) new DodgeTriggeredAnimation(this, KEY_DODGE));
 }
 
-void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue)
+void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
     Ground* g = GetRandomGround(&groundsValue);		// Randomly select Ground
     _x = random(g->GetCor(0), g->GetCor(2) - GetWidth());		// Randomly set x coordinate within Ground's width
     _y = g->GetCor(1) - GetHeight();
-    //
-    ResetTriggeredAnimationVariables();
-    _finishedTriggeredAniKeyID = 0;
     //
     _width = (int)(_collision_box.Width() * BITMAP_SIZE);
     _height = (int)(_collision_box.Height() * BITMAP_SIZE);
@@ -152,28 +117,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
         _keys = keysValue;
 
     //
-    _isPressingLeft = _isPressingRight = _dir = false;
-    _isTriggerPressingLeft = false;
-    //
-    _isPressingDown = false;
-    //
-    _isTriggerJump = false;
-    ResetJumpCount();
-    //
-    _horizontalVelocity = OFFSET_INITIAL_VELOCITY;
-    _isOffsetLeft = _isOffsetRight = false;
-    //
-    _verticalVelocity = INITIAL_VELOCITY;
-    _verticalAcceleration = INITIAL_ACCELERATION;
-    //
-    _isTriggerDrawWeapon = false;
-    //
-    _isHoldingWeapon = _isTriggerAttack = false;
-    _takenDmg = 10;
     _playersPtr = playersPtrValue;
-    //
-    _isTriggerDodge = false;
-    _isDodging = false;
     //
     _grounds = groundsValue;
     //
@@ -181,24 +125,15 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     //
     _name = nameValue;
     //
-    ResetWeaponID();
     _roundPrevPickedUpWpnID = 2;
-    //
-    _aniSelector = false;
-    //
-    _currentAniByWpn = 0;
-    //
-    SetConscious();
-    //
-    _isFirstTimeOnEdge = true;
-    //
-    _flyingWeapon = nullptr;
     //
     InitializeTriggeredAnimations();
     //
     _hitTargetPlayers = vector<Player*>();
     //
-    ResetMovementVelocity();
+    _battleSystem = battleSystemValue;
+    //
+    InitializeOnRespawn();
 }
 
 void Player::LoadBitmap()
@@ -656,7 +591,7 @@ void Player::OnMoveAnimationLogic()
     */
     /// Comment for future devs: Reset jump animation is not well placed here and should be re-accomodate in the near future
     if (IsOnGround() || IsOnEdge() || (_isTriggerJump && _jumpCount > 0))
-        ResetAnimations(ANI_ID_JUMP_LEFT);
+        ResetAnimations(ANI_ID_JUMP_LEFT); // Reset the jump animation so that it keeps displaying while the player is jumping regardless of reaching its final bitmap
 
     /*	~ SET CURRENT ANIMATION
     	~ Set the current animation based on '_aniSelector',
@@ -1188,7 +1123,7 @@ void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
     Vector2 vectorAttackerToTargetPlayer;
     vectorAttackerToTargetPlayer.SetXY(GetCor(0), GetCor(1), targetPlayer->GetCor(0), targetPlayer->GetCor(1));
     //
-    targetPlayer->_takenDmg += 2; // increment the taken damage of the target player
+    targetPlayer->_takenDmg += INCREMENT_AMOUNT_OF_TAKEN_DAMAGE; // increment the taken damage of the target player
     int attackOffsetMagnitude = targetPlayer->_takenDmg;
     //
     double multiplier = (vectorAttackerToTargetPlayer.GetLength() == 0 ? attackOffsetMagnitude : attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength()); // Avoid division by 0
@@ -1275,17 +1210,62 @@ void Player::DoDead()
     SetHoldWeapon(false);
     ResetWeaponID(); // reset to the default weapon - punch
     _life--;
-    /// Activate dead effect
+    // Activate dead effect
+    _battleSystem->InitializeExplosionEffect(this);
 }
 void Player::DoRespawn()
 {
-    //If the player is out of the screen, then he will be set on the highest position
-    _y = 0;
-    _verticalVelocity = INITIAL_VELOCITY;
-    // Reset taken damages and conscious state
-    _takenDmg = 0;
-    SetConscious();
+    // Set the respawn position
+    Ground* g = GetRandomGround(&_grounds);		// Randomly select Ground
+    _x = random(g->GetCor(0), g->GetCor(2) - GetWidth());		// Randomly set x coordinate within Ground's width
+    _y = g->GetCor(1) - GetHeight();
+    // Reset related variables of the player
+    InitializeOnRespawn();
 }
+
+void Player::InitializeOnRespawn()
+{
+    //
+    ResetTriggeredAnimationVariables();
+    _finishedTriggeredAniKeyID = 0;
+    //
+    _isPressingLeft = _isPressingRight = _dir = false;
+    _isTriggerPressingLeft = false;
+    //
+    _isPressingDown = false;
+    //
+    _isTriggerJump = false;
+    ResetJumpCount();
+    //
+    _horizontalVelocity = OFFSET_INITIAL_VELOCITY;
+    _isOffsetLeft = _isOffsetRight = false;
+    //
+    _verticalVelocity = INITIAL_VELOCITY;
+    _verticalAcceleration = INITIAL_ACCELERATION;
+    //
+    _isTriggerDrawWeapon = false;
+    //
+    _isHoldingWeapon = _isTriggerAttack = false;
+    _takenDmg = INITIAL_TAKEN_DAMAGE;
+    //
+    _isTriggerDodge = false;
+    _isDodging = false;
+    //
+    ResetWeaponID();
+    //
+    _aniSelector = false;
+    //
+    _currentAniByWpn = 0;
+    //
+    SetConscious();
+    //
+    _isFirstTimeOnEdge = true;
+    //
+    _flyingWeapon = nullptr;
+    //
+    ResetMovementVelocity();
+}
+
 void Player::SetAnimationStateByWeapon(int num)
 {
     _currentAniByWpn = num;
@@ -1656,6 +1636,7 @@ void Player::AddCamera(Camera* cam)
 {
     camera = cam;
 }
+
 void Player::SetPlayer(bool tri)
 {
     _isPlayer = tri;

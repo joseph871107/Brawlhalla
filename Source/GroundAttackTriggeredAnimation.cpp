@@ -49,17 +49,17 @@ void GroundAttackTriggeredAnimation::SetTriggeredAnimationSelector()
 
 void GroundAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
-	_playerPtr->EmptyHitTargetPlayers();
+    _playerPtr->EmptyHitTargetPlayers();
 }
 
 void GroundAttackTriggeredAnimation::SetTriggeredAnimationVariables()
 {
-	TriggeredAnimation::SetTriggeredAnimationVariables();
+    TriggeredAnimation::SetTriggeredAnimationVariables();
 
     if (_playerPtr->GetTriggeredAnimationDirection())
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_ATTACK_RIGHT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_ATTACK_RIGHT);
     else
-        _playerPtr->SetTriggeredAnimationAnimationID(ANI_WPN_ID_ATTACK_LEFT);
+        _playerPtr->SetTriggeredAnimationAnimationID(Player::ANI_WPN_ID_ATTACK_LEFT);
 }
 
 void GroundAttackTriggeredAnimation::InitiateTriggeredAction()
