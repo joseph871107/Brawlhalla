@@ -20,7 +20,6 @@ namespace game_framework
 const int MATCH_TIME = 180;
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 bool enemyPause = false;
-/// DEBUG
 CInteger integer(2);																												// Used to show current remain time
 
 BattleSystem::BattleSystem(CGame* g) : CGameState(g), settingWindow(Window(g))
@@ -48,7 +47,7 @@ void BattleSystem::OnBeginState()
     map = CGameStateInit::GetMap();
     _grounds = map->GetGrounds();
     _weapons = map->GetWeapons();
-    CAudio::Instance()->Play(IDS_BATTLE_MUSIC, true);
+    CAudio::Instance()->Play(AUDIO_BATTLE_MUSIC, true);
     _secPerRound = MATCH_TIME;
     camera = Camera();
     camera.SetGradual(true);
@@ -110,6 +109,15 @@ void BattleSystem::OnMove()							// 移動遊戲元素
     ResizeCamera();
 }
 
+void BattleSystem::OnInitLoadSound() {
+	CAudio::Instance()->Load(AUDIO_BATTLE_MUSIC, "sounds\\BattleMusic.mp3");
+	CAudio::Instance()->Load(AUDIO_DRAW_WEAPON, "sounds\\DrawWeapon.mp3");
+	CAudio::Instance()->Load(AUDIO_MENU_MUSIC, "sounds\\Menu.mp3");
+	CAudio::Instance()->Load(AUDIO_PUNCH, "sounds\\Punch.mp3");
+	CAudio::Instance()->Load(AUDIO_SWING_ATTACK, "sounds\\SwingAttack.mp3");
+	CAudio::Instance()->Load(AUDIO_SWOOSH, "sounds\\Swoosh.mp3");                
+}
+
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
     InitializeNum();										// 初始化"resource.h"中點陣圖的資源編號
@@ -128,8 +136,8 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
-    InitializeLoadSound();
-    CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
+	OnInitLoadSound();
+    CAudio::Instance()->Play(AUDIO_MENU_MUSIC, true);
     ShowInitProgress(50);
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
@@ -158,7 +166,7 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     if (nChar == KEY_ESC)  								// Demo 關閉遊戲的方法
     {
-        CAudio::Instance()->Stop(IDS_BATTLE_MUSIC);
+        CAudio::Instance()->Stop(AUDIO_BATTLE_MUSIC);
         GotoGameState(GAME_STATE_OVER);	// 關閉遊戲
     }
 

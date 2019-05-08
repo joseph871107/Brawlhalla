@@ -1172,9 +1172,9 @@ void Player::DoAttack()
         if (IsAttackable(eachPlayerPtr))
         {
             if (_isHoldingWeapon)
-                CAudio::Instance()->Play(IDS_SWOOSH);
+                CAudio::Instance()->Play(AUDIO_SWOOSH);
             else
-                CAudio::Instance()->Play(IDS_PUNCH);
+                CAudio::Instance()->Play(AUDIO_PUNCH);
 
             PerformAttack(eachPlayerPtr, _triggeredAniDir);
         }
@@ -1236,7 +1236,7 @@ void Player::PlayAudioByState()
         {
             case ANI_WPN_ID_DRAW_SWORD_LEFT:
             case ANI_WPN_ID_DRAW_SWORD_RIGHT:
-                aboutToPlay = IDS_DRAW_WEAPON;
+                aboutToPlay = AUDIO_DRAW_WEAPON;
                 break;
 
             case ANI_WPN_ID_STAND_LEFT:
@@ -1253,7 +1253,7 @@ void Player::PlayAudioByState()
             case ANI_WPN_ID_AIR_MOVE_ATTACK_RIGHT:
             case ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT:
             case ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT:
-                aboutToPlay = IDS_SWING_ATTACK;
+                aboutToPlay = AUDIO_SWING_ATTACK;
                 break;
         }
     }

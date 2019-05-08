@@ -171,7 +171,7 @@ void CGameStateInit::OnBeginState()
     {
         welcomeWindow.GetUI()->Reset();
         settingWindow.GetUI()->Reset();
-        CAudio::Instance()->Play(IDS_MENU_MUSIC, true);
+        CAudio::Instance()->Play(AUDIO_MENU_MUSIC, true);
     }
 }
 
@@ -244,7 +244,7 @@ void CGameStateInit::OnMove()
 
     if (chosenBut == "start")
     {
-        CAudio::Instance()->Stop(IDS_MENU_MUSIC);
+        CAudio::Instance()->Stop(AUDIO_MENU_MUSIC);
         GotoGameState(GAME_STATE_RUN);
     }
     else if (chosenBut == "settings")
@@ -415,7 +415,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 {
     if (battleSystem.IsGameOver())								// Demo 關閉遊戲的方法
     {
-        CAudio::Instance()->Stop(IDS_BATTLE_MUSIC);
+        CAudio::Instance()->Stop(AUDIO_BATTLE_MUSIC);
         SetLegacyString(battleSystem.GetGameResult());
         GotoGameState(GAME_STATE_OVER);					// 關閉遊戲
     }

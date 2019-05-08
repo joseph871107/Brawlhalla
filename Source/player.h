@@ -17,8 +17,6 @@ class Player
         Player();						//Default constructor
         ~Player();						//Destructor
 
-
-
         //Required for Game Framework
         void Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue);
         void LoadBitmap();
@@ -36,8 +34,8 @@ class Player
         int GetWidth();
         int GetHeight();
         void AddCamera(Camera* cam);	// Camera
-		void SetPlayer(bool tri);
-		bool IsPlayer();
+        void SetPlayer(bool tri);
+        bool IsPlayer();
 
         //Others - Bill
         const string& GetName() const;
@@ -165,7 +163,7 @@ class Player
         void DoOnGround();
         void DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
         bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
-		void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
+        void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
 
         //
         void SetTriggeredAnimationSelector();
@@ -178,7 +176,7 @@ class Player
         void MoveCurrentAnimation();
         void OnMoveAnimationLogic();
         void OnMoveGameLogic();
-		
+
         void SetCurrentNonTriggeredAnimationByWeapon();
         void SetCurrentTriggeredAnimationByWeapon();
         void SetCurrentTriggeredAnimation();
@@ -196,7 +194,7 @@ class Player
 
         void ResetMovementVelocity();
 
-		void DoParseKeyPressed();
+        void DoParseKeyPressed();
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
@@ -243,7 +241,7 @@ class Player
         // how long he would be in the unconscious state '_unconsciousFramesCount'
 
         vector<Player*>* _playersPtr;
-		bool _isPlayer;
+        bool _isPlayer;
 
         //Dodge
         bool _isTriggerDodge;

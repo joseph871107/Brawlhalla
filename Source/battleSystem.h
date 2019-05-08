@@ -41,6 +41,7 @@ class BattleSystem : public CGameState
 		void ClearPlayers();
         void ShowPlayerLife(const Player& player, int posXValue, int posYValue);
         int GetCurrentRemainTime();
+		void OnInitLoadSound();
         //-----------------VARIABLES DECLARATIONS-----------------//
         int _secPerRound;
         CPoint mousePoint;

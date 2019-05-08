@@ -234,11 +234,12 @@ void InitializeFile(string type, string file)
 
 void InitializeLoadSound()
 {
-	for (auto i = idsList.begin(); i != idsList.end(); i++)
-	{
-		TRACE("---Loading sound effect %s...\n", i->first.c_str());
-		CAudio::Instance()->Load(i->second);
-	}
+	/// DEBUG: Temporary disable for setup deployment
+	//for (auto i = idsList.begin(); i != idsList.end(); i++)
+	//{
+	//	TRACE("---Loading sound effect %s...\n", i->first.c_str());
+	//	CAudio::Instance()->Load(i->second);
+	//}
 }
 
 void InitializeCollideArray(bool trace)
