@@ -345,3 +345,4 @@ healthchecksdb
 MigrationBackup/
 
 *.png
+*.jpg

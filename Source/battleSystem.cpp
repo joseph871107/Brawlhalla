@@ -20,11 +20,11 @@ namespace game_framework
 const int MATCH_TIME = 180;
 const int MAX_weapons = 5;
 //-----------------FUNCTIONS DEFINITIONS-----------------//
-
+bool enemyPause = false;
 /// DEBUG
 CInteger integer(2);																												// Used to show current remain time
 
-BattleSystem::BattleSystem(CGame* g) : CGameState(g)
+BattleSystem::BattleSystem(CGame* g) : CGameState(g), settingWindow(Window(g))
 {
 	map = nullptr;
 	background = &map->background;
@@ -32,7 +32,7 @@ BattleSystem::BattleSystem(CGame* g) : CGameState(g)
 	_weapons = map->GetWeapons();
 }
 
-BattleSystem::BattleSystem(CGame * g, shared_ptr<Map> m) : CGameState(g)
+BattleSystem::BattleSystem(CGame * g, shared_ptr<Map> m) : CGameState(g), settingWindow(Window(g))
 {
 	map = m;
 }
@@ -81,6 +81,7 @@ void BattleSystem::OnBeginState()
 		sprintf(str, "%d", i - _players.begin() + 1);
 		(*i)->Initialize(*_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
 	}
+	settingWindow.GetUI()->Reset();
 }
 
 void BattleSystem::OnMove()							// 移動遊戲元素
@@ -88,8 +89,19 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 	map->OnMove();
     for (auto player : _players)
     {
-		player->OnMove();
+		if(player->IsPlayer())
+			player->OnMove();
+		else if(!enemyPause)
+			player->OnMove();
     }
+	settingWindow.OnMove();
+	string chosenBut = settingWindow.GetUI()->ChosenButton();
+	if (chosenBut == "enemy stop") {
+		TRACE("Enemy : %s", (!enemyPause ? "True " : "False"));
+		enemyPause = !enemyPause;
+		settingWindow.GetUI()->Reset();
+		(*settingWindow.GetUI()->Index("enemy stop"))->SetStr(!enemyPause ? "True " : "False");
+	}
 
     ResizeCamera();
 }
@@ -117,6 +129,10 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     ShowInitProgress(75);
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
     integer.LoadBitmap();					// time + life
+	settingWindow.Initialize(1, 1);
+	settingWindow.SetXY(0, 0);
+	settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_GROUND1, IDB_GROUND1, IDB_GROUND1, 0, 0);
+	settingWindow.SetSize(0.5);
     ShowInitProgress(100);
 }
 
@@ -146,8 +162,19 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
     }
 }
 
+void BattleSystem::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	settingWindow.OnLButtonDown(nFlags, point);
+}
+
+void BattleSystem::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	settingWindow.OnLButtonUp(nFlags, point);
+}
+
 void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
+	settingWindow.OnMouseMove(nFlags, point);
 }
 
 void BattleSystem::OnShow()
@@ -173,6 +200,7 @@ void BattleSystem::OnShow()
         // Show player's life
         ShowPlayerLife((**i), 1200 + 200 * (i - _players.begin()), 0);
     }
+	settingWindow.OnShow();
 
     //------------------Test Text------------------//
     if (_PLAYER_DEBUG)

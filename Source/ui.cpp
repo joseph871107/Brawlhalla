@@ -67,6 +67,18 @@ void UI::AddButton(string name, int x, int y, int width, int height, int tpx, in
 		_pos[tpx][tpy] = 0;
 	}
 }
+void UI::AddButton(string name, int x, int y, COLORREF color, int out, int hov, int clk, int tpx, int tpy, string str, int tri)
+{
+	UI_Button* button = new UI_Button(x, y, color, out, hov, clk, tri, tpx, tpy);
+	button->SetName(name);
+	button->SetStr(str);
+	button->AddCamera(camera);
+	_buttons.push_back(button);
+	static bool first = true;
+	if (!first) {
+		_pos[tpx][tpy] = 0;
+	}
+}
 void UI::SetXY(int x, int y)
 {
 	offsetX = x;
@@ -159,6 +171,14 @@ UI_Button::UI_Button(int tx, int ty, int twidth, int theight, int tri, int tpos_
 	state = isBitmapLoaded = _bounce = _bounce_key = offsetX = offsetY = 0;
 	trigger = tri;
 }
+UI_Button::UI_Button(int tx, int ty, COLORREF color, int out, int hov, int clk, int tri, int tpos_x, int tpos_y)
+{
+	LoadBitmap(out, hov, clk, color);
+		x = tx, y = ty, width = _outside.GetWidth(), height = _outside.GetHeight(); pos_x = tpos_x; pos_y = tpos_y;
+	state = _bounce = _bounce_key = offsetX = offsetY = 0;
+	isBitmapLoaded = true;
+	trigger = tri;
+}
 bool UI_Button::InRange(CPoint point)
 {
 	int _x = point.x + 3, _y = point.y + 3, x1 = x + offsetX, y1 = y + offsetY, x2 = x1 + width, y2 = y1 + height;
@@ -169,7 +189,6 @@ bool UI_Button::InRange(CPoint point)
 		x2 = cam.x + (int)(GetWidth() * camera->GetSize());
 		y2 = cam.y + (int)(GetHeight() * camera->GetSize());
 	}
-	DrawRectangleBlock(x1, y1, x2 - x1, y2 - y1);
 	return (_x >= x1 && _x <= x2 && _y >= y1 && _y <= y2);
 }
 int UI_Button::GetTrigger()
@@ -259,15 +278,18 @@ void UI_Button::OnShow()
 		switch (state)
 		{
 		case BUTTON_OUTSIDE:
+			_outside.SetXY(_x, _y);
 			_outside.OnShow();
 			break;
 
 		case BUTTON_HOVER:
+			_hover.SetXY(_x, _y);
 			_hover.OnShow();
 			break;
 
 		case BUTTON_CLICK:
 		case BUTTON_RELEASE:
+			_click.SetXY(_x, _y);
 			_click.OnShow();
 			break;
 
@@ -298,10 +320,16 @@ void UI_Button::OnShow()
 		OnShowText(name, _x, _y, (int)(20 * (camera != nullptr ? camera->GetSize() : 1)));
 		OnShowText(str, _x2, _y2, (int)(textSize * (camera != nullptr ? camera->GetSize() : 1)));
 	}
-	InRange(_point);
 }
 void UI_Button::Reset()
 {
 	state = _bounce = 0;
+}
+void UI_Button::LoadBitmap(int out, int hov, int clk, COLORREF color)
+{
+	_outside.LoadBitmap(out, color);
+	_hover.LoadBitmap(hov, color);
+	_click.LoadBitmap(clk, color);
+	isBitmapLoaded = true;
 }
 }

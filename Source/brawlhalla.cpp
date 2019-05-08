@@ -136,7 +136,8 @@ void CGameStateInit::OnInit()
     welcomeWindow.AddItem(ui_info4);
     int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() + ui_info4->GetHeight()) / 3;
     welcomeWindow.Initialize(3, 1);
-    welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, butW, butH, 0, 0);
+	welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, RGB(0,255,0), IDB_UI_BUTTON1_OUT, IDB_UI_BUTTON1_HOV, IDB_UI_BUTTON1_CLK, 0, 0);
+    //welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, butW, butH, 0, 0);
     welcomeWindow.GetUI()->AddButton("settings", refX - butW, refY + butH, butW, butH, 1, 0);
     welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 2, butW, butH, 2, 0);
     settingWindow.Initialize(2, 2, false, false);
@@ -420,10 +421,12 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
+	battleSystem.OnLButtonDown(nFlags, point);
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
+	battleSystem.OnLButtonUp(nFlags, point);
 }
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -433,10 +436,12 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
+	battleSystem.OnLButtonDown(nFlags, point);
 }
 
 void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
+	battleSystem.OnLButtonUp(nFlags, point);
 }
 
 void CGameStateRun::OnShow()

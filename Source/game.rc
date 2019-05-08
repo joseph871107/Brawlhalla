@@ -240,6 +240,12 @@ IDB_UI_INFO3            BITMAP                  "..\\res\\ui\\newstile.bmp"
 
 IDB_UI_INFO4            BITMAP                  "..\\res\\ui\\communitytourneynew.bmp"
 
+IDB_UI_BUTTON1_OUT      BITMAP                  "..\\res\\ui\\button\\start_out.bmp"
+
+IDB_UI_BUTTON1_HOV      BITMAP                  "..\\res\\ui\\button\\start_hov.bmp"
+
+IDB_UI_BUTTON1_CLK      BITMAP                  "..\\res\\ui\\button\\start_clk.bmp"
+
 IDR_MAINFRAME           BITMAP                  "..\\res\\Toolbar.bmp"
 
 IDB_P1_TEST             BITMAP                  "..\\RES\\player1\\player1_collision.bmp"

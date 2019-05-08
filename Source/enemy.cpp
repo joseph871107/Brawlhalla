@@ -12,7 +12,7 @@ namespace game_framework {
 	Enemy::Enemy()
 	{
 		_isPlayer = false;
-		_difficulty = 0;
+		_difficulty = 3;
 	}
 
 	Enemy::Enemy(int diff)
@@ -39,7 +39,7 @@ namespace game_framework {
 			OnKeyDown(keys[1]);
 		else
 			OnKeyUp(keys[1]);
-		if (GetCor(1) - target->GetCor(1) > 10 && abs(GetCor(0) - target->GetCor(0)) < GetWidth() * 1.5)	// Y of Enemy were lower than Y of target and 
+		if (GetCor(1) - target->GetCor(1) > 10 && abs(GetCor(0) - target->GetCor(0)) < GetWidth() * 1.5)
 			OnKeyDown(keys[0]);
 		else
 			OnKeyUp(keys[0]);

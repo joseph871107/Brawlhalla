@@ -14,6 +14,7 @@ class UI_Button : public Object
 {
 public:
 	UI_Button(int tx, int ty, int twidth, int theight, int tri, int tpos_x, int tpos_y);
+	UI_Button(int tx, int ty, COLORREF color, int out, int hov, int clk, int tri, int tpos_x, int tpos_y);
 	bool InRange(CPoint point);
 	int GetTrigger();
 	int GetState();
@@ -25,6 +26,7 @@ public:
 	void SetStr(string _str);
 	void OnShow();
 	void Reset();
+	void LoadBitmap(int out, int hov, int clk, COLORREF color);
 private:
 	string name, str;
 	int state, trigger, pos_x, pos_y, offsetX, offsetY;
@@ -43,6 +45,7 @@ public:
 	void SetButtonState(UINT nFlags, UINT nChar, CPoint point);
 	void AddCamera(Camera *cam);
 	void AddButton(string name, int x = 0, int y = 0, int width = 50, int height = 50, int tpx = 0, int tpy = 0, string str = "", int tri = BUTTON_RELEASE);
+	void AddButton(string name, int x, int y, COLORREF color, int out, int hov, int clk, int tpx = 0, int tpy = 0, string str = "", int tri = BUTTON_RELEASE);
 	void SetXY(int x, int y);
 	void DelButton(string name);
 	void OnShow(int offsetX = 0, int offsetY = 0);

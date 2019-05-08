@@ -291,6 +291,9 @@
 #define IDB_UI_INFO2                    2003
 #define IDB_UI_INFO3                    2004
 #define IDB_UI_INFO4                    2005
+#define	IDB_UI_BUTTON1_OUT				2006
+#define	IDB_UI_BUTTON1_HOV				2007
+#define	IDB_UI_BUTTON1_CLK				2008
 #define ID_FILE_PAUSE                   32771
 #define ID_TOGGLE_FULLSCREEN            32772
 #define ID_BUTTON_FULLSCREEN            32773
