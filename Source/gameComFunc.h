@@ -9,23 +9,30 @@
 
 namespace game_framework
 {
-	const long KEY_A = 0x41;
-	const long KEY_S = 0x53;
-	const long KEY_D = 0x44;
-	const long KEY_W = 0x57;
-	const long KEY_LEFT = 0x25;
-	const long KEY_UP = 0x26;
-	const long KEY_RIGHT = 0x27;
-	const long KEY_DOWN = 0x28;
-	const long KEY_C = 0x43;
-	const long KEY_COMMA = 0xbc;
-	const long KEY_V = 0x56;
-	const long KEY_X = 0x58;
-	const long KEY_M = 0x4d;
-	const long KEY_ENTER = 0x0d;
-	const long KEY_ESC = 0x1b;
-	const long KEY_F = 0x46;
-	const long KEY_PERIOD = 0xbe;
+/* KEY */
+const long KEY_A = 0x41;
+const long KEY_S = 0x53;
+const long KEY_D = 0x44;
+const long KEY_W = 0x57;
+const long KEY_LEFT = 0x25;
+const long KEY_UP = 0x26;
+const long KEY_RIGHT = 0x27;
+const long KEY_DOWN = 0x28;
+const long KEY_C = 0x43;
+const long KEY_COMMA = 0xbc;
+const long KEY_V = 0x56;
+const long KEY_X = 0x58;
+const long KEY_M = 0x4d;
+const long KEY_ENTER = 0x0d;
+const long KEY_ESC = 0x1b;
+const long KEY_F = 0x46;
+const long KEY_PERIOD = 0xbe;
+/* MAP BORDER */
+const int MAP_BORDER_OFFSET = 1000;
+const int MAP_BORDER_X1 = -MAP_BORDER_OFFSET;
+const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
+const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
+const int MAP_BORDER_Y2 = SIZE_Y + MAP_BORDER_OFFSET;
 
 class Ground;
 struct ColArray
@@ -43,10 +50,11 @@ struct ColBmp
     vector< vector<COLORREF>> pixel;
 };
 
-class CRAnimation : public CAnimation {
-public:
-	void NextPtr();
-	void PreviousPtr();
+class CRAnimation : public CAnimation
+{
+    public:
+        void NextPtr();
+        void PreviousPtr();
 };
 
 /////////////////////////
@@ -88,7 +96,7 @@ void DrawLine(int x1, int y1, int x2, int y2, COLORREF color = RGB(255, 255, 255
 SIZE GetStringSize(string str, int textSize);
 char* ToCharPtr(string);
 int random(int min, int max);
-Ground* GetRandomGround(vector<Ground*> *ground);
+Ground* GetRandomGround(vector<Ground*>* ground);
 bool IsCollide(int x1, int y1, int x2, int y2, int tx1, int ty1, int tx2, int ty2);
 }
 

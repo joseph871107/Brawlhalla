@@ -18,6 +18,7 @@ class Weapon : public Object
         void OnShow();
         void OnMove();
         void OnKeyDown(UINT);
+		bool IsOutMapBorder();
         void LoadBitmap();
         void Initialize(vector<Ground*>, vector<Player*>);
 		void Throw(bool, Player*);

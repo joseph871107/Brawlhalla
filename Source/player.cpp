@@ -35,11 +35,6 @@ const double COLLISION_ERRORS = 1.0;
 const int _OFFSET_X = 20;
 const int _OFFSET_Y = 7;
 const int MAX_LIFE = 3;
-const int MAP_BORDER_OFFSET = 1000;
-const int MAP_BORDER_X1 = -MAP_BORDER_OFFSET;
-const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
-const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
-const int MAP_BORDER_Y2 = SIZE_Y + MAP_BORDER_OFFSET;
 const double BITMAP_SIZE = 2.5;
 const double MOVE_ACCELERATION = 0.5;
 const double STOP_ACCELERATION = 1;
@@ -149,13 +144,16 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     //
     _width = (int)(_collision_box.Width() * BITMAP_SIZE);
     _height = (int)(_collision_box.Height() * BITMAP_SIZE);
+
     //
-	if (!keysValue.size())
-		_keys = { KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X };
-	else
-		_keys = keysValue;
+    if (!keysValue.size())
+        _keys = { KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X };
+    else
+        _keys = keysValue;
+
     //
     _isPressingLeft = _isPressingRight = _dir = false;
+    _isTriggerPressingLeft = false;
     //
     _isPressingDown = false;
     //
@@ -199,7 +197,7 @@ void Player::Initialize(vector<Ground*> groundsValue, vector<Player*>* playersPt
     InitializeTriggeredAnimations();
     //
     _hitTargetPlayers = vector<Player*>();
-	//
+    //
     ResetMovementVelocity();
 }
 
@@ -717,8 +715,23 @@ void Player::OnMoveGameLogic()
     DeleteFlyingWeapon();
 }
 
+void Player::DoParseKeyPressed()
+{
+    /*	~ Remark: When both keys are held, the right key prevails the left key
+    	~ Thus, when both keys are held and the right key is released, then
+    	~ the left key will come to play
+    */
+    if (_isTriggerPressingLeft && !_isPressingRight)
+    {
+        _dir = false;
+        _isPressingLeft = true;
+        _isTriggerPressingLeft = false;
+    }
+}
+
 void Player::OnMove()
 {
+    DoParseKeyPressed();
     _currentKeyID = GetKeyCombination(); // Get the current key combination to re-use in 'OnMoveAnimationLogic()' and 'OnMoveGameLogic()'
     OnMoveAnimationLogic();
     OnMoveGameLogic();
@@ -760,8 +773,7 @@ void Player::OnKeyDown(const UINT& nChar)
     }
     else if (nChar == _keys[3]) // Left
     {
-        _dir = false;
-        _isPressingLeft = true;
+        _isTriggerPressingLeft = true;
     }
     else if (nChar == _keys[4]) //Attack
     {
@@ -776,7 +788,7 @@ void Player::OnKeyDown(const UINT& nChar)
     {
         _isTriggerDodge = true;
     }
-    else if (nChar == _keys[6])	//Trow
+    else if (nChar == _keys[6])	//Throw
     {
         if (GetHoldWeapon())
         {
@@ -1350,10 +1362,6 @@ int Player::GetKeyCombination()
         keyCombString = "113";
     else if (_isTriggerDodge) // The player dodges
         keyCombString = "114";
-    else
-    {
-        // Do nothing
-    }
 
     return (stoi(keyCombString));
 }
@@ -1562,24 +1570,73 @@ void Player::SetCurrentNonTriggeredAnimation()
         else
             SetAnimationState(ANI_ID_UNCONSCIOUS_FLYING_LEFT);
     }
-    else if (IsOnGround()) // Player is on ground
+    else
     {
-        if (_isPressingLeft || _isPressingRight) // Player is moving
-            SetAnimationStateLeftRight(ANI_ID_RUN_LEFT);
-        else // Player is idling
-            SetAnimationStateLeftRight(ANI_ID_STAND_LEFT);
+        switch (_currentKeyID)
+        {
+            /* ON GROUND */
+            case KEY_GND_IDLE:
+                SetAnimationStateLeftRight(ANI_ID_STAND_LEFT);
+                break;
+
+            case KEY_GND_MOVE_RIGHT:
+                SetAnimationState(ANI_ID_RUN_RIGHT);
+                break;
+
+            case KEY_GND_MOVE_LEFT:
+                SetAnimationState(ANI_ID_RUN_LEFT);
+                break;
+
+            case KEY_GND_LAND_DOWN:
+                // Do nothing
+                break;
+
+            /* ON AIR */
+            case KEY_AIR_IDLE:
+                if (IsOnLeftEdge()) // Player is leaning on left edge
+                    SetAnimationState(ANI_ID_LEAN_RIGHT); // Set the leaning animation of player facing right
+                else if (IsOnRightEdge()) // Player is leaning on left edge
+                    SetAnimationState(ANI_ID_LEAN_LEFT); // Set the leaning animation of player facing left
+                else // Player is jumping
+                    SetAnimationStateLeftRight(ANI_ID_JUMP_LEFT);
+
+                break;
+
+            case KEY_AIR_MOVE_RIGHT:
+                SetAnimationState(ANI_ID_JUMP_RIGHT);
+                break;
+
+            case KEY_AIR_MOVE_LEFT:
+                SetAnimationState(ANI_ID_JUMP_LEFT);
+                break;
+
+            case KEY_AIR_LAND_DOWN:
+                SetAnimationStateLeftRight(ANI_ID_LAND_FALL_LEFT);
+                break;
+
+            default:
+                break;
+        }
     }
-    else // Player is NOT on ground
-    {
-        if (IsOnLeftEdge()) // Player is leaning on left edge
-            SetAnimationState(ANI_ID_LEAN_RIGHT); // Set the leaning animation of player facing right
-        else if (IsOnRightEdge()) // Player is leaning on left edge
-            SetAnimationState(ANI_ID_LEAN_LEFT); // Set the leaning animation of player facing left
-        else if (_isPressingDown) // Player is intentionally landing down
-            SetAnimationStateLeftRight(ANI_ID_LAND_FALL_LEFT);
-        else   // Player is jumping
-            SetAnimationStateLeftRight(ANI_ID_JUMP_LEFT);
-    }
+
+    //else if (IsOnGround()) // Player is on ground
+    //   {
+    //       if (_isPressingLeft || _isPressingRight) // Player is moving
+    //           SetAnimationStateLeftRight(ANI_ID_RUN_LEFT);
+    //       else // Player is idling
+    //           SetAnimationStateLeftRight(ANI_ID_STAND_LEFT);
+    //   }
+    //   else // Player is NOT on ground
+    //   {
+    //       if (IsOnLeftEdge()) // Player is leaning on left edge
+    //           SetAnimationState(ANI_ID_LEAN_RIGHT); // Set the leaning animation of player facing right
+    //       else if (IsOnRightEdge()) // Player is leaning on left edge
+    //           SetAnimationState(ANI_ID_LEAN_LEFT); // Set the leaning animation of player facing left
+    //       else if (_isPressingDown) // Player is intentionally landing down
+    //           SetAnimationStateLeftRight(ANI_ID_LAND_FALL_LEFT);
+    //       else   // Player is jumping
+    //           SetAnimationStateLeftRight(ANI_ID_JUMP_LEFT);
+    //   }
 }
 
 void Player::SetCurrentNonTriggeredAnimationByWeapon()
@@ -1601,11 +1658,11 @@ void Player::AddCamera(Camera* cam)
 }
 void Player::SetPlayer(bool tri)
 {
-	_isPlayer = tri;
+    _isPlayer = tri;
 }
 bool Player::IsPlayer()
 {
-	return _isPlayer;
+    return _isPlayer;
 }
 int Player::Round(double i)
 {
