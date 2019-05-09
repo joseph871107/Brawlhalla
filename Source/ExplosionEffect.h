@@ -1,5 +1,5 @@
 /* File description:
-This is the header file 'GameEffect.h'. This is the API for the class 'GameEffect'. */
+This is the header file 'ExplosionEffect.h'. This is the API for the class 'ExplosionEffect'. */
 
 #include "camera.h"
 
@@ -7,22 +7,22 @@ namespace game_framework
 {
 #ifndef GAME_EFFECT_H
 #define GAME_EFFECT_H
-class GameEffect
+class ExplosionEffect
 {
     public:
-        virtual ~GameEffect();
+        virtual ~ExplosionEffect();
         //Destructor
 
-        GameEffect();
+        ExplosionEffect();
         //Default constructor
 
-        GameEffect(const GameEffect& objectValue);
+        ExplosionEffect(const ExplosionEffect& objectValue);
         //Copy constructor
 
-        GameEffect(const int& xValue, const int& yValue, const vector<CAnimation>& anisValue, const int& currentAniValue, Camera* const& cameraPtrValue);
+        ExplosionEffect(const int& xValue, const int& yValue, const vector<CAnimation>& anisValue, const int& currentAniValue, Camera* const& cameraPtrValue);
         //Full constructor
 
-        GameEffect& operator=(const GameEffect& rightObject);
+        ExplosionEffect& operator=(const ExplosionEffect& rightObject);
         //Operator overloading function of the assignment operator
 
         // Required for Game Framework
