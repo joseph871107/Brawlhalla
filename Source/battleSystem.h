@@ -3,7 +3,7 @@
 #include "player.h"
 #include "weapon.h"
 #include "map.h"
-#include "GameEffect.h"
+#include "ExplosionEffect.h"
 #include <chrono>
 #include "window.h"
 
@@ -58,8 +58,8 @@ class BattleSystem : public CGameState
 		Camera camera;
 		shared_ptr<Map> map;
 		Window settingWindow;
-		GameEffect _gameEffect;
-		bool _isShowingGameEffect;
+		ExplosionEffect _explosionEffect;
+		bool _isShowingExplosionEffect;
 
 };
 

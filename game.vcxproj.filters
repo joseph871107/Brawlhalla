@@ -92,7 +92,7 @@
     <Filter Include="Brawlhalla\Enemy">
       <UniqueIdentifier>{427d87f5-bc90-42f6-994a-5b66b01feca3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\GameEffect">
+    <Filter Include="Brawlhalla\ExplosionEffect">
       <UniqueIdentifier>{34624e8c-9fbc-408f-80ae-46042f364aa0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -228,8 +228,8 @@
     <ClCompile Include="Source\enemy.cpp">
       <Filter>Brawlhalla\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameEffect.cpp">
-      <Filter>Brawlhalla\GameEffect</Filter>
+    <ClCompile Include="Source\ExplosionEffect.cpp">
+      <Filter>Brawlhalla\ExplosionEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,8 +332,8 @@
     <ClInclude Include="Source\enemy.h">
       <Filter>Brawlhalla\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameEffect.h">
-      <Filter>Brawlhalla\GameEffect</Filter>
+    <ClInclude Include="Source\ExplosionEffect.h">
+      <Filter>Brawlhalla\ExplosionEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -250,7 +250,7 @@
     <ClCompile Include="Source\DodgeTriggeredAnimation.cpp" />
     <ClCompile Include="Source\DrawSwordTriggeredAnimation.cpp" />
     <ClCompile Include="Source\enemy.cpp" />
-    <ClCompile Include="Source\GameEffect.cpp" />
+    <ClCompile Include="Source\ExplosionEffect.cpp" />
     <ClCompile Include="Source\GroundAttackTriggeredAnimation.cpp" />
     <ClCompile Include="Source\GroundLandDownAttackTriggeredAnimation.cpp" />
     <ClCompile Include="Source\GroundMoveLeftAttackTriggeredAnimation.cpp" />
@@ -318,7 +318,7 @@
     <ClInclude Include="Source\DodgeTriggeredAnimation.h" />
     <ClInclude Include="Source\DrawSwordTriggeredAnimation.h" />
     <ClInclude Include="Source\enemy.h" />
-    <ClInclude Include="Source\GameEffect.h" />
+    <ClInclude Include="Source\ExplosionEffect.h" />
     <ClInclude Include="Source\GroundAttackTriggeredAnimation.h" />
     <ClInclude Include="Source\battleSystem.h" />
     <ClInclude Include="source\camera.h" />

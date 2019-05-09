@@ -88,15 +88,15 @@ void BattleSystem::OnBeginState()
     }
 
     settingWindow.GetUI()->Reset();
-    // Game Effect
-    _isShowingGameEffect = false;
-    _gameEffect.AddCamera(&camera);
+    // Explosion Effect
+    _isShowingExplosionEffect = false;
+    _explosionEffect.AddCamera(&camera);
 }
 
 void BattleSystem::GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, int* posYPtr)
 {
     /*	~ Remark:
-    	~ Set the effect position based on the selected current animation for '_gameEffect'
+    	~ Set the effect position based on the selected current animation for '_explosionEffect'
     */
     int playerX1 = deadPlayer->GetCor(0);
     int playerY1 = deadPlayer->GetCor(1);
@@ -106,26 +106,26 @@ void BattleSystem::GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, 
     int offsetY = 50;
     int offsetX = 50;
 
-    switch (_gameEffect.GetCurrentAni())
+    switch (_explosionEffect.GetCurrentAni())
     {
-        case GameEffect::ANI_ID_EXPLO_UP:
-            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - _gameEffect.GetCurrentAnimationWidth() / 2.0);
+        case ExplosionEffect::ANI_ID_EXPLO_UP:
+            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - _explosionEffect.GetCurrentAnimationWidth() / 2.0);
             *posYPtr = 0 - offsetY;
             break;
 
-        case GameEffect::ANI_ID_EXPLO_RIGHT:
-            *posXPtr = DoubleToInteger(SIZE_X - _gameEffect.GetCurrentAnimationWidth() - offsetX);
-            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - _gameEffect.GetCurrentAnimationHeight() / 2.0);
+        case ExplosionEffect::ANI_ID_EXPLO_RIGHT:
+            *posXPtr = DoubleToInteger(SIZE_X - _explosionEffect.GetCurrentAnimationWidth() - offsetX);
+            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - _explosionEffect.GetCurrentAnimationHeight() / 2.0);
             break;
 
-        case GameEffect::ANI_ID_EXPLO_DOWN:
-            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - _gameEffect.GetCurrentAnimationWidth() / 2.0);
-            *posYPtr = DoubleToInteger(SIZE_Y - _gameEffect.GetCurrentAnimationHeight() - offsetY);
+        case ExplosionEffect::ANI_ID_EXPLO_DOWN:
+            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - _explosionEffect.GetCurrentAnimationWidth() / 2.0);
+            *posYPtr = DoubleToInteger(SIZE_Y - _explosionEffect.GetCurrentAnimationHeight() - offsetY);
             break;
 
-        case GameEffect::ANI_ID_EXPLO_LEFT:
+        case ExplosionEffect::ANI_ID_EXPLO_LEFT:
             *posXPtr = 0 - offsetX;
-            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - _gameEffect.GetCurrentAnimationHeight() / 2.0);
+            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - _explosionEffect.GetCurrentAnimationHeight() / 2.0);
             break;
 
         default:
@@ -140,21 +140,21 @@ int BattleSystem::DoubleToInteger(double mDouble)
 
 void BattleSystem::InitializeExplosionEffect(Player* deadPlayer)
 {
-    // Trigger the game effect
-    _isShowingGameEffect = true;
+    // Trigger the explosion effect
+    _isShowingExplosionEffect = true;
     // Set the proper explosion effect direction
     int playerX = deadPlayer->GetCor(0);
     int playerY = deadPlayer->GetCor(1);
     int distanceError = 100;
 
     if (abs(playerY - MAP_BORDER_Y1) < distanceError)
-        _gameEffect.SetCurrentAni(GameEffect::ANI_ID_EXPLO_UP);
+        _explosionEffect.SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_UP);
     else if (abs(playerY - MAP_BORDER_Y2) < distanceError)
-        _gameEffect.SetCurrentAni(GameEffect::ANI_ID_EXPLO_DOWN);
+        _explosionEffect.SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_DOWN);
     else if (abs(playerX - MAP_BORDER_X1) < distanceError)
-        _gameEffect.SetCurrentAni(GameEffect::ANI_ID_EXPLO_LEFT);
+        _explosionEffect.SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_LEFT);
     else if (abs(playerX - MAP_BORDER_X2) < distanceError)
-        _gameEffect.SetCurrentAni(GameEffect::ANI_ID_EXPLO_RIGHT);
+        _explosionEffect.SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_RIGHT);
     else
     {
         /* Do nothing */
@@ -163,7 +163,7 @@ void BattleSystem::InitializeExplosionEffect(Player* deadPlayer)
     //
     int posX, posY;
     GetExplosionEffectPosition(deadPlayer, &posX, &posY);
-    _gameEffect.SetXY(posX, posY);
+    _explosionEffect.SetXY(posX, posY);
 }
 
 
@@ -191,12 +191,12 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 
     ResizeCamera();
 
-    // Game Effect
-    if (_isShowingGameEffect)
-        _gameEffect.OnMove();
+    // Explosion Effect
+    if (_isShowingExplosionEffect)
+        _explosionEffect.OnMove();
 
-    if (_gameEffect.IsCurrentAniFinalBitmap())
-        _isShowingGameEffect = false;
+    if (_explosionEffect.IsCurrentAniFinalBitmap())
+        _isShowingExplosionEffect = false;
 }
 
 void BattleSystem::OnInitLoadSound()
@@ -240,9 +240,9 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     settingWindow.SetXY(0, 0);
     settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, (enemyPause ? "PAUSE" : "RESUME"));
     settingWindow.SetSize(0.5);
-    // Game Effect
-    _gameEffect = GameEffect();
-    _gameEffect.LoadBitmap();
+    // Explosion Effect
+    _explosionEffect = ExplosionEffect();
+    _explosionEffect.LoadBitmap();
     //
     ShowInitProgress(100);
 }
@@ -315,9 +315,9 @@ void BattleSystem::OnShow()
 
     settingWindow.OnShow();
 
-    // Game Effect
-    if (_isShowingGameEffect)
-        _gameEffect.OnShow();
+    // Explosion Effect
+    if (_isShowingExplosionEffect)
+        _explosionEffect.OnShow();
 
     //------------------Test Text------------------//
     if (_PLAYER_DEBUG)
