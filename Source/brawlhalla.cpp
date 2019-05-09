@@ -259,6 +259,7 @@ void CGameStateInit::OnMove()
     if (chosenBut == "start")
     {
         CAudio::Instance()->Stop(AUDIO_MENU_MUSIC);
+        CAudio::Instance()->Play(AUDIO_CLICK_START);
         GotoGameState(GAME_STATE_RUN);
     }
     else if (chosenBut == "settings")
