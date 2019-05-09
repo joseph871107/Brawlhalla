@@ -39,6 +39,7 @@ class Player
         void AddCamera(Camera* cam);	// Camera
         void SetPlayer(bool tri);
         bool IsPlayer();
+		vector<Weapon*>* weapons;
 
         //Others - Bill
         const string& GetName() const;
@@ -57,6 +58,7 @@ class Player
         const bool& GetTriggeredAnimationDirection() const;
         void SetTriggeredAnimationAnimationID(const int& newTriggeredAniAnimationID);
         void DoAttack();
+		void DoLand();
         void SetIsTriggerAttack(const bool& newIsTriggerAttack);
         void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
         void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
@@ -130,7 +132,6 @@ class Player
         //Movements
         void DoMoveLeft(int movementUnit);
         void DoMoveRight(int movementUnit);
-        void DoLand();
 
         //Jump
         void DoJump();

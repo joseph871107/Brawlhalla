@@ -566,9 +566,18 @@ void Player::ConsciouslyOnMoveAnimationLogic()
 void Player::MoveCurrentAnimation()
 {
     if (_aniSelector)
-        _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
+		if (_currentAniByWpn == ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT || _currentAniByWpn == ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT) {
+			if (_aniByWpn[_wpnID][_currentAniByWpn].GetCurrentBitmapNumber() < 2)
+				_aniByWpn[_wpnID][_currentAniByWpn].OnMove();
+			else {
+				if (IsOnGround())
+					_aniByWpn[_wpnID][_currentAniByWpn].OnMove();
+			}
+		}
+		else
+			_aniByWpn[_wpnID][_currentAniByWpn].OnMove();
     else
-        ani[currentAni].OnMove();
+		ani[currentAni].OnMove();
 }
 
 void Player::OnMoveAnimationLogic()

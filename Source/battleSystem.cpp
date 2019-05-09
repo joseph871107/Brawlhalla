@@ -66,11 +66,13 @@ void BattleSystem::OnBeginState()
     Player* player = new Player();
     player->LoadBitmap();
     player->AddCamera(&camera);
+	player->weapons = map->GetWeapons();
     _players.push_back(player);				// Player1
     // Enemy
     player = new Enemy();
     player->LoadBitmap();
     player->AddCamera(&camera);
+	player->weapons = map->GetWeapons();
     _players.push_back(player);				// Enemy
     //
     map->AddPlayers(&_players);
@@ -186,7 +188,6 @@ void BattleSystem::OnMove()							// 移動遊戲元素
     {
         enemyPause = !enemyPause;
         settingWindow.GetUI()->Reset();
-        (*settingWindow.GetUI()->Index("enemy stop"))->SetStr(enemyPause ? "PAUSE" : "RESUME");
     }
 
     ResizeCamera();
@@ -238,7 +239,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     // Setting Window (for controlling the CPU player a.k.a Enemy)
     settingWindow.Initialize(1, 1);
     settingWindow.SetXY(0, 0);
-    settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, (enemyPause ? "PAUSE" : "RESUME"));
+    settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0);
     settingWindow.SetSize(0.5);
     // Game Effect
     _gameEffect = GameEffect();

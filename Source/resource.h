@@ -255,7 +255,6 @@
 #define IDB_FX_EXPLO_DOWN2              535
 #define IDB_FX_EXPLO_DOWN3              536
 #define IDB_FX_EXPLO_LEFT0              537
-#define IDB_BITMAP7                     538
 #define IDB_FX_EXPLO_LEFT1              538
 #define IDB_FX_EXPLO_LEFT2              539
 #define IDB_FX_EXPLO_LEFT3              540
@@ -267,6 +266,12 @@
 #define IDB_FX_EXPLO_UP1                546
 #define IDB_FX_EXPLO_UP2                547
 #define IDB_FX_EXPLO_UP3                548
+#define	IDB_FX_SKILL0_L0				549
+#define	IDB_FX_SKILL0_L1				550
+#define	IDB_FX_SKILL0_L2				551
+#define	IDB_FX_SKILL0_R0				552
+#define	IDB_FX_SKILL0_R1				553
+#define	IDB_FX_SKILL0_R2				554
 #define IDB_WEAPON_ROT_L                600
 #define IDB_WEAPON_ROT_L_45             601
 #define IDB_WEAPON_ROT_L_90             602

@@ -319,7 +319,8 @@ void UI_Button::OnShow()
 		}
 	}
 	//OnShowText(name, _x, _y, (int)(20 * (camera != nullptr ? camera->GetSize() : 1)));
-	OnShowText(str, _x2, _y2, (int)(textSize * (camera != nullptr ? camera->GetSize() : 1)));
+	if(str!="")
+		OnShowText(str, _x2, _y2, (int)(textSize * (camera != nullptr ? camera->GetSize() : 1)));
 }
 void UI_Button::Reset()
 {

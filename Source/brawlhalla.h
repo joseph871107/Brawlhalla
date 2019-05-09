@@ -81,6 +81,7 @@ class CGameStateInit : public CGameState
 		Window settingWindow;
 		Camera camera;
 		static bool _fullscreenEnabled;
+		static bool _closing;
 		static bool _cameraEnabled;
 		static int _mapSelected;
 		static vector<shared_ptr<Map>> maps;

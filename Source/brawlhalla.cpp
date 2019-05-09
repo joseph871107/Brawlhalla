@@ -78,6 +78,7 @@ const vector<MapPARM> _mapP
 };
 // Initialize static variable
 bool CGameStateInit::_fullscreenEnabled = OPEN_AS_FULLSCREEN;
+bool CGameStateInit::_closing = false;
 bool CGameStateInit::_cameraEnabled = true;
 int CGameStateInit::_mapSelected = 0;
 vector<shared_ptr<Map>> CGameStateInit::maps;
@@ -152,7 +153,7 @@ void CGameStateInit::OnInit()
     settingWindow.GetUI()->AddButton("camera", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "CAMERA : TRUE");
     settingWindow.GetUI()->AddButton("maps", butW, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 1, "MAP : " + _mapP[_mapSelected]._name);
     settingWindow.GetUI()->AddButton("fullScreen", 0, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 0, (OPEN_AS_FULLSCREEN ? "FULLSCREEN : TRUE" : "FULLSCREEN : FALSE"));
-    settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1);
+    settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1,"BACK");
     ShowInitProgress(10);
 }
 
@@ -217,6 +218,16 @@ void CGameStateInit::OnShow()
 {
     welcomeWindow.OnShow();
     settingWindow.OnShow();
+	if (_closing) {
+		static int count = 0;
+		DrawRectangle(0, 0, SIZE_X, count);
+		DrawRectangle(0, 0, count, SIZE_Y);
+		DrawRectangle(SIZE_X - count, 0, count, SIZE_Y);
+		DrawRectangle(0, SIZE_Y - count, SIZE_X, count);
+		count+=20;
+		if (count > SIZE_X / 2 || count > SIZE_Y / 2)
+			PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Ãö³¬¹CÀ¸
+	}
 }
 
 bool CGameStateInit::GetCameraEnable()
@@ -242,19 +253,19 @@ void CGameStateInit::OnMove()
     settingWindow.OnMove();
     string chosenBut = welcomeWindow.GetUI()->ChosenButton();
 
-    if (chosenBut == "start")
-    {
-        CAudio::Instance()->Stop(AUDIO_MENU_MUSIC);
-        GotoGameState(GAME_STATE_RUN);
-    }
-    else if (chosenBut == "settings")
-    {
-        welcomeWindow.SetButtonEnable(false);
-        settingWindow.SetButtonEnable(true);
-        settingWindow.SetVisible(true);
-    }
-    else if (chosenBut == "exit")
-        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Closing
+	if (chosenBut == "start")
+	{
+		CAudio::Instance()->Stop(AUDIO_MENU_MUSIC);
+		GotoGameState(GAME_STATE_RUN);
+	}
+	else if (chosenBut == "settings")
+	{
+		welcomeWindow.SetButtonEnable(false);
+		settingWindow.SetButtonEnable(true);
+		settingWindow.SetVisible(true);
+	}
+	else if (chosenBut == "exit")
+		_closing = true;
 
     chosenBut = settingWindow.GetUI()->ChosenButton();
 
