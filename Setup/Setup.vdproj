@@ -15,25 +15,19 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_3A8BB160071C420E9EDD45100921DD95"
+        "MsmKey" = "8:_1A3B5B90BB8C429EAAFDC7AEAAB598DB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3BCD6424628D4587963CE4FC5ED28EC7"
+        "MsmKey" = "8:_1E439BF550AE4862902575987DE5C916"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3BEE041AFB6B480AB3DF99BA54CE7D20"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3E0FA35F666D4F31889F13B907F19882"
+        "MsmKey" = "8:_6ECE59B61BA24A369F8802802F4AADCE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,19 +39,37 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_870B85884F85400F95A9EF101524B102"
+        "MsmKey" = "8:_99326DFF6B3A4F5F910DCB71960E0D48"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_AD62A94676194B64B213528A7CEA48CB"
+        "MsmKey" = "8:_C17BD7674C944928B2747810464A6CD9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_CCC7B73A0F5A47FD81AB14EB572E9485"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D355F26B0FA548D4B56874018E29DA23"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E72726A3540B4797B12D851710CDF6C0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EC60ECA0A3A24693AABFF63AC2A38FEB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -148,7 +160,27 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3A8BB160071C420E9EDD45100921DD95"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1A3B5B90BB8C429EAAFDC7AEAAB598DB"
+            {
+            "SourcePath" = "8:..\\Sounds\\ExplosionFX.mp3"
+            "TargetName" = "8:ExplosionFX.mp3"
+            "Tag" = "8:"
+            "Folder" = "8:_6BC336A94B574E9CAD70A1576E9DDB16"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1E439BF550AE4862902575987DE5C916"
             {
             "SourcePath" = "8:..\\Sounds\\DrawWeapon.mp3"
             "TargetName" = "8:DrawWeapon.mp3"
@@ -168,47 +200,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3BCD6424628D4587963CE4FC5ED28EC7"
-            {
-            "SourcePath" = "8:..\\Sounds\\Menu.mp3"
-            "TargetName" = "8:Menu.mp3"
-            "Tag" = "8:"
-            "Folder" = "8:_6BC336A94B574E9CAD70A1576E9DDB16"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3BEE041AFB6B480AB3DF99BA54CE7D20"
-            {
-            "SourcePath" = "8:..\\Sounds\\Swoosh.mp3"
-            "TargetName" = "8:Swoosh.mp3"
-            "Tag" = "8:"
-            "Folder" = "8:_6BC336A94B574E9CAD70A1576E9DDB16"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3E0FA35F666D4F31889F13B907F19882"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6ECE59B61BA24A369F8802802F4AADCE"
             {
             "SourcePath" = "8:..\\Sounds\\BattleMusic.mp3"
             "TargetName" = "8:BattleMusic.mp3"
@@ -228,7 +220,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_870B85884F85400F95A9EF101524B102"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_99326DFF6B3A4F5F910DCB71960E0D48"
             {
             "SourcePath" = "8:..\\Sounds\\Punch.mp3"
             "TargetName" = "8:Punch.mp3"
@@ -248,10 +240,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AD62A94676194B64B213528A7CEA48CB"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C17BD7674C944928B2747810464A6CD9"
             {
-            "SourcePath" = "8:..\\Sounds\\SwingAttack.mp3"
-            "TargetName" = "8:SwingAttack.mp3"
+            "SourcePath" = "8:..\\Sounds\\Menu.mp3"
+            "TargetName" = "8:Menu.mp3"
             "Tag" = "8:"
             "Folder" = "8:_6BC336A94B574E9CAD70A1576E9DDB16"
             "Condition" = "8:"
@@ -274,6 +266,66 @@
             "TargetName" = "8:brawlhalla.ico"
             "Tag" = "8:"
             "Folder" = "8:_13EF2868E6BE446FBC3DA1AD2E571445"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D355F26B0FA548D4B56874018E29DA23"
+            {
+            "SourcePath" = "8:..\\Sounds\\Swoosh.mp3"
+            "TargetName" = "8:Swoosh.mp3"
+            "Tag" = "8:"
+            "Folder" = "8:_6BC336A94B574E9CAD70A1576E9DDB16"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E72726A3540B4797B12D851710CDF6C0"
+            {
+            "SourcePath" = "8:..\\Sounds\\SwingAttack.mp3"
+            "TargetName" = "8:SwingAttack.mp3"
+            "Tag" = "8:"
+            "Folder" = "8:_6BC336A94B574E9CAD70A1576E9DDB16"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EC60ECA0A3A24693AABFF63AC2A38FEB"
+            {
+            "SourcePath" = "8:..\\Sounds\\ClickStart.mp3"
+            "TargetName" = "8:ClickStart.mp3"
+            "Tag" = "8:"
+            "Folder" = "8:_6BC336A94B574E9CAD70A1576E9DDB16"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
