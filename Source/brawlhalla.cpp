@@ -78,6 +78,7 @@ const vector<MapPARM> _mapP
 };
 // Initialize static variable
 bool CGameStateInit::_fullscreenEnabled = OPEN_AS_FULLSCREEN;
+bool CGameStateInit::_closing = false;
 bool CGameStateInit::_cameraEnabled = true;
 int CGameStateInit::_mapSelected = 0;
 vector<shared_ptr<Map>> CGameStateInit::maps;
@@ -143,16 +144,16 @@ void CGameStateInit::OnInit()
     welcomeWindow.AddItem(ui_info4);
     int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() + ui_info4->GetHeight()) / 3;
     welcomeWindow.Initialize(3, 1);
-	welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, RGB(0,255,0), IDB_UI_BUTTON1_OUT, IDB_UI_BUTTON1_HOV, IDB_UI_BUTTON1_CLK, 0, 0);
+    welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, RGB(0, 255, 0), IDB_UI_BUTTON1_OUT, IDB_UI_BUTTON1_HOV, IDB_UI_BUTTON1_CLK, 0, 0);
     welcomeWindow.GetUI()->AddButton("settings", refX - butW, refY + butH, RGB(0, 255, 0), IDB_UI_BUTTON2_OUT, IDB_UI_BUTTON2_HOV, IDB_UI_BUTTON2_CLK, 1, 0);
     welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 2, RGB(0, 255, 0), IDB_UI_BUTTON3_OUT, IDB_UI_BUTTON3_HOV, IDB_UI_BUTTON3_CLK, 2, 0);
     settingWindow.Initialize(2, 2, false, false);
-	butW = 350;
-	settingWindow.SetXY((SIZE_X - butW * 2) / 2, 300);
+    butW = 350;
+    settingWindow.SetXY((SIZE_X - butW * 2) / 2, 300);
     settingWindow.GetUI()->AddButton("camera", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "CAMERA : TRUE");
     settingWindow.GetUI()->AddButton("maps", butW, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 1, "MAP : " + _mapP[_mapSelected]._name);
     settingWindow.GetUI()->AddButton("fullScreen", 0, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 0, (OPEN_AS_FULLSCREEN ? "FULLSCREEN : TRUE" : "FULLSCREEN : FALSE"));
-    settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1);
+    settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
     ShowInitProgress(10);
 }
 
@@ -217,6 +218,19 @@ void CGameStateInit::OnShow()
 {
     welcomeWindow.OnShow();
     settingWindow.OnShow();
+
+    if (_closing)
+    {
+        static int count = 0;
+        DrawRectangle(0, 0, SIZE_X, count);
+        DrawRectangle(0, 0, count, SIZE_Y);
+        DrawRectangle(SIZE_X - count, 0, count, SIZE_Y);
+        DrawRectangle(0, SIZE_Y - count, SIZE_X, count);
+        count += 20;
+
+        if (count > SIZE_X / 2 || count > SIZE_Y / 2)
+            PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
+    }
 }
 
 bool CGameStateInit::GetCameraEnable()
@@ -244,9 +258,7 @@ void CGameStateInit::OnMove()
 
     if (chosenBut == "start")
     {
-		
         CAudio::Instance()->Stop(AUDIO_MENU_MUSIC);
-		CAudio::Instance()->Play(AUDIO_CLICK_START);
         GotoGameState(GAME_STATE_RUN);
     }
     else if (chosenBut == "settings")
@@ -256,7 +268,7 @@ void CGameStateInit::OnMove()
         settingWindow.SetVisible(true);
     }
     else if (chosenBut == "exit")
-        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Closing
+        _closing = true;
 
     chosenBut = settingWindow.GetUI()->ChosenButton();
 
@@ -445,12 +457,12 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
-	battleSystem.OnLButtonDown(nFlags, point);
+    battleSystem.OnLButtonDown(nFlags, point);
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
-	battleSystem.OnLButtonUp(nFlags, point);
+    battleSystem.OnLButtonUp(nFlags, point);
 }
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -460,12 +472,12 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
-	battleSystem.OnLButtonDown(nFlags, point);
+    battleSystem.OnLButtonDown(nFlags, point);
 }
 
 void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
-	battleSystem.OnLButtonUp(nFlags, point);
+    battleSystem.OnLButtonUp(nFlags, point);
 }
 
 void CGameStateRun::OnShow()

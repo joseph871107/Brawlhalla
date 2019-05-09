@@ -13,9 +13,10 @@ class Enemy : public Player
         Enemy();
         Enemy(int diff);
         void DoAttack();
-        void ChaseTarget();
+		bool ChaseTarget(CPoint point, int width = 0, int height = 0);
         void OnMove();
     private:
+		vector<Weapon*>::iterator WeaponNearby();
         Player* target;
         int _difficulty;
 };

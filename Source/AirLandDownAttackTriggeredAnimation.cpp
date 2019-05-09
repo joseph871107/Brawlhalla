@@ -50,6 +50,7 @@ void AirLandDownAttackTriggeredAnimation::SetTriggeredAnimationSelector()
 void AirLandDownAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
     _playerPtr->EmptyHitTargetPlayers();
+	_playerPtr->SetIsDodging(false);
 }
 
 void AirLandDownAttackTriggeredAnimation::SetTriggeredAnimationVariables()
@@ -65,10 +66,12 @@ void AirLandDownAttackTriggeredAnimation::SetTriggeredAnimationVariables()
 void AirLandDownAttackTriggeredAnimation::InitiateTriggeredAction()
 {
     _playerPtr->SetIsTriggerAttack(false);
+	_playerPtr->SetIsDodging(true);
 }
 
 void AirLandDownAttackTriggeredAnimation::DoTriggeredAction()
 {
+	_playerPtr->DoLand();
     _playerPtr->DoAttack();
 }
 

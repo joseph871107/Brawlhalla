@@ -74,12 +74,14 @@ void BattleSystem::InitializePlayersOnBeginState()
     player = new Player();
     player->LoadBitmap();
     player->AddCamera(&camera);
-    _players.push_back(player);				// Player 1
+    player->weapons = map->GetWeapons();
+    _players.push_back(player);				// Player1
     // Enemy
     player = new Enemy();
     player->LoadBitmap();
     player->AddCamera(&camera);
-    _players.push_back(player);				// Player 2
+    player->weapons = map->GetWeapons();
+    _players.push_back(player);				// Enemy
     // Initialize keys for players
     vector<vector<long>> playerKeys =
     {
@@ -216,9 +218,8 @@ void BattleSystem::TriggerExplosionEffect(Player* deadPlayer)
     int posX, posY;
     GetExplosionEffectPosition(deadPlayer, &posX, &posY);
     explosionEffectPtr->SetXY(posX, posY);
-
-	// Play explosion effect
-	CAudio::Instance()->Play(AUDIO_EXPLOSION_FX);
+    // Play explosion effect
+    CAudio::Instance()->Play(AUDIO_EXPLOSION_FX);
 }
 
 
@@ -241,7 +242,6 @@ void BattleSystem::OnMove()							// 移動遊戲元素
     {
         enemyPause = !enemyPause;
         settingWindow.GetUI()->Reset();
-        (*settingWindow.GetUI()->Index("enemy stop"))->SetStr(enemyPause ? "PAUSE" : "RESUME");
     }
 
     ResizeCamera();
@@ -282,7 +282,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
-	LoadSoundOnInit(); // Load all the soundtracks required
+    LoadSoundOnInit(); // Load all the soundtracks required
     CAudio::Instance()->Play(AUDIO_MENU_MUSIC, true);
     ShowInitProgress(50);
     ShowInitProgress(75);
@@ -292,7 +292,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     // Setting Window (for controlling the CPU player a.k.a Enemy)
     settingWindow.Initialize(1, 1);
     settingWindow.SetXY(0, 0);
-    settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, (enemyPause ? "PAUSE" : "RESUME"));
+    settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0);
     settingWindow.SetSize(0.5);
     // Explosion Effects
     _explosionEffects = vector<ExplosionEffect*>();
