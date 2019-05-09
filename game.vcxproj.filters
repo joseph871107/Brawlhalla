@@ -17,24 +17,6 @@
     <Filter Include="Brawlhalla\BattleSystem">
       <UniqueIdentifier>{dc6cbd24-8642-41e1-8a14-8122c6ce5015}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Animation">
-      <UniqueIdentifier>{fc9b157f-9907-4561-81f4-5f88255d1b29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Animation\Player1">
-      <UniqueIdentifier>{f39a9c85-c6d2-473b-9b60-5909d486e712}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Animation\Player1\run">
-      <UniqueIdentifier>{d0ad53c6-cb0b-42d3-a4b9-af4091841338}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Animation\Player1\runM">
-      <UniqueIdentifier>{5e88158c-d684-4f5a-b3ff-f43a8a02ab28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Animation\Player1\jump">
-      <UniqueIdentifier>{32877933-3b0f-4013-a5ce-77a58c01365d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Animation\Player1\jumpM">
-      <UniqueIdentifier>{8790d827-3de7-4b78-ba4f-aa98b676a320}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Player">
       <UniqueIdentifier>{eedfae59-751c-4f3c-9e55-9614b166dac8}</UniqueIdentifier>
     </Filter>
@@ -94,6 +76,24 @@
     </Filter>
     <Filter Include="Brawlhalla\ExplosionEffect">
       <UniqueIdentifier>{34624e8c-9fbc-408f-80ae-46042f364aa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Bitmap\Animation">
+      <UniqueIdentifier>{fc9b157f-9907-4561-81f4-5f88255d1b29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Bitmap\Animation\Player1">
+      <UniqueIdentifier>{f39a9c85-c6d2-473b-9b60-5909d486e712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Bitmap\Animation\Player1\run">
+      <UniqueIdentifier>{d0ad53c6-cb0b-42d3-a4b9-af4091841338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Bitmap\Animation\Player1\runM">
+      <UniqueIdentifier>{5e88158c-d684-4f5a-b3ff-f43a8a02ab28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Bitmap\Animation\Player1\jump">
+      <UniqueIdentifier>{32877933-3b0f-4013-a5ce-77a58c01365d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Bitmap\Animation\Player1\jumpM">
+      <UniqueIdentifier>{8790d827-3de7-4b78-ba4f-aa98b676a320}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -343,52 +343,52 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="RES\player1\adventurer-jump-00.bmp">
-      <Filter>Animation\Player1\jump</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\jump</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-jump-01.bmp">
-      <Filter>Animation\Player1\jump</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\jump</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-jump-02.bmp">
-      <Filter>Animation\Player1\jump</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\jump</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-jump-03.bmp">
-      <Filter>Animation\Player1\jump</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\jump</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-00.bmp">
-      <Filter>Animation\Player1\run</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\run</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-01.bmp">
-      <Filter>Animation\Player1\run</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\run</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-02.bmp">
-      <Filter>Animation\Player1\run</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\run</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-03.bmp">
-      <Filter>Animation\Player1\run</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\run</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-04.bmp">
-      <Filter>Animation\Player1\run</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\run</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-05.bmp">
-      <Filter>Animation\Player1\run</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\run</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-00%28Mirrored%29.bmp">
-      <Filter>Animation\Player1\runM</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\runM</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-01%28Mirrored%29.bmp">
-      <Filter>Animation\Player1\runM</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\runM</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-02%28Mirrored%29.bmp">
-      <Filter>Animation\Player1\runM</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\runM</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-03%28Mirrored%29.bmp">
-      <Filter>Animation\Player1\runM</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\runM</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-04%28Mirrored%29.bmp">
-      <Filter>Animation\Player1\runM</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\runM</Filter>
     </Image>
     <Image Include="RES\player1\adventurer-run-05%28Mirrored%29.bmp">
-      <Filter>Animation\Player1\runM</Filter>
+      <Filter>Resource Files\Bitmap\Animation\Player1\runM</Filter>
     </Image>
     <Image Include="RES\Numbers\0.bmp">
       <Filter>Resource Files\Bitmap</Filter>

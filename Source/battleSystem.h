@@ -36,16 +36,19 @@ class BattleSystem : public CGameState
 		void AddMap(shared_ptr<Map> m);
         bool IsGameOver();
         string GetGameResult();
-		void InitializeExplosionEffect(Player* deadPlayer);
+		void TriggerExplosionEffect(Player* deadPlayer);
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
 		void ClearPlayers();
         void ShowPlayerLife(const Player& player, int posXValue, int posYValue);
         int GetCurrentRemainTime();
-		void OnInitLoadSound();
+		void LoadSoundOnInit();
 		void GetExplosionEffectPosition(Player * deadPlayer, int * posXPtr, int * posYPtr);
 		int DoubleToInteger(double mDouble);
+		void ClearExplosionEffects();
+		void InitializeExplosionEffectsOnBeginState();
+		void InitializePlayersOnBeginState();
         //-----------------VARIABLES DECLARATIONS-----------------//
         int _secPerRound;
         CPoint mousePoint;
@@ -58,8 +61,7 @@ class BattleSystem : public CGameState
 		Camera camera;
 		shared_ptr<Map> map;
 		Window settingWindow;
-		ExplosionEffect _explosionEffect;
-		bool _isShowingExplosionEffect;
+		vector<ExplosionEffect*> _explosionEffects;
 
 };
 

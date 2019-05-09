@@ -34,13 +34,16 @@ const int MAP_BORDER_Y1 = -MAP_BORDER_OFFSET;
 const int MAP_BORDER_X2 = SIZE_X + MAP_BORDER_OFFSET;
 const int MAP_BORDER_Y2 = SIZE_Y + MAP_BORDER_OFFSET;
 /* SOUND */
-enum AUDIO_ID {				// 定義各種音效的編號
-	AUDIO_BATTLE_MUSIC,				// 0
-	AUDIO_DRAW_WEAPON,				// 1
-	AUDIO_MENU_MUSIC,				// 2
-	AUDIO_PUNCH,					// 3
-	AUDIO_SWING_ATTACK,				// 4
-	AUDIO_SWOOSH					// 5
+enum AUDIO_ID  				// 定義各種音效的編號
+{
+    AUDIO_BATTLE_MUSIC,				// 0
+    AUDIO_DRAW_WEAPON,				// 1
+    AUDIO_MENU_MUSIC,				// 2
+    AUDIO_PUNCH,					// 3
+    AUDIO_SWING_ATTACK,				// 4
+    AUDIO_SWOOSH,					// 5
+    AUDIO_EXPLOSION_FX,				// 6
+    AUDIO_CLICK_START				// 7
 };
 
 class Ground;

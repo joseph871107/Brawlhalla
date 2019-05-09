@@ -39,6 +39,64 @@ BattleSystem::BattleSystem(CGame* g, shared_ptr<Map> m) : CGameState(g), setting
 BattleSystem::~BattleSystem()
 {
     ClearPlayers();
+    ClearExplosionEffects();
+}
+
+void BattleSystem::ClearExplosionEffects()
+{
+    for (auto elementPtr : _explosionEffects)
+        delete elementPtr;
+
+    _explosionEffects.clear();
+}
+
+void BattleSystem::InitializeExplosionEffectsOnBeginState()
+{
+    ExplosionEffect* explosionEffectPtr;
+    // _explosionEffects[0] for Player 1
+    explosionEffectPtr = new ExplosionEffect();
+    explosionEffectPtr->SetIsTrigger(false); // required
+    explosionEffectPtr->LoadBitmap();
+    explosionEffectPtr->AddCamera(&camera);
+    _explosionEffects.push_back(explosionEffectPtr);
+    // _explosionEffects[1] for Player 2
+    explosionEffectPtr = new ExplosionEffect();
+    explosionEffectPtr->SetIsTrigger(false); // required
+    explosionEffectPtr->LoadBitmap();
+    explosionEffectPtr->AddCamera(&camera);
+    _explosionEffects.push_back(explosionEffectPtr);
+}
+
+void BattleSystem::InitializePlayersOnBeginState()
+{
+    Player* player;
+    // Player
+    player = new Player();
+    player->LoadBitmap();
+    player->AddCamera(&camera);
+    _players.push_back(player);				// Player 1
+    // Enemy
+    player = new Enemy();
+    player->LoadBitmap();
+    player->AddCamera(&camera);
+    _players.push_back(player);				// Player 2
+    // Initialize keys for players
+    vector<vector<long>> playerKeys =
+    {
+        {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M},
+        {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
+    };
+
+    // Initialize other attributes of the players
+    for (auto i = _players.begin(); i != _players.end(); i++)
+    {
+        char str[80];
+        sprintf(str, "%d", i - _players.begin() + 1);
+        (*i)->Initialize(this, *_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+    }
+
+    //
+    map->AddPlayers(&_players);
 }
 
 void BattleSystem::OnBeginState()
@@ -47,12 +105,16 @@ void BattleSystem::OnBeginState()
     	~ This function is called whenever the game state turns into 'CGameStateRun';
     	~ thus, it serves as the initialization of each game match
     */
+    // Clear the players and explosion effects from the last match
     ClearPlayers();
+    ClearExplosionEffects();
+    // Initialize the match
+    CAudio::Instance()->Play(AUDIO_BATTLE_MUSIC, true);
+    _secPerRound = MATCH_TIME;
+    //
     map = CGameStateInit::GetMap();
     _grounds = map->GetGrounds();
     _weapons = map->GetWeapons();
-    CAudio::Instance()->Play(AUDIO_BATTLE_MUSIC, true);
-    _secPerRound = MATCH_TIME;
     camera = Camera();
     camera.SetGradual(true);
     map->AddCamera(&camera);
@@ -62,35 +124,12 @@ void BattleSystem::OnBeginState()
 
     background = &map->background;
     background->AddCamera(&camera);
+    // Explosion Effects
+    InitializeExplosionEffectsOnBeginState();
     // Player
-    Player* player = new Player();
-    player->LoadBitmap();
-    player->AddCamera(&camera);
-    _players.push_back(player);				// Player1
-    // Enemy
-    player = new Enemy();
-    player->LoadBitmap();
-    player->AddCamera(&camera);
-    _players.push_back(player);				// Enemy
-    //
-    map->AddPlayers(&_players);
-    vector<vector<long>> playerKeys =
-    {
-        {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M},
-        {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
-    };
-
-    for (auto i = _players.begin(); i != _players.end(); i++)
-    {
-        char str[80];
-        sprintf(str, "%d", i - _players.begin() + 1);
-        (*i)->Initialize(this, *_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()]);
-    }
-
+    InitializePlayersOnBeginState();
+    // Setting Window
     settingWindow.GetUI()->Reset();
-    // Explosion Effect
-    _isShowingExplosionEffect = false;
-    _explosionEffect.AddCamera(&camera);
 }
 
 void BattleSystem::GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, int* posYPtr)
@@ -98,6 +137,7 @@ void BattleSystem::GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, 
     /*	~ Remark:
     	~ Set the effect position based on the selected current animation for '_explosionEffect'
     */
+    ExplosionEffect* explosionEffectPtr = deadPlayer->GetExplosionEffect();
     int playerX1 = deadPlayer->GetCor(0);
     int playerY1 = deadPlayer->GetCor(1);
     int playerX2 = deadPlayer->GetCor(2);
@@ -106,31 +146,42 @@ void BattleSystem::GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, 
     int offsetY = 50;
     int offsetX = 50;
 
-    switch (_explosionEffect.GetCurrentAni())
+    switch (explosionEffectPtr->GetCurrentAni())
     {
         case ExplosionEffect::ANI_ID_EXPLO_UP:
-            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - _explosionEffect.GetCurrentAnimationWidth() / 2.0);
+            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - explosionEffectPtr->GetCurrentAnimationWidth() / 2.0);
             *posYPtr = 0 - offsetY;
             break;
 
         case ExplosionEffect::ANI_ID_EXPLO_RIGHT:
-            *posXPtr = DoubleToInteger(SIZE_X - _explosionEffect.GetCurrentAnimationWidth() - offsetX);
-            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - _explosionEffect.GetCurrentAnimationHeight() / 2.0);
+            *posXPtr = DoubleToInteger(SIZE_X - explosionEffectPtr->GetCurrentAnimationWidth() - offsetX);
+            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - explosionEffectPtr->GetCurrentAnimationHeight() / 2.0);
             break;
 
         case ExplosionEffect::ANI_ID_EXPLO_DOWN:
-            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - _explosionEffect.GetCurrentAnimationWidth() / 2.0);
-            *posYPtr = DoubleToInteger(SIZE_Y - _explosionEffect.GetCurrentAnimationHeight() - offsetY);
+            *posXPtr = DoubleToInteger(playerX1 + deadPlayer->GetWidth() / 2.0 - explosionEffectPtr->GetCurrentAnimationWidth() / 2.0);
+            *posYPtr = DoubleToInteger(SIZE_Y - explosionEffectPtr->GetCurrentAnimationHeight() - offsetY);
             break;
 
         case ExplosionEffect::ANI_ID_EXPLO_LEFT:
             *posXPtr = 0 - offsetX;
-            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - _explosionEffect.GetCurrentAnimationHeight() / 2.0);
+            *posYPtr = DoubleToInteger(playerY1 + deadPlayer->GetHeight() / 2.0 - explosionEffectPtr->GetCurrentAnimationHeight() / 2.0);
             break;
 
         default:
             break;
     }
+
+    // Confine posX and posY to the map
+    if (*posXPtr < 0 - offsetX)
+        *posXPtr = 0 - offsetX;
+    else if (*posXPtr > SIZE_X)
+        *posXPtr = DoubleToInteger(SIZE_X - explosionEffectPtr->GetCurrentAnimationWidth());
+
+    if (*posYPtr < 0 - offsetY)
+        *posYPtr = 0 - offsetY;
+    else if (*posYPtr > SIZE_Y)
+        *posYPtr = DoubleToInteger(SIZE_Y - explosionEffectPtr->GetCurrentAnimationHeight());
 }
 
 int BattleSystem::DoubleToInteger(double mDouble)
@@ -138,32 +189,36 @@ int BattleSystem::DoubleToInteger(double mDouble)
     return ((int)(mDouble + 0.5));
 }
 
-void BattleSystem::InitializeExplosionEffect(Player* deadPlayer)
+void BattleSystem::TriggerExplosionEffect(Player* deadPlayer)
 {
+    ExplosionEffect* explosionEffectPtr = deadPlayer->GetExplosionEffect();
     // Trigger the explosion effect
-    _isShowingExplosionEffect = true;
+    explosionEffectPtr->SetIsTrigger(true);
     // Set the proper explosion effect direction
     int playerX = deadPlayer->GetCor(0);
     int playerY = deadPlayer->GetCor(1);
-    int distanceError = 100;
+    int distanceError = 200;
 
     if (abs(playerY - MAP_BORDER_Y1) < distanceError)
-        _explosionEffect.SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_UP);
+        explosionEffectPtr->SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_UP);
     else if (abs(playerY - MAP_BORDER_Y2) < distanceError)
-        _explosionEffect.SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_DOWN);
+        explosionEffectPtr->SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_DOWN);
     else if (abs(playerX - MAP_BORDER_X1) < distanceError)
-        _explosionEffect.SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_LEFT);
+        explosionEffectPtr->SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_LEFT);
     else if (abs(playerX - MAP_BORDER_X2) < distanceError)
-        _explosionEffect.SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_RIGHT);
+        explosionEffectPtr->SetCurrentAni(ExplosionEffect::ANI_ID_EXPLO_RIGHT);
     else
     {
         /* Do nothing */
     }
 
-    //
+    // Set the position of the explosion
     int posX, posY;
     GetExplosionEffectPosition(deadPlayer, &posX, &posY);
-    _explosionEffect.SetXY(posX, posY);
+    explosionEffectPtr->SetXY(posX, posY);
+
+	// Play explosion effect
+	CAudio::Instance()->Play(AUDIO_EXPLOSION_FX);
 }
 
 
@@ -192,14 +247,11 @@ void BattleSystem::OnMove()							// 移動遊戲元素
     ResizeCamera();
 
     // Explosion Effect
-    if (_isShowingExplosionEffect)
-        _explosionEffect.OnMove();
-
-    if (_explosionEffect.IsCurrentAniFinalBitmap())
-        _isShowingExplosionEffect = false;
+    for (auto elementPtr : _explosionEffects)
+        elementPtr->OnMove();
 }
 
-void BattleSystem::OnInitLoadSound()
+void BattleSystem::LoadSoundOnInit()
 {
     CAudio::Instance()->Load(AUDIO_BATTLE_MUSIC, "sounds\\BattleMusic.mp3");
     CAudio::Instance()->Load(AUDIO_DRAW_WEAPON, "sounds\\DrawWeapon.mp3");
@@ -207,6 +259,8 @@ void BattleSystem::OnInitLoadSound()
     CAudio::Instance()->Load(AUDIO_PUNCH, "sounds\\Punch.mp3");
     CAudio::Instance()->Load(AUDIO_SWING_ATTACK, "sounds\\SwingAttack.mp3");
     CAudio::Instance()->Load(AUDIO_SWOOSH, "sounds\\Swoosh.mp3");
+    CAudio::Instance()->Load(AUDIO_EXPLOSION_FX, "sounds\\ExplosionFX.mp3");
+    CAudio::Instance()->Load(AUDIO_CLICK_START, "sounds\\ClickStart.mp3");
 }
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
@@ -228,7 +282,7 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     }
 
     /*------------------------------INIT PROGRESS STAGE 4------------------------------*/
-    OnInitLoadSound(); // Load all the soundtracks required
+	LoadSoundOnInit(); // Load all the soundtracks required
     CAudio::Instance()->Play(AUDIO_MENU_MUSIC, true);
     ShowInitProgress(50);
     ShowInitProgress(75);
@@ -240,9 +294,8 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     settingWindow.SetXY(0, 0);
     settingWindow.GetUI()->AddButton("enemy stop", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, (enemyPause ? "PAUSE" : "RESUME"));
     settingWindow.SetSize(0.5);
-    // Explosion Effect
-    _explosionEffect = ExplosionEffect();
-    _explosionEffect.LoadBitmap();
+    // Explosion Effects
+    _explosionEffects = vector<ExplosionEffect*>();
     //
     ShowInitProgress(100);
 }
@@ -316,8 +369,8 @@ void BattleSystem::OnShow()
     settingWindow.OnShow();
 
     // Explosion Effect
-    if (_isShowingExplosionEffect)
-        _explosionEffect.OnShow();
+    for (auto elementPtr : _explosionEffects)
+        elementPtr->OnShow();
 
     //------------------Test Text------------------//
     if (_PLAYER_DEBUG)
@@ -381,11 +434,22 @@ void BattleSystem::AddMap(shared_ptr<Map> m)
 
 bool BattleSystem::IsGameOver()
 {
+    bool isFinishedPlayingAllEffects = true;
+
+    for (auto explosionEffectPtr : _explosionEffects)
+    {
+        if (explosionEffectPtr->GetIsTrigger())
+        {
+            isFinishedPlayingAllEffects = false;
+            break;
+        }
+    }
+
     for (auto i : _players)
-        if (i->IsOutOfLife())
+        if (isFinishedPlayingAllEffects && i->IsOutOfLife())
             return true;
 
-    return (GetCurrentRemainTime() == 0);
+    return (GetCurrentRemainTime() == 0); // Draw
 }
 
 string BattleSystem::GetGameResult()
@@ -410,9 +474,7 @@ string BattleSystem::GetGameResult()
 void BattleSystem::ClearPlayers()
 {
     for (auto element : _players)
-    {
         delete element;
-    }
 
     _players.clear();
 }

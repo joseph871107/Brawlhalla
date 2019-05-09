@@ -21,17 +21,17 @@ ExplosionEffect::~ExplosionEffect()
     /* Body intentionally empty */
 }
 
-ExplosionEffect::ExplosionEffect() : ExplosionEffect(int(), int(), vector<CAnimation>(), int(), nullptr)
+ExplosionEffect::ExplosionEffect() : ExplosionEffect(int(), int(), vector<CAnimation>(), int(), nullptr, bool())
 {
     /* Body intentionally empty */
 }
 
-ExplosionEffect::ExplosionEffect(const ExplosionEffect& objectValue) : ExplosionEffect(objectValue._x, objectValue._y, objectValue._anis, objectValue._currentAni, objectValue._cameraPtr)
+ExplosionEffect::ExplosionEffect(const ExplosionEffect& objectValue) : ExplosionEffect(objectValue._x, objectValue._y, objectValue._anis, objectValue._currentAni, objectValue._cameraPtr, objectValue._isTrigger)
 {
     /* Body intentionally empty */
 }
 
-ExplosionEffect::ExplosionEffect(const int& xValue, const int& yValue, const vector<CAnimation>& anisValue, const int& currentAniValue, Camera* const& cameraPtrValue) : _x(xValue), _y(yValue), _anis(anisValue), _currentAni(currentAniValue), _cameraPtr(cameraPtrValue)
+ExplosionEffect::ExplosionEffect(const int& xValue, const int& yValue, const vector<CAnimation>& anisValue, const int& currentAniValue, Camera* const& cameraPtrValue, const bool& isTriggerValue) : _x(xValue), _y(yValue), _anis(anisValue), _currentAni(currentAniValue), _cameraPtr(cameraPtrValue), _isTrigger(isTriggerValue)
 {
     /* Body intentionally empty */
 }
@@ -45,14 +45,10 @@ ExplosionEffect& ExplosionEffect::operator=(const ExplosionEffect& rightObject)
         _anis = rightObject._anis;
         _currentAni = rightObject._currentAni;
         _cameraPtr = rightObject._cameraPtr;
+		_isTrigger = rightObject._isTrigger;
     }
 
     return (*this);
-}
-
-void ExplosionEffect::Initialize()
-{
-    /* Do nothing */
 }
 
 void ExplosionEffect::LoadBitmap()
@@ -70,15 +66,22 @@ void ExplosionEffect::LoadBitmap()
 
 void ExplosionEffect::OnMove()
 {
-    _anis[_currentAni].OnMove();
+    if (_isTrigger) // Animation only display when triggered
+        _anis[_currentAni].OnMove();
+
+    if (IsCurrentAniFinalBitmap()) // If the explosion effect finishes its showcase, then stop it
+        SetIsTrigger(false);
 }
 
 void ExplosionEffect::OnShow()
 {
-    CPoint cam = _cameraPtr->GetXY(_x, _y );
-    _anis[_currentAni].SetSize(BITMAP_SIZE * _cameraPtr->GetSize());
-    _anis[_currentAni].SetTopLeft(_x, _y);
-    _anis[_currentAni].OnShow();
+    if (_isTrigger) // Animation only display when triggered
+    {
+        CPoint cam = _cameraPtr->GetXY(_x, _y);
+        _anis[_currentAni].SetSize(BITMAP_SIZE * _cameraPtr->GetSize());
+        _anis[_currentAni].SetTopLeft(_x, _y);
+        _anis[_currentAni].OnShow();
+    }
 }
 
 void ExplosionEffect::SetXY(const int& newX, const int& newY)
@@ -128,6 +131,15 @@ const int& ExplosionEffect::GetCurrentAni() const
 void ExplosionEffect::AddCamera(Camera* camcameraPtrValue)
 {
     _cameraPtr = camcameraPtrValue;
+}
+
+void ExplosionEffect::SetIsTrigger(bool newIsTrigger)
+{
+    _isTrigger = newIsTrigger;
+}
+
+const bool& ExplosionEffect::GetIsTrigger() const {
+	return(_isTrigger);
 }
 
 }

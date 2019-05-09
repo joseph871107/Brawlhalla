@@ -19,14 +19,13 @@ class ExplosionEffect
         ExplosionEffect(const ExplosionEffect& objectValue);
         //Copy constructor
 
-        ExplosionEffect(const int& xValue, const int& yValue, const vector<CAnimation>& anisValue, const int& currentAniValue, Camera* const& cameraPtrValue);
+        ExplosionEffect(const int& xValue, const int& yValue, const vector<CAnimation>& anisValue, const int& currentAniValue, Camera* const& cameraPtrValue, const bool& isTriggerValue);
         //Full constructor
 
         ExplosionEffect& operator=(const ExplosionEffect& rightObject);
         //Operator overloading function of the assignment operator
 
         // Required for Game Framework
-        void Initialize(); /// DEBUG: Comment for future devs: unused function
         void LoadBitmap();
         void OnMove();
         void OnShow();
@@ -35,10 +34,11 @@ class ExplosionEffect
         void SetXY(const int& newX, const int& newY);
         void SetCurrentAni(const int& newCurrentAni);
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
-        bool IsCurrentAniFinalBitmap();
         double GetCurrentAnimationHeight();
         double GetCurrentAnimationWidth();
         const int& GetCurrentAni() const;
+		void SetIsTrigger(bool newIsTrigger);
+		const bool & GetIsTrigger() const;
 
         // Camera
         void AddCamera(Camera* cameraPtrValue);	// Camera
@@ -51,10 +51,14 @@ class ExplosionEffect
 
 
     private:
+		//-----------------FUNCTIONS DECLARATIONS-----------------//
+		bool IsCurrentAniFinalBitmap();
+		//-----------------VARIABLES DECLARATIONS-----------------//
         int _x, _y;
         vector<CAnimation> _anis;
         int _currentAni;
         Camera* _cameraPtr;
+		bool _isTrigger;
 
 };
 #endif

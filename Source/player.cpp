@@ -6,6 +6,7 @@
 #include "gamelib.h"
 //
 #include "player.h"
+// Triggered Animation
 #include "TriggeredAnimation.h"
 #include "AirAttackTriggeredAnimation.h"
 #include "AirLandDownAttackTriggeredAnimation.h"
@@ -17,7 +18,9 @@
 #include "GroundLandDownAttackTriggeredAnimation.h"
 #include "GroundMoveLeftAttackTriggeredAnimation.h"
 #include "GroundMoveRightAttackTriggeredAnimation.h"
+// Others
 #include "BattleSystem.h"
+#include "ExplosionEffect.h"
 
 namespace game_framework
 {
@@ -38,7 +41,7 @@ const double MOVE_ACCELERATION = 0.5;
 const double STOP_ACCELERATION = 1;
 const double MAX_MOVE_VELOCITY = 10;
 const int INITIAL_TAKEN_DAMAGE = 10;
-const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 2;
+const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 20; /// DEBUG: For demo 2 on May 10th
 // Triggered Animation Key ID
 const int KEY_GND_ATTACK = 112;
 const int KEY_GND_MOVE_RIGHT_ATTACK = 122;
@@ -100,7 +103,7 @@ void Player::InitializeTriggeredAnimations()
     _triggeredAnis.push_back((TriggeredAnimation*) new DodgeTriggeredAnimation(this, KEY_DODGE));
 }
 
-void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue)
+void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue, ExplosionEffect* const explosionEffectPtrValue)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
     Ground* g = GetRandomGround(&groundsValue);		// Randomly select Ground
@@ -134,6 +137,8 @@ void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> grounds
     _battleSystem = battleSystemValue;
     //
     InitializeOnRespawn();
+    //
+    _explosionEffectPtr = explosionEffectPtrValue;
 }
 
 void Player::LoadBitmap()
@@ -633,8 +638,11 @@ void Player::OnMoveGameLogic()
     /* FALL OFF THE MAP */
     if (IsOutMapBorder())
     {
-        DoDead();
-        DoRespawn();
+        if (_life > 0) // Avoid decrementing the player's life when he has no remaining life left while being hit out of the map
+            DoDead();
+
+        if (!IsOutOfLife())
+            DoRespawn();
     }
 
     /*	~ RESET JUMP COUNT
@@ -690,6 +698,7 @@ void Player::OnShow()
         OnShowText(_name.c_str(), cam.x, cam.y, Round(15 * camera->GetSize()), RGB(255, 255, 255));
     }///////////////////////////////
 }
+
 void Player::OnKeyDown(const UINT& nChar)
 {
     if (nChar == _keys[0]) // Up
@@ -748,6 +757,7 @@ void Player::OnKeyDown(const UINT& nChar)
         // Do nothing
     }
 }
+
 void Player::OnKeyUp(const UINT& nChar)
 {
     if (nChar == _keys[1]) // Right
@@ -767,18 +777,21 @@ void Player::OnKeyUp(const UINT& nChar)
         // Do nothing
     }
 }
+
 void Player::SetHoldWeapon(bool isHolding)
 {
     _isHoldingWeapon = isHolding;
     _isTriggerDrawWeapon = isHolding;
     _isTriggerAttack = false; // We are picking weapon, not performing an attack
 }
+
 void Player::InitializeUnconsciousState(bool beingAttackedDirection)
 {
     _isUnconscious = true;
     _unconsciousFramesCount = 0;
     _unconsciousAniDir = beingAttackedDirection;
 }
+
 void Player::BeenAttacked(Vector2 displacementVector, bool beingAttackedDirection)
 {
     int displaceX = displacementVector.GetX();
@@ -812,14 +825,17 @@ void Player::BeenAttacked(Vector2 displacementVector, bool beingAttackedDirectio
 
     InitializeUnconsciousState(beingAttackedDirection);
 }
+
 bool Player::GetHoldWeapon()
 {
     return _isHoldingWeapon;
 }
+
 bool Player::GetDirection()
 {
     return _dir;
 }
+
 int Player::GetCor(int index)
 {
     switch (index)
@@ -840,30 +856,37 @@ int Player::GetCor(int index)
             return NULL;
     }
 }
+
 int Player::GetWidth()
 {
     return GetCor(2) - GetCor(0);
 }
+
 int Player::GetHeight()
 {
     return GetCor(3) - GetCor(1);
 }
+
 const string& Player::GetName() const
 {
     return (_name);
 }
+
 const int& Player::GetLife() const
 {
     return (_life);
 }
+
 const bool Player::IsOutOfLife() const
 {
     return (_life == 0);
 }
+
 const long& Player::GetAttackKey() const
 {
     return (_keys[4]);
 }
+
 void Player::GenerateAndSetWeaponID() // This function is intended to be called by 'Weapon::HitPlayer()'
 {
     // The player will pick his weapon alternatively through out the round
@@ -1211,7 +1234,7 @@ void Player::DoDead()
     ResetWeaponID(); // reset to the default weapon - punch
     _life--;
     // Activate dead effect
-    _battleSystem->InitializeExplosionEffect(this);
+    _battleSystem->TriggerExplosionEffect(this);
 }
 void Player::DoRespawn()
 {
@@ -1789,6 +1812,11 @@ void Player::DoBounceOffGround(int playerX1, int playerY1, int playerX2, int pla
     {
         InitiateOffsetUp(abs(_verticalVelocity));
     }
+}
+
+ExplosionEffect* Player::GetExplosionEffect()
+{
+    return (_explosionEffectPtr);
 }
 
 }

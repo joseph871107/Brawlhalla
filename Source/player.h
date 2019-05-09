@@ -12,6 +12,8 @@ namespace game_framework
 class TriggeredAnimation;
 class BattleSystem;
 
+class ExplosionEffect;
+
 class Player
 {
     public:
@@ -21,7 +23,7 @@ class Player
         ~Player();						//Destructor
 
         //Required for Game Framework
-        void Initialize(BattleSystem* battleSystemValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue);
+        void Initialize(BattleSystem* battleSystemValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue, ExplosionEffect* const explosionEffectPtrValue);
         void LoadBitmap();
         virtual void OnMove();
         void OnShow();
@@ -48,6 +50,7 @@ class Player
         void GenerateAndSetWeaponID();	// Called by 'Weapon::HitPlayer()' when the player picks up a weapon
         void ResetWeaponID();
         void PerformAttack(Player* targetPlayer, bool attackDirection);
+		ExplosionEffect* GetExplosionEffect();
 
         // Used by Triggered Animation classes
         void SetAnimationSelector(bool newAniSelector);
@@ -274,7 +277,7 @@ class Player
         bool _isTriggerAttack;
         int _takenDmg;
 
-        //Trow weapon
+        //Throw weapon
         Weapon* _flyingWeapon;
         void DeleteFlyingWeapon();
         // The taken damage will determine how far the target player would fly 'attackOffsetMagnitude', and
@@ -368,6 +371,7 @@ class Player
 
         // Game Effect
         BattleSystem* _battleSystem;
+		ExplosionEffect* _explosionEffectPtr;
 };
 #endif
 }
