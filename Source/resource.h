@@ -272,6 +272,7 @@
 #define	IDB_FX_SKILL0_R0				552
 #define	IDB_FX_SKILL0_R1				553
 #define	IDB_FX_SKILL0_R2				554
+#define	IDB_P_LOUIS						555
 #define IDB_WEAPON_ROT_L                600
 #define IDB_WEAPON_ROT_L_45             601
 #define IDB_WEAPON_ROT_L_90             602

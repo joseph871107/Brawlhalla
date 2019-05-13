@@ -337,6 +337,31 @@ bool IsCollide(int x1, int y1, int x2, int y2, int tx1, int ty1, int tx2, int ty
 {
 	return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
 }
+vector<vector<CMovingBitmap>> CropSprite(int IDB, int row, int column, COLORREF color)
+{
+	vector<vector<CMovingBitmap>> sprite;
+	CMovingBitmap tbmp;
+	tbmp.LoadBitmap(IDB, color);
+	int width = tbmp.Width() / column, height = tbmp.Height() / row;
+	for (int i = 0; i < row; i++) {
+		vector<CMovingBitmap> temp;
+		for (int j = 0; j < column; j++) {
+			RECT rect;
+			rect.left = width * j;
+			rect.right = rect.left + width;
+			rect.top = height * i;
+			rect.bottom = rect.top + height;
+			CMovingBitmap bmp;
+			char path[64];
+			strcpy(path, GetPathFromResource(IDB).c_str());
+			bmp.LoadBitmap(path, rect, color);
+			temp.push_back(bmp);
+		}
+		sprite.push_back(temp);
+	}
+
+	return sprite;
+}
 void CRAnimation::NextPtr()
 {
 	bmp_iter++;

@@ -110,6 +110,7 @@ char* ToCharPtr(string);
 int random(int min, int max);
 Ground* GetRandomGround(vector<Ground*>* ground);
 bool IsCollide(int x1, int y1, int x2, int y2, int tx1, int ty1, int tx2, int ty2);
+vector<vector<CMovingBitmap>> CropSprite(int IDB, int row, int column, COLORREF color);
 }
 
 #endif //define GAMECOMFUNC_H

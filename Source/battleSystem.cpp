@@ -265,14 +265,6 @@ void BattleSystem::LoadSoundOnInit()
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
-    /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
-    InitializeNum();										// 初始化"resource.h"中點陣圖的資源編號
-    InitializeNum("IDS");									// 初始化"resource.h"中音效的資源編號
-    ShowInitProgress(13);
-    /*------------------------------INIT PROGRESS STAGE 2------------------------------*/
-    InitializeFile();										// 初始化"game.rc"中點陣圖的路徑
-    InitializeFile("SOUND");								// 初始化"game.rc"中音效的路徑
-    ShowInitProgress(25);
 
     /*------------------------------INIT PROGRESS STAGE 3------------------------------*/
     if (GENERATE_COLLISION_ARRAY)

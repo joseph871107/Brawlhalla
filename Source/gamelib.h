@@ -68,7 +68,7 @@
 
 #define SIZE_X				 1600		// 設定遊戲畫面的解析度為640x480
 #define SIZE_Y				 900		// 註：若不使用標準的解析度，則不能切換到全螢幕
-#define OPEN_AS_FULLSCREEN	 true		// 是否以全螢幕方式開啟遊戲
+#define OPEN_AS_FULLSCREEN	 false		// 是否以全螢幕方式開啟遊戲
 #define SHOW_LOAD_PROGRESS   true		// 是否顯示loading(OnInit)的進度
 #define DEFAULT_BG_COLOR	 RGB(0,0,0)	// 遊戲畫面預設的背景顏色(黑色)
 #define GAME_CYCLE_TIME		 16		    // 每33ms跑一次Move及Show(每秒30次)
@@ -165,10 +165,12 @@ class CDDraw
         static bool  CreateSurfaceFullScreen();
         static bool  CreateSurfaceWindowed();
         static void  LoadBitmap(int i, int IDB_BITMAP);
-        static void  LoadBitmap(int i, char* filename);
+		static void  LoadBitmap(int i, char* filename);
+		static void  LoadBitmap(int i, char* filename, RECT rect);
         static DWORD MatchColorKey(LPDIRECTDRAWSURFACE lpDDSurface, COLORREF color);
         static int   RegisterBitmap(int IDB_BITMAP, COLORREF ColorKey);
-        static int   RegisterBitmap(char* filename, COLORREF ColorKey);
+		static int   RegisterBitmap(char* filename, COLORREF ColorKey);
+		static int   RegisterBitmap(char* filename, COLORREF ColorKey, RECT rect);
         static void  ReleaseSurface();
         static void  RestoreSurface();
         static void  SetColorKey(unsigned SurfaceID, COLORREF color);
@@ -202,8 +204,9 @@ class CMovingBitmap
         CMovingBitmap();
         int   Height();						// 取得圖形的高度
         int   Left();						// 取得圖形的左上角的 x 座標
-        void  LoadBitmap(int, COLORREF = CLR_INVALID);		// 載入圖，指定圖的編號(resource)及透明色
-        void  LoadBitmap(char*, COLORREF = CLR_INVALID);	// 載入圖，指定圖的檔名及透明色
+		void  LoadBitmap(int, COLORREF = CLR_INVALID);			// 載入圖，指定圖的編號(resource)及透明色
+		void  LoadBitmap(char*, RECT, COLORREF = CLR_INVALID);	// 載入圖，指定圖的檔名及透明色及裁切範圍
+		void  LoadBitmap(char*, COLORREF = CLR_INVALID);		// 載入圖，指定圖的檔名及透明色
         void  SetTopLeft(int, int);			// 將圖的左上角座標移至 (x,y)
         void  ShowBitmap();					// 將圖貼到螢幕
         void  ShowBitmap(double factor);	// 將圖貼到螢幕 factor < 1時縮小，>1時放大。注意：需要VGA卡硬體的支援，否則會很慢
@@ -235,8 +238,10 @@ class CAnimation
         CAnimation(bool rt, int = 1, int = 10);			// Constructor (預設動畫播放頻率每1/3秒換一張圖)
         void  AddBitmap(int, COLORREF = CLR_INVALID);
         // 增加一張圖形至動畫(圖的編號及透明色)
-        void  AddBitmap(char*, COLORREF = CLR_INVALID);
-        // 增加一張圖形至動畫(圖的編號及透明色)
+		void  AddBitmap(char*, COLORREF = CLR_INVALID);
+		// 增加一張圖形至動畫(圖的編號及透明色)
+		void  AddBitmap(CMovingBitmap);
+		// 增加一張圖形至動
         int   GetCurrentBitmapNumber();	// 取得正在撥放的bitmap是第幾個bitmap
         int   Height();					// 取得動畫的高度
         bool  IsFinalBitmap();			// 回傳正在撥放的bitmap是否為最後一個bitmap

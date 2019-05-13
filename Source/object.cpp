@@ -94,6 +94,14 @@ void Object::LoadBitmap(int resource, COLORREF color)
 	loaded++;
 }
 
+void Object::LoadBitmap(char * resource, RECT rect, COLORREF color)
+{
+	bmp.LoadBitmap(resource, rect, color);
+	width = bmp.Width();
+	height = bmp.Height();
+	loaded++;
+}
+
 void Object::SetXY(int nx, int ny)
 {
     x = nx;

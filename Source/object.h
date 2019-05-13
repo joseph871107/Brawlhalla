@@ -29,7 +29,8 @@ class Object
         virtual void OnShow(int offsetX = 0, int offsetY = 0);	// 將圖形貼到畫面
         virtual void OnMove();									// 移動
 		virtual void LoadBitmap(int);							// 載入圖形
-        virtual void LoadBitmap(int, COLORREF);					// 載入圖形
+		virtual void LoadBitmap(int, COLORREF);					// 載入圖形
+		virtual void LoadBitmap(char*, RECT, COLORREF);					// 載入圖形
     protected:
         int x, y, loaded = 0;												// 物件的座標
         int width, height;										// 物件的長寬

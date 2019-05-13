@@ -203,6 +203,12 @@ void CAnimation::AddBitmap(char* filename, COLORREF colorkey)
     Reset();
 }
 
+void CAnimation::AddBitmap(CMovingBitmap tbmp)
+{
+	bmp.insert(bmp.end(), tbmp);
+	Reset();
+}
+
 int CAnimation::GetCurrentBitmapNumber()
 {
     return bmp_counter;
@@ -435,6 +441,58 @@ void CMovingBitmap::LoadBitmap(int IDB_BITMAP, COLORREF color)
     isBitmapLoaded = true;
 }
 
+HBITMAP GetClippedBitmapFromBitmap(RECT rect, HBITMAP hSource)
+{
+	HDC hdcMem, hdcMem2;
+	// Get some HDCs that are compatible with the display driver
+
+	HBITMAP hClone = (HBITMAP)CopyImage(hSource, IMAGE_BITMAP, rect.right - rect.left, rect.bottom - rect.top, LR_CREATEDIBSECTION);
+
+	hdcMem = CreateCompatibleDC(0);
+	hdcMem2 = CreateCompatibleDC(0);
+
+	HBITMAP hOldBmp = (HBITMAP)SelectObject(hdcMem, hSource);
+	HBITMAP hOldBmp2 = (HBITMAP)SelectObject(hdcMem2, hClone);
+
+	BitBlt(hdcMem2, 0, 0, rect.right - rect.left, rect.bottom - rect.top, hdcMem, rect.left, rect.top, SRCCOPY);
+
+	// Clean up.
+	SelectObject(hdcMem, hOldBmp);
+	SelectObject(hdcMem2, hOldBmp2);
+
+	DeleteDC(hdcMem);
+	DeleteDC(hdcMem2);
+
+	return hClone;
+}
+
+void CMovingBitmap::LoadBitmap(char *filename, RECT rect, COLORREF color)
+{
+	const int nx = 0;
+	const int ny = 0;
+	GAME_ASSERT(!isBitmapLoaded, "A bitmap has been loaded. You can not load another bitmap !!!");
+	HBITMAP hbitmap = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	hbitmap = GetClippedBitmapFromBitmap(rect, hbitmap);
+
+	if (hbitmap == NULL)
+	{
+		char error_msg[300];
+		sprintf(error_msg, "Loading bitmap from file \"%s\" failed !!!", filename);
+		GAME_ASSERT(false, error_msg);
+	}
+
+	CBitmap* bmp = CBitmap::FromHandle(hbitmap); // memory will be deleted automatically
+	BITMAP bitmapSize;
+	bmp->GetBitmap(&bitmapSize);
+	location.left = nx;
+	location.top = ny;
+	location.right = nx + bitmapSize.bmWidth;
+	location.bottom = ny + bitmapSize.bmHeight;
+	SurfaceID = CDDraw::RegisterBitmap(filename, color, rect);
+	isBitmapLoaded = true;
+	bmp->DeleteObject();
+}
+
 void CMovingBitmap::LoadBitmap(char* filename, COLORREF color)
 {
     const int nx = 0;
@@ -458,6 +516,7 @@ void CMovingBitmap::LoadBitmap(char* filename, COLORREF color)
     location.bottom = ny + bitmapSize.bmHeight;
     SurfaceID = CDDraw::RegisterBitmap(filename, color);
     isBitmapLoaded = true;
+	bmp->DeleteObject();
 }
 
 void CMovingBitmap::SetTopLeft(int x, int y)
@@ -1051,10 +1110,14 @@ bool CDDraw::CreateSurface()
 
     for (unsigned i = 0; i < lpDDS.size(); i++)
     {
-        if (BitmapID[i] != -1) // from resource
-            LoadBitmap(i, BitmapID[i]);
+        if (BitmapID[i] == -1)
+			LoadBitmap(i, (char*)BitmapName[i].c_str());  // from file
+		else if (BitmapID[i] == -2) {
+			string str = BitmapName[i].substr(0, BitmapName[i].find(".bmp") + 4);
+			LoadBitmap(i, (char*)str.c_str(), BitmapRect[i]);  // from file
+		}
         else
-            LoadBitmap(i, (char*) BitmapName[i].c_str());  // from file
+			LoadBitmap(i, BitmapID[i]); // from resource
 
         SetColorKey(i, BitmapColorKey[i]);
     }
@@ -1273,6 +1336,42 @@ void CDDraw::LoadBitmap(int i, char* filename)
     bmp->DeleteObject();
 }
 
+void CDDraw::LoadBitmap(int i, char * filename, RECT rect)
+{
+	HBITMAP hbitmap = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	hbitmap = GetClippedBitmapFromBitmap(rect, hbitmap);
+	GAME_ASSERT(hbitmap != NULL, "Load bitmap failed !!! Please check bitmap ID (IDB_XXX).");
+	CBitmap* bmp = CBitmap::FromHandle(hbitmap); // will be deleted automatically
+	CDC mDC;
+	mDC.CreateCompatibleDC(NULL);
+	CBitmap* pOldBitmap = mDC.SelectObject(bmp);
+	BITMAP bitmapSize;
+	bmp->GetBitmap(&bitmapSize);
+	DDSURFACEDESC ddsd;
+	ZeroMemory(&ddsd, sizeof(ddsd));
+	ddsd.dwSize = sizeof(ddsd);
+	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+	ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
+	BitmapRect[i].bottom = ddsd.dwHeight = bitmapSize.bmHeight;
+	BitmapRect[i].right = ddsd.dwWidth = bitmapSize.bmWidth;
+	ddrval = lpDD->CreateSurface(&ddsd, &lpDDS[i], NULL);
+	CheckDDFail("Create Bitmap Surface Failed");
+	HDC hdc;
+	ddrval = lpDDS[i]->GetDC(&hdc);
+	CheckDDFail("Get surface HDC failed");
+	CDC cdc;
+	cdc.Attach(hdc);
+	cdc.BitBlt(0, 0, bitmapSize.bmWidth, bitmapSize.bmHeight, &mDC, 0, 0, SRCCOPY);
+	cdc.Detach();
+	lpDDS[i]->ReleaseDC(hdc);
+	// avoid memory leak
+	// According to spec, mDC should delete itself automatically.  However,
+	// it appears that we have to do it explictly.
+	mDC.SelectObject(&pOldBitmap);
+	mDC.DeleteDC();
+	bmp->DeleteObject();
+}
+
 DWORD CDDraw::MatchColorKey(LPDIRECTDRAWSURFACE lpDDSurface, COLORREF color)
 {
     DDSURFACEDESC ddsd;
@@ -1366,6 +1465,31 @@ int CDDraw::RegisterBitmap(char* filename, COLORREF ColorKey)
     LoadBitmap(i, filename);
     SetColorKey(i, ColorKey);
     return i;
+}
+
+int CDDraw::RegisterBitmap(char * filename, COLORREF ColorKey, RECT rect)
+{
+	unsigned i;
+	char buf[128], buff[128];
+	sprintf(buf, "%d%d%d%d", rect.left, rect.top, rect.right, rect.bottom);
+	strcpy(buff, filename);
+	strcat(buff, buf);
+
+	for (i = 0; i < lpDDS.size(); i++)
+		if (BitmapName[i].compare(buff) == 0)
+			return i;
+
+	//
+	// Enlarge the size of vectors
+	//
+	BitmapID.push_back(-2);
+	BitmapName.push_back(buff);
+	BitmapColorKey.push_back(ColorKey);
+	BitmapRect.push_back(CRect(0, 0, 0, 0));
+	lpDDS.push_back(NULL);
+	LoadBitmap(i, filename, rect);
+	SetColorKey(i, ColorKey);
+	return i;
 }
 
 void CDDraw::ReleaseBackCDC()

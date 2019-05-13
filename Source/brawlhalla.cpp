@@ -97,6 +97,14 @@ CGameStateInit::~CGameStateInit()
 
 void CGameStateInit::OnInit()
 {
+	/*------------------------------INIT PROGRESS STAGE 1------------------------------*/
+	InitializeNum();										// 初始化"resource.h"中點陣圖的資源編號
+	InitializeNum("IDS");									// 初始化"resource.h"中音效的資源編號
+	ShowInitProgress(5);
+	/*------------------------------INIT PROGRESS STAGE 2------------------------------*/
+	InitializeFile();										// 初始化"game.rc"中點陣圖的路徑
+	InitializeFile("SOUND");								// 初始化"game.rc"中音效的路徑
+	ShowInitProgress(10);
     // Automatically generate ground objects //
     for (auto map : _mapP)
     {
@@ -112,7 +120,7 @@ void CGameStateInit::OnInit()
     for (auto map : maps)
         map->OnInit();
 
-    ShowInitProgress(0);
+    ShowInitProgress(15);
     Object* uiPtr, *ui_info1, *ui_info2, *ui_info3, *ui_info4;
     uiPtr = new Object();
     uiPtr->LoadBitmap(IDB_UI_BACKGROUND);
@@ -154,7 +162,12 @@ void CGameStateInit::OnInit()
     settingWindow.GetUI()->AddButton("maps", butW, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 1, "MAP : " + _mapP[_mapSelected]._name);
     settingWindow.GetUI()->AddButton("fullScreen", 0, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 0, (OPEN_AS_FULLSCREEN ? "FULLSCREEN : TRUE" : "FULLSCREEN : FALSE"));
     settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
-    ShowInitProgress(10);
+    ShowInitProgress(20);
+	vector< vector<CMovingBitmap>> temp = CropSprite(IDB_P_LOUIS, 7, 10, RGB(0, 0, 0));
+	for (auto i : temp)
+		for (auto j : i)
+			ani.AddBitmap(j);
+	ani.SetSize(3);
 }
 
 void CGameStateInit::OnBeginState()
@@ -231,6 +244,7 @@ void CGameStateInit::OnShow()
         if (count > SIZE_X / 2 || count > SIZE_Y / 2)
             PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
     }
+	ani.OnShow();
 }
 
 bool CGameStateInit::GetCameraEnable()
@@ -315,6 +329,7 @@ void CGameStateInit::OnMove()
     }
 
     _fullscreenEnabledLast = _fullscreenEnabled;
+	ani.OnMove();
 }
 
 /////////////////////////////////////////////////////////////////////////////

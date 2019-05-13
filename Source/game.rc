@@ -720,6 +720,8 @@ IDB_FX_SKILL0_R1		BITMAP					"..\\RES\\Effects\\Skill\\skill_0_1(Mirrored).bmp"
 
 IDB_FX_SKILL0_R2		BITMAP					"..\\RES\\Effects\\Skill\\skill_0_2(Mirrored).bmp"
 
+IDB_P_LOUIS				BITMAP					"..\\RES\\players\\louisEX_0.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
