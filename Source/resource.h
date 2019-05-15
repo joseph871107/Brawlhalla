@@ -272,7 +272,20 @@
 #define	IDB_FX_SKILL0_R0				552
 #define	IDB_FX_SKILL0_R1				553
 #define	IDB_FX_SKILL0_R2				554
-#define	IDB_P_LOUIS						555
+#define	IDB_P_LOUIS_R0					555
+#define	IDB_P_LOUIS_L0					556
+#define	IDB_P_LOUIS_R1					557
+#define	IDB_P_LOUIS_L1					558
+#define	IDB_P_LOUIS_R2					559
+#define	IDB_P_LOUIS_L2					560
+#define	IDB_P_LOUIS_EX_R0				561
+#define	IDB_P_LOUIS_EX_L0				562
+#define	IDB_P_LOUIS_EX_R1				563
+#define	IDB_P_LOUIS_EX_L1				564
+#define	IDB_P_LOUIS_EX_R2				565
+#define	IDB_P_LOUIS_EX_L2				566
+#define	IDB_P_LOUIS_EX_R3				567
+#define	IDB_P_LOUIS_EX_L3				568
 #define IDB_WEAPON_ROT_L                600
 #define IDB_WEAPON_ROT_L_45             601
 #define IDB_WEAPON_ROT_L_90             602
@@ -337,7 +350,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        549
+#define _APS_NEXT_RESOURCE_VALUE        100000
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

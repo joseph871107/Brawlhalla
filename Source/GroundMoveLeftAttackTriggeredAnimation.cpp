@@ -65,12 +65,13 @@ void GroundMoveLeftAttackTriggeredAnimation::SetTriggeredAnimationVariables()
 void GroundMoveLeftAttackTriggeredAnimation::InitiateTriggeredAction()
 {
     _playerPtr->SetIsTriggerAttack(false);
-    _playerPtr->InitiateOffsetLeft(Player::OFFSET_INITIAL_VELOCITY);
 }
 
 void GroundMoveLeftAttackTriggeredAnimation::DoTriggeredAction()
 {
     _playerPtr->DoAttack();
+	if(_playerPtr->GetCurrentAniByWeaponNum() == 2)
+		_playerPtr->InitiateOffsetLeft(Player::OFFSET_INITIAL_VELOCITY);
 }
 
 }

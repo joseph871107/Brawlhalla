@@ -85,7 +85,6 @@ class CGameStateInit : public CGameState
 		static bool _cameraEnabled;
 		static int _mapSelected;
 		static vector<shared_ptr<Map>> maps;
-		CAnimation ani;
 };
 
 /////////////////////////////////////////////////////////////////////////////

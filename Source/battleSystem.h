@@ -17,6 +17,21 @@ extern map<string, int> idbList;
 extern map<int, string> fileList;
 extern map<int, ColArray> cArray;
 
+extern vector< vector<CMovingBitmap>> louis_l0;
+extern vector< vector<CMovingBitmap>> louis_r0;
+extern vector< vector<CMovingBitmap>> louis_l1;
+extern vector< vector<CMovingBitmap>> louis_r1;
+extern vector< vector<CMovingBitmap>> louis_l2;
+extern vector< vector<CMovingBitmap>> louis_r2;
+extern vector< vector<CMovingBitmap>> louis_ex_l0;
+extern vector< vector<CMovingBitmap>> louis_ex_r0;
+extern vector< vector<CMovingBitmap>> louis_ex_l1;
+extern vector< vector<CMovingBitmap>> louis_ex_r1;
+extern vector< vector<CMovingBitmap>> louis_ex_l2;
+extern vector< vector<CMovingBitmap>> louis_ex_r2;
+extern vector< vector<CMovingBitmap>> louis_ex_l3;
+extern vector< vector<CMovingBitmap>> louis_ex_r3;
+
 class BattleSystem : public CGameState
 {
     public:

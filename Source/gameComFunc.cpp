@@ -362,6 +362,10 @@ vector<vector<CMovingBitmap>> CropSprite(int IDB, int row, int column, COLORREF 
 
 	return sprite;
 }
+void FlipSprite(vector<vector<CMovingBitmap>> *sprite) {
+	for (auto i = (*sprite).begin(); i != (*sprite).end(); i++)
+		reverse(i->begin(), i->end());
+}
 void CRAnimation::NextPtr()
 {
 	bmp_iter++;

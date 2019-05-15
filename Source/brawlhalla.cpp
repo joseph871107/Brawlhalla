@@ -163,11 +163,6 @@ void CGameStateInit::OnInit()
     settingWindow.GetUI()->AddButton("fullScreen", 0, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 0, (OPEN_AS_FULLSCREEN ? "FULLSCREEN : TRUE" : "FULLSCREEN : FALSE"));
     settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
     ShowInitProgress(20);
-	vector< vector<CMovingBitmap>> temp = CropSprite(IDB_P_LOUIS, 7, 10, RGB(0, 0, 0));
-	for (auto i : temp)
-		for (auto j : i)
-			ani.AddBitmap(j);
-	ani.SetSize(3);
 }
 
 void CGameStateInit::OnBeginState()
@@ -244,7 +239,6 @@ void CGameStateInit::OnShow()
         if (count > SIZE_X / 2 || count > SIZE_Y / 2)
             PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// Ãö³¬¹CÀ¸
     }
-	ani.OnShow();
 }
 
 bool CGameStateInit::GetCameraEnable()
@@ -329,7 +323,6 @@ void CGameStateInit::OnMove()
     }
 
     _fullscreenEnabledLast = _fullscreenEnabled;
-	ani.OnMove();
 }
 
 /////////////////////////////////////////////////////////////////////////////

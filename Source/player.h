@@ -69,6 +69,8 @@ class Player
         void SetIsTriggerDodge(const bool& newIsTriggerDodge);
         void SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon);
         void EmptyHitTargetPlayers();
+		int GetCurrentAniNum();
+		int GetCurrentAniByWeaponNum();
 
         // Used by Ground
         void SetX(const int& newX);
@@ -108,13 +110,14 @@ class Player
         static const int ANI_WPN_ID_DRAW_SWORD_LEFT = 14;
         static const int ANI_WPN_ID_DRAW_SWORD_RIGHT = 15;
         // Others
-        static const int OFFSET_INITIAL_VELOCITY = 15;
+        static const int OFFSET_INITIAL_VELOCITY = 20;
 
     protected:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
         //Animations
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
-        void ResetAnimations(int animationID);
+		void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
+		void ResetAnimations(int animationID);
 
         void SetAnimationStateLeftRight(int leftAnimationId);
         void SetAnimationState(int);	// Set which CAnimation is going to play

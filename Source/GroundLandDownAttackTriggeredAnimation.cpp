@@ -65,16 +65,18 @@ void GroundLandDownAttackTriggeredAnimation::SetTriggeredAnimationVariables()
 void GroundLandDownAttackTriggeredAnimation::InitiateTriggeredAction()
 {
     _playerPtr->SetIsTriggerAttack(false);
-
-    if (_playerPtr->GetTriggeredAnimationDirection())
-        _playerPtr->InitiateOffsetRight(Player::OFFSET_INITIAL_VELOCITY);
-    else
-        _playerPtr->InitiateOffsetLeft(Player::OFFSET_INITIAL_VELOCITY);
 }
 
 void GroundLandDownAttackTriggeredAnimation::DoTriggeredAction()
 {
     _playerPtr->DoAttack();
+
+	if (_playerPtr->GetCurrentAniByWeaponNum() > 4) {
+		if (_playerPtr->GetTriggeredAnimationDirection())
+			_playerPtr->InitiateOffsetRight(15);
+		else
+			_playerPtr->InitiateOffsetLeft(15);
+	}
 }
 
 }

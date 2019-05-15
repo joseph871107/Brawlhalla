@@ -16,6 +16,21 @@ namespace game_framework
 // BattleSystem class
 /////////////////////////////////////////////////////////////////////////////
 
+	vector< vector<CMovingBitmap>> louis_l0;
+	vector< vector<CMovingBitmap>> louis_r0;
+	vector< vector<CMovingBitmap>> louis_l1;
+	vector< vector<CMovingBitmap>> louis_r1;
+	vector< vector<CMovingBitmap>> louis_l2;
+	vector< vector<CMovingBitmap>> louis_r2;
+	vector< vector<CMovingBitmap>> louis_ex_l0;
+	vector< vector<CMovingBitmap>> louis_ex_r0;
+	vector< vector<CMovingBitmap>> louis_ex_l1;
+	vector< vector<CMovingBitmap>> louis_ex_r1;
+	vector< vector<CMovingBitmap>> louis_ex_l2;
+	vector< vector<CMovingBitmap>> louis_ex_r2;
+	vector< vector<CMovingBitmap>> louis_ex_l3;
+	vector< vector<CMovingBitmap>> louis_ex_r3;
+
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MATCH_TIME = 180;
 
@@ -288,7 +303,34 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     settingWindow.SetSize(0.5);
     // Explosion Effects
     _explosionEffects = vector<ExplosionEffect*>();
-    //
+    // Player
+	louis_l0 = CropSprite(IDB_P_LOUIS_L0, 7, 10, RGB(0, 0, 0));
+	FlipSprite(&louis_l0);
+	louis_r0 = CropSprite(IDB_P_LOUIS_R0, 7, 10, RGB(0, 0, 0));
+	ShowInitProgress(78);
+	louis_l1 = CropSprite(IDB_P_LOUIS_L1, 7, 10, RGB(0, 0, 0));
+	FlipSprite(&louis_l1);
+	louis_r1 = CropSprite(IDB_P_LOUIS_R1, 7, 10, RGB(0, 0, 0));
+	ShowInitProgress(81);
+	louis_l2 = CropSprite(IDB_P_LOUIS_L2, 5, 10, RGB(0, 0, 0));
+	FlipSprite(&louis_l2);
+	louis_r2 = CropSprite(IDB_P_LOUIS_R2, 5, 10, RGB(0, 0, 0));
+	ShowInitProgress(84);
+	louis_ex_l0 = CropSprite(IDB_P_LOUIS_EX_L0, 7, 10, RGB(0, 0, 0));
+	FlipSprite(&louis_ex_l0);
+	louis_ex_r0 = CropSprite(IDB_P_LOUIS_EX_R0, 7, 10, RGB(0, 0, 0));
+	ShowInitProgress(87);
+	louis_ex_l1 = CropSprite(IDB_P_LOUIS_EX_L1, 7, 10, RGB(0, 0, 0));
+	FlipSprite(&louis_ex_l1);
+	louis_ex_r1 = CropSprite(IDB_P_LOUIS_EX_R1, 7, 10, RGB(0, 0, 0));
+	ShowInitProgress(90);
+	louis_ex_l2 = CropSprite(IDB_P_LOUIS_EX_L2, 2, 10, RGB(0, 0, 0));
+	FlipSprite(&louis_ex_l2);
+	louis_ex_r2 = CropSprite(IDB_P_LOUIS_EX_R2, 2, 10, RGB(0, 0, 0));
+	ShowInitProgress(95);
+	//louis_ex_l3 = CropSprite(IDB_P_LOUIS_EX_L3, 3, 10, RGB(0, 0, 0));
+	//FlipSprite(&louis_ex_l3);
+	//louis_ex_r3 = CropSprite(IDB_P_LOUIS_EX_R3, 3, 10, RGB(0, 0, 0));
     ShowInitProgress(100);
 }
 

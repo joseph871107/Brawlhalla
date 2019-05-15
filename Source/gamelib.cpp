@@ -1299,6 +1299,7 @@ void CDDraw::LoadBitmap(int i, int IDB_BITMAP)
     mDC.SelectObject(&pOldBitmap);
     mDC.DeleteDC();
     bitmap.DeleteObject();
+	pOldBitmap->DeleteObject();
 }
 
 void CDDraw::LoadBitmap(int i, char* filename)
@@ -1334,6 +1335,7 @@ void CDDraw::LoadBitmap(int i, char* filename)
     mDC.SelectObject(&pOldBitmap);
     mDC.DeleteDC();
     bmp->DeleteObject();
+	pOldBitmap->DeleteObject();
 }
 
 void CDDraw::LoadBitmap(int i, char * filename, RECT rect)
@@ -1370,6 +1372,7 @@ void CDDraw::LoadBitmap(int i, char * filename, RECT rect)
 	mDC.SelectObject(&pOldBitmap);
 	mDC.DeleteDC();
 	bmp->DeleteObject();
+	pOldBitmap->DeleteObject();
 }
 
 DWORD CDDraw::MatchColorKey(LPDIRECTDRAWSURFACE lpDDSurface, COLORREF color)
