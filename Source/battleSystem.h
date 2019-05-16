@@ -12,6 +12,7 @@ namespace game_framework
 /////////////////////////////////////////////////////////////////////////////
 // BattleSystem class
 /////////////////////////////////////////////////////////////////////////////
+	class UIMessage;
 
 extern map<string, int> idbList;
 extern map<int, string> fileList;
@@ -45,6 +46,7 @@ class BattleSystem : public CGameState
 		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnLButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
         void OnMouseMove(UINT, CPoint);					// 滑鼠移動
+		void TriggerDisplayMessage(const string& message, const int& posX, const int& posY, const int& durationByFrame);
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
 		void ResizeCamera();
@@ -64,6 +66,8 @@ class BattleSystem : public CGameState
 		void ClearExplosionEffects();
 		void InitializeExplosionEffectsOnBeginState();
 		void InitializePlayersOnBeginState();
+		void RemoveFinishedDisplayMessages();
+		void ClearUIMessages();
         //-----------------VARIABLES DECLARATIONS-----------------//
         int _secPerRound;
         CPoint mousePoint;
@@ -77,6 +81,7 @@ class BattleSystem : public CGameState
 		shared_ptr<Map> map;
 		Window settingWindow;
 		vector<ExplosionEffect*> _explosionEffects;
+		vector<UIMessage*> _uiMessages;
 
 };
 
