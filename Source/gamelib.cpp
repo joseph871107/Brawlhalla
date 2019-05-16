@@ -1113,8 +1113,15 @@ bool CDDraw::CreateSurface()
         if (BitmapID[i] == -1)
 			LoadBitmap(i, (char*)BitmapName[i].c_str());  // from file
 		else if (BitmapID[i] == -2) {
-			string str = BitmapName[i].substr(0, BitmapName[i].find(".bmp") + 4);
-			LoadBitmap(i, (char*)str.c_str(), BitmapRect[i]);  // from file
+			string str = BitmapName[i].substr(0, BitmapName[i].find(".bmp") + 4), rectCoe = BitmapName[i].substr(BitmapName[i].find(".bmp") + 4, BitmapName[i].size());
+			stringstream ss(rectCoe);
+			string item;
+			vector<int> elems;
+			while (getline(ss, item, ',')) {
+				elems.push_back(stoi(item));
+			}
+			RECT trect = RECT{ elems[0], elems[1], elems[2], elems[3] };
+			LoadBitmap(i, (char*)str.c_str(), trect);  // from file
 		}
         else
 			LoadBitmap(i, BitmapID[i]); // from resource
@@ -1474,7 +1481,7 @@ int CDDraw::RegisterBitmap(char * filename, COLORREF ColorKey, RECT rect)
 {
 	unsigned i;
 	char buf[128], buff[128];
-	sprintf(buf, "%d%d%d%d", rect.left, rect.top, rect.right, rect.bottom);
+	sprintf(buf, "%d,%d,%d,%d", rect.left, rect.top, rect.right, rect.bottom);
 	strcpy(buff, filename);
 	strcat(buff, buf);
 
