@@ -480,6 +480,8 @@ void BattleSystem::OnShow()
             mString.SetSize(1.0);
             mString.SetTopLeft(elementPtr->GetX(), elementPtr->GetY());
             mString.ShowBitmap();
+            // Avoid conflicts of UI messages with a break
+            break;
         }
     }
 

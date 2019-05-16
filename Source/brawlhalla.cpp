@@ -97,14 +97,15 @@ CGameStateInit::~CGameStateInit()
 
 void CGameStateInit::OnInit()
 {
-	/*------------------------------INIT PROGRESS STAGE 1------------------------------*/
-	InitializeNum();										// 初始化"resource.h"中點陣圖的資源編號
-	InitializeNum("IDS");									// 初始化"resource.h"中音效的資源編號
-	ShowInitProgress(5);
-	/*------------------------------INIT PROGRESS STAGE 2------------------------------*/
-	InitializeFile();										// 初始化"game.rc"中點陣圖的路徑
-	InitializeFile("SOUND");								// 初始化"game.rc"中音效的路徑
-	ShowInitProgress(10);
+    /*------------------------------INIT PROGRESS STAGE 1------------------------------*/
+    InitializeNum();										// 初始化"resource.h"中點陣圖的資源編號
+    InitializeNum("IDS");									// 初始化"resource.h"中音效的資源編號
+    ShowInitProgress(5);
+    /*------------------------------INIT PROGRESS STAGE 2------------------------------*/
+    InitializeFile();										// 初始化"game.rc"中點陣圖的路徑
+    InitializeFile("SOUND");								// 初始化"game.rc"中音效的路徑
+    ShowInitProgress(10);
+
     // Automatically generate ground objects //
     for (auto map : _mapP)
     {
