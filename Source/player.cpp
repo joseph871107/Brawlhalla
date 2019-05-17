@@ -526,7 +526,7 @@ void Player::DeleteFlyingWeapon()
 {
     if (_flyingWeapon != nullptr)
     {
-        if (_flyingWeapon->HasTaken())
+        if (_flyingWeapon->HasTaken() || _flyingWeapon->IsOutMapBorder())
         {
             delete _flyingWeapon;
             _flyingWeapon = nullptr;
