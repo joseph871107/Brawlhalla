@@ -4,10 +4,12 @@
 #include <ddraw.h>
 #include "audio.h"
 #include "gamelib.h"
+//
 #include "brawlhalla.h"
 #include "battleSystem.h"
 #include "enemy.h"
 #include "map.h"
+#include "UIMessage.h"
 
 namespace game_framework
 {
@@ -16,27 +18,28 @@ namespace game_framework
 // BattleSystem class
 /////////////////////////////////////////////////////////////////////////////
 
-	vector< vector<CMovingBitmap>> louis_l0;
-	vector< vector<CMovingBitmap>> louis_r0;
-	vector< vector<CMovingBitmap>> louis_l1;
-	vector< vector<CMovingBitmap>> louis_r1;
-	vector< vector<CMovingBitmap>> louis_l2;
-	vector< vector<CMovingBitmap>> louis_r2;
-	vector< vector<CMovingBitmap>> louis_ex_l0;
-	vector< vector<CMovingBitmap>> louis_ex_r0;
-	vector< vector<CMovingBitmap>> louis_ex_l1;
-	vector< vector<CMovingBitmap>> louis_ex_r1;
-	vector< vector<CMovingBitmap>> louis_ex_l2;
-	vector< vector<CMovingBitmap>> louis_ex_r2;
-	vector< vector<CMovingBitmap>> louis_ex_l3;
-	vector< vector<CMovingBitmap>> louis_ex_r3;
+vector< vector<CMovingBitmap>> louis_l0;
+vector< vector<CMovingBitmap>> louis_r0;
+vector< vector<CMovingBitmap>> louis_l1;
+vector< vector<CMovingBitmap>> louis_r1;
+vector< vector<CMovingBitmap>> louis_l2;
+vector< vector<CMovingBitmap>> louis_r2;
+vector< vector<CMovingBitmap>> louis_ex_l0;
+vector< vector<CMovingBitmap>> louis_ex_r0;
+vector< vector<CMovingBitmap>> louis_ex_l1;
+vector< vector<CMovingBitmap>> louis_ex_r1;
+vector< vector<CMovingBitmap>> louis_ex_l2;
+vector< vector<CMovingBitmap>> louis_ex_r2;
+vector< vector<CMovingBitmap>> louis_ex_l3;
+vector< vector<CMovingBitmap>> louis_ex_r3;
 
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MATCH_TIME = 180;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 bool enemyPause = false;
-CInteger integer(2);																												// Used to show current remain time
+CInteger integer(2); // Used to show current remain time
+CString mString;
 
 BattleSystem::BattleSystem(CGame* g) : CGameState(g), settingWindow(Window(g))
 {
@@ -55,6 +58,7 @@ BattleSystem::~BattleSystem()
 {
     ClearPlayers();
     ClearExplosionEffects();
+    ClearUIMessages();
 }
 
 void BattleSystem::ClearExplosionEffects()
@@ -122,9 +126,10 @@ void BattleSystem::OnBeginState()
     	~ This function is called whenever the game state turns into 'CGameStateRun';
     	~ thus, it serves as the initialization of each game match
     */
-    // Clear the players and explosion effects from the last match
+    // Clear the players, explosion effects, and UI messages from the last match
     ClearPlayers();
     ClearExplosionEffects();
+    ClearUIMessages();
     // Initialize the match
     CAudio::Instance()->Play(AUDIO_BATTLE_MUSIC, true);
     _secPerRound = MATCH_TIME;
@@ -147,6 +152,8 @@ void BattleSystem::OnBeginState()
     InitializePlayersOnBeginState();
     // Setting Window
     settingWindow.GetUI()->Reset();
+    // UI Messages
+    _uiMessages = vector<UIMessage*>();
 }
 
 void BattleSystem::GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, int* posYPtr)
@@ -280,7 +287,6 @@ void BattleSystem::LoadSoundOnInit()
 
 void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 {
-
     /*------------------------------INIT PROGRESS STAGE 3------------------------------*/
     if (GENERATE_COLLISION_ARRAY)
     {
@@ -296,6 +302,8 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     /*------------------------------INIT PROGRESS STAGE 5------------------------------*/
     // Integer (for displaying time and life count)
     integer.LoadBitmap();
+    // String
+    mString.LoadBitmap();
     // Setting Window (for controlling the CPU player a.k.a Enemy)
     settingWindow.Initialize(1, 1);
     settingWindow.SetXY(0, 0);
@@ -304,33 +312,33 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     // Explosion Effects
     _explosionEffects = vector<ExplosionEffect*>();
     // Player
-	louis_l0 = CropSprite(IDB_P_LOUIS_L0, 7, 10, RGB(0, 0, 0));
-	FlipSprite(&louis_l0);
-	louis_r0 = CropSprite(IDB_P_LOUIS_R0, 7, 10, RGB(0, 0, 0));
-	ShowInitProgress(78);
-	louis_l1 = CropSprite(IDB_P_LOUIS_L1, 7, 10, RGB(0, 0, 0));
-	FlipSprite(&louis_l1);
-	louis_r1 = CropSprite(IDB_P_LOUIS_R1, 7, 10, RGB(0, 0, 0));
-	ShowInitProgress(81);
-	louis_l2 = CropSprite(IDB_P_LOUIS_L2, 5, 10, RGB(0, 0, 0));
-	FlipSprite(&louis_l2);
-	louis_r2 = CropSprite(IDB_P_LOUIS_R2, 5, 10, RGB(0, 0, 0));
-	ShowInitProgress(84);
-	louis_ex_l0 = CropSprite(IDB_P_LOUIS_EX_L0, 7, 10, RGB(0, 0, 0));
-	FlipSprite(&louis_ex_l0);
-	louis_ex_r0 = CropSprite(IDB_P_LOUIS_EX_R0, 7, 10, RGB(0, 0, 0));
-	ShowInitProgress(87);
-	louis_ex_l1 = CropSprite(IDB_P_LOUIS_EX_L1, 7, 10, RGB(0, 0, 0));
-	FlipSprite(&louis_ex_l1);
-	louis_ex_r1 = CropSprite(IDB_P_LOUIS_EX_R1, 7, 10, RGB(0, 0, 0));
-	ShowInitProgress(90);
-	louis_ex_l2 = CropSprite(IDB_P_LOUIS_EX_L2, 2, 10, RGB(0, 0, 0));
-	FlipSprite(&louis_ex_l2);
-	louis_ex_r2 = CropSprite(IDB_P_LOUIS_EX_R2, 2, 10, RGB(0, 0, 0));
-	ShowInitProgress(95);
-	//louis_ex_l3 = CropSprite(IDB_P_LOUIS_EX_L3, 3, 10, RGB(0, 0, 0));
-	//FlipSprite(&louis_ex_l3);
-	//louis_ex_r3 = CropSprite(IDB_P_LOUIS_EX_R3, 3, 10, RGB(0, 0, 0));
+    louis_l0 = CropSprite(IDB_P_LOUIS_L0, 7, 10, RGB(0, 0, 0));
+    FlipSprite(&louis_l0);
+    louis_r0 = CropSprite(IDB_P_LOUIS_R0, 7, 10, RGB(0, 0, 0));
+    ShowInitProgress(78);
+    louis_l1 = CropSprite(IDB_P_LOUIS_L1, 7, 10, RGB(0, 0, 0));
+    FlipSprite(&louis_l1);
+    louis_r1 = CropSprite(IDB_P_LOUIS_R1, 7, 10, RGB(0, 0, 0));
+    ShowInitProgress(81);
+    louis_l2 = CropSprite(IDB_P_LOUIS_L2, 5, 10, RGB(0, 0, 0));
+    FlipSprite(&louis_l2);
+    louis_r2 = CropSprite(IDB_P_LOUIS_R2, 5, 10, RGB(0, 0, 0));
+    ShowInitProgress(84);
+    louis_ex_l0 = CropSprite(IDB_P_LOUIS_EX_L0, 7, 10, RGB(0, 0, 0));
+    FlipSprite(&louis_ex_l0);
+    louis_ex_r0 = CropSprite(IDB_P_LOUIS_EX_R0, 7, 10, RGB(0, 0, 0));
+    ShowInitProgress(87);
+    louis_ex_l1 = CropSprite(IDB_P_LOUIS_EX_L1, 7, 10, RGB(0, 0, 0));
+    FlipSprite(&louis_ex_l1);
+    louis_ex_r1 = CropSprite(IDB_P_LOUIS_EX_R1, 7, 10, RGB(0, 0, 0));
+    ShowInitProgress(90);
+    louis_ex_l2 = CropSprite(IDB_P_LOUIS_EX_L2, 2, 10, RGB(0, 0, 0));
+    FlipSprite(&louis_ex_l2);
+    louis_ex_r2 = CropSprite(IDB_P_LOUIS_EX_R2, 2, 10, RGB(0, 0, 0));
+    ShowInitProgress(95);
+    //louis_ex_l3 = CropSprite(IDB_P_LOUIS_EX_L3, 3, 10, RGB(0, 0, 0));
+    //FlipSprite(&louis_ex_l3);
+    //louis_ex_r3 = CropSprite(IDB_P_LOUIS_EX_R3, 3, 10, RGB(0, 0, 0));
     ShowInitProgress(100);
 }
 
@@ -377,6 +385,61 @@ void BattleSystem::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動�
     settingWindow.OnMouseMove(nFlags, point);
 }
 
+void BattleSystem::TriggerDisplayMessage(const string& message, const int& posX, const int& posY, const int& durationByFrame)
+{
+    UIMessage* ptr = new UIMessage();
+    ptr->Initialize(message, posX, posY, durationByFrame);
+    _uiMessages.push_back(ptr);
+}
+
+void BattleSystem::RemoveFinishedDisplayMessages()
+{
+    int leftIndex = 0;
+    int rightIndex = _uiMessages.size() - 1;
+
+    // Re-accomodate the pointers to finished messages into the end of the vector '_uiMessages'
+    while (leftIndex <= rightIndex)
+    {
+        while ((leftIndex <= rightIndex) && (_uiMessages[leftIndex]->GetCurrentFrame() >= _uiMessages[leftIndex]->GetMaxFrame()))
+        {
+            /* _uiMessages[leftIndex] <-> _uiMessages[rightIndex] */
+            iter_swap(_uiMessages.begin() + leftIndex, _uiMessages.begin() + rightIndex);
+            rightIndex--;
+        }
+
+        leftIndex++;
+    }
+
+    unsigned int position = 100;
+
+    for (unsigned int index = 0; index < _uiMessages.size(); index++)
+    {
+        if (_uiMessages[index]->GetCurrentFrame() >= _uiMessages[index]->GetMaxFrame())
+        {
+            position = index;
+            break;
+        }
+    }
+
+    if (position != 100) // If there is at least a message having finished its showcase
+    {
+        for (unsigned int index = position; index < _uiMessages.size(); index++)
+        {
+            delete _uiMessages[position]; // Free the memory allocated by the messages that has finished displaying
+        }
+
+        _uiMessages.erase(_uiMessages.begin() + position, _uiMessages.begin() + _uiMessages.size()); // Erase the finished message in the '_uiMessages' vector
+    }
+}
+
+void BattleSystem::ClearUIMessages()
+{
+    for (auto elementPtr : _uiMessages)
+        delete elementPtr;
+
+    _uiMessages.clear();
+}
+
 void BattleSystem::OnShow()
 {
     map->OnShow();
@@ -397,7 +460,7 @@ void BattleSystem::OnShow()
         // Show player
         (*i)->OnShow();
         // Show player's life
-        ShowPlayerLife((**i), 1200 + 200 * (i - _players.begin()), 0);
+        ShowPlayerLife((**i), 1150, 100 * (i - _players.begin()));
     }
 
     settingWindow.OnShow();
@@ -405,6 +468,24 @@ void BattleSystem::OnShow()
     // Explosion Effect
     for (auto elementPtr : _explosionEffects)
         elementPtr->OnShow();
+
+    // Display UI Message
+    for (auto elementPtr : _uiMessages)
+    {
+        if (elementPtr->GetCurrentFrame() < elementPtr->GetMaxFrame())
+        {
+            elementPtr->IncrementCurrentFrame();
+            // Display the message
+            mString.SetString(elementPtr->GetMessage());
+            mString.SetSize(1.0);
+            mString.SetTopLeft(elementPtr->GetX(), elementPtr->GetY());
+            mString.ShowBitmap();
+            // Avoid conflicts of UI messages with a break
+            break;
+        }
+    }
+
+    RemoveFinishedDisplayMessages();
 
     //------------------Test Text------------------//
     if (_PLAYER_DEBUG)
@@ -516,12 +597,13 @@ void BattleSystem::ClearPlayers()
 void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)
 {
     // Display player's name
-    char playerName[80];
-    sprintf(playerName, (player.GetName() + " Life").c_str());
-    OnShowText(playerName, posXValue, posYValue + 20);
+    mString.SetString(player.GetName() + " Life");
+    mString.SetSize(0.5);
+    mString.SetTopLeft(posXValue, posYValue + 20);
+    mString.ShowBitmap();
     // Displayer player's life
     integer.SetInteger(player.GetLife()); //CInteger integer
-    integer.SetTopLeft(posXValue + 120, posYValue);
+    integer.SetTopLeft(posXValue + 350, posYValue);
     integer.ShowBitmap();
 }
 

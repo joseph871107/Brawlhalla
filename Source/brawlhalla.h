@@ -61,30 +61,30 @@ class CGameStateInit : public CGameState
 {
     public:
         CGameStateInit(CGame* g);
-		~CGameStateInit();
+        ~CGameStateInit();
         void OnInit();  								// 遊戲的初值及圖形設定
         void OnBeginState();							// 設定每次重玩所需的變數
-		void OnKeyDown(UINT, UINT, UINT);
-		void OnKeyUp(UINT, UINT, UINT);
-		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
-		void OnLButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
-		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-		void OnMove();									// 移動遊戲元素
+        void OnKeyDown(UINT, UINT, UINT);
+        void OnKeyUp(UINT, UINT, UINT);
+        void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnLButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+        void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+        void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+        void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
-		static bool GetCameraEnable();
-		static bool GetFullscreenEnabled();
-		static shared_ptr<Map> GetMap();
+        static bool GetCameraEnable();
+        static bool GetFullscreenEnabled();
+        static shared_ptr<Map> GetMap();
     private:
-		Window welcomeWindow;
-		Window settingWindow;
-		Camera camera;
-		static bool _fullscreenEnabled;
-		static bool _closing;
-		static bool _cameraEnabled;
-		static int _mapSelected;
-		static vector<shared_ptr<Map>> maps;
+        Window welcomeWindow;
+        Window settingWindow;
+        Camera camera;
+        static bool _fullscreenEnabled;
+        static bool _closing;
+        static bool _cameraEnabled;
+        static int _mapSelected;
+        static vector<shared_ptr<Map>> maps;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ class CGameStateRun : public CGameState
         static string GetLegacyString();
         static void SetLegacyString(string newLegacyString);
     private:
-		FImage test;
+        FImage test;
         BattleSystem battleSystem;
         static string _legacyString;				// used for transferring message to other game state (e.g., CGameStateInit, CGameStateOver)
 };
@@ -127,16 +127,16 @@ class CGameStateOver : public CGameState
         CGameStateOver(CGame* g);
         void OnBeginState();							// 設定每次重玩所需的變數
         void OnInit();									// 遊戲的初值及圖形設定
-		void OnKeyDown(UINT, UINT, UINT);
-		void OnKeyUp(UINT, UINT, UINT);
-		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
-		void OnLButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+        void OnKeyDown(UINT, UINT, UINT);
+        void OnKeyUp(UINT, UINT, UINT);
+        void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnLButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+        void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         int counter;	// 倒數之計數器
-		Window settingWindow;
+        Window settingWindow;
 };
 
 }

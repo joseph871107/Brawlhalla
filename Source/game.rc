@@ -708,41 +708,43 @@ IDB_FX_EXPLO_UP2        BITMAP                  "..\\RES\\Effects\\Explosion\\ex
 
 IDB_FX_EXPLO_UP3        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up3.bmp"
 
-IDB_FX_SKILL0_L0		BITMAP					"..\\RES\\Effects\\Skill\\skill_0_0.bmp"
+IDB_FX_SKILL0_L0        BITMAP                  "..\\RES\\Effects\\Skill\\skill_0_0.bmp"
 
-IDB_FX_SKILL0_L1		BITMAP					"..\\RES\\Effects\\Skill\\skill_0_1.bmp"
+IDB_FX_SKILL0_L1        BITMAP                  "..\\RES\\Effects\\Skill\\skill_0_1.bmp"
 
-IDB_FX_SKILL0_L2		BITMAP					"..\\RES\\Effects\\Skill\\skill_0_2.bmp"
+IDB_FX_SKILL0_L2        BITMAP                  "..\\RES\\Effects\\Skill\\skill_0_2.bmp"
 
-IDB_FX_SKILL0_R0		BITMAP					"..\\RES\\Effects\\Skill\\skill_0_0(Mirrored).bmp"
+IDB_FX_SKILL0_R0        BITMAP                  "..\\RES\\Effects\\Skill\\skill_0_0(Mirrored).bmp"
 
-IDB_FX_SKILL0_R1		BITMAP					"..\\RES\\Effects\\Skill\\skill_0_1(Mirrored).bmp"
+IDB_FX_SKILL0_R1        BITMAP                  "..\\RES\\Effects\\Skill\\skill_0_1(Mirrored).bmp"
 
-IDB_FX_SKILL0_R2		BITMAP					"..\\RES\\Effects\\Skill\\skill_0_2(Mirrored).bmp"
+IDB_FX_SKILL0_R2        BITMAP                  "..\\RES\\Effects\\Skill\\skill_0_2(Mirrored).bmp"
 
-IDB_P_LOUIS_R0			BITMAP					"..\\RES\\players\\louis_0.bmp"
+IDB_P_LOUIS_R0          BITMAP                  "..\\RES\\players\\louis_0.bmp"
 
-IDB_P_LOUIS_L0			BITMAP					"..\\RES\\players\\louis_0_mirror.bmp"
+IDB_P_LOUIS_L0          BITMAP                  "..\\RES\\players\\louis_0_mirror.bmp"
 
-IDB_P_LOUIS_R1			BITMAP					"..\\RES\\players\\louis_1.bmp"
+IDB_P_LOUIS_R1          BITMAP                  "..\\RES\\players\\louis_1.bmp"
 
-IDB_P_LOUIS_L1			BITMAP					"..\\RES\\players\\louis_1_mirror.bmp"
+IDB_P_LOUIS_L1          BITMAP                  "..\\RES\\players\\louis_1_mirror.bmp"
 
-IDB_P_LOUIS_R2			BITMAP					"..\\RES\\players\\louis_2.bmp"
+IDB_P_LOUIS_R2          BITMAP                  "..\\RES\\players\\louis_2.bmp"
 
-IDB_P_LOUIS_L2			BITMAP					"..\\RES\\players\\louis_2_mirror.bmp"
+IDB_P_LOUIS_L2          BITMAP                  "..\\RES\\players\\louis_2_mirror.bmp"
 
-IDB_P_LOUIS_EX_R0		BITMAP					"..\\RES\\players\\louisEX_0.bmp"
+IDB_P_LOUIS_EX_R0       BITMAP                  "..\\RES\\players\\louisEX_0.bmp"
 
-IDB_P_LOUIS_EX_L0 		BITMAP					"..\\RES\\players\\louisEX_0_mirror.bmp"
+IDB_P_LOUIS_EX_L0       BITMAP                  "..\\RES\\players\\louisEX_0_mirror.bmp"
 
-IDB_P_LOUIS_EX_R1		BITMAP					"..\\RES\\players\\louisEX_1.bmp"
+IDB_P_LOUIS_EX_R1       BITMAP                  "..\\RES\\players\\louisEX_1.bmp"
 
-IDB_P_LOUIS_EX_L1 		BITMAP					"..\\RES\\players\\louisEX_1_mirror.bmp"
+IDB_P_LOUIS_EX_L1       BITMAP                  "..\\RES\\players\\louisEX_1_mirror.bmp"
 
-IDB_P_LOUIS_EX_R2		BITMAP					"..\\RES\\players\\louisEX_2.bmp"
+IDB_P_LOUIS_EX_R2       BITMAP                  "..\\RES\\players\\louisEX_2.bmp"
 
-IDB_P_LOUIS_EX_L2 		BITMAP					"..\\RES\\players\\louisEX_2_mirror.bmp"
+IDB_P_LOUIS_EX_L2       BITMAP                  "..\\RES\\players\\louisEX_2_mirror.bmp"
+
+IDB_CHARS               BITMAP                  "..\\RES\\Characters\\characters.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////

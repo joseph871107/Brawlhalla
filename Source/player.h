@@ -41,7 +41,7 @@ class Player
         void AddCamera(Camera* cam);	// Camera
         void SetPlayer(bool tri);
         bool IsPlayer();
-		vector<Weapon*>* weapons;
+        vector<Weapon*>* weapons;
 
         //Others - Bill
         const string& GetName() const;
@@ -51,7 +51,7 @@ class Player
         void GenerateAndSetWeaponID();	// Called by 'Weapon::HitPlayer()' when the player picks up a weapon
         void ResetWeaponID();
         void PerformAttack(Player* targetPlayer, bool attackDirection);
-		ExplosionEffect* GetExplosionEffect();
+        ExplosionEffect* GetExplosionEffect();
 
         // Used by Triggered Animation classes
         void SetAnimationSelector(bool newAniSelector);
@@ -61,7 +61,7 @@ class Player
         const bool& GetTriggeredAnimationDirection() const;
         void SetTriggeredAnimationAnimationID(const int& newTriggeredAniAnimationID);
         void DoAttack();
-		void DoLand();
+        void DoLand();
         void SetIsTriggerAttack(const bool& newIsTriggerAttack);
         void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
         void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
@@ -69,8 +69,8 @@ class Player
         void SetIsTriggerDodge(const bool& newIsTriggerDodge);
         void SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon);
         void EmptyHitTargetPlayers();
-		int GetCurrentAniNum();
-		int GetCurrentAniByWeaponNum();
+        int GetCurrentAniNum();
+        int GetCurrentAniByWeaponNum();
 
         // Used by Ground
         void SetX(const int& newX);
@@ -116,8 +116,8 @@ class Player
         //-----------------FUNCTIONS DECLARATIONS-----------------//
         //Animations
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
-		void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
-		void ResetAnimations(int animationID);
+        void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
+        void ResetAnimations(int animationID);
 
         void SetAnimationStateLeftRight(int leftAnimationId);
         void SetAnimationState(int);	// Set which CAnimation is going to play
@@ -232,6 +232,8 @@ class Player
         void SetCurrentNonTriggeredAnimation();
 
         void InitializeTriggeredAnimations();
+
+		void SetAttacker(Player * const & newAttacker, const int & attackerAffectionFrameCountValue);
 
         bool IsAttackable(Player* potentialTargetPlayer);
 
@@ -375,7 +377,12 @@ class Player
 
         // Game Effect
         BattleSystem* _battleSystem;
-		ExplosionEffect* _explosionEffectPtr;
+        ExplosionEffect* _explosionEffectPtr;
+
+        // Display killer
+        Player* _attacker;
+        int _attackerAffectionFrameCount;
+		bool _isDead;
 };
 #endif
 }

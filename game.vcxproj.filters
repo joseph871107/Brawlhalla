@@ -95,6 +95,9 @@
     <Filter Include="Resource Files\Bitmap\Animation\Player1\jumpM">
       <UniqueIdentifier>{8790d827-3de7-4b78-ba4f-aa98b676a320}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\UIMessage">
+      <UniqueIdentifier>{e8433d73-925b-4d48-97e9-d1c45631648a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
@@ -231,6 +234,9 @@
     <ClCompile Include="Source\ExplosionEffect.cpp">
       <Filter>Brawlhalla\ExplosionEffect</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UIMessage.cpp">
+      <Filter>Brawlhalla\UIMessage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -334,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="Source\ExplosionEffect.h">
       <Filter>Brawlhalla\ExplosionEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UIMessage.h">
+      <Filter>Brawlhalla\UIMessage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1274,6 +1283,90 @@
     </Image>
     <Image Include="res\ui\button\start_out.bmp">
       <Filter>Resource Files\Bitmap</Filter>
+    </Image>
+    <Image Include="RES\Characters\characters.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\button_out.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\button_hov.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\button_clk.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\setting_out.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\setting_hov.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\setting_clk.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\close_out.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\close_hov.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\close_clk.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\Effects\Skill\skill_0_0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\Effects\Skill\skill_0_1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\Effects\Skill\skill_0_2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\Effects\Skill\skill_0_0(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\Effects\Skill\skill_0_1(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\Effects\Skill\skill_0_2(Mirrored).bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louis_0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louis_0_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louis_1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louis_1_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louis_2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louis_2_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louisEX_0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louisEX_0_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louisEX_1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louisEX_1_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louisEX_2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louisEX_2_mirror.bmp">
+      <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

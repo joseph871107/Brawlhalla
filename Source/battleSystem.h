@@ -12,6 +12,7 @@ namespace game_framework
 /////////////////////////////////////////////////////////////////////////////
 // BattleSystem class
 /////////////////////////////////////////////////////////////////////////////
+class UIMessage;
 
 extern map<string, int> idbList;
 extern map<int, string> fileList;
@@ -36,34 +37,37 @@ class BattleSystem : public CGameState
 {
     public:
         BattleSystem(CGame* g);
-		BattleSystem(CGame* g, shared_ptr<Map> m);
+        BattleSystem(CGame* g, shared_ptr<Map> m);
         ~BattleSystem();
         void OnBeginState();							// 設定每次重玩所需的變數
         void OnInit();  								// 遊戲的初值及圖形設定
         void OnKeyDown(UINT, UINT, UINT);				// 鍵盤按下
         void OnKeyUp(UINT, UINT, UINT);					// 鍵盤釋放
-		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
-		void OnLButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+        void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnLButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
         void OnMouseMove(UINT, CPoint);					// 滑鼠移動
+        void TriggerDisplayMessage(const string& message, const int& posX, const int& posY, const int& durationByFrame);
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
-		void ResizeCamera();
-		void AddMap(shared_ptr<Map> m);
+        void ResizeCamera();
+        void AddMap(shared_ptr<Map> m);
         bool IsGameOver();
         string GetGameResult();
-		void TriggerExplosionEffect(Player* deadPlayer);
+        void TriggerExplosionEffect(Player* deadPlayer);
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
-		void ClearPlayers();
+        void ClearPlayers();
         void ShowPlayerLife(const Player& player, int posXValue, int posYValue);
         int GetCurrentRemainTime();
-		void LoadSoundOnInit();
-		void GetExplosionEffectPosition(Player * deadPlayer, int * posXPtr, int * posYPtr);
-		int DoubleToInteger(double mDouble);
-		void ClearExplosionEffects();
-		void InitializeExplosionEffectsOnBeginState();
-		void InitializePlayersOnBeginState();
+        void LoadSoundOnInit();
+        void GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, int* posYPtr);
+        int DoubleToInteger(double mDouble);
+        void ClearExplosionEffects();
+        void InitializeExplosionEffectsOnBeginState();
+        void InitializePlayersOnBeginState();
+        void RemoveFinishedDisplayMessages();
+        void ClearUIMessages();
         //-----------------VARIABLES DECLARATIONS-----------------//
         int _secPerRound;
         CPoint mousePoint;
@@ -72,11 +76,12 @@ class BattleSystem : public CGameState
         Background* background;
         vector<Ground*>* _grounds;
         vector<Player*> _players;
-		vector<Weapon*>* _weapons;
-		Camera camera;
-		shared_ptr<Map> map;
-		Window settingWindow;
-		vector<ExplosionEffect*> _explosionEffects;
+        vector<Weapon*>* _weapons;
+        Camera camera;
+        shared_ptr<Map> map;
+        Window settingWindow;
+        vector<ExplosionEffect*> _explosionEffects;
+        vector<UIMessage*> _uiMessages;
 
 };
 

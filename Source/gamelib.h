@@ -157,7 +157,7 @@ class CDDraw
         static bool  IsFullScreen();			// 回答是否為全螢幕模式/視窗模式
     private:
         CDDraw();								// private constructor
-		static void  BltBitmapToBack(unsigned SurfaceID, int x, int y);
+        static void  BltBitmapToBack(unsigned SurfaceID, int x, int y);
         static void  BltBitmapToBack(unsigned SurfaceID, int x, int y, double factor);
         static void  BltBitmapToBitmap(unsigned SourceID, unsigned TargetID, int x, int y);
         static void	 CheckDDFail(char* s);
@@ -165,12 +165,12 @@ class CDDraw
         static bool  CreateSurfaceFullScreen();
         static bool  CreateSurfaceWindowed();
         static void  LoadBitmap(int i, int IDB_BITMAP);
-		static void  LoadBitmap(int i, char* filename);
-		static void  LoadBitmap(int i, char* filename, RECT rect);
+        static void  LoadBitmap(int i, char* filename);
+        static void  LoadBitmap(int i, char* filename, RECT rect);
         static DWORD MatchColorKey(LPDIRECTDRAWSURFACE lpDDSurface, COLORREF color);
         static int   RegisterBitmap(int IDB_BITMAP, COLORREF ColorKey);
-		static int   RegisterBitmap(char* filename, COLORREF ColorKey);
-		static int   RegisterBitmap(char* filename, COLORREF ColorKey, RECT rect);
+        static int   RegisterBitmap(char* filename, COLORREF ColorKey);
+        static int   RegisterBitmap(char* filename, COLORREF ColorKey, RECT rect);
         static void  ReleaseSurface();
         static void  RestoreSurface();
         static void  SetColorKey(unsigned SurfaceID, COLORREF color);
@@ -204,16 +204,16 @@ class CMovingBitmap
         CMovingBitmap();
         int   Height();						// 取得圖形的高度
         int   Left();						// 取得圖形的左上角的 x 座標
-		void  LoadBitmap(int, COLORREF = CLR_INVALID);			// 載入圖，指定圖的編號(resource)及透明色
-		void  LoadBitmap(char*, RECT, COLORREF = CLR_INVALID);	// 載入圖，指定圖的檔名及透明色及裁切範圍
-		void  LoadBitmap(char*, COLORREF = CLR_INVALID);		// 載入圖，指定圖的檔名及透明色
+        void  LoadBitmap(int, COLORREF = CLR_INVALID);			// 載入圖，指定圖的編號(resource)及透明色
+        void  LoadBitmap(char*, RECT, COLORREF = CLR_INVALID);	// 載入圖，指定圖的檔名及透明色及裁切範圍
+        void  LoadBitmap(char*, COLORREF = CLR_INVALID);		// 載入圖，指定圖的檔名及透明色
         void  SetTopLeft(int, int);			// 將圖的左上角座標移至 (x,y)
         void  ShowBitmap();					// 將圖貼到螢幕
         void  ShowBitmap(double factor);	// 將圖貼到螢幕 factor < 1時縮小，>1時放大。注意：需要VGA卡硬體的支援，否則會很慢
         void  ShowBitmap(CMovingBitmap&);	// 將圖貼到到另一張圖上 (僅供特殊用途)
         int   Top();						// 取得圖形的左上角的 y 座標
         int   Width();						// 取得圖形的寬度
-		bool  IsLoaded();
+        bool  IsLoaded();
     protected:
         CRect    location;			// location of the bitmap
         bool     isBitmapLoaded;	// whether a bitmap has been loaded
@@ -238,10 +238,10 @@ class CAnimation
         CAnimation(bool rt, int = 1, int = 10);			// Constructor (預設動畫播放頻率每1/3秒換一張圖)
         void  AddBitmap(int, COLORREF = CLR_INVALID);
         // 增加一張圖形至動畫(圖的編號及透明色)
-		void  AddBitmap(char*, COLORREF = CLR_INVALID);
-		// 增加一張圖形至動畫(圖的編號及透明色)
-		void  AddBitmap(CMovingBitmap);
-		// 增加一張圖形至動
+        void  AddBitmap(char*, COLORREF = CLR_INVALID);
+        // 增加一張圖形至動畫(圖的編號及透明色)
+        void  AddBitmap(CMovingBitmap);
+        // 增加一張圖形至動
         int   GetCurrentBitmapNumber();	// 取得正在撥放的bitmap是第幾個bitmap
         int   Height();					// 取得動畫的高度
         bool  IsFinalBitmap();			// 回傳正在撥放的bitmap是否為最後一個bitmap
@@ -292,6 +292,29 @@ class CInteger
         int x, y;						// 顯示的座標
         int n;							// 整數值
         bool isBmpLoaded;				// 是否已經載入圖形
+        double _size;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// 這個class提供顯示整數圖形的能力
+// 每個Public Interface的用法都要懂，Implementation可以不懂
+/////////////////////////////////////////////////////////////////////////////
+
+class CString
+{
+    public:
+        CString();
+        string GetString();				// Return the string
+        void LoadBitmap();					// Load A...Za...z characters
+        void SetString(string newS);		// Set string
+        void SetTopLeft(int newX, int newY);			// 將動畫的左上角座標移至 (x,y)
+        void ShowBitmap();					// 將動畫貼到螢幕
+        void SetSize(double newSize);
+    private:
+        static CMovingBitmap _chars[91];	// 儲存 a...z & A...Z & symbols 之圖形(bitmap)
+        int x, y;							// 顯示的座標
+        string _s;
+        bool isBmpLoaded;					// 是否已經載入圖形
         double _size;
 };
 

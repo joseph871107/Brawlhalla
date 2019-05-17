@@ -205,8 +205,8 @@ void CAnimation::AddBitmap(char* filename, COLORREF colorkey)
 
 void CAnimation::AddBitmap(CMovingBitmap tbmp)
 {
-	bmp.insert(bmp.end(), tbmp);
-	Reset();
+    bmp.insert(bmp.end(), tbmp);
+    Reset();
 }
 
 int CAnimation::GetCurrentBitmapNumber()
@@ -401,6 +401,240 @@ void CInteger::SetSize(double size)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// CString: 這個class提供顯示整數圖形的能力
+// 1. 要懂得怎麼呼叫(運用)其各種能力，但是可以不懂下列的程式是什麼意思
+// 2. 自己寫到運用CMovingBitmap的程式時，可以參考下列程式的寫法
+/////////////////////////////////////////////////////////////////////////////
+
+CMovingBitmap CString::_chars[91];
+
+CString::CString() : _size(1.0)
+{
+}
+
+string CString::GetString()
+{
+    return _s;
+}
+
+void CString::LoadBitmap()
+{
+    //
+    // digit[i]為class varibale，所以必須避免重複LoadBitmap
+    //
+    if (!isBmpLoaded)
+    {
+        // Load the actual bitmaps
+        vector<vector<CMovingBitmap>> charactersBitmap = CropSprite(IDB_CHARS, 10, 10, RGB(0, 0, 0));
+        // Divide and conquer
+        vector<CPoint> alphabet = vector<CPoint>
+        {
+            CPoint(2, 6), CPoint(2, 7), CPoint(2, 8), CPoint(2, 9), CPoint(3, 0), CPoint(3, 1),
+            CPoint(3, 2), CPoint(3, 3), CPoint(3, 4), CPoint(3, 5), CPoint(3, 6), CPoint(3, 7),
+            CPoint(3, 8), CPoint(3, 9), CPoint(4, 0), CPoint(4, 1), CPoint(4, 2), CPoint(4, 3),
+            CPoint(4, 4), CPoint(4, 5), CPoint(4, 6), CPoint(4, 7), CPoint(4, 8), CPoint(4, 9),
+            CPoint(5, 0), CPoint(5, 1)
+        };
+        vector<CPoint> capitalizedAlphabet = vector<CPoint>
+        {
+            CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3), CPoint(0, 4), CPoint(0, 5),
+            CPoint(0, 6), CPoint(0, 7), CPoint(0, 8), CPoint(0, 9), CPoint(1, 0), CPoint(1, 1),
+            CPoint(1, 2), CPoint(1, 3), CPoint(1, 4), CPoint(1, 5), CPoint(1, 6), CPoint(1, 7),
+            CPoint(1, 8), CPoint(1, 9), CPoint(2, 0), CPoint(2, 1), CPoint(2, 2), CPoint(2, 3),
+            CPoint(2, 4), CPoint(2, 5)
+        };
+        vector<CPoint> numbers = vector<CPoint>
+        {
+            CPoint(5, 2), CPoint(5, 3), CPoint(5, 4), CPoint(5, 5), CPoint(5, 6), CPoint(5, 7),
+            CPoint(5, 8), CPoint(5, 9), CPoint(6, 0), CPoint(6, 1)
+        };
+        vector<CPoint> symbols = vector<CPoint>
+        {
+            CPoint(6, 2), CPoint(6, 3), CPoint(6, 4), CPoint(6, 5), CPoint(6, 6), CPoint(6, 7),
+            CPoint(6, 8), CPoint(6, 9), CPoint(7, 0), CPoint(7, 1), CPoint(7, 2), CPoint(7, 3),
+            CPoint(7, 4), CPoint(7, 5), CPoint(7, 6), CPoint(7, 7), CPoint(7, 8), CPoint(7, 9),
+            CPoint(8, 0), CPoint(8, 1), CPoint(8, 2), CPoint(8, 3), CPoint(8, 4), CPoint(8, 5),
+            CPoint(8, 6), CPoint(8, 7), CPoint(8, 8), CPoint(8, 9), CPoint(9, 0)
+        };
+
+        // Assignment
+        for (int index = 0; index < 26; index++)
+            _chars[index] = charactersBitmap[alphabet[index].x][alphabet[index].y];
+
+        for (int index = 26; index < 52; index++)
+            _chars[index] = charactersBitmap[capitalizedAlphabet[index - 26].x][capitalizedAlphabet[index - 26].y];
+
+        for (int index = 52; index < 62; index++)
+            _chars[index] = charactersBitmap[numbers[index - 52].x][numbers[index - 52].y];
+
+        for (int index = 62; index < 91; index++)
+            _chars[index] = charactersBitmap[symbols[index - 62].x][symbols[index - 62].y];
+
+        isBmpLoaded = true;
+    }
+}
+
+void CString::SetString(string newS)
+{
+    _s = newS;
+}
+
+void CString::SetTopLeft(int newX, int newY)
+{
+    x = newX;
+    y = newY;
+}
+
+void CString::ShowBitmap()
+{
+    GAME_ASSERT(isBmpLoaded, "CString: 請先執行LoadBitmap，然後才能ShowBitmap");
+    int stringX; // The x-coordinate position to be displayed of the string
+    stringX = x;
+
+    for (auto element : _s)
+    {
+        int asciiOfChar = element;
+        int index;
+
+        if (97 <= asciiOfChar && asciiOfChar <= 122) // Capitalized characters
+            index = asciiOfChar - 'a';
+        else if (65 <= asciiOfChar && asciiOfChar <= 90) // Capitalized characters
+            index = asciiOfChar - 'A' + 26;
+        else if (48 <= asciiOfChar && asciiOfChar <= 57) // Numbers
+            index = asciiOfChar - '0' + 52;
+        else // Symbols
+            switch (asciiOfChar)
+            {
+                case 46: // dot
+                    index = 62;
+                    break;
+
+                case 44: // comma
+                    index = 63;
+                    break;
+
+                case 59: // ;
+                    index = 64;
+                    break;
+
+                case 58: // :
+                    index = 65;
+                    break;
+
+                case 63: // ?
+                    index = 66;
+                    break;
+
+                case 33: // !
+                    index = 67;
+                    break;
+
+                case 20: // -
+                    index = 68;
+                    break;
+
+                case 35: // #
+                    index = 69;
+                    break;
+
+                case 34: // "
+                    index = 70;
+                    break;
+
+                case 39: // ' start quote
+                    index = 71;
+                    break;
+
+                case 38: // &
+                    index = 72;
+                    break;
+
+                case 40: // (
+                    index = 73;
+                    break;
+
+                case 41: // )
+                    index = 74;
+                    break;
+
+                case 91: // [
+                    index = 75;
+                    break;
+
+                case 93: // ]
+                    index = 76;
+                    break;
+
+                //case ?: // end quote
+                //	index = 77;
+                //	break;
+                case 92: // left slash
+                    index = 78;
+                    break;
+
+                case 47: // / right slash
+                    index = 79;
+                    break;
+
+                case 184: // copyright
+                    index = 80;
+                    break;
+
+                //case ?: // info
+                //	index = 81;
+                //	break;
+                //case ?: // degree
+                //	index = 82;
+                //	break;
+                case 43: // +
+                    index = 83;
+                    break;
+
+                case 61: // =
+                    index = 84;
+                    break;
+
+                case 42: // *
+                    index = 85;
+                    break;
+
+                case 36: // $
+                    index = 86;
+                    break;
+
+                case 60: // <
+                    index = 87;
+                    break;
+
+                case 62: // >
+                    index = 88;
+                    break;
+
+                case 37: // %
+                    index = 89;
+                    break;
+
+                case 32: // space
+                    index = 90;
+                    break;
+
+                default:
+                    index = 0;
+                    break;
+            }
+
+        _chars[index].SetTopLeft(stringX, y);
+        _chars[index].ShowBitmap(_size);
+        stringX += (int)(_chars[index].Width() * _size);
+    }
+}
+
+void CString::SetSize(double newSize)
+{
+    _size = newSize;
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // CMovingBitmap: Moving Bitmap class
 // 這個class提供可以移動的圖形
 // 要懂得怎麼呼叫(運用)其各種能力，但是可以不懂下列的程式是什麼意思
@@ -443,54 +677,47 @@ void CMovingBitmap::LoadBitmap(int IDB_BITMAP, COLORREF color)
 
 HBITMAP GetClippedBitmapFromBitmap(RECT rect, HBITMAP hSource)
 {
-	HDC hdcMem, hdcMem2;
-	// Get some HDCs that are compatible with the display driver
-
-	HBITMAP hClone = (HBITMAP)CopyImage(hSource, IMAGE_BITMAP, rect.right - rect.left, rect.bottom - rect.top, LR_CREATEDIBSECTION);
-
-	hdcMem = CreateCompatibleDC(0);
-	hdcMem2 = CreateCompatibleDC(0);
-
-	HBITMAP hOldBmp = (HBITMAP)SelectObject(hdcMem, hSource);
-	HBITMAP hOldBmp2 = (HBITMAP)SelectObject(hdcMem2, hClone);
-
-	BitBlt(hdcMem2, 0, 0, rect.right - rect.left, rect.bottom - rect.top, hdcMem, rect.left, rect.top, SRCCOPY);
-
-	// Clean up.
-	SelectObject(hdcMem, hOldBmp);
-	SelectObject(hdcMem2, hOldBmp2);
-
-	DeleteDC(hdcMem);
-	DeleteDC(hdcMem2);
-
-	return hClone;
+    HDC hdcMem, hdcMem2;
+    // Get some HDCs that are compatible with the display driver
+    HBITMAP hClone = (HBITMAP)CopyImage(hSource, IMAGE_BITMAP, rect.right - rect.left, rect.bottom - rect.top, LR_CREATEDIBSECTION);
+    hdcMem = CreateCompatibleDC(0);
+    hdcMem2 = CreateCompatibleDC(0);
+    HBITMAP hOldBmp = (HBITMAP)SelectObject(hdcMem, hSource);
+    HBITMAP hOldBmp2 = (HBITMAP)SelectObject(hdcMem2, hClone);
+    BitBlt(hdcMem2, 0, 0, rect.right - rect.left, rect.bottom - rect.top, hdcMem, rect.left, rect.top, SRCCOPY);
+    // Clean up.
+    SelectObject(hdcMem, hOldBmp);
+    SelectObject(hdcMem2, hOldBmp2);
+    DeleteDC(hdcMem);
+    DeleteDC(hdcMem2);
+    return hClone;
 }
 
-void CMovingBitmap::LoadBitmap(char *filename, RECT rect, COLORREF color)
+void CMovingBitmap::LoadBitmap(char* filename, RECT rect, COLORREF color)
 {
-	const int nx = 0;
-	const int ny = 0;
-	GAME_ASSERT(!isBitmapLoaded, "A bitmap has been loaded. You can not load another bitmap !!!");
-	HBITMAP hbitmap = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	hbitmap = GetClippedBitmapFromBitmap(rect, hbitmap);
+    const int nx = 0;
+    const int ny = 0;
+    GAME_ASSERT(!isBitmapLoaded, "A bitmap has been loaded. You can not load another bitmap !!!");
+    HBITMAP hbitmap = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    hbitmap = GetClippedBitmapFromBitmap(rect, hbitmap);
 
-	if (hbitmap == NULL)
-	{
-		char error_msg[300];
-		sprintf(error_msg, "Loading bitmap from file \"%s\" failed !!!", filename);
-		GAME_ASSERT(false, error_msg);
-	}
+    if (hbitmap == NULL)
+    {
+        char error_msg[300];
+        sprintf(error_msg, "Loading bitmap from file \"%s\" failed !!!", filename);
+        GAME_ASSERT(false, error_msg);
+    }
 
-	CBitmap* bmp = CBitmap::FromHandle(hbitmap); // memory will be deleted automatically
-	BITMAP bitmapSize;
-	bmp->GetBitmap(&bitmapSize);
-	location.left = nx;
-	location.top = ny;
-	location.right = nx + bitmapSize.bmWidth;
-	location.bottom = ny + bitmapSize.bmHeight;
-	SurfaceID = CDDraw::RegisterBitmap(filename, color, rect);
-	isBitmapLoaded = true;
-	bmp->DeleteObject();
+    CBitmap* bmp = CBitmap::FromHandle(hbitmap); // memory will be deleted automatically
+    BITMAP bitmapSize;
+    bmp->GetBitmap(&bitmapSize);
+    location.left = nx;
+    location.top = ny;
+    location.right = nx + bitmapSize.bmWidth;
+    location.bottom = ny + bitmapSize.bmHeight;
+    SurfaceID = CDDraw::RegisterBitmap(filename, color, rect);
+    isBitmapLoaded = true;
+    bmp->DeleteObject();
 }
 
 void CMovingBitmap::LoadBitmap(char* filename, COLORREF color)
@@ -516,7 +743,7 @@ void CMovingBitmap::LoadBitmap(char* filename, COLORREF color)
     location.bottom = ny + bitmapSize.bmHeight;
     SurfaceID = CDDraw::RegisterBitmap(filename, color);
     isBitmapLoaded = true;
-	bmp->DeleteObject();
+    bmp->DeleteObject();
 }
 
 void CMovingBitmap::SetTopLeft(int x, int y)
@@ -563,7 +790,7 @@ int CMovingBitmap::Width()
 
 bool CMovingBitmap::IsLoaded()
 {
-	return isBitmapLoaded;
+    return isBitmapLoaded;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1111,20 +1338,24 @@ bool CDDraw::CreateSurface()
     for (unsigned i = 0; i < lpDDS.size(); i++)
     {
         if (BitmapID[i] == -1)
-			LoadBitmap(i, (char*)BitmapName[i].c_str());  // from file
-		else if (BitmapID[i] == -2) {
-			string str = BitmapName[i].substr(0, BitmapName[i].find(".bmp") + 4), rectCoe = BitmapName[i].substr(BitmapName[i].find(".bmp") + 4, BitmapName[i].size());
-			stringstream ss(rectCoe);
-			string item;
-			vector<int> elems;
-			while (getline(ss, item, ',')) {
-				elems.push_back(stoi(item));
-			}
-			RECT trect = RECT{ elems[0], elems[1], elems[2], elems[3] };
-			LoadBitmap(i, (char*)str.c_str(), trect);  // from file
-		}
+            LoadBitmap(i, (char*)BitmapName[i].c_str());  // from file
+        else if (BitmapID[i] == -2)
+        {
+            string str = BitmapName[i].substr(0, BitmapName[i].find(".bmp") + 4), rectCoe = BitmapName[i].substr(BitmapName[i].find(".bmp") + 4, BitmapName[i].size());
+            stringstream ss(rectCoe);
+            string item;
+            vector<int> elems;
+
+            while (getline(ss, item, ','))
+            {
+                elems.push_back(stoi(item));
+            }
+
+            RECT trect = RECT{ elems[0], elems[1], elems[2], elems[3] };
+            LoadBitmap(i, (char*)str.c_str(), trect);  // from file
+        }
         else
-			LoadBitmap(i, BitmapID[i]); // from resource
+            LoadBitmap(i, BitmapID[i]); // from resource
 
         SetColorKey(i, BitmapColorKey[i]);
     }
@@ -1306,7 +1537,7 @@ void CDDraw::LoadBitmap(int i, int IDB_BITMAP)
     mDC.SelectObject(&pOldBitmap);
     mDC.DeleteDC();
     bitmap.DeleteObject();
-	pOldBitmap->DeleteObject();
+    pOldBitmap->DeleteObject();
 }
 
 void CDDraw::LoadBitmap(int i, char* filename)
@@ -1342,44 +1573,44 @@ void CDDraw::LoadBitmap(int i, char* filename)
     mDC.SelectObject(&pOldBitmap);
     mDC.DeleteDC();
     bmp->DeleteObject();
-	pOldBitmap->DeleteObject();
+    pOldBitmap->DeleteObject();
 }
 
-void CDDraw::LoadBitmap(int i, char * filename, RECT rect)
+void CDDraw::LoadBitmap(int i, char* filename, RECT rect)
 {
-	HBITMAP hbitmap = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	hbitmap = GetClippedBitmapFromBitmap(rect, hbitmap);
-	GAME_ASSERT(hbitmap != NULL, "Load bitmap failed !!! Please check bitmap ID (IDB_XXX).");
-	CBitmap* bmp = CBitmap::FromHandle(hbitmap); // will be deleted automatically
-	CDC mDC;
-	mDC.CreateCompatibleDC(NULL);
-	CBitmap* pOldBitmap = mDC.SelectObject(bmp);
-	BITMAP bitmapSize;
-	bmp->GetBitmap(&bitmapSize);
-	DDSURFACEDESC ddsd;
-	ZeroMemory(&ddsd, sizeof(ddsd));
-	ddsd.dwSize = sizeof(ddsd);
-	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
-	ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
-	BitmapRect[i].bottom = ddsd.dwHeight = bitmapSize.bmHeight;
-	BitmapRect[i].right = ddsd.dwWidth = bitmapSize.bmWidth;
-	ddrval = lpDD->CreateSurface(&ddsd, &lpDDS[i], NULL);
-	CheckDDFail("Create Bitmap Surface Failed");
-	HDC hdc;
-	ddrval = lpDDS[i]->GetDC(&hdc);
-	CheckDDFail("Get surface HDC failed");
-	CDC cdc;
-	cdc.Attach(hdc);
-	cdc.BitBlt(0, 0, bitmapSize.bmWidth, bitmapSize.bmHeight, &mDC, 0, 0, SRCCOPY);
-	cdc.Detach();
-	lpDDS[i]->ReleaseDC(hdc);
-	// avoid memory leak
-	// According to spec, mDC should delete itself automatically.  However,
-	// it appears that we have to do it explictly.
-	mDC.SelectObject(&pOldBitmap);
-	mDC.DeleteDC();
-	bmp->DeleteObject();
-	pOldBitmap->DeleteObject();
+    HBITMAP hbitmap = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    hbitmap = GetClippedBitmapFromBitmap(rect, hbitmap);
+    GAME_ASSERT(hbitmap != NULL, "Load bitmap failed !!! Please check bitmap ID (IDB_XXX).");
+    CBitmap* bmp = CBitmap::FromHandle(hbitmap); // will be deleted automatically
+    CDC mDC;
+    mDC.CreateCompatibleDC(NULL);
+    CBitmap* pOldBitmap = mDC.SelectObject(bmp);
+    BITMAP bitmapSize;
+    bmp->GetBitmap(&bitmapSize);
+    DDSURFACEDESC ddsd;
+    ZeroMemory(&ddsd, sizeof(ddsd));
+    ddsd.dwSize = sizeof(ddsd);
+    ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+    ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
+    BitmapRect[i].bottom = ddsd.dwHeight = bitmapSize.bmHeight;
+    BitmapRect[i].right = ddsd.dwWidth = bitmapSize.bmWidth;
+    ddrval = lpDD->CreateSurface(&ddsd, &lpDDS[i], NULL);
+    CheckDDFail("Create Bitmap Surface Failed");
+    HDC hdc;
+    ddrval = lpDDS[i]->GetDC(&hdc);
+    CheckDDFail("Get surface HDC failed");
+    CDC cdc;
+    cdc.Attach(hdc);
+    cdc.BitBlt(0, 0, bitmapSize.bmWidth, bitmapSize.bmHeight, &mDC, 0, 0, SRCCOPY);
+    cdc.Detach();
+    lpDDS[i]->ReleaseDC(hdc);
+    // avoid memory leak
+    // According to spec, mDC should delete itself automatically.  However,
+    // it appears that we have to do it explictly.
+    mDC.SelectObject(&pOldBitmap);
+    mDC.DeleteDC();
+    bmp->DeleteObject();
+    pOldBitmap->DeleteObject();
 }
 
 DWORD CDDraw::MatchColorKey(LPDIRECTDRAWSURFACE lpDDSurface, COLORREF color)
@@ -1477,29 +1708,29 @@ int CDDraw::RegisterBitmap(char* filename, COLORREF ColorKey)
     return i;
 }
 
-int CDDraw::RegisterBitmap(char * filename, COLORREF ColorKey, RECT rect)
+int CDDraw::RegisterBitmap(char* filename, COLORREF ColorKey, RECT rect)
 {
-	unsigned i;
-	char buf[128], buff[128];
-	sprintf(buf, "%d,%d,%d,%d", rect.left, rect.top, rect.right, rect.bottom);
-	strcpy(buff, filename);
-	strcat(buff, buf);
+    unsigned i;
+    char buf[128], buff[128];
+    sprintf(buf, "%d,%d,%d,%d", rect.left, rect.top, rect.right, rect.bottom);
+    strcpy(buff, filename);
+    strcat(buff, buf);
 
-	for (i = 0; i < lpDDS.size(); i++)
-		if (BitmapName[i].compare(buff) == 0)
-			return i;
+    for (i = 0; i < lpDDS.size(); i++)
+        if (BitmapName[i].compare(buff) == 0)
+            return i;
 
-	//
-	// Enlarge the size of vectors
-	//
-	BitmapID.push_back(-2);
-	BitmapName.push_back(buff);
-	BitmapColorKey.push_back(ColorKey);
-	BitmapRect.push_back(CRect(0, 0, 0, 0));
-	lpDDS.push_back(NULL);
-	LoadBitmap(i, filename, rect);
-	SetColorKey(i, ColorKey);
-	return i;
+    //
+    // Enlarge the size of vectors
+    //
+    BitmapID.push_back(-2);
+    BitmapName.push_back(buff);
+    BitmapColorKey.push_back(ColorKey);
+    BitmapRect.push_back(CRect(0, 0, 0, 0));
+    lpDDS.push_back(NULL);
+    LoadBitmap(i, filename, rect);
+    SetColorKey(i, ColorKey);
+    return i;
 }
 
 void CDDraw::ReleaseBackCDC()
