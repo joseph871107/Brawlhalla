@@ -70,7 +70,7 @@ namespace game_framework
 const vector<MapPARM> _mapP
 {
     // Define Grounds of Map Default
-    MapPARM("Plain Field", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1, GroundPARM(0, 500, 1, 15, 1, IDB_GROUND1)),
+    MapPARM("Plain Field", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1, GroundPARM(100, 500, 1, 10, 1, IDB_GROUND1)),
     // Define Grounds of Map Test
     MapPARM("Arena", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 2, GroundPARM(560, 500, 0.174, 2, 1, IDB_GROUND2, 0, 900, 900), GroundPARM(400, 340, 0.174, 1, 2, IDB_GROUND2, 0, 900, 900)),
     // Define 3 Grounds

@@ -78,18 +78,18 @@ void BattleSystem::InitializeExplosionEffectsOnBeginState()
     explosionEffectPtr->LoadBitmap();
     explosionEffectPtr->AddCamera(&camera);
     _explosionEffects.push_back(explosionEffectPtr);
-	// _explosionEffects[1] for Player 2
-	explosionEffectPtr = new ExplosionEffect();
-	explosionEffectPtr->SetIsTrigger(false); // required
-	explosionEffectPtr->LoadBitmap();
-	explosionEffectPtr->AddCamera(&camera);
-	_explosionEffects.push_back(explosionEffectPtr);
-	// _explosionEffects[1] for Player 2
-	explosionEffectPtr = new ExplosionEffect();
-	explosionEffectPtr->SetIsTrigger(false); // required
-	explosionEffectPtr->LoadBitmap();
-	explosionEffectPtr->AddCamera(&camera);
-	_explosionEffects.push_back(explosionEffectPtr);
+    // _explosionEffects[1] for Player 2
+    explosionEffectPtr = new ExplosionEffect();
+    explosionEffectPtr->SetIsTrigger(false); // required
+    explosionEffectPtr->LoadBitmap();
+    explosionEffectPtr->AddCamera(&camera);
+    _explosionEffects.push_back(explosionEffectPtr);
+    // _explosionEffects[1] for Player 2
+    explosionEffectPtr = new ExplosionEffect();
+    explosionEffectPtr->SetIsTrigger(false); // required
+    explosionEffectPtr->LoadBitmap();
+    explosionEffectPtr->AddCamera(&camera);
+    _explosionEffects.push_back(explosionEffectPtr);
 }
 
 void BattleSystem::InitializePlayersOnBeginState()
@@ -102,24 +102,24 @@ void BattleSystem::InitializePlayersOnBeginState()
     player->weapons = map->GetWeapons();
     _players.push_back(player);				// Player1
     // Enemy
-	player = new Enemy();
-	player->LoadBitmap();
-	player->AddCamera(&camera);
-	player->SetSize(2);
-	player->weapons = map->GetWeapons();
-	_players.push_back(player);				// Enemy
+    player = new Enemy();
+    player->LoadBitmap();
+    player->AddCamera(&camera);
+    player->SetSize(2);
+    player->weapons = map->GetWeapons();
+    _players.push_back(player);				// Enemy
     // Enemy
-	player = new Player();
-	player->LoadBitmap();
-	player->AddCamera(&camera);
-	player->weapons = map->GetWeapons();
-	_players.push_back(player);				// Enemy
+    player = new Player();
+    player->LoadBitmap();
+    player->AddCamera(&camera);
+    player->weapons = map->GetWeapons();
+    _players.push_back(player);				// Enemy
     // Initialize keys for players
     vector<vector<long>> playerKeys =
     {
         {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M},
-		{KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X},
-		{KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
+        {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X},
+        {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
     };
 
     // Initialize other attributes of the players
@@ -532,8 +532,20 @@ void BattleSystem::ResizeCamera()
             totalY += i->GetCor(1);
         }
 
-        int minX = totalX / (signed int)_players.size(), maxX = minX, minY = totalY / (signed int)_players.size(), maxY = minY, minWidth = 800, maxWidth = 2000, paddingX = 500, paddingY = 300, centerX = minX + (maxX - minX) / 2, centerY = minY + (maxY - minY) / 2;
-		int offsetX = 100, minPlayerX = -offsetX, maxPlayerX = SIZE_X + offsetX, offsetY = 200, minPlayerY= -offsetY, maxPlayerY = SIZE_Y + offsetY;
+        int minX = totalX / (signed int)_players.size();
+        int maxX = minX;
+        int minY = totalY / (signed int)_players.size();
+        int maxY = minY;
+        int minWidth = 800;
+        int maxWidth = 2000;
+        int paddingX = 500;
+        int paddingY = 300;
+        int offsetX = 100;
+        int minPlayerX = -offsetX;
+        int maxPlayerX = SIZE_X + offsetX;
+        int offsetY = 200;
+        int minPlayerY = -offsetY;
+        int maxPlayerY = SIZE_Y + offsetY;
 
         for (auto i : _players) // Find max and minimum position among players
         {
@@ -547,13 +559,22 @@ void BattleSystem::ResizeCamera()
         maxX += paddingX; // Enlarge view horizentally
         minY -= paddingY;
         maxY += paddingY; // Enlarge view vertically
-        int width = (maxX - minX < minWidth ? minWidth : maxX - minX > maxWidth ? maxWidth : maxX - minX), height = maxY - minY;
+		// Constraint the camera's x-coordinate
+		minX = (minX < 0) ? 0 : minX;
+		maxX = (maxX > SIZE_X) ? SIZE_X : maxX;
+		//
+        int width = (maxX - minX < minWidth ? minWidth : maxX - minX > maxWidth ? maxWidth : maxX - minX);
+        int height = maxY - minY;
         width = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? width : height * SIZE_X / SIZE_Y);
         height = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? height : width * SIZE_Y / SIZE_X);
-        double sizeX = SIZE_X / (double)(width), sizeY = SIZE_Y / (double)(height);
+        double sizeX = SIZE_X / (double)(width);
+        double sizeY = SIZE_Y / (double)(height);
         double size = (sizeX < sizeY ? sizeX : sizeY);
-        camera.SetCameraXY(centerX, centerY);
         camera.SetSize(size);
+        //
+        int centerX = minX + (maxX - minX) / 2;
+        int centerY = minY + (maxY - minY) / 2;
+        camera.SetCameraXY(centerX, centerY);
     }
 }
 
