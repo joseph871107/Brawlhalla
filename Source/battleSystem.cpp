@@ -78,12 +78,18 @@ void BattleSystem::InitializeExplosionEffectsOnBeginState()
     explosionEffectPtr->LoadBitmap();
     explosionEffectPtr->AddCamera(&camera);
     _explosionEffects.push_back(explosionEffectPtr);
-    // _explosionEffects[1] for Player 2
-    explosionEffectPtr = new ExplosionEffect();
-    explosionEffectPtr->SetIsTrigger(false); // required
-    explosionEffectPtr->LoadBitmap();
-    explosionEffectPtr->AddCamera(&camera);
-    _explosionEffects.push_back(explosionEffectPtr);
+	// _explosionEffects[1] for Player 2
+	explosionEffectPtr = new ExplosionEffect();
+	explosionEffectPtr->SetIsTrigger(false); // required
+	explosionEffectPtr->LoadBitmap();
+	explosionEffectPtr->AddCamera(&camera);
+	_explosionEffects.push_back(explosionEffectPtr);
+	// _explosionEffects[1] for Player 2
+	explosionEffectPtr = new ExplosionEffect();
+	explosionEffectPtr->SetIsTrigger(false); // required
+	explosionEffectPtr->LoadBitmap();
+	explosionEffectPtr->AddCamera(&camera);
+	_explosionEffects.push_back(explosionEffectPtr);
 }
 
 void BattleSystem::InitializePlayersOnBeginState()
@@ -96,16 +102,24 @@ void BattleSystem::InitializePlayersOnBeginState()
     player->weapons = map->GetWeapons();
     _players.push_back(player);				// Player1
     // Enemy
-    player = new Enemy();
-    player->LoadBitmap();
-    player->AddCamera(&camera);
-    player->weapons = map->GetWeapons();
-    _players.push_back(player);				// Enemy
+	player = new Enemy();
+	player->LoadBitmap();
+	player->AddCamera(&camera);
+	player->SetSize(2);
+	player->weapons = map->GetWeapons();
+	_players.push_back(player);				// Enemy
+    // Enemy
+	player = new Player();
+	player->LoadBitmap();
+	player->AddCamera(&camera);
+	player->weapons = map->GetWeapons();
+	_players.push_back(player);				// Enemy
     // Initialize keys for players
     vector<vector<long>> playerKeys =
     {
         {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M},
-        {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
+		{KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X},
+		{KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
     };
 
     // Initialize other attributes of the players
@@ -519,13 +533,14 @@ void BattleSystem::ResizeCamera()
         }
 
         int minX = totalX / (signed int)_players.size(), maxX = minX, minY = totalY / (signed int)_players.size(), maxY = minY, minWidth = 800, maxWidth = 2000, paddingX = 500, paddingY = 300, centerX = minX + (maxX - minX) / 2, centerY = minY + (maxY - minY) / 2;
+		int offsetX = 100, minPlayerX = -offsetX, maxPlayerX = SIZE_X + offsetX, offsetY = 200, minPlayerY= -offsetY, maxPlayerY = SIZE_Y + offsetY;
 
         for (auto i : _players) // Find max and minimum position among players
         {
-            minX = (i->GetCor(0) < minX ? i->GetCor(0) : minX);
-            maxX = (i->GetCor(2) > maxX ? i->GetCor(2) : maxX);
-            minY = (i->GetCor(1) < minY ? i->GetCor(1) : minY);
-            maxY = (i->GetCor(3) > maxY ? i->GetCor(3) : maxY);
+            minX = (i->GetCor(0) < minX && i->GetCor(0) > minPlayerX ? i->GetCor(0) : minX);
+            maxX = (i->GetCor(2) > maxX && i->GetCor(2) < maxPlayerX ? i->GetCor(2) : maxX);
+            minY = (i->GetCor(1) < minY && i->GetCor(1) > minPlayerY ? i->GetCor(1) : minY);
+            maxY = (i->GetCor(3) > maxY && i->GetCor(3) < maxPlayerY ? i->GetCor(3) : maxY);
         }
 
         minX -= paddingX;

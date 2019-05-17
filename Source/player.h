@@ -41,6 +41,8 @@ class Player
         void AddCamera(Camera* cam);	// Camera
         void SetPlayer(bool tri);
         bool IsPlayer();
+		void SetSize(double);
+		double GetSize();
         vector<Weapon*>* weapons;
 
         //Others - Bill
@@ -249,6 +251,7 @@ class Player
         int _x, _y;						// position of the collision's box
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
+		double BITMAP_SIZE = 1;
         //bool _beInterrupt;
         vector<vector<int>*> bmp_iter;	// used to display current animation state in DEBUG mode
 

@@ -101,7 +101,7 @@ void GetCollideArray(int file, ColBmp*);						// file 為IDB名稱
 /////////////////////////
 // 通用輔助副程式
 /////////////////////////
-void OnShowText(string, int, int, int = 20, COLORREF = RGB(255, 255, 255), COLORREF = RGB(255, 255, 255), LPCTSTR = "Times New Roman");	// 簡化原本Game Framework 的字串顯示
+void OnShowText(string, int, int, int = 20, COLORREF = RGB(255, 255, 255), COLORREF = RGB(255, 255, 255), LPCTSTR = "Agency FB");	// 簡化原本Game Framework 的字串顯示
 void DrawRectangleBlock(int x, int y, int width, int height, COLORREF color = RGB(255, 255, 255));
 void DrawRectangle(int x, int y, int width, int height, COLORREF color = RGB(0, 0, 0));
 void DrawLine(int x1, int y1, int x2, int y2, COLORREF color = RGB(255, 255, 255));

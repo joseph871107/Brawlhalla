@@ -36,11 +36,10 @@ const double COLLISION_ERRORS = 1.0;
 const int _OFFSET_X = 20;
 const int _OFFSET_Y = 10;
 const int MAX_LIFE = 3;
-const double BITMAP_SIZE = 1;
 const double MOVE_ACCELERATION = 0.5;
 const double STOP_ACCELERATION = 1;
 const double MAX_MOVE_VELOCITY = 10;
-const int INITIAL_TAKEN_DAMAGE = 5;
+const int INITIAL_TAKEN_DAMAGE = 100;
 const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 2;
 const int MAX_ATTACK_AFFECTION_FRAMES = 150; // 5 secs
 // Triggered Animation Key ID
@@ -1819,6 +1818,16 @@ void Player::SetPlayer(bool tri)
 bool Player::IsPlayer()
 {
     return _isPlayer;
+}
+
+void Player::SetSize(double size)
+{
+	BITMAP_SIZE = size;
+}
+
+double Player::GetSize()
+{
+	return BITMAP_SIZE;
 }
 
 int Player::Round(double i)
