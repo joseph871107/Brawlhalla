@@ -32,6 +32,12 @@ vector< vector<CMovingBitmap>> louis_ex_l2;
 vector< vector<CMovingBitmap>> louis_ex_r2;
 vector< vector<CMovingBitmap>> louis_ex_l3;
 vector< vector<CMovingBitmap>> louis_ex_r3;
+vector< vector<CMovingBitmap>> julian_l0;
+vector< vector<CMovingBitmap>> julian_r0;
+vector< vector<CMovingBitmap>> julian_l1;
+vector< vector<CMovingBitmap>> julian_r1;
+vector< vector<CMovingBitmap>> julian_l2;
+vector< vector<CMovingBitmap>> julian_r2;
 
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MATCH_TIME = 180;
@@ -105,7 +111,7 @@ void BattleSystem::InitializePlayersOnBeginState()
     player = new Enemy();
     player->LoadBitmap();
     player->AddCamera(&camera);
-    player->SetSize(2);
+    //player->SetSize(2);
     player->weapons = map->GetWeapons();
     _players.push_back(player);				// Enemy
     // Enemy
@@ -113,7 +119,7 @@ void BattleSystem::InitializePlayersOnBeginState()
     player->LoadBitmap();
     player->AddCamera(&camera);
     player->weapons = map->GetWeapons();
-    _players.push_back(player);				// Enemy
+    //_players.push_back(player);				// Enemy
     // Initialize keys for players
     vector<vector<long>> playerKeys =
     {
@@ -123,11 +129,18 @@ void BattleSystem::InitializePlayersOnBeginState()
     };
 
     // Initialize other attributes of the players
+	int pNum = 1, eNum = 1;
     for (auto i = _players.begin(); i != _players.end(); i++)
     {
         char str[80];
-        sprintf(str, "%d", i - _players.begin() + 1);
-        (*i)->Initialize(this, *_grounds, &_players, "Player " + (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+		if ((*i)->IsPlayer()) {
+			sprintf(str, "Player %d", pNum++);
+			(*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+		}
+		else {
+			sprintf(str, "Enemy %d", eNum++);
+			(*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+		}
     }
 
     //
@@ -326,33 +339,50 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     // Explosion Effects
     _explosionEffects = vector<ExplosionEffect*>();
     // Player
-    louis_l0 = CropSprite(IDB_P_LOUIS_L0, 7, 10, RGB(0, 0, 0));
-    FlipSprite(&louis_l0);
-    louis_r0 = CropSprite(IDB_P_LOUIS_R0, 7, 10, RGB(0, 0, 0));
-    ShowInitProgress(78);
-    louis_l1 = CropSprite(IDB_P_LOUIS_L1, 7, 10, RGB(0, 0, 0));
-    FlipSprite(&louis_l1);
-    louis_r1 = CropSprite(IDB_P_LOUIS_R1, 7, 10, RGB(0, 0, 0));
-    ShowInitProgress(81);
-    louis_l2 = CropSprite(IDB_P_LOUIS_L2, 5, 10, RGB(0, 0, 0));
-    FlipSprite(&louis_l2);
-    louis_r2 = CropSprite(IDB_P_LOUIS_R2, 5, 10, RGB(0, 0, 0));
-    ShowInitProgress(84);
-    louis_ex_l0 = CropSprite(IDB_P_LOUIS_EX_L0, 7, 10, RGB(0, 0, 0));
-    FlipSprite(&louis_ex_l0);
-    louis_ex_r0 = CropSprite(IDB_P_LOUIS_EX_R0, 7, 10, RGB(0, 0, 0));
-    ShowInitProgress(87);
-    louis_ex_l1 = CropSprite(IDB_P_LOUIS_EX_L1, 7, 10, RGB(0, 0, 0));
-    FlipSprite(&louis_ex_l1);
-    louis_ex_r1 = CropSprite(IDB_P_LOUIS_EX_R1, 7, 10, RGB(0, 0, 0));
-    ShowInitProgress(90);
-    louis_ex_l2 = CropSprite(IDB_P_LOUIS_EX_L2, 2, 10, RGB(0, 0, 0));
-    FlipSprite(&louis_ex_l2);
-    louis_ex_r2 = CropSprite(IDB_P_LOUIS_EX_R2, 2, 10, RGB(0, 0, 0));
-    ShowInitProgress(95);
-    //louis_ex_l3 = CropSprite(IDB_P_LOUIS_EX_L3, 3, 10, RGB(0, 0, 0));
-    //FlipSprite(&louis_ex_l3);
-    //louis_ex_r3 = CropSprite(IDB_P_LOUIS_EX_R3, 3, 10, RGB(0, 0, 0));
+	struct cropPARM {
+		cropPARM(vector<vector<CMovingBitmap>>* _target, int _idbRes, int _row, int _col,bool _flip)
+		{
+			target = _target;
+			idbRes = _idbRes;
+			row = _row;
+			col = _col;
+			flip = _flip;
+		}
+		vector<vector<CMovingBitmap>>* target;
+		int idbRes, row, col;
+		bool flip;
+	};
+
+	vector<cropPARM> cropPARMs = {
+		cropPARM(&louis_l0, IDB_P_LOUIS_L0, 7, 10, true), 
+		cropPARM(&louis_r0, IDB_P_LOUIS_R0, 7, 10, false), 
+		cropPARM(&louis_l1, IDB_P_LOUIS_L1, 7, 10, true),  
+		cropPARM(&louis_r1, IDB_P_LOUIS_R1, 7, 10, false),  
+		cropPARM(&louis_l2, IDB_P_LOUIS_L2, 5, 10, true),  
+		cropPARM(&louis_r2, IDB_P_LOUIS_R2, 5, 10, false),  
+		cropPARM(&louis_ex_l0, IDB_P_LOUIS_EX_L0, 7, 10, true),  
+		cropPARM(&louis_ex_r0, IDB_P_LOUIS_EX_R0, 7, 10, false),
+		cropPARM(&louis_ex_l1, IDB_P_LOUIS_EX_L1, 7, 10, true),
+		cropPARM(&louis_ex_r1, IDB_P_LOUIS_EX_R1, 7, 10, false),
+		cropPARM(&louis_ex_l2, IDB_P_LOUIS_EX_L2, 2, 10, true),
+		cropPARM(&louis_ex_r2, IDB_P_LOUIS_EX_R2, 2, 10, false),
+		cropPARM(&louis_ex_l3, IDB_P_LOUIS_EX_L3, 3, 6, true),
+		cropPARM(&louis_ex_r3, IDB_P_LOUIS_EX_R3, 3, 6, false),
+		cropPARM(&julian_l0, IDB_P_JULIAN_L0, 5, 10, true),
+		cropPARM(&julian_r0, IDB_P_JULIAN_R0, 5, 10, false),
+		cropPARM(&julian_l1, IDB_P_JULIAN_L1, 2, 7, true),
+		cropPARM(&julian_r1, IDB_P_JULIAN_R1, 2, 7, false),
+		cropPARM(&julian_l2, IDB_P_JULIAN_L2, 5, 10, true),
+		cropPARM(&julian_r2, IDB_P_JULIAN_R2, 5, 10, false)
+	};
+
+	int progS = 75, progE = 100;
+	for (int i = 0; i < (signed int)cropPARMs.size(); i++) {
+		*(cropPARMs[i].target) = CropSprite(cropPARMs[i].idbRes, cropPARMs[i].row, cropPARMs[i].col, RGB(0, 0, 0));
+		if (cropPARMs[i].flip)
+			FlipSprite(cropPARMs[i].target);
+		ShowInitProgress((progE-progS) / cropPARMs.size() * i + progS);
+	}
     ShowInitProgress(100);
 }
 

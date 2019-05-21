@@ -744,6 +744,22 @@ IDB_P_LOUIS_EX_R2       BITMAP                  "..\\RES\\players\\louisEX_2.bmp
 
 IDB_P_LOUIS_EX_L2       BITMAP                  "..\\RES\\players\\louisEX_2_mirror.bmp"
 
+IDB_P_LOUIS_EX_R3       BITMAP                  "..\\RES\\players\\louisEX_3.bmp"
+
+IDB_P_LOUIS_EX_L3       BITMAP                  "..\\RES\\players\\louisEX_3_mirror.bmp"
+
+IDB_P_JULIAN_R0         BITMAP                  "..\\RES\\players\\julian_0.bmp"
+
+IDB_P_JULIAN_L0         BITMAP                  "..\\RES\\players\\julian_0_mirror.bmp"
+
+IDB_P_JULIAN_R1         BITMAP                  "..\\RES\\players\\julian_1.bmp"
+
+IDB_P_JULIAN_L1         BITMAP                  "..\\RES\\players\\julian_1_mirror.bmp"
+
+IDB_P_JULIAN_R2         BITMAP                  "..\\RES\\players\\julian_2.bmp"
+
+IDB_P_JULIAN_L2         BITMAP                  "..\\RES\\players\\julian_2_mirror.bmp"
+
 IDB_CHARS               BITMAP                  "..\\RES\\Characters\\characters.bmp"
 
 

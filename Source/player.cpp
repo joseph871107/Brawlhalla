@@ -33,13 +33,11 @@ const double INITIAL_ACCELERATION = 1.2;
 const double LANDING_ACCELERATION = 5;
 const double EDGE_SLIDING_ACCELERATION = 0.1;
 const double COLLISION_ERRORS = 1.0;
-const int _OFFSET_X = 20;
-const int _OFFSET_Y = 10;
 const int MAX_LIFE = 3;
 const double MOVE_ACCELERATION = 0.5;
 const double STOP_ACCELERATION = 1;
 const double MAX_MOVE_VELOCITY = 10;
-const int INITIAL_TAKEN_DAMAGE = 100;
+const int INITIAL_TAKEN_DAMAGE = 10;
 const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 2;
 const int MAX_ATTACK_AFFECTION_FRAMES = 150; // 5 secs
 // Triggered Animation Key ID
@@ -195,31 +193,6 @@ void Player::LoadBitmap()
     AddCAnimation(&dgl, BITMAP_SIZE); //ani[12] Dodging Left
     AddCAnimation(&dgr, BITMAP_SIZE); //ani[13] Dodging Right
     */
-    vector<CPoint> r = vector<CPoint> { CPoint(2, 0), CPoint(2, 1), CPoint(2, 2), CPoint(2, 1) };	// bmps of running
-    vector<CPoint> j = vector<CPoint> { CPoint(6, 2), CPoint(5, 5), CPoint(6, 2) };	// bmps of jumping
-    vector<CPoint> s = vector<CPoint> { CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3) };	// bmps of standing
-    vector<CPoint> l = vector<CPoint> { CPoint(5, 2) }; // bmps of leaning
-    vector<CPoint> lf = vector<CPoint> { CPoint(5, 5), CPoint(6, 2) }; // bmps of landing fallin
-    vector<CPoint> uf = vector<CPoint> { CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3), CPoint(3, 4) }; // bmps of unconsciously flying
-    vector<CPoint> dg = vector<CPoint> { CPoint(5, 6), CPoint(5, 7) }; // bmps of dodging
-    /// Comment for future devs: I duplicate the bitmaps for longer animation duration, which is dirty, should be improved
-    AddCAnimationWithSprite(&ani, &louis_l0, &r, BITMAP_SIZE); //ani[0] Run Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &r, BITMAP_SIZE); //ani[1] Run Right
-    AddCAnimationWithSprite(&ani, &louis_l0, &j, BITMAP_SIZE, 5, false); //ani[2] Jump Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &j, BITMAP_SIZE, 5, false); //ani[3] Jump Right
-    AddCAnimationWithSprite(&ani, &louis_l0, &s, BITMAP_SIZE); //ani[4] Stand (Idle) Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &s, BITMAP_SIZE); //ani[5] Stand (Idle) Right
-    AddCAnimationWithSprite(&ani, &louis_r0, &l, BITMAP_SIZE); //ani[6] Lean Left
-    AddCAnimationWithSprite(&ani, &louis_l0, &l, BITMAP_SIZE); //ani[7] Lean Right
-    AddCAnimationWithSprite(&ani, &louis_l0, &lf, BITMAP_SIZE); //ani[8] Landing Falling Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &lf, BITMAP_SIZE); //ani[9] Landing Falling Right
-    AddCAnimationWithSprite(&ani, &louis_r0, &uf, BITMAP_SIZE); //ani[10] Unconsciously Flying Left
-    AddCAnimationWithSprite(&ani, &louis_l0, &uf, BITMAP_SIZE); //ani[11] Unconsciously Flying Right
-    AddCAnimationWithSprite(&ani, &louis_l0, &dg, BITMAP_SIZE, 15); //ani[12] Dodging Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &dg, BITMAP_SIZE, 15); //ani[13] Dodging Right
-    _collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
-    //-----------------ANIMATION BY WEAPONS-----------------//
-    _aniByWpn = vector<vector<CAnimation>>();
     /*
     vector<int> s2l;// bmps of standing left with sword
     vector<int> s2r;// bmps of standing right with sword
@@ -297,69 +270,8 @@ void Player::LoadBitmap()
         aal, aar, amal, amar,
         adal, adar, sdl, sdr);
     */
-    vector<CPoint> s2;// bmps of standing with weapon
-    vector<CPoint> a; // bmps of attacking
-    vector<CPoint> gma;// bmps of on-ground-moving attack
-    vector<CPoint> sa;// bmps of slide-attack
-    vector<CPoint> aa;// bmps of air-attack
-    vector<CPoint> ama;// bmps of on-air-moving attack
-    vector<CPoint> ada;// bmps of on-air-down attack
-    vector<CPoint> sd;// bmps of drawing sword
-    // ~
-    // ~ Weapon 0 - default
-    s2 = s;
-    a = vector<CPoint> { CPoint(1, 0), CPoint(1, 1), CPoint(1, 2), CPoint(1, 3) };
-    gma = vector<CPoint> { CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3) };
-    sa = vector<CPoint> { CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3), CPoint(0, 4), CPoint(0, 5), CPoint(0, 6), CPoint(0, 7), CPoint(0, 8), CPoint(0, 9) };
-    aa = vector<CPoint> { CPoint(1, 4), CPoint(1, 5), CPoint(1, 6), CPoint(1, 7), CPoint(1, 8) };
-    ama = vector<CPoint> { CPoint(1, 4), CPoint(1, 5), CPoint(1, 6), CPoint(1, 7), CPoint(1, 8) };
-    ada = vector<CPoint> { CPoint(6, 2), CPoint(6, 3), CPoint(6, 4), CPoint(6, 5), CPoint(6, 6) };
-    sd = vector<CPoint> { CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3), CPoint(3, 4), CPoint(3, 5), CPoint(3, 6), CPoint(3, 7), CPoint(3, 8), CPoint(3, 9), CPoint(4, 0), CPoint(4, 1), CPoint(4, 2), CPoint(4, 3), CPoint(4, 4), CPoint(4, 5), CPoint(4, 6), CPoint(4, 7), CPoint(4, 8) };
-    vector<CAnimation> tempAniByWpn = vector<CAnimation>();
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &s2, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &s2, BITMAP_SIZE); //ani[1] Stand (Idle) Right with sword
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l1, &gma, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r1, &gma, BITMAP_SIZE, 3, false); //ani[5] On-Ground-Moving Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sa, BITMAP_SIZE, 3, false); //ani[6] Slide Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sa, BITMAP_SIZE, 3, false); //ani[7] Slide Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &aa, BITMAP_SIZE, 3, false); //ani[8] Air Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &aa, BITMAP_SIZE, 3, false); //ani[9] Air Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &ama, BITMAP_SIZE, 3, false); //ani[10] On-Air-Moving Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &ama, BITMAP_SIZE, 3, false); //ani[11] On-Air-Moving Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l1, &ada, BITMAP_SIZE, 3, false); //ani[12] On-Air-Down Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r1, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
-    _aniByWpn.push_back(tempAniByWpn);
-    // ~
-    // ~ Weapon 1
-    gma = a;
-    sa = vector<CPoint> { CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3), CPoint(0, 4), CPoint(0, 5), CPoint(0, 6), CPoint(0, 7), CPoint(0, 8), CPoint(0, 9), CPoint(1, 0), CPoint(1, 1), CPoint(1, 2), CPoint(1, 3) };
-    aa = sa;
-    ama = vector<CPoint> { CPoint(4, 2), CPoint(4, 3), CPoint(4, 4) };
-    tempAniByWpn = vector<CAnimation>();
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &s2, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &s2, BITMAP_SIZE); //ani[1] Stand (Idle) Right with sword
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &gma, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &gma, BITMAP_SIZE, 3, false); //ani[5] On-Ground-Moving Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l2, &sa, BITMAP_SIZE, 3, false); //ani[6] Slide Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r2, &sa, BITMAP_SIZE, 3, false); //ani[7] Slide Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l2, &aa, BITMAP_SIZE, 2, false); //ani[8] Air Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r2, &aa, BITMAP_SIZE, 2, false); //ani[9] Air Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l1, &ama, BITMAP_SIZE, 3, false); //ani[10] On-Air-Moving Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r1, &ama, BITMAP_SIZE, 3, false); //ani[11] On-Air-Moving Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l1, &ada, BITMAP_SIZE, 3, false); //ani[12] On-Air-Down Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r1, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
-    _aniByWpn.push_back(tempAniByWpn);
-    // ~
-    // ~ Weapon 2
-    _aniByWpn.push_back(tempAniByWpn);
+	_collision_box.LoadBitmap(IDB_P1_TEST, RGB(0, 0, 0));
+	SetAnimation();
 }
 
 bool Player::IsOnEdge()
@@ -895,6 +807,11 @@ void Player::OnKeyUp(const UINT& nChar)
     }
 }
 
+void Player::SetName(string name)
+{
+	_name = name;
+}
+
 void Player::SetHoldWeapon(bool isHolding)
 {
     _isHoldingWeapon = isHolding;
@@ -1054,6 +971,97 @@ void Player::ResetAnimations(int leftAnimationID)
 {
     ani[leftAnimationID].Reset(); // Reset left animation
     ani[leftAnimationID + 1].Reset(); // Reset right animation
+}
+void Player::SetAnimation()
+{
+	vector<CPoint> r = vector<CPoint>{ CPoint(2, 0), CPoint(2, 1), CPoint(2, 2), CPoint(2, 1) };	// bmps of running
+	vector<CPoint> j = vector<CPoint>{ CPoint(6, 2), CPoint(5, 5), CPoint(6, 2) };	// bmps of jumping
+	vector<CPoint> s = vector<CPoint>{ CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3) };	// bmps of standing
+	vector<CPoint> l = vector<CPoint>{ CPoint(5, 2) }; // bmps of leaning
+	vector<CPoint> lf = vector<CPoint>{ CPoint(5, 5), CPoint(6, 2) }; // bmps of landing fallin
+	vector<CPoint> uf = vector<CPoint>{ CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3), CPoint(3, 4) }; // bmps of unconsciously flying
+	vector<CPoint> dg = vector<CPoint>{ CPoint(5, 6), CPoint(5, 7) }; // bmps of dodging
+	/// Comment for future devs: I duplicate the bitmaps for longer animation duration, which is dirty, should be improved
+	AddCAnimationWithSprite(&ani, &louis_l0, &r, BITMAP_SIZE); //ani[0] Run Left
+	AddCAnimationWithSprite(&ani, &louis_r0, &r, BITMAP_SIZE); //ani[1] Run Right
+	AddCAnimationWithSprite(&ani, &louis_l0, &j, BITMAP_SIZE, 5, false); //ani[2] Jump Left
+	AddCAnimationWithSprite(&ani, &louis_r0, &j, BITMAP_SIZE, 5, false); //ani[3] Jump Right
+	AddCAnimationWithSprite(&ani, &louis_l0, &s, BITMAP_SIZE); //ani[4] Stand (Idle) Left
+	AddCAnimationWithSprite(&ani, &louis_r0, &s, BITMAP_SIZE); //ani[5] Stand (Idle) Right
+	AddCAnimationWithSprite(&ani, &louis_r0, &l, BITMAP_SIZE); //ani[6] Lean Left
+	AddCAnimationWithSprite(&ani, &louis_l0, &l, BITMAP_SIZE); //ani[7] Lean Right
+	AddCAnimationWithSprite(&ani, &louis_l0, &lf, BITMAP_SIZE); //ani[8] Landing Falling Left
+	AddCAnimationWithSprite(&ani, &louis_r0, &lf, BITMAP_SIZE); //ani[9] Landing Falling Right
+	AddCAnimationWithSprite(&ani, &louis_r0, &uf, BITMAP_SIZE); //ani[10] Unconsciously Flying Left
+	AddCAnimationWithSprite(&ani, &louis_l0, &uf, BITMAP_SIZE); //ani[11] Unconsciously Flying Right
+	AddCAnimationWithSprite(&ani, &louis_l0, &dg, BITMAP_SIZE, 15); //ani[12] Dodging Left
+	AddCAnimationWithSprite(&ani, &louis_r0, &dg, BITMAP_SIZE, 15); //ani[13] Dodging Right
+	//-----------------ANIMATION BY WEAPONS-----------------//
+	_aniByWpn = vector<vector<CAnimation>>();
+	vector<CPoint> s2;// bmps of standing with weapon
+	vector<CPoint> a; // bmps of attacking
+	vector<CPoint> gma;// bmps of on-ground-moving attack
+	vector<CPoint> sa;// bmps of slide-attack
+	vector<CPoint> aa;// bmps of air-attack
+	vector<CPoint> ama;// bmps of on-air-moving attack
+	vector<CPoint> ada;// bmps of on-air-down attack
+	vector<CPoint> sd;// bmps of drawing sword
+	// ~
+	// ~ Weapon 0 - default
+	s2 = s;
+	a = vector<CPoint>{ CPoint(1, 0), CPoint(1, 1), CPoint(1, 2), CPoint(1, 3) };
+	gma = vector<CPoint>{ CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3) };
+	sa = vector<CPoint>{ CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3), CPoint(0, 4), CPoint(0, 5), CPoint(0, 6), CPoint(0, 7), CPoint(0, 8), CPoint(0, 9) };
+	aa = vector<CPoint>{ CPoint(1, 4), CPoint(1, 5), CPoint(1, 6), CPoint(1, 7), CPoint(1, 8) };
+	ama = vector<CPoint>{ CPoint(1, 4), CPoint(1, 5), CPoint(1, 6), CPoint(1, 7), CPoint(1, 8) };
+	ada = vector<CPoint>{ CPoint(6, 2), CPoint(6, 3), CPoint(6, 4), CPoint(6, 5), CPoint(6, 6) };
+	sd = vector<CPoint>{ CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3), CPoint(3, 4), CPoint(3, 5), CPoint(3, 6), CPoint(3, 7), CPoint(3, 8), CPoint(3, 9), CPoint(4, 0), CPoint(4, 1), CPoint(4, 2), CPoint(4, 3), CPoint(4, 4), CPoint(4, 5), CPoint(4, 6), CPoint(4, 7), CPoint(4, 8) };
+	vector<CAnimation> tempAniByWpn = vector<CAnimation>();
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &s2, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &s2, BITMAP_SIZE); //ani[1] Stand (Idle) Right with sword
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_l1, &gma, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_r1, &gma, BITMAP_SIZE, 3, false); //ani[5] On-Ground-Moving Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sa, BITMAP_SIZE, 3, false); //ani[6] Slide Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sa, BITMAP_SIZE, 3, false); //ani[7] Slide Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &aa, BITMAP_SIZE, 3, false); //ani[8] Air Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &aa, BITMAP_SIZE, 3, false); //ani[9] Air Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &ama, BITMAP_SIZE, 3, false); //ani[10] On-Air-Moving Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &ama, BITMAP_SIZE, 3, false); //ani[11] On-Air-Moving Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_l1, &ada, BITMAP_SIZE, 3, false); //ani[12] On-Air-Down Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_r1, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
+	_aniByWpn.push_back(tempAniByWpn);
+	// ~
+	// ~ Weapon 1
+	gma = a;
+	a = vector<CPoint>{ CPoint(0,0), CPoint(0,1), CPoint(0,2), CPoint(0,3), CPoint(0,4), CPoint(0,5) };
+	sa = vector<CPoint>{ CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3), CPoint(0, 4), CPoint(0, 5), CPoint(0, 6), CPoint(0, 7), CPoint(0, 8), CPoint(0, 9), CPoint(1, 0), CPoint(1, 1), CPoint(1, 2), CPoint(1, 3) };
+	aa = sa;
+	ama = vector<CPoint>{ CPoint(4, 2), CPoint(4, 3), CPoint(4, 4) };
+	tempAniByWpn = vector<CAnimation>();
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &s2, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &s2, BITMAP_SIZE); //ani[1] Stand (Idle) Right with sword
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l3, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r3, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &gma, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &gma, BITMAP_SIZE, 3, false); //ani[5] On-Ground-Moving Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l2, &sa, BITMAP_SIZE, 3, false); //ani[6] Slide Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r2, &sa, BITMAP_SIZE, 3, false); //ani[7] Slide Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l2, &aa, BITMAP_SIZE, 2, false); //ani[8] Air Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r2, &aa, BITMAP_SIZE, 2, false); //ani[9] Air Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l1, &ama, BITMAP_SIZE, 3, false); //ani[10] On-Air-Moving Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r1, &ama, BITMAP_SIZE, 3, false); //ani[11] On-Air-Moving Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l1, &ada, BITMAP_SIZE, 3, false); //ani[12] On-Air-Down Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r1, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
+	AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
+	_aniByWpn.push_back(tempAniByWpn);
+	// ~
+	// ~ Weapon 2
+	_aniByWpn.push_back(tempAniByWpn);
 }
 void Player::SetAnimationStateLeftRight(int leftAnimationID)
 {

@@ -31,6 +31,7 @@ class Player
         void OnKeyUp(const UINT& nChar);
 
         //Others - Joseph
+		void SetName(string);
         void SetHoldWeapon(bool);
         void BeenAttacked(Vector2 displaymentVector, bool beingAttackedDirection);
         bool GetHoldWeapon();
@@ -120,6 +121,7 @@ class Player
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
         void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
         void ResetAnimations(int animationID);
+		virtual void SetAnimation();
 
         void SetAnimationStateLeftRight(int leftAnimationId);
         void SetAnimationState(int);	// Set which CAnimation is going to play
@@ -254,6 +256,8 @@ class Player
 		double BITMAP_SIZE = 1;
         //bool _beInterrupt;
         vector<vector<int>*> bmp_iter;	// used to display current animation state in DEBUG mode
+		int _OFFSET_X = 20;
+		int _OFFSET_Y = 10;
 
         //Required for "physical" existence in the game
         CMovingBitmap _collision_box;

@@ -288,6 +288,12 @@
 #define IDB_P_LOUIS_EX_L2               566
 #define IDB_P_LOUIS_EX_R3               567
 #define IDB_P_LOUIS_EX_L3               568
+#define IDB_P_JULIAN_R0                 569
+#define IDB_P_JULIAN_L0                 570
+#define IDB_P_JULIAN_R1                 571
+#define IDB_P_JULIAN_L1                 572
+#define IDB_P_JULIAN_R2                 573
+#define IDB_P_JULIAN_L2                 574
 #define IDB_WEAPON_ROT_L                600
 #define IDB_WEAPON_ROT_L_45             601
 #define IDB_WEAPON_ROT_L_90             602

@@ -32,6 +32,12 @@ extern vector< vector<CMovingBitmap>> louis_ex_l2;
 extern vector< vector<CMovingBitmap>> louis_ex_r2;
 extern vector< vector<CMovingBitmap>> louis_ex_l3;
 extern vector< vector<CMovingBitmap>> louis_ex_r3;
+extern vector< vector<CMovingBitmap>> julian_l0;
+extern vector< vector<CMovingBitmap>> julian_r0;
+extern vector< vector<CMovingBitmap>> julian_l1;
+extern vector< vector<CMovingBitmap>> julian_r1;
+extern vector< vector<CMovingBitmap>> julian_l2;
+extern vector< vector<CMovingBitmap>> julian_r2;
 
 class BattleSystem : public CGameState
 {

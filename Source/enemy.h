@@ -15,6 +15,7 @@ class Enemy : public Player
         void DoAttack();
 		bool ChaseTarget(CPoint point, int width = 0, int height = 0);
         void OnMove();
+		void SetAnimation();
     private:
 		vector<Weapon*>::iterator WeaponNearby();
         Player* target;
