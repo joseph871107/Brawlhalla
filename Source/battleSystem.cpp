@@ -94,17 +94,10 @@ void BattleSystem::InitializePlayersOnBeginState()
     Player* player;
     // Player
     player = new Player();
-    player->LoadBitmap();
-    player->AddCamera(&camera);
-    player->weapons = map->GetWeapons();
-    _players.push_back(player);				// Player1
+    _players.push_back(player);
     // Enemy
     player = new Enemy();
-    player->LoadBitmap();
-    player->AddCamera(&camera);
-    //player->SetSize(2);
-    player->weapons = map->GetWeapons();
-    _players.push_back(player);				// Enemy
+    _players.push_back(player);
     // Initialize keys for players
     vector<vector<long>> playerKeys =
     {
@@ -112,13 +105,18 @@ void BattleSystem::InitializePlayersOnBeginState()
         {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X},
         {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
     };
-	// Initialize explosion effects for every players
-	InitializeExplosionEffectsOnBeginState();
+    // Initialize explosion effects for every players
+    InitializeExplosionEffectsOnBeginState();
     // Initialize other attributes of the players
     int pNum = 1, eNum = 1;
 
     for (auto i = _players.begin(); i != _players.end(); i++)
     {
+        //
+        (*i)->LoadBitmap();
+        (*i)->AddCamera(&camera);
+        (*i)->weapons = map->GetWeapons();
+        //
         char str[80];
 
         if ((*i)->IsPlayer())
@@ -164,7 +162,7 @@ void BattleSystem::OnBeginState()
     background = &map->background;
     background->AddCamera(&camera);
     // Player
-    InitializePlayersOnBeginState();  
+    InitializePlayersOnBeginState();
     // Setting Window
     settingWindow.GetUI()->Reset();
     // UI Messages

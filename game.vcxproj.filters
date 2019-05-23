@@ -98,6 +98,9 @@
     <Filter Include="Brawlhalla\UIMessage">
       <UniqueIdentifier>{e8433d73-925b-4d48-97e9-d1c45631648a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\Player\RespawnCourier">
+      <UniqueIdentifier>{1e0f1efe-b94a-454a-a42c-d804f85122aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
@@ -237,6 +240,9 @@
     <ClCompile Include="Source\UIMessage.cpp">
       <Filter>Brawlhalla\UIMessage</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RespawnCourier.cpp">
+      <Filter>Brawlhalla\Player\RespawnCourier</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -343,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="Source\UIMessage.h">
       <Filter>Brawlhalla\UIMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RespawnCourier.h">
+      <Filter>Brawlhalla\Player\RespawnCourier</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1366,6 +1375,45 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="RES\players\louisEX_2_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\RespawnCourier.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louisEX_3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\louisEX_3_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\julian_0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\julian_0_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\julian_1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\julian_1_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\julian_2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\julian_2_mirror.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\players\bitmap2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\collision_box.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\respawn_courier_left.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\players\respawn_courier_right.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

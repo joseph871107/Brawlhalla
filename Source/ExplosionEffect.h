@@ -37,8 +37,8 @@ class ExplosionEffect
         double GetCurrentAnimationHeight();
         double GetCurrentAnimationWidth();
         const int& GetCurrentAni() const;
-		void SetIsTrigger(bool newIsTrigger);
-		const bool & GetIsTrigger() const;
+        void SetIsTrigger(bool newIsTrigger);
+        const bool& GetIsTrigger() const;
 
         // Camera
         void AddCamera(Camera* cameraPtrValue);	// Camera
@@ -51,14 +51,14 @@ class ExplosionEffect
 
 
     private:
-		//-----------------FUNCTIONS DECLARATIONS-----------------//
-		bool IsCurrentAniFinalBitmap();
-		//-----------------VARIABLES DECLARATIONS-----------------//
+        //-----------------FUNCTIONS DECLARATIONS-----------------//
+        bool IsCurrentAniFinalBitmap();
+        //-----------------VARIABLES DECLARATIONS-----------------//
         int _x, _y;
         vector<CAnimation> _anis;
         int _currentAni;
         Camera* _cameraPtr;
-		bool _isTrigger;
+        bool _isTrigger;
 
 };
 #endif

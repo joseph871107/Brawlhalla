@@ -45,7 +45,7 @@ ExplosionEffect& ExplosionEffect::operator=(const ExplosionEffect& rightObject)
         _anis = rightObject._anis;
         _currentAni = rightObject._currentAni;
         _cameraPtr = rightObject._cameraPtr;
-		_isTrigger = rightObject._isTrigger;
+        _isTrigger = rightObject._isTrigger;
     }
 
     return (*this);
@@ -138,8 +138,9 @@ void ExplosionEffect::SetIsTrigger(bool newIsTrigger)
     _isTrigger = newIsTrigger;
 }
 
-const bool& ExplosionEffect::GetIsTrigger() const {
-	return(_isTrigger);
+const bool& ExplosionEffect::GetIsTrigger() const
+{
+    return (_isTrigger);
 }
 
 }

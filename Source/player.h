@@ -2,6 +2,7 @@
 #include "weapon.h"
 #include "camera.h"
 #include "Vector2.h"
+#include "RespawnCourier.h"
 
 #define _PLAYER_DEBUG false
 
@@ -11,7 +12,6 @@ namespace game_framework
 #define PLAYER_H
 class TriggeredAnimation;
 class BattleSystem;
-
 class ExplosionEffect;
 
 class Player
@@ -31,7 +31,7 @@ class Player
         void OnKeyUp(const UINT& nChar);
 
         //Others - Joseph
-		void SetName(string);
+        void SetName(string);
         void SetHoldWeapon(bool);
         void BeenAttacked(Vector2 displaymentVector, bool beingAttackedDirection);
         bool GetHoldWeapon();
@@ -42,8 +42,8 @@ class Player
         void AddCamera(Camera* cam);	// Camera
         void SetPlayer(bool tri);
         bool IsPlayer();
-		void SetSize(double);
-		double GetSize();
+        void SetSize(double);
+        double GetSize();
         vector<Weapon*>* weapons;
 
         //Others - Bill
@@ -121,7 +121,7 @@ class Player
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
         void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
         void ResetAnimations(int animationID);
-		virtual void SetAnimation();
+        virtual void SetAnimation();
 
         void SetAnimationStateLeftRight(int leftAnimationId);
         void SetAnimationState(int);	// Set which CAnimation is going to play
@@ -167,6 +167,7 @@ class Player
 
         //Others
         void DoDead();
+        void SetRespawnMovementVector(const int& startPosX, const int& startPosY, const int& destinationPosX, const int& destinationPosY);
         void DoRespawn();
         void InitializeOnRespawn();
         int Round(double i);
@@ -225,7 +226,10 @@ class Player
         void FinishTriggeredAnimationGameLogic();
         void ConsciouslyOnMoveAnimationLogic();
         void MoveCurrentAnimation();
+        void RespawnOnMoveAnimationLogic();
         void OnMoveAnimationLogic();
+        void RespawnOnMoveGameLogic();
+        void DoReturnHomeRespawnCourier();
         void OnMoveGameLogic();
 
         void SetCurrentNonTriggeredAnimationByWeapon();
@@ -237,7 +241,7 @@ class Player
 
         void InitializeTriggeredAnimations();
 
-		void SetAttacker(Player * const & newAttacker, const int & attackerAffectionFrameCountValue);
+        void SetAttacker(Player* const& newAttacker, const int& attackerAffectionFrameCountValue);
 
         bool IsAttackable(Player* potentialTargetPlayer);
 
@@ -248,16 +252,18 @@ class Player
         void ResetMovementVelocity();
 
         void DoParseKeyPressed();
+
+        void SetState(const int& newState);
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
         vector<CAnimation> ani;			// vector of CAnimation
         int currentAni;					// current running CAnimation
-		double BITMAP_SIZE = 1;
+        double BITMAP_SIZE = 1;
         //bool _beInterrupt;
         vector<vector<int>*> bmp_iter;	// used to display current animation state in DEBUG mode
-		int _OFFSET_X = 20;
-		int _OFFSET_Y = 10;
+        int _OFFSET_X = 20;
+        int _OFFSET_Y = 10;
 
         //Required for "physical" existence in the game
         CMovingBitmap _collision_box;
@@ -360,7 +366,6 @@ class Player
         // This variable is determined in 'Player::OnMove()'
 
         //Unconscious state
-        bool _isUnconscious;
         int _unconsciousFramesCount;
         bool _unconsciousAniDir;
 
@@ -389,7 +394,16 @@ class Player
         // Display killer
         Player* _attacker;
         int _attackerAffectionFrameCount;
-		bool _isDead;
+        bool _isDead;
+
+        // State
+        int _state;
+
+        // Repawn
+        Vector2 _vectorRespawnMovement;
+        int _resDestPosX, _resDestPosY;
+        double _preDistance; // used in combination with _vectorRespawnMovement
+        RespawnCourier _respawnCourier;
 };
 #endif
 }
