@@ -78,24 +78,15 @@ void BattleSystem::ClearExplosionEffects()
 void BattleSystem::InitializeExplosionEffectsOnBeginState()
 {
     ExplosionEffect* explosionEffectPtr;
-    // _explosionEffects[0] for Player 1
-    explosionEffectPtr = new ExplosionEffect();
-    explosionEffectPtr->SetIsTrigger(false); // required
-    explosionEffectPtr->LoadBitmap();
-    explosionEffectPtr->AddCamera(&camera);
-    _explosionEffects.push_back(explosionEffectPtr);
-    // _explosionEffects[1] for Player 2
-    explosionEffectPtr = new ExplosionEffect();
-    explosionEffectPtr->SetIsTrigger(false); // required
-    explosionEffectPtr->LoadBitmap();
-    explosionEffectPtr->AddCamera(&camera);
-    _explosionEffects.push_back(explosionEffectPtr);
-    // _explosionEffects[1] for Player 2
-    explosionEffectPtr = new ExplosionEffect();
-    explosionEffectPtr->SetIsTrigger(false); // required
-    explosionEffectPtr->LoadBitmap();
-    explosionEffectPtr->AddCamera(&camera);
-    _explosionEffects.push_back(explosionEffectPtr);
+
+    for (auto player : _players)
+    {
+        explosionEffectPtr = new ExplosionEffect();
+        explosionEffectPtr->SetIsTrigger(false); // required
+        explosionEffectPtr->LoadBitmap();
+        explosionEffectPtr->AddCamera(&camera);
+        _explosionEffects.push_back(explosionEffectPtr);
+    }
 }
 
 void BattleSystem::InitializePlayersOnBeginState()
@@ -114,12 +105,6 @@ void BattleSystem::InitializePlayersOnBeginState()
     //player->SetSize(2);
     player->weapons = map->GetWeapons();
     _players.push_back(player);				// Enemy
-    // Enemy
-    player = new Player();
-    player->LoadBitmap();
-    player->AddCamera(&camera);
-    player->weapons = map->GetWeapons();
-    //_players.push_back(player);				// Enemy
     // Initialize keys for players
     vector<vector<long>> playerKeys =
     {
@@ -127,20 +112,25 @@ void BattleSystem::InitializePlayersOnBeginState()
         {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X},
         {KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X}
     };
-
+	// Initialize explosion effects for every players
+	InitializeExplosionEffectsOnBeginState();
     // Initialize other attributes of the players
-	int pNum = 1, eNum = 1;
+    int pNum = 1, eNum = 1;
+
     for (auto i = _players.begin(); i != _players.end(); i++)
     {
         char str[80];
-		if ((*i)->IsPlayer()) {
-			sprintf(str, "Player %d", pNum++);
-			(*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
-		}
-		else {
-			sprintf(str, "Enemy %d", eNum++);
-			(*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
-		}
+
+        if ((*i)->IsPlayer())
+        {
+            sprintf(str, "Player %d", pNum++);
+            (*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+        }
+        else
+        {
+            sprintf(str, "Enemy %d", eNum++);
+            (*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+        }
     }
 
     //
@@ -173,10 +163,8 @@ void BattleSystem::OnBeginState()
 
     background = &map->background;
     background->AddCamera(&camera);
-    // Explosion Effects
-    InitializeExplosionEffectsOnBeginState();
     // Player
-    InitializePlayersOnBeginState();
+    InitializePlayersOnBeginState();  
     // Setting Window
     settingWindow.GetUI()->Reset();
     // UI Messages
@@ -339,50 +327,55 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     // Explosion Effects
     _explosionEffects = vector<ExplosionEffect*>();
     // Player
-	struct cropPARM {
-		cropPARM(vector<vector<CMovingBitmap>>* _target, int _idbRes, int _row, int _col,bool _flip)
-		{
-			target = _target;
-			idbRes = _idbRes;
-			row = _row;
-			col = _col;
-			flip = _flip;
-		}
-		vector<vector<CMovingBitmap>>* target;
-		int idbRes, row, col;
-		bool flip;
-	};
+    struct cropPARM
+    {
+        cropPARM(vector<vector<CMovingBitmap>>* _target, int _idbRes, int _row, int _col, bool _flip)
+        {
+            target = _target;
+            idbRes = _idbRes;
+            row = _row;
+            col = _col;
+            flip = _flip;
+        }
+        vector<vector<CMovingBitmap>>* target;
+        int idbRes, row, col;
+        bool flip;
+    };
+    vector<cropPARM> cropPARMs =
+    {
+        cropPARM(&louis_l0, IDB_P_LOUIS_L0, 7, 10, true),
+        cropPARM(&louis_r0, IDB_P_LOUIS_R0, 7, 10, false),
+        cropPARM(&louis_l1, IDB_P_LOUIS_L1, 7, 10, true),
+        cropPARM(&louis_r1, IDB_P_LOUIS_R1, 7, 10, false),
+        cropPARM(&louis_l2, IDB_P_LOUIS_L2, 5, 10, true),
+        cropPARM(&louis_r2, IDB_P_LOUIS_R2, 5, 10, false),
+        cropPARM(&louis_ex_l0, IDB_P_LOUIS_EX_L0, 7, 10, true),
+        cropPARM(&louis_ex_r0, IDB_P_LOUIS_EX_R0, 7, 10, false),
+        cropPARM(&louis_ex_l1, IDB_P_LOUIS_EX_L1, 7, 10, true),
+        cropPARM(&louis_ex_r1, IDB_P_LOUIS_EX_R1, 7, 10, false),
+        cropPARM(&louis_ex_l2, IDB_P_LOUIS_EX_L2, 2, 10, true),
+        cropPARM(&louis_ex_r2, IDB_P_LOUIS_EX_R2, 2, 10, false),
+        cropPARM(&louis_ex_l3, IDB_P_LOUIS_EX_L3, 3, 6, true),
+        cropPARM(&louis_ex_r3, IDB_P_LOUIS_EX_R3, 3, 6, false),
+        cropPARM(&julian_l0, IDB_P_JULIAN_L0, 5, 10, true),
+        cropPARM(&julian_r0, IDB_P_JULIAN_R0, 5, 10, false),
+        cropPARM(&julian_l1, IDB_P_JULIAN_L1, 2, 7, true),
+        cropPARM(&julian_r1, IDB_P_JULIAN_R1, 2, 7, false),
+        cropPARM(&julian_l2, IDB_P_JULIAN_L2, 5, 10, true),
+        cropPARM(&julian_r2, IDB_P_JULIAN_R2, 5, 10, false)
+    };
+    int progS = 75, progE = 100;
 
-	vector<cropPARM> cropPARMs = {
-		cropPARM(&louis_l0, IDB_P_LOUIS_L0, 7, 10, true), 
-		cropPARM(&louis_r0, IDB_P_LOUIS_R0, 7, 10, false), 
-		cropPARM(&louis_l1, IDB_P_LOUIS_L1, 7, 10, true),  
-		cropPARM(&louis_r1, IDB_P_LOUIS_R1, 7, 10, false),  
-		cropPARM(&louis_l2, IDB_P_LOUIS_L2, 5, 10, true),  
-		cropPARM(&louis_r2, IDB_P_LOUIS_R2, 5, 10, false),  
-		cropPARM(&louis_ex_l0, IDB_P_LOUIS_EX_L0, 7, 10, true),  
-		cropPARM(&louis_ex_r0, IDB_P_LOUIS_EX_R0, 7, 10, false),
-		cropPARM(&louis_ex_l1, IDB_P_LOUIS_EX_L1, 7, 10, true),
-		cropPARM(&louis_ex_r1, IDB_P_LOUIS_EX_R1, 7, 10, false),
-		cropPARM(&louis_ex_l2, IDB_P_LOUIS_EX_L2, 2, 10, true),
-		cropPARM(&louis_ex_r2, IDB_P_LOUIS_EX_R2, 2, 10, false),
-		cropPARM(&louis_ex_l3, IDB_P_LOUIS_EX_L3, 3, 6, true),
-		cropPARM(&louis_ex_r3, IDB_P_LOUIS_EX_R3, 3, 6, false),
-		cropPARM(&julian_l0, IDB_P_JULIAN_L0, 5, 10, true),
-		cropPARM(&julian_r0, IDB_P_JULIAN_R0, 5, 10, false),
-		cropPARM(&julian_l1, IDB_P_JULIAN_L1, 2, 7, true),
-		cropPARM(&julian_r1, IDB_P_JULIAN_R1, 2, 7, false),
-		cropPARM(&julian_l2, IDB_P_JULIAN_L2, 5, 10, true),
-		cropPARM(&julian_r2, IDB_P_JULIAN_R2, 5, 10, false)
-	};
+    for (int i = 0; i < (signed int)cropPARMs.size(); i++)
+    {
+        *(cropPARMs[i].target) = CropSprite(cropPARMs[i].idbRes, cropPARMs[i].row, cropPARMs[i].col, RGB(0, 0, 0));
 
-	int progS = 75, progE = 100;
-	for (int i = 0; i < (signed int)cropPARMs.size(); i++) {
-		*(cropPARMs[i].target) = CropSprite(cropPARMs[i].idbRes, cropPARMs[i].row, cropPARMs[i].col, RGB(0, 0, 0));
-		if (cropPARMs[i].flip)
-			FlipSprite(cropPARMs[i].target);
-		ShowInitProgress((progE-progS) / cropPARMs.size() * i + progS);
-	}
+        if (cropPARMs[i].flip)
+            FlipSprite(cropPARMs[i].target);
+
+        ShowInitProgress((progE - progS) / cropPARMs.size() * i + progS);
+    }
+
     ShowInitProgress(100);
 }
 
@@ -589,10 +582,10 @@ void BattleSystem::ResizeCamera()
         maxX += paddingX; // Enlarge view horizentally
         minY -= paddingY;
         maxY += paddingY; // Enlarge view vertically
-		// Constraint the camera's x-coordinate
-		minX = (minX < 0) ? 0 : minX;
-		maxX = (maxX > SIZE_X) ? SIZE_X : maxX;
-		//
+        // Constraint the camera's x-coordinate
+        minX = (minX < 0) ? 0 : minX;
+        maxX = (maxX > SIZE_X) ? SIZE_X : maxX;
+        //
         int width = (maxX - minX < minWidth ? minWidth : maxX - minX > maxWidth ? maxWidth : maxX - minX);
         int height = maxY - minY;
         width = (SIZE_X / (double)(width) < SIZE_Y / (double)(height) ? width : height * SIZE_X / SIZE_Y);
