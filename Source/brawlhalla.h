@@ -78,7 +78,8 @@ class CGameStateInit : public CGameState
         static shared_ptr<Map> GetMap();
     private:
         Window welcomeWindow;
-        Window settingWindow;
+		Window settingWindow;
+		Window aboutWindow;
         Camera camera;
         static bool _fullscreenEnabled;
         static bool _closing;

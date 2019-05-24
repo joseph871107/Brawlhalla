@@ -118,6 +118,9 @@
 #define IDB_UI_BUTTON3_OUT              2015
 #define IDB_UI_BUTTON3_HOV              2016
 #define IDB_UI_BUTTON3_CLK              2017
+#define IDB_UI_BUTTON4_OUT              2018
+#define IDB_UI_BUTTON4_HOV              2019
+#define IDB_UI_BUTTON4_CLK              2020
 #define ID_FILE_PAUSE                   32771
 #define ID_TOGGLE_FULLSCREEN            32772
 #define ID_BUTTON_FULLSCREEN            32773

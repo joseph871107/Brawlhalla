@@ -23,9 +23,9 @@ Enemy::Enemy(int diff)
     _difficulty = diff;
 }
 
-void Enemy::DoAttack()
+void Enemy::DoAttack(vector<Player*>::iterator target)
 {
-    if (IsCollide(GetCor(0), GetCor(1), GetCor(2), GetCor(3), target->GetCor(0), target->GetCor(1), target->GetCor(2), target->GetCor(3)))
+    if (IsCollide(GetCor(0), GetCor(1), GetCor(2), GetCor(3), (*target)->GetCor(0), (*target)->GetCor(1), (*target)->GetCor(2), (*target)->GetCor(3)))
         OnKeyDown(keys[4]);
     else
         OnKeyUp(keys[4]);
@@ -73,10 +73,10 @@ bool Enemy::ChaseTarget(CPoint point, int width, int height)
 void Enemy::OnMove()
 {
     static int counter = 0, ptr = 0;
-    target = (*_playersPtr)[0];
 	CPoint targetPos;
+	vector<Player*>::iterator target = PlayerNearby();
 	int width, height;
-	if (!_isHoldingWeapon && weapons->size()>0) {
+	if (!_isHoldingWeapon && weapons->size()>0 && 0) {
 		vector<Weapon*>::iterator tar = WeaponNearby();
 		if (ChaseTarget(CPoint((*tar)->GetCor(0), (*tar)->GetCor(3)), (*tar)->GetWidth(), (*tar)->GetHeight())) {
 			(*tar)->OnKeyDown(KEY_C);
@@ -85,12 +85,12 @@ void Enemy::OnMove()
 		}
 	}
 	else {
-		targetPos = CPoint(target->GetCor(0), target->GetCor(1));
-		width = target->GetWidth();
-		height = target->GetHeight();
+		targetPos = CPoint((*target)->GetCor(0), (*target)->GetCor(1));
+		width = (*target)->GetWidth();
+		height = (*target)->GetHeight();
 		ChaseTarget(targetPos, width, height);
 	}
-    DoAttack();
+	DoAttack(target);
     DoParseKeyPressed();
     _currentKeyID = GetKeyCombination();
     OnMoveAnimationLogic();
@@ -176,6 +176,19 @@ vector<Weapon*>::iterator Enemy::WeaponNearby()
 		Vector2 diffT((*weapon)->GetCor(0) - GetCor(0), (*weapon)->GetCor(1) - GetCor(1));
 		if (diffT.GetLength() < diffO.GetLength())
 			tar = weapon;
+	}
+	return tar;
+}
+vector<Player*>::iterator Enemy::PlayerNearby()
+{
+	vector<Player*>::iterator tar = _playersPtr->begin();
+	if (_playersPtr->size() > 0)
+		tar = _playersPtr->begin();
+	for (auto player = _playersPtr->begin(); player != _playersPtr->end(); player++) {
+		Vector2 diffO((*tar)->GetCor(0) - GetCor(0), (*tar)->GetCor(1) - GetCor(1));
+		Vector2 diffT((*player)->GetCor(0) - GetCor(0), (*player)->GetCor(1) - GetCor(1));
+		if (diffT.GetLength() < diffO.GetLength() && (*player)->GetName() != this->GetName())
+			tar = player;
 	}
 	return tar;
 }

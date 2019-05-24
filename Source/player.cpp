@@ -155,6 +155,8 @@ void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> grounds
     _respawnCourier.Initialize(camera);
     //
     InitializeOnRespawn();
+	//
+	DoRespawn();
 }
 
 void Player::LoadBitmap()

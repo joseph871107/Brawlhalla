@@ -146,11 +146,17 @@ IDB_UI_BUTTON2_HOV      BITMAP                  "..\\res\\ui\\button\\setting_ho
 
 IDB_UI_BUTTON2_CLK      BITMAP                  "..\\res\\ui\\button\\setting_clk.bmp"
 
-IDB_UI_BUTTON3_OUT      BITMAP                  "..\\res\\ui\\button\\close_out.bmp"
+IDB_UI_BUTTON3_OUT      BITMAP                  "..\\res\\ui\\button\\about_out.bmp"
 
-IDB_UI_BUTTON3_HOV      BITMAP                  "..\\res\\ui\\button\\close_hov.bmp"
+IDB_UI_BUTTON3_HOV      BITMAP                  "..\\res\\ui\\button\\about_hov.bmp"
 
-IDB_UI_BUTTON3_CLK      BITMAP                  "..\\res\\ui\\button\\close_clk.bmp"
+IDB_UI_BUTTON3_CLK      BITMAP                  "..\\res\\ui\\button\\about_clk.bmp"
+
+IDB_UI_BUTTON4_OUT      BITMAP                  "..\\res\\ui\\button\\close_out.bmp"
+
+IDB_UI_BUTTON4_HOV      BITMAP                  "..\\res\\ui\\button\\close_hov.bmp"
+
+IDB_UI_BUTTON4_CLK      BITMAP                  "..\\res\\ui\\button\\close_clk.bmp"
 
 IDR_MAINFRAME           BITMAP                  "..\\res\\Toolbar.bmp"
 
