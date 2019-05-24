@@ -96,7 +96,7 @@ void BattleSystem::InitializePlayersOnBeginState()
     player = new Player();
     _players.push_back(player);
     // Enemy
-    player = new Enemy();
+    player = new Player();
     _players.push_back(player);
     // Initialize keys for players
     vector<vector<long>> playerKeys =
