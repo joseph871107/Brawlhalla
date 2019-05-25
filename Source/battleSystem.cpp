@@ -621,7 +621,7 @@ bool BattleSystem::IsGameOver()
     }
 
     for (auto i : _players)
-        if (isFinishedPlayingAllEffects && i->IsOutOfLife())
+        if (isFinishedPlayingAllEffects && i->IsOutOfLife() && !i->IsPlayer())
             return true;
 
     return (GetCurrentRemainTime() == 0); // Draw

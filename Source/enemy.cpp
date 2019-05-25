@@ -25,6 +25,8 @@ Enemy::Enemy(int diff)
 
 void Enemy::DoAttack(vector<Player*>::iterator target)
 {
+	if (target == _playersPtr->end())
+		return;
     if (IsCollide(GetCor(0), GetCor(1), GetCor(2), GetCor(3), (*target)->GetCor(0), (*target)->GetCor(1), (*target)->GetCor(2), (*target)->GetCor(3)))
         OnKeyDown(keys[4]);
     else
@@ -74,9 +76,8 @@ void Enemy::OnMove()
 {
     static int counter = 0, ptr = 0;
 	CPoint targetPos;
-	vector<Player*>::iterator target = PlayerNearby();
 	int width, height;
-	if (!_isHoldingWeapon && weapons->size()>0 && 0) {
+	if (!_isHoldingWeapon && weapons->size()>0) {
 		vector<Weapon*>::iterator tar = WeaponNearby();
 		if (ChaseTarget(CPoint((*tar)->GetCor(0), (*tar)->GetCor(3)), (*tar)->GetWidth(), (*tar)->GetHeight())) {
 			(*tar)->OnKeyDown(KEY_C);
@@ -85,12 +86,13 @@ void Enemy::OnMove()
 		}
 	}
 	else {
+		vector<Player*>::iterator target = PlayerNearby();
 		targetPos = CPoint((*target)->GetCor(0), (*target)->GetCor(1));
 		width = (*target)->GetWidth();
 		height = (*target)->GetHeight();
 		ChaseTarget(targetPos, width, height);
+		DoAttack(target);
 	}
-	DoAttack(target);
     DoParseKeyPressed();
     _currentKeyID = GetKeyCombination();
     OnMoveAnimationLogic();
@@ -99,6 +101,7 @@ void Enemy::OnMove()
 void Enemy::SetAnimation()
 {
 	_OFFSET_Y = 30;
+	/*
 	vector<CPoint> r = vector<CPoint>{ CPoint(2, 6), CPoint(2, 7), CPoint(2, 8) };	// bmps of running
 	vector<CPoint> j = vector<CPoint>{ CPoint(2, 5) };	// bmps of jumping
 	vector<CPoint> s = vector<CPoint>{ CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3) };	// bmps of standing
@@ -121,19 +124,26 @@ void Enemy::SetAnimation()
 	AddCAnimationWithSprite(&ani, &julian_l1, &uf, BITMAP_SIZE); //ani[11] Unconsciously Flying Right
 	AddCAnimationWithSprite(&ani, &julian_l0, &dg, BITMAP_SIZE, 15); //ani[12] Dodging Left
 	AddCAnimationWithSprite(&ani, &julian_r0, &dg, BITMAP_SIZE, 15); //ani[13] Dodging Right
+	*/
 	//-----------------ANIMATION BY WEAPONS-----------------//
 	_aniByWpn = vector<vector<CAnimation>>();
-	vector<CPoint> s2;// bmps of standing with weapon
-	vector<CPoint> a; // bmps of attacking
-	vector<CPoint> gma;// bmps of on-ground-moving attack
-	vector<CPoint> sa;// bmps of slide-attack
-	vector<CPoint> aa;// bmps of air-attack
-	vector<CPoint> ama;// bmps of on-air-moving attack
-	vector<CPoint> ada;// bmps of on-air-down attack
-	vector<CPoint> sd;// bmps of drawing sword
+	vector<CPoint> s;	// bmps of standing
+	vector<CPoint> a;	// bmps of attacking
+	vector<CPoint> gma;	// bmps of on-ground-moving attack
+	vector<CPoint> sa;	// bmps of slide-attack
+	vector<CPoint> aa;	// bmps of air-attack
+	vector<CPoint> ama;	// bmps of on-air-moving attack
+	vector<CPoint> ada;	// bmps of on-air-down attack
+	vector<CPoint> sd;	// bmps of drawing sword
+	vector<CPoint> r;	// bmps of running
+	vector<CPoint> j;	// bmps of jumping
+	vector<CPoint> l;	// bmps of leaning
+	vector<CPoint> lf;	// bmps of landing falling
+	vector<CPoint> uf;	// bmps of unconsciously flying
+	vector<CPoint> dg;	// bmps of dodging
 	// ~
 	// ~ Weapon 0 - default
-	s2 = s;
+	s = vector<CPoint>{ CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3) };	// bmps of standing
 	a = vector<CPoint>{ CPoint(1, 0), CPoint(1, 1), CPoint(1, 2), CPoint(1, 3) };
 	gma = vector<CPoint>{ CPoint(0, 1), CPoint(0, 2), CPoint(0, 3), CPoint(0, 3) };
 	sa = vector<CPoint>{ CPoint(1, 2), CPoint(1, 2), CPoint(1, 3), CPoint(1, 4), CPoint(1, 5), CPoint(1, 6), CPoint(1, 7), CPoint(1, 8) };
@@ -141,9 +151,15 @@ void Enemy::SetAnimation()
 	ama = vector<CPoint>{ CPoint(0, 0) };
 	ada = vector<CPoint>{ CPoint(1, 5), CPoint(1, 6), CPoint(1, 7), CPoint(1, 8), CPoint(1, 9) };
 	sd = vector<CPoint>{ CPoint(3, 3), CPoint(3, 4), CPoint(3, 5), CPoint(3, 6), CPoint(3, 7), CPoint(3, 8), CPoint(3, 9) };
+	r = vector<CPoint>{ CPoint(2, 6), CPoint(2, 7), CPoint(2, 8) };	// bmps of running
+	j = vector<CPoint>{ CPoint(2, 5) };	// bmps of jumping
+	l = vector<CPoint>{ CPoint(2, 0) }; // bmps of leaning
+	lf = vector<CPoint>{ CPoint(1, 5), CPoint(1, 4) }; // bmps of landing fallin
+	uf = vector<CPoint>{ CPoint(0, 4), CPoint(0, 5), CPoint(0, 6) }; // bmps of unconsciously flying
+	dg = vector<CPoint>{ CPoint(4, 0), CPoint(4, 1), CPoint(4, 2), CPoint(4, 3) }; // bmps of dodging
 	vector<CAnimation> tempAniByWpn = vector<CAnimation>();
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &s2, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &s2, BITMAP_SIZE); //ani[1] Stand (Idle) Right with sword
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &s, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &s, BITMAP_SIZE); //ani[1] Stand (Idle) Right with sword
 	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
 	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
 	AddCAnimationWithSprite(&tempAniByWpn, &julian_l1, &gma, BITMAP_SIZE, 5, false); //ani[4] On-Ground-Moving Attack Left
@@ -158,6 +174,18 @@ void Enemy::SetAnimation()
 	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
 	AddCAnimationWithSprite(&tempAniByWpn, &julian_l2, &sd, BITMAP_SIZE, 5, false); //ani[14] Draw sword Left
 	AddCAnimationWithSprite(&tempAniByWpn, &julian_r2, &sd, BITMAP_SIZE, 5, false); //ani[15] Draw sword Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &r, BITMAP_SIZE); //ani[16] Run Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &r, BITMAP_SIZE); //ani[17] Run Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &j, BITMAP_SIZE, 5, false); //ani[18] Jump Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &j, BITMAP_SIZE, 5, false); //ani[19] Jump Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &l, BITMAP_SIZE); //ani[20] Lean Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &l, BITMAP_SIZE); //ani[21] Lean Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &lf, BITMAP_SIZE); //ani[22] Landing Falling Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &lf, BITMAP_SIZE); //ani[23] Landing Falling Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r1, &uf, BITMAP_SIZE); //ani[24] Unconsciously Flying Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l1, &uf, BITMAP_SIZE); //ani[25] Unconsciously Flying Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &dg, BITMAP_SIZE, 15); //ani[26] Dodging Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &dg, BITMAP_SIZE, 15); //ani[27] Dodging Right
 	_aniByWpn.push_back(tempAniByWpn);
 	// ~
 	// ~ Weapon 1
@@ -181,7 +209,7 @@ vector<Weapon*>::iterator Enemy::WeaponNearby()
 }
 vector<Player*>::iterator Enemy::PlayerNearby()
 {
-	vector<Player*>::iterator tar = _playersPtr->begin();
+	vector<Player*>::iterator tar = _playersPtr->end();
 	if (_playersPtr->size() > 0)
 		tar = _playersPtr->begin();
 	for (auto player = _playersPtr->begin(); player != _playersPtr->end(); player++) {

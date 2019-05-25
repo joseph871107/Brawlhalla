@@ -120,7 +120,7 @@ class Player
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
         void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
         void ResetAnimations(int animationID);
-        void SetAnimation();
+        virtual void SetAnimation();
 
         void SetAnimationStateLeftRight(int leftAnimationId);
         void SetAnimationState(int);	// Set which CAnimation is going to play

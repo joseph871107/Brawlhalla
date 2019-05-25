@@ -52,8 +52,38 @@ void Camera::SetSize(double s)
 }
 void Camera::SetCameraXY(int tx, int ty)
 {
-    x = tx;
-    y = ty;
+	if (gradual)
+	{
+		static double gradientX = tx;
+
+		if (abs(gradientX - tx) >= CAMERA_SIZING_OFFSET)
+		{
+			if (gradientX > tx)
+				gradientX -= CAMERA_SIZING_OFFSET * CAMERA_ZOOMOUT;
+			else
+				gradientX += CAMERA_SIZING_OFFSET * CAMERA_ZOOMIN;
+		}
+
+		x = (int)gradientX;
+	}
+	else
+		x = tx;
+	if (gradual)
+	{
+		static double gradientY = ty;
+
+		if (abs(gradientY - tx) >= CAMERA_SIZING_OFFSET)
+		{
+			if (gradientY > tx)
+				gradientY -= CAMERA_SIZING_OFFSET * CAMERA_ZOOMOUT;
+			else
+				gradientY += CAMERA_SIZING_OFFSET * CAMERA_ZOOMIN;
+		}
+
+		y = (int)gradientY;
+	}
+	else
+		y = ty;
 }
 void Camera::SetCameraOffsetXY(int tx, int ty)
 {
