@@ -81,20 +81,7 @@ class Player
 
         //-----------------STATIC VARIABLES DECLARATIONS-----------------//
         // Animations ID of 'ani'
-        static const int ANI_ID_RUN_LEFT = 0;
-        static const int ANI_ID_RUN_RIGHT = 1;
-        static const int ANI_ID_JUMP_LEFT = 2;
-        static const int ANI_ID_JUMP_RIGHT = 3;
-        static const int ANI_ID_STAND_LEFT = 4;
-        static const int ANI_ID_STAND_RIGHT = 5;
-        static const int ANI_ID_LEAN_LEFT = 6;
-        static const int ANI_ID_LEAN_RIGHT = 7;
-        static const int ANI_ID_LAND_FALL_LEFT = 8;
-        static const int ANI_ID_LAND_FALL_RIGHT = 9;
-        static const int ANI_ID_UNCONSCIOUS_FLYING_LEFT = 10;
-        static const int ANI_ID_UNCONSCIOUS_FLYING_RIGHT = 11;
-        static const int ANI_ID_DODGE_LEFT = 12;
-        static const int ANI_ID_DODGE_RIGHT = 13;
+
         // Animations ID of '_aniByWpn'
         static const int ANI_WPN_ID_STAND_LEFT = 0;
         static const int ANI_WPN_ID_STAND_RIGHT = 1;
@@ -112,6 +99,18 @@ class Player
         static const int ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT = 13;
         static const int ANI_WPN_ID_DRAW_SWORD_LEFT = 14;
         static const int ANI_WPN_ID_DRAW_SWORD_RIGHT = 15;
+        static const int ANI_WPN_ID_MOVE_LEFT = 16;
+        static const int ANI_WPN_ID_MOVE_RIGHT = 17;
+        static const int ANI_WPN_ID_JUMP_LEFT = 18;
+        static const int ANI_WPN_ID_JUMP_RIGHT = 19;
+        static const int ANI_WPN_ID_LEAN_LEFT = 20;
+        static const int ANI_WPN_ID_LEAN_RIGHT = 21;
+        static const int ANI_WPN_ID_LAND_FALL_LEFT = 22;
+        static const int ANI_WPN_ID_LAND_FALL_RIGHT = 23;
+        static const int ANI_WPN_ID_UNCONSCIOUS_FLYING_LEFT = 24;
+        static const int ANI_WPN_ID_UNCONSCIOUS_FLYING_RIGHT = 25;
+        static const int ANI_WPN_ID_DODGE_LEFT = 26;
+        static const int ANI_WPN_ID_DODGE_RIGHT = 27;
         // Others
         static const int OFFSET_INITIAL_VELOCITY = 20;
 
@@ -121,7 +120,7 @@ class Player
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
         void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
         void ResetAnimations(int animationID);
-        virtual void SetAnimation();
+        void SetAnimation();
 
         void SetAnimationStateLeftRight(int leftAnimationId);
         void SetAnimationState(int);	// Set which CAnimation is going to play

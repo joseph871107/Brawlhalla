@@ -325,10 +325,8 @@ void Player::SetTriggeredAnimationSelector()
 
 void Player::SetNonTriggeredAnimationSelector()
 {
-    if ((_currentKeyID == KEY_GND_IDLE) && _isHoldingWeapon) // Special case: Player is idling on the ground with his weapon
-        SetAnimationSelector(true);
-    else
-        SetAnimationSelector(false);
+    SetAnimationSelector(true);
+    /// DEBUG: We do not need 'ani' anymore, now all set to '_aniByWpn'
 }
 
 void Player::DeleteFlyingWeapon()
@@ -397,10 +395,10 @@ void Player::UnconsciouslyOnMoveAnimationLogic()
     */
     /// Comment for future devs: This should be written as "if ani[currentAni].IsFinalBitmap() { ... }" for better clarification
     /// However, by normal logic, since we haven't set the animation selector, we should not refer 'ani[currentAni]'
-    if (ani[ANI_ID_UNCONSCIOUS_FLYING_LEFT].IsFinalBitmap() || ani[ANI_ID_UNCONSCIOUS_FLYING_RIGHT].IsFinalBitmap())
+    if (_aniByWpn[_wpnID][ANI_WPN_ID_UNCONSCIOUS_FLYING_LEFT].IsFinalBitmap() || _aniByWpn[_wpnID][ANI_WPN_ID_UNCONSCIOUS_FLYING_RIGHT].IsFinalBitmap())
     {
-        ani[ANI_ID_UNCONSCIOUS_FLYING_LEFT].Reset();
-        ani[ANI_ID_UNCONSCIOUS_FLYING_RIGHT].Reset();
+        _aniByWpn[_wpnID][ANI_WPN_ID_UNCONSCIOUS_FLYING_LEFT].Reset();
+        _aniByWpn[_wpnID][ANI_WPN_ID_UNCONSCIOUS_FLYING_RIGHT].Reset();
     }
 
     /*	~ OVERRIDE TRIGGERED ANIMATION
@@ -415,7 +413,7 @@ void Player::UnconsciouslyOnMoveAnimationLogic()
     */
     /// Comment for future devs: Unconscious animation should be defined as a new animation vector;
     /// that is, it should not be mixed with other conscious animation in 'ani'
-    SetAnimationSelector(false);
+    SetAnimationSelector(true);
 }
 
 void Player::FinishTriggeredAnimationAnimationLogic()
@@ -500,7 +498,7 @@ void Player::RespawnOnMoveAnimationLogic()
     */
     /// Comment for future devs: Respawn animation should be defined as a new animation vector;
     /// that is, it should not be mixed with other conscious animation in 'ani'
-    SetAnimationSelector(false);
+    SetAnimationSelector(true);
 }
 
 void Player::OnMoveAnimationLogic()
@@ -537,7 +535,7 @@ void Player::OnMoveAnimationLogic()
     */
     /// Comment for future devs: Reset jump animation is not well placed here and should be re-accomodate in the near future
     if (IsOnGround() || IsOnEdge() || (_isTriggerJump && _jumpCount > 0))
-        ResetAnimations(ANI_ID_JUMP_LEFT); // Reset the jump animation so that it keeps displaying while the player is jumping regardless of reaching its final bitmap
+        ResetAnimations(ANI_WPN_ID_JUMP_LEFT); // Reset the jump animation so that it keeps displaying while the player is jumping regardless of reaching its final bitmap
 
     /*	~ SET CURRENT ANIMATION
     	~ Set the current animation based on '_aniSelector'
@@ -945,46 +943,32 @@ void Player::AddCAnimationWithSprite(vector<CAnimation>* tempAniByWpn, vector< v
 
 void Player::ResetAnimations(int leftAnimationID)
 {
-    ani[leftAnimationID].Reset(); // Reset left animation
-    ani[leftAnimationID + 1].Reset(); // Reset right animation
+    _aniByWpn[_wpnID][leftAnimationID].Reset(); // Reset left animation
+    _aniByWpn[_wpnID][leftAnimationID + 1].Reset(); // Reset right animation
 }
 void Player::SetAnimation()
 {
-    vector<CPoint> r = vector<CPoint> { CPoint(2, 0), CPoint(2, 1), CPoint(2, 2), CPoint(2, 1) };	// bmps of running
-    vector<CPoint> j = vector<CPoint> { CPoint(6, 2), CPoint(5, 5), CPoint(6, 2) };	// bmps of jumping
-    vector<CPoint> s = vector<CPoint> { CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3) };	// bmps of standing
-    vector<CPoint> l = vector<CPoint> { CPoint(5, 2) }; // bmps of leaning
-    vector<CPoint> lf = vector<CPoint> { CPoint(5, 5), CPoint(6, 2) }; // bmps of landing fallin
-    vector<CPoint> uf = vector<CPoint> { CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3), CPoint(3, 4) }; // bmps of unconsciously flying
-    vector<CPoint> dg = vector<CPoint> { CPoint(5, 6), CPoint(5, 7) }; // bmps of dodging
-    /// Comment for future devs: I duplicate the bitmaps for longer animation duration, which is dirty, should be improved
-    AddCAnimationWithSprite(&ani, &louis_l0, &r, BITMAP_SIZE); //ani[0] Run Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &r, BITMAP_SIZE); //ani[1] Run Right
-    AddCAnimationWithSprite(&ani, &louis_l0, &j, BITMAP_SIZE, 5, false); //ani[2] Jump Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &j, BITMAP_SIZE, 5, false); //ani[3] Jump Right
-    AddCAnimationWithSprite(&ani, &louis_l0, &s, BITMAP_SIZE); //ani[4] Stand (Idle) Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &s, BITMAP_SIZE); //ani[5] Stand (Idle) Right
-    AddCAnimationWithSprite(&ani, &louis_r0, &l, BITMAP_SIZE); //ani[6] Lean Left
-    AddCAnimationWithSprite(&ani, &louis_l0, &l, BITMAP_SIZE); //ani[7] Lean Right
-    AddCAnimationWithSprite(&ani, &louis_l0, &lf, BITMAP_SIZE); //ani[8] Landing Falling Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &lf, BITMAP_SIZE); //ani[9] Landing Falling Right
-    AddCAnimationWithSprite(&ani, &louis_r0, &uf, BITMAP_SIZE); //ani[10] Unconsciously Flying Left
-    AddCAnimationWithSprite(&ani, &louis_l0, &uf, BITMAP_SIZE); //ani[11] Unconsciously Flying Right
-    AddCAnimationWithSprite(&ani, &louis_l0, &dg, BITMAP_SIZE, 15); //ani[12] Dodging Left
-    AddCAnimationWithSprite(&ani, &louis_r0, &dg, BITMAP_SIZE, 15); //ani[13] Dodging Right
     //-----------------ANIMATION BY WEAPONS-----------------//
     _aniByWpn = vector<vector<CAnimation>>();
-    vector<CPoint> s2;// bmps of standing with weapon
-    vector<CPoint> a; // bmps of attacking
-    vector<CPoint> gma;// bmps of on-ground-moving attack
-    vector<CPoint> sa;// bmps of slide-attack
-    vector<CPoint> aa;// bmps of air-attack
-    vector<CPoint> ama;// bmps of on-air-moving attack
-    vector<CPoint> ada;// bmps of on-air-down attack
-    vector<CPoint> sd;// bmps of drawing sword
-    // ~
-    // ~ Weapon 0 - default
-    s2 = s;
+    /*	~ WEAPON 0
+    	~ Fist (Default)
+    */
+    vector<CPoint> s;	// bmps of standing
+    vector<CPoint> a;	// bmps of attacking
+    vector<CPoint> gma;	// bmps of on-ground-moving attack
+    vector<CPoint> sa;	// bmps of slide-attack
+    vector<CPoint> aa;	// bmps of air-attack
+    vector<CPoint> ama;	// bmps of on-air-moving attack
+    vector<CPoint> ada;	// bmps of on-air-down attack
+    vector<CPoint> sd;	// bmps of drawing sword
+    vector<CPoint> r;	// bmps of running
+    vector<CPoint> j;	// bmps of jumping
+    vector<CPoint> l;	// bmps of leaning
+    vector<CPoint> lf;	// bmps of landing falling
+    vector<CPoint> uf;	// bmps of unconsciously flying
+    vector<CPoint> dg;	// bmps of dodging
+    //
+    s = vector<CPoint> { CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3) };
     a = vector<CPoint> { CPoint(1, 0), CPoint(1, 1), CPoint(1, 2), CPoint(1, 3) };
     gma = vector<CPoint> { CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3) };
     sa = vector<CPoint> { CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3), CPoint(0, 4), CPoint(0, 5), CPoint(0, 6), CPoint(0, 7), CPoint(0, 8), CPoint(0, 9) };
@@ -992,9 +976,16 @@ void Player::SetAnimation()
     ama = vector<CPoint> { CPoint(1, 4), CPoint(1, 5), CPoint(1, 6), CPoint(1, 7), CPoint(1, 8) };
     ada = vector<CPoint> { CPoint(6, 2), CPoint(6, 3), CPoint(6, 4), CPoint(6, 5), CPoint(6, 6) };
     sd = vector<CPoint> { CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3), CPoint(3, 4), CPoint(3, 5), CPoint(3, 6), CPoint(3, 7), CPoint(3, 8), CPoint(3, 9), CPoint(4, 0), CPoint(4, 1), CPoint(4, 2), CPoint(4, 3), CPoint(4, 4), CPoint(4, 5), CPoint(4, 6), CPoint(4, 7), CPoint(4, 8) };
+    r = vector<CPoint> { CPoint(2, 0), CPoint(2, 1), CPoint(2, 2), CPoint(2, 1) };
+    j = vector<CPoint> { CPoint(6, 2) };
+    l = vector<CPoint> { CPoint(5, 2) };
+    lf = vector<CPoint> { CPoint(6, 4) };
+    uf = vector<CPoint> { CPoint(3, 0), CPoint(3, 1), CPoint(3, 2), CPoint(3, 3), CPoint(3, 4) };
+    dg = vector<CPoint> { CPoint(5, 6), CPoint(5, 7) };
+    //
     vector<CAnimation> tempAniByWpn = vector<CAnimation>();
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &s2, BITMAP_SIZE); //ani[0] Stand (Idle) Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &s2, BITMAP_SIZE); //ani[1] Stand (Idle) Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &s, BITMAP_SIZE); //ani[0] Stand (Idle) Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &s, BITMAP_SIZE); //ani[1] Stand (Idle) Right
     AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
     AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
     AddCAnimationWithSprite(&tempAniByWpn, &louis_l1, &gma, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
@@ -1009,17 +1000,31 @@ void Player::SetAnimation()
     AddCAnimationWithSprite(&tempAniByWpn, &louis_r1, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
     AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
     AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &r, BITMAP_SIZE); //ani[16] Run Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &r, BITMAP_SIZE); //ani[17] Run Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &j, BITMAP_SIZE, 5, false); //ani[18] Jump Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &j, BITMAP_SIZE, 5, false); //ani[19] Jump Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &l, BITMAP_SIZE); //ani[20] Lean Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &l, BITMAP_SIZE); //ani[21] Lean Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &lf, BITMAP_SIZE); //ani[22] Landing Falling Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &lf, BITMAP_SIZE); //ani[23] Landing Falling Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &uf, BITMAP_SIZE); //ani[24] Unconsciously Flying Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &uf, BITMAP_SIZE); //ani[25] Unconsciously Flying Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &dg, BITMAP_SIZE, 15); //ani[26] Dodging Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &dg, BITMAP_SIZE, 15); //ani[27] Dodging Right
     _aniByWpn.push_back(tempAniByWpn);
-    // ~
-    // ~ Weapon 1
+    /*	~ WEAPON 1
+    	~ Sword
+    */
     gma = a;
     a = vector<CPoint> { CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3), CPoint(0, 4), CPoint(0, 5) };
     sa = vector<CPoint> { CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3), CPoint(0, 4), CPoint(0, 5), CPoint(0, 6), CPoint(0, 7), CPoint(0, 8), CPoint(0, 9), CPoint(1, 0), CPoint(1, 1), CPoint(1, 2), CPoint(1, 3) };
     aa = sa;
     ama = vector<CPoint> { CPoint(4, 2), CPoint(4, 3), CPoint(4, 4) };
+    //
     tempAniByWpn = vector<CAnimation>();
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &s2, BITMAP_SIZE); //ani[0] Stand (Idle) Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &s2, BITMAP_SIZE); //ani[1] Stand (Idle) Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &s, BITMAP_SIZE); //ani[0] Stand (Idle) Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &s, BITMAP_SIZE); //ani[1] Stand (Idle) Right
     AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l3, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
     AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r3, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
     AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &gma, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
@@ -1034,9 +1039,22 @@ void Player::SetAnimation()
     AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r1, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
     AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
     AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &r, BITMAP_SIZE); //ani[16] Run Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &r, BITMAP_SIZE); //ani[17] Run Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &j, BITMAP_SIZE, 5, false); //ani[18] Jump Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &j, BITMAP_SIZE, 5, false); //ani[19] Jump Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &l, BITMAP_SIZE); //ani[20] Lean Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &l, BITMAP_SIZE); //ani[21] Lean Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &lf, BITMAP_SIZE); //ani[22] Landing Falling Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &lf, BITMAP_SIZE); //ani[23] Landing Falling Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &uf, BITMAP_SIZE); //ani[24] Unconsciously Flying Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &uf, BITMAP_SIZE); //ani[25] Unconsciously Flying Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &dg, BITMAP_SIZE, 15); //ani[26] Dodging Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &dg, BITMAP_SIZE, 15); //ani[27] Dodging Right
     _aniByWpn.push_back(tempAniByWpn);
-    // ~
-    // ~ Weapon 2
+    /*	~ WEAPON 2
+    	~ N/A
+    */
     _aniByWpn.push_back(tempAniByWpn);
 }
 void Player::SetAnimationStateLeftRight(int leftAnimationID)
@@ -1442,7 +1460,7 @@ void Player::InitializeOnRespawn()
     //
     ResetWeaponID();
     //
-    _aniSelector = false;
+    SetAnimationSelector(true);
     //
     _currentAniByWpn = 0;
     //
@@ -1745,80 +1763,6 @@ void Player::SetCurrentNonTriggeredAnimation()
     	~ The player is NOT performing a trigger animation
     	~ The animation is NOT dependent on the weapon (decided by the actual sprite of the player)
     */
-    switch (_state)
-    {
-        case CONSCIOUS_STATE:
-            switch (_currentKeyID)
-            {
-                /* ON GROUND */
-                case KEY_GND_IDLE:
-                    SetAnimationStateLeftRight(ANI_ID_STAND_LEFT);
-                    break;
-
-                case KEY_GND_MOVE_RIGHT:
-                    SetAnimationState(ANI_ID_RUN_RIGHT);
-                    break;
-
-                case KEY_GND_MOVE_LEFT:
-                    SetAnimationState(ANI_ID_RUN_LEFT);
-                    break;
-
-                case KEY_GND_LAND_DOWN:
-                    // Do nothing
-                    break;
-
-                /* ON AIR */
-                case KEY_AIR_IDLE:
-                    if (IsOnLeftEdge()) // Player is leaning on left edge
-                        SetAnimationState(ANI_ID_LEAN_RIGHT); // Set the leaning animation of player facing right
-                    else if (IsOnRightEdge()) // Player is leaning on left edge
-                        SetAnimationState(ANI_ID_LEAN_LEFT); // Set the leaning animation of player facing left
-                    else // Player is jumping
-                        SetAnimationStateLeftRight(ANI_ID_JUMP_LEFT);
-
-                    break;
-
-                case KEY_AIR_MOVE_RIGHT:
-                    SetAnimationState(ANI_ID_JUMP_RIGHT);
-                    break;
-
-                case KEY_AIR_MOVE_LEFT:
-                    SetAnimationState(ANI_ID_JUMP_LEFT);
-                    break;
-
-                case KEY_AIR_LAND_DOWN:
-                    SetAnimationStateLeftRight(ANI_ID_LAND_FALL_LEFT);
-                    break;
-
-                default:
-                    break;
-            }
-
-            break;
-
-        case UNCONSCIOUS_STATE:
-
-            /// Comment for future devs: This special case overrides the others
-            /// where the player is unconscious should be separated as another
-            /// animation vector, not being put in 'ani'
-            if (_unconsciousAniDir)
-                SetAnimationState(ANI_ID_UNCONSCIOUS_FLYING_RIGHT);
-            else
-                SetAnimationState(ANI_ID_UNCONSCIOUS_FLYING_LEFT);
-
-            break;
-
-        case RESPAWN_STATE:
-            /// Comment for future devs: This special case overrides the others
-            /// where the player is unconscious should be separated as another
-            /// animation vector, not being put in 'ani'
-            SetAnimationStateLeftRight(ANI_ID_STAND_LEFT);
-            break;
-
-        default:
-            // Never happen
-            return;
-    }
 }
 
 int Player::GetCurrentAniNum()
@@ -1837,11 +1781,96 @@ void Player::SetCurrentNonTriggeredAnimationByWeapon()
     	~ The player is NOT performing a trigger animation
     	~ The animation is dependent on the weapon (decided by the actual sprite of the player)
     */
-    if (_currentKeyID == KEY_GND_IDLE) // Player is idling on the ground
-        if (_dir) // If the player is facing right
-            SetAnimationStateByWeapon(ANI_WPN_ID_STAND_RIGHT);
-        else
-            SetAnimationStateByWeapon(ANI_WPN_ID_STAND_LEFT);
+    switch (_state)
+    {
+        case CONSCIOUS_STATE:
+            switch (_currentKeyID)
+            {
+                /* ON GROUND */
+                case KEY_GND_IDLE:
+                    if (_dir) // If the player is facing right
+                        SetAnimationStateByWeapon(ANI_WPN_ID_STAND_RIGHT);
+                    else
+                        SetAnimationStateByWeapon(ANI_WPN_ID_STAND_LEFT);
+
+                    break;
+
+                case KEY_GND_MOVE_LEFT:
+                    SetAnimationStateByWeapon(ANI_WPN_ID_MOVE_LEFT);
+                    break;
+
+                case KEY_GND_MOVE_RIGHT:
+                    SetAnimationStateByWeapon(ANI_WPN_ID_MOVE_RIGHT);
+                    break;
+
+                case KEY_GND_LAND_DOWN:
+                    // Do nothing
+                    break;
+
+                /* ON AIR */
+                case KEY_AIR_IDLE:
+                    if (IsOnLeftEdge()) // Player is leaning on left edge
+                        SetAnimationStateByWeapon(ANI_WPN_ID_LEAN_RIGHT); // Set the leaning animation of player facing right
+                    else if (IsOnRightEdge()) // Player is leaning on left edge
+                        SetAnimationStateByWeapon(ANI_WPN_ID_LEAN_LEFT); // Set the leaning animation of player facing left
+                    else // Player is jumping
+                        if (_dir)
+                            SetAnimationStateByWeapon(ANI_WPN_ID_JUMP_RIGHT);
+                        else
+                            SetAnimationStateByWeapon(ANI_WPN_ID_JUMP_LEFT);
+
+                    break;
+
+                case KEY_AIR_MOVE_RIGHT:
+                    SetAnimationStateByWeapon(ANI_WPN_ID_JUMP_RIGHT);
+                    break;
+
+                case KEY_AIR_MOVE_LEFT:
+                    SetAnimationStateByWeapon(ANI_WPN_ID_JUMP_LEFT);
+                    break;
+
+                case KEY_AIR_LAND_DOWN:
+                    if (_dir)
+                        SetAnimationStateByWeapon(ANI_WPN_ID_LAND_FALL_RIGHT);
+                    else
+                        SetAnimationStateByWeapon(ANI_WPN_ID_LAND_FALL_LEFT);
+
+                    break;
+
+                default:
+                    break;
+            }
+
+            break;
+
+        case UNCONSCIOUS_STATE:
+
+            /// Comment for future devs: This special case overrides the others
+            /// where the player is unconscious should be separated as another
+            /// animation vector, not being put in 'ani'
+            if (_unconsciousAniDir)
+                SetAnimationStateByWeapon(ANI_WPN_ID_UNCONSCIOUS_FLYING_RIGHT);
+            else
+                SetAnimationStateByWeapon(ANI_WPN_ID_UNCONSCIOUS_FLYING_LEFT);
+
+            break;
+
+        case RESPAWN_STATE:
+
+            /// Comment for future devs: This special case overrides the others
+            /// where the player is unconscious should be separated as another
+            /// animation vector, not being put in 'ani'
+            if (_dir)
+                SetAnimationStateByWeapon(ANI_WPN_ID_STAND_RIGHT);
+            else
+                SetAnimationStateByWeapon(ANI_WPN_ID_STAND_LEFT);
+
+            break;
+
+        default:
+            // Never happen
+            return;
+    }
 }
 
 void Player::AddCamera(Camera* cam)
