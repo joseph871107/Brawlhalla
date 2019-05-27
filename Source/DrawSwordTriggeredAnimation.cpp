@@ -42,11 +42,6 @@ DrawSwordTriggeredAnimation& DrawSwordTriggeredAnimation::operator=(const DrawSw
     return (*this);
 }
 
-void DrawSwordTriggeredAnimation::SetTriggeredAnimationSelector()
-{
-    _playerPtr->SetAnimationSelector(true);
-}
-
 void DrawSwordTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
     // Do nothing

@@ -42,11 +42,6 @@ AirMoveRightAttackTriggeredAnimation& AirMoveRightAttackTriggeredAnimation::oper
     return (*this);
 }
 
-void AirMoveRightAttackTriggeredAnimation::SetTriggeredAnimationSelector()
-{
-    _playerPtr->SetAnimationSelector(true);
-}
-
 void AirMoveRightAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
     _playerPtr->EmptyHitTargetPlayers();

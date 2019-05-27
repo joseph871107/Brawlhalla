@@ -73,7 +73,7 @@ const int KEY_AIR_LAND_DOWN = 241;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 Player::Player() :
-    _x(int()), _y(int()), ani(vector<CAnimation>()), currentAni(int()),
+    _x(int()), _y(int()),
     bmp_iter(vector<vector<int>*>()), _width(int()),
     _height(int()), _isPressingLeft(bool()),
     _isPressingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
@@ -155,8 +155,8 @@ void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> grounds
     _respawnCourier.Initialize(camera);
     //
     InitializeOnRespawn();
-	//
-	DoRespawn();
+    //
+    DoRespawn();
 }
 
 void Player::LoadBitmap()
@@ -316,19 +316,6 @@ void Player::UnconsciouslyOnMoveGameLogic()
         SetConscious();
 }
 
-void Player::SetTriggeredAnimationSelector()
-{
-    for (auto elementPtr : _triggeredAnis)
-        if (elementPtr->GetKeyID() == _triggeredAniKeyID)
-            elementPtr->SetTriggeredAnimationSelector();
-}
-
-void Player::SetNonTriggeredAnimationSelector()
-{
-    SetAnimationSelector(true);
-    /// DEBUG: We do not need 'ani' anymore, now all set to '_aniByWpn'
-}
-
 void Player::DeleteFlyingWeapon()
 {
     if (_flyingWeapon != nullptr)
@@ -350,15 +337,6 @@ void Player::SetCurrentTriggeredAnimationByWeapon()
     SetAnimationStateByWeapon(_triggeredAniAnimationID);
 }
 
-void Player::SetCurrentTriggeredAnimation()
-{
-    /*	~ Remark:
-    	~ The player is performing a trigger animation
-    	~ The animation is NOT dependent on the weapon (decided by the actual sprite of the player)
-    */
-    SetAnimationState(_triggeredAniAnimationID);
-}
-
 void Player::SetCurrentAniByWeapon()
 {
     if (_isTriggeredAni)
@@ -367,25 +345,9 @@ void Player::SetCurrentAniByWeapon()
         SetCurrentNonTriggeredAnimationByWeapon();
 }
 
-void Player::SetCurrentAni()
-{
-    if (_isTriggeredAni)
-        SetCurrentTriggeredAnimation();
-    else
-        SetCurrentNonTriggeredAnimation();
-}
-
 void Player::SetCurrentAnimation()
 {
-    if (_aniSelector)
-        SetCurrentAniByWeapon();
-    else
-        SetCurrentAni();
-}
-
-void Player::SetAnimationSelector(bool newAniSelector)
-{
-    _aniSelector = newAniSelector;
+    SetCurrentAniByWeapon();
 }
 
 void Player::UnconsciouslyOnMoveAnimationLogic()
@@ -393,13 +355,8 @@ void Player::UnconsciouslyOnMoveAnimationLogic()
     /*	~ RESET UNCONSCIOUSLY FLYING ANIMATION
     	~ Continuously running the animation until '_unconsciousFramesCount' reaches its maximum value
     */
-    /// Comment for future devs: This should be written as "if ani[currentAni].IsFinalBitmap() { ... }" for better clarification
-    /// However, by normal logic, since we haven't set the animation selector, we should not refer 'ani[currentAni]'
-    if (_aniByWpn[_wpnID][ANI_WPN_ID_UNCONSCIOUS_FLYING_LEFT].IsFinalBitmap() || _aniByWpn[_wpnID][ANI_WPN_ID_UNCONSCIOUS_FLYING_RIGHT].IsFinalBitmap())
-    {
-        _aniByWpn[_wpnID][ANI_WPN_ID_UNCONSCIOUS_FLYING_LEFT].Reset();
-        _aniByWpn[_wpnID][ANI_WPN_ID_UNCONSCIOUS_FLYING_RIGHT].Reset();
-    }
+    if (_aniByWpn[_wpnID][_currentAniByWpn].IsFinalBitmap())
+        _aniByWpn[_wpnID][_currentAniByWpn].Reset();
 
     /*	~ OVERRIDE TRIGGERED ANIMATION
     	~ If the player is hit and changes his state to unconscious,
@@ -407,23 +364,12 @@ void Player::UnconsciouslyOnMoveAnimationLogic()
     */
     if (_isTriggeredAni)
         FinishTriggeredAnimationAnimationLogic(); // Compel the triggered animation to finish
-
-    /*	~ SET ANIMATION SELECTOR
-    	~ Set the animation selector to 'false'
-    */
-    /// Comment for future devs: Unconscious animation should be defined as a new animation vector;
-    /// that is, it should not be mixed with other conscious animation in 'ani'
-    SetAnimationSelector(true);
 }
 
 void Player::FinishTriggeredAnimationAnimationLogic()
 {
     // Reset the animation of the finished triggered animation
-    if (_aniSelector)
-        _aniByWpn[_wpnID][_triggeredAniAnimationID].Reset();
-    else
-        ani[_triggeredAniAnimationID].Reset();
-
+    _aniByWpn[_wpnID][_triggeredAniAnimationID].Reset();
     // Save the finished Triggered Animation's key ID '_triggeredAniKeyID'
     _finishedTriggeredAniKeyID = _triggeredAniKeyID;
     // Mark that the trigger animation has finished by resetting all animation variables
@@ -449,17 +395,9 @@ void Player::ConsciouslyOnMoveAnimationLogic()
     if (!_isTriggeredAni)
         SetTriggeredAnimationVariables(_currentKeyID);
 
-    /*	~ SET ANIMATION SELECTOR
-    	~ The '_aniSelector' decides the currently displayed animation
-    */
-    if (_isTriggeredAni)
-        SetTriggeredAnimationSelector();
-    else
-        SetNonTriggeredAnimationSelector();
-
     /*	~ ESTIMATE FINISH OF TRIGGERED ANIMATION
-    	~ This estimation is independent of the current animation, but relies
-    	~ on the '_aniSelector' and '_triggeredAniAnimationId'.
+    	~ This estimation is independent of the current animation, but
+    	~ relies on the '_triggeredAniAnimationId'.
     */
     if (_isTriggeredAni && IsFinishedTriggeredAnimation())
         FinishTriggeredAnimationAnimationLogic();
@@ -467,21 +405,18 @@ void Player::ConsciouslyOnMoveAnimationLogic()
 
 void Player::MoveCurrentAnimation()
 {
-    if (_aniSelector)
-        if (_currentAniByWpn == ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT || _currentAniByWpn == ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT)
-        {
-            if (_aniByWpn[_wpnID][_currentAniByWpn].GetCurrentBitmapNumber() < 2)
-                _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
-            else
-            {
-                if (IsOnGround())
-                    _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
-            }
-        }
-        else
+    if (_currentAniByWpn == ANI_WPN_ID_AIR_DOWN_ATTACK_LEFT || _currentAniByWpn == ANI_WPN_ID_AIR_DOWN_ATTACK_RIGHT)
+    {
+        if (_aniByWpn[_wpnID][_currentAniByWpn].GetCurrentBitmapNumber() < 2)
             _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
+        else
+        {
+            if (IsOnGround())
+                _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
+        }
+    }
     else
-        ani[currentAni].OnMove();
+        _aniByWpn[_wpnID][_currentAniByWpn].OnMove();
 }
 
 void Player::RespawnOnMoveAnimationLogic()
@@ -492,13 +427,6 @@ void Player::RespawnOnMoveAnimationLogic()
     */
     if (_isTriggeredAni)
         FinishTriggeredAnimationAnimationLogic(); // Compel the triggered animation to finish
-
-    /*	~ SET ANIMATION SELECTOR
-    	~ Set the animation selector to 'false'
-    */
-    /// Comment for future devs: Respawn animation should be defined as a new animation vector;
-    /// that is, it should not be mixed with other conscious animation in 'ani'
-    SetAnimationSelector(true);
 }
 
 void Player::OnMoveAnimationLogic()
@@ -538,13 +466,11 @@ void Player::OnMoveAnimationLogic()
         ResetAnimations(ANI_WPN_ID_JUMP_LEFT); // Reset the jump animation so that it keeps displaying while the player is jumping regardless of reaching its final bitmap
 
     /*	~ SET CURRENT ANIMATION
-    	~ Set the current animation based on '_aniSelector'
-    	~ and '_triggeredAniAnimationID'
+    	~ Set the current animation based on '_triggeredAniAnimationID'
     */
     SetCurrentAnimation();
     /*	~ MOVE CURRENT ANIMATION
     	~ Proceed to the next CMovingBitmap of the current animation,
-    	~ which is determined by '_aniSelector'
     */
     MoveCurrentAnimation();
 }
@@ -915,20 +841,6 @@ void Player::ResetWeaponID()
     _wpnID = 0; // reset to default weapon: punch
 }
 
-void Player::AddCAnimation(vector<int>* list, double size, int delay, bool repeat, int times)
-//void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1);
-{
-    CAnimation temp(repeat, times);
-
-    for (auto i = list->begin(); i != list->end(); i++)
-        temp.AddBitmap(*i, RGB(0, 0, 0));
-
-    temp.SetSize(size);
-    temp.SetDelayCount(delay);
-    ani.push_back(temp);
-    bmp_iter.push_back(list);
-}
-
 void Player::AddCAnimationWithSprite(vector<CAnimation>* tempAniByWpn, vector< vector<CMovingBitmap>>* sprite, vector<CPoint>* list, double size, int delay, bool repeat, int times)
 {
     CAnimation temp(repeat, times);
@@ -1057,22 +969,6 @@ void Player::SetAnimation()
     */
     _aniByWpn.push_back(tempAniByWpn);
 }
-void Player::SetAnimationStateLeftRight(int leftAnimationID)
-{
-    if (_dir) // Player is facing right
-    {
-        SetAnimationState(leftAnimationID + 1);
-    }
-    else // Player is facing left
-    {
-        SetAnimationState(leftAnimationID);
-    }
-}
-
-void Player::SetAnimationState(int num)
-{
-    currentAni = num;
-}
 
 void Player::ShowCurrentAnimation()
 {
@@ -1083,23 +979,11 @@ void Player::ShowCurrentAnimation()
         _collision_box.ShowBitmap(BITMAP_SIZE * camera->GetSize());
     }
 
-    if (_aniSelector) // If '_aniByWpn' is chosen for showing the animation
-    {
-        //Calculate and set the position of the player current animation in respect to the collision box's
-        CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
-        _aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
-        _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(cam.x, cam.y);
-        _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
-    }
-    else // If '_ani' is chosen for showing the animation
-    {
-        vector<CAnimation>::iterator ani_iter = ani.begin() + currentAni;
-        //Calculate and set the position of the player current animation in respect to the collision box's
-        CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
-        ani_iter->SetSize(BITMAP_SIZE * camera->GetSize());
-        ani_iter->SetTopLeft(cam.x, cam.y);
-        ani_iter->OnShow();
-    }
+    //Calculate and set the position of the player current animation in respect to the collision box's
+    CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
+    _aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
+    _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(cam.x, cam.y);
+    _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
 }
 
 bool Player::IsOnLeftEdge()
@@ -1460,8 +1344,6 @@ void Player::InitializeOnRespawn()
     //
     ResetWeaponID();
     //
-    SetAnimationSelector(true);
-    //
     _currentAniByWpn = 0;
     //
     SetConscious();
@@ -1651,10 +1533,7 @@ void Player::DoTriggeredAction()
 
 bool Player::IsFinishedTriggeredAnimation()
 {
-    if (_aniSelector)
-        return (_aniByWpn[_wpnID][_triggeredAniAnimationID].IsFinalBitmap());
-    else
-        return (ani[_triggeredAniAnimationID].IsFinalBitmap());
+    return (_aniByWpn[_wpnID][_triggeredAniAnimationID].IsFinalBitmap());
 }
 
 void Player::DoMoveLeftWithAcceleration()
@@ -1756,18 +1635,6 @@ void Player::DoNonTriggeredAction()
     {
         ResetMovementVelocity(); // Reset all movement inertia
     }
-}
-void Player::SetCurrentNonTriggeredAnimation()
-{
-    /*	~ Remark:
-    	~ The player is NOT performing a trigger animation
-    	~ The animation is NOT dependent on the weapon (decided by the actual sprite of the player)
-    */
-}
-
-int Player::GetCurrentAniNum()
-{
-    return (ani.begin() + currentAni)->GetCurrentBitmapNumber();
 }
 
 int Player::GetCurrentAniByWeaponNum()

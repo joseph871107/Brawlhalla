@@ -25,8 +25,6 @@ namespace game_framework
 		GroundMoveRightAttackTriggeredAnimation& operator=(const GroundMoveRightAttackTriggeredAnimation& rightObject);
 		//Operator overloading function of the assignment operator
 
-		void SetTriggeredAnimationSelector() override;
-
 		void FinishTriggeredAnimationGameLogic() override;
 
 		void SetTriggeredAnimationVariables() override;

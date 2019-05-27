@@ -42,11 +42,6 @@ GroundLandDownAttackTriggeredAnimation& GroundLandDownAttackTriggeredAnimation::
     return (*this);
 }
 
-void GroundLandDownAttackTriggeredAnimation::SetTriggeredAnimationSelector()
-{
-    _playerPtr->SetAnimationSelector(true);
-}
-
 void GroundLandDownAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
     _playerPtr->EmptyHitTargetPlayers();

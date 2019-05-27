@@ -25,8 +25,6 @@ class AirLandDownAttackTriggeredAnimation : TriggeredAnimation
         AirLandDownAttackTriggeredAnimation& operator=(const AirLandDownAttackTriggeredAnimation& rightObject);
         //Operator overloading function of the assignment operator
 
-        void SetTriggeredAnimationSelector() override;
-
         void FinishTriggeredAnimationGameLogic() override;
 
         void SetTriggeredAnimationVariables() override;

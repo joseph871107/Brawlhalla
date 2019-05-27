@@ -26,8 +26,6 @@ class AirMoveRightAttackTriggeredAnimation : TriggeredAnimation
         AirMoveRightAttackTriggeredAnimation& operator=(const AirMoveRightAttackTriggeredAnimation& rightObject);
         //Operator overloading function of the assignment operator
 
-        void SetTriggeredAnimationSelector() override;
-
         void FinishTriggeredAnimationGameLogic() override;
 
         void SetTriggeredAnimationVariables() override;

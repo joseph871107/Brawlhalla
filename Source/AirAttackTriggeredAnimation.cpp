@@ -42,11 +42,6 @@ AirAttackTriggeredAnimation& AirAttackTriggeredAnimation::operator=(const AirAtt
     return (*this);
 }
 
-void AirAttackTriggeredAnimation::SetTriggeredAnimationSelector()
-{
-    _playerPtr->SetAnimationSelector(true);
-}
-
 void AirAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
     _playerPtr->EmptyHitTargetPlayers();

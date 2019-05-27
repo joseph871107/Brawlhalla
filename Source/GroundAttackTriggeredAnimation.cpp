@@ -42,11 +42,6 @@ GroundAttackTriggeredAnimation& GroundAttackTriggeredAnimation::operator=(const 
     return (*this);
 }
 
-void GroundAttackTriggeredAnimation::SetTriggeredAnimationSelector()
-{
-    _playerPtr->SetAnimationSelector(true);
-}
-
 void GroundAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
     _playerPtr->EmptyHitTargetPlayers();

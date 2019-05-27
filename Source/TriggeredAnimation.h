@@ -27,8 +27,6 @@ class TriggeredAnimation
 
 		const int& GetKeyID() const;
 
-        virtual void SetTriggeredAnimationSelector() = 0;
-
         virtual void FinishTriggeredAnimationGameLogic() = 0;
 
         virtual void SetTriggeredAnimationVariables();

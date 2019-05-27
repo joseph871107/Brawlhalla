@@ -42,11 +42,6 @@ AirLandDownAttackTriggeredAnimation& AirLandDownAttackTriggeredAnimation::operat
     return (*this);
 }
 
-void AirLandDownAttackTriggeredAnimation::SetTriggeredAnimationSelector()
-{
-    _playerPtr->SetAnimationSelector(true);
-}
-
 void AirLandDownAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
     _playerPtr->EmptyHitTargetPlayers();

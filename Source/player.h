@@ -57,7 +57,6 @@ class Player
         ExplosionEffect* GetExplosionEffect();
 
         // Used by Triggered Animation classes
-        void SetAnimationSelector(bool newAniSelector);
         void SetTriggeredAnimation(bool newIsTriggeredAni);
         void SetTriggeredAnimationKeyID(int newTriggeredAniKeyID);
         void SetTriggeredAnimationDir(bool newTriggeredAniDir);
@@ -72,7 +71,6 @@ class Player
         void SetIsTriggerDodge(const bool& newIsTriggerDodge);
         void SetIsTriggerDrawWeapon(const bool& newIsTriggerDrawWeapon);
         void EmptyHitTargetPlayers();
-        int GetCurrentAniNum();
         int GetCurrentAniByWeaponNum();
 
         // Used by Ground
@@ -117,13 +115,10 @@ class Player
     protected:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
         //Animations
-        void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
         void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
         void ResetAnimations(int animationID);
         virtual void SetAnimation();
 
-        void SetAnimationStateLeftRight(int leftAnimationId);
-        void SetAnimationState(int);	// Set which CAnimation is going to play
         void ShowCurrentAnimation();			// Show CAnimation by currentAni
 
         //Position
@@ -217,8 +212,6 @@ class Player
         void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
 
         //
-        void SetTriggeredAnimationSelector();
-        void SetNonTriggeredAnimationSelector();
         void SetCurrentAnimation();
         void UnconsciouslyOnMoveAnimationLogic();
         void FinishTriggeredAnimationAnimationLogic();
@@ -233,10 +226,7 @@ class Player
 
         void SetCurrentNonTriggeredAnimationByWeapon();
         void SetCurrentTriggeredAnimationByWeapon();
-        void SetCurrentTriggeredAnimation();
         void SetCurrentAniByWeapon();
-        void SetCurrentAni();
-        void SetCurrentNonTriggeredAnimation();
 
         void InitializeTriggeredAnimations();
 
@@ -256,8 +246,6 @@ class Player
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
-        vector<CAnimation> ani;			// vector of CAnimation
-        int currentAni;					// current running CAnimation
         double BITMAP_SIZE = 1;
         //bool _beInterrupt;
         vector<vector<int>*> bmp_iter;	// used to display current animation state in DEBUG mode
@@ -338,10 +326,8 @@ class Player
 
         int _triggeredAniAnimationID;
         // The index of the triggered animation in the 1-dimensional vector 'ani[---index---]' or 2-dimensional vector '_aniByWpn[_wpnID][---index---]',
-        // depending on the value of '_aniSelector'
         // Its value is one of the constants starting with 'ANI_ID_...' or 'ANI_WPN_ID_...'
-        // Technically, the animation needed in 'OnShow()' is defined by 'ani[_triggeredAniAnimationID]' or '_aniByWpn[_wpnID][_triggeredAniAnimationID]',
-        // depending on the value of '_aniSelector'
+        // Technically, the animation needed in 'OnShow()' is defined by 'ani[_triggeredAniAnimationID]' or '_aniByWpn[_wpnID][_triggeredAniAnimationID]'
 
         bool _isInitiatedTriggeredAni;
 
@@ -356,10 +342,8 @@ class Player
         int _roundPrevPickedUpWpnID; // The previously picked up weapon in the round. Values: 1 - sword 1, 2 - sword 2 (initialized as 2)
 
         //Animation By Weapons
-        /// Remark: Technically, if '_aniSelector' is true, '_aniByWpn' is displayed instead of the traditional 'ani', and vice versa.
         vector<vector<CAnimation>> _aniByWpn;
         int _currentAniByWpn;
-        bool _aniSelector;
         // False - choose 'ani' for showing the animation
         // True - choose '_aniByWpn' for showing the animation
         // This variable is determined in 'Player::OnMove()'

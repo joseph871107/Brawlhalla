@@ -42,11 +42,6 @@ GroundMoveRightAttackTriggeredAnimation& GroundMoveRightAttackTriggeredAnimation
     return (*this);
 }
 
-void GroundMoveRightAttackTriggeredAnimation::SetTriggeredAnimationSelector()
-{
-    _playerPtr->SetAnimationSelector(true);
-}
-
 void GroundMoveRightAttackTriggeredAnimation::FinishTriggeredAnimationGameLogic()
 {
     _playerPtr->EmptyHitTargetPlayers();
