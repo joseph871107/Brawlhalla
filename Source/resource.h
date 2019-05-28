@@ -10,8 +10,25 @@
 #define IDB_RESPAWN_COURIER_LEFT        107
 #define IDB_RESPAWN_COURIER_R           108
 #define IDB_RESPAWN_COURIER_RIGHT       108
+#define IDB_FX_EXPLO_LEFT0              113
+#define IDB_FX_EXPLO_LEFT1              114
+#define IDB_FX_EXPLO_LEFT2              115
+#define IDB_FX_EXPLO_LEFT3              116
+#define IDB_FX_EXPLO_RIGHT0             117
+#define IDB_FX_EXPLO_RIGHT1             118
+#define IDB_FX_EXPLO_RIGHT2             119
+#define IDB_FX_EXPLO_RIGHT3             120
+#define IDB_FX_EXPLO_DOWN0              125
+#define IDB_FX_EXPLO_DOWN1              126
+#define IDB_FX_EXPLO_DOWN2              127
 #define IDR_MAINFRAME                   128
 #define IDR_GAMETYPE                    129
+#define IDB_FX_EXPLO_DOWN3              129
+#define IDB_FX_EXLO_UP0                 130
+#define IDB_FX_EXPLO_UP0                130
+#define IDB_FX_EXPLO_UP1                131
+#define IDB_FX_EXPLO_UP2                132
+#define IDB_FX_EXPLO_UP3                133
 #define IDC_GAMECURSOR                  153
 #define IDB_LOADING                     156
 #define IDB_CONTINUE                    158
@@ -24,22 +41,6 @@
 #define IDB_WEAPON_FALLING              500
 #define IDB_BITMAP8                     520
 #define IDB_BITMAP4                     532
-#define IDB_FX_EXPLO_DOWN0              533
-#define IDB_FX_EXPLO_DOWN1              534
-#define IDB_FX_EXPLO_DOWN2              535
-#define IDB_FX_EXPLO_DOWN3              536
-#define IDB_FX_EXPLO_LEFT0              537
-#define IDB_FX_EXPLO_LEFT1              538
-#define IDB_FX_EXPLO_LEFT2              539
-#define IDB_FX_EXPLO_LEFT3              540
-#define IDB_FX_EXPLO_RIGHT0             541
-#define IDB_FX_EXPLO_RIGHT1             542
-#define IDB_FX_EXPLO_RIGHT2             543
-#define IDB_FX_EXPLO_RIGHT3             544
-#define IDB_FX_EXPLO_UP0                545
-#define IDB_FX_EXPLO_UP1                546
-#define IDB_FX_EXPLO_UP2                547
-#define IDB_FX_EXPLO_UP3                548
 #define IDB_FX_SKILL0_L0                549
 #define IDB_FX_SKILL0_L1                550
 #define IDB_FX_SKILL0_L2                551
@@ -132,7 +133,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        109
+#define _APS_NEXT_RESOURCE_VALUE        134
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

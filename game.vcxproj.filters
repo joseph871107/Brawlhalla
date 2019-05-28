@@ -1416,6 +1416,15 @@
     <Image Include="RES\players\respawn_courier_right.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\ui\button\about_out.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\about_hov.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ui\button\about_clk.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\BattleMusic.mp3">

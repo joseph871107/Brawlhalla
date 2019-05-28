@@ -1,56 +1,3 @@
-/*
- * mygame.cpp: 本檔案儲遊戲本身的class的implementation
- * Copyright (C) 2002-2008 Woei-Kae Chen <wkc@csie.ntut.edu.tw>
- *
- * This file is part of game, a free game development framework for windows.
- *
- * game is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * game is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * History:
- *   2002-03-04 V3.1
- *          Add codes to demostrate the use of CMovingBitmap::ShowBitmap(CMovingBitmap &).
- *	 2004-03-02 V4.0
- *      1. Add CGameStateInit, CGameStateRun, and CGameStateOver to
- *         demonstrate the use of states.
- *      2. Demo the use of CInteger in CGameStateRun.
- *   2005-09-13
- *      Rewrite the codes for CBall and CEraser.
- *   2005-09-20 V4.2Beta1.
- *   2005-09-29 V4.2Beta2.
- *      1. Add codes to display IDC_GAMECURSOR in GameStateRun.
- *   2006-02-08 V4.2
- *      1. Revise sample screens to display in English only.
- *      2. Add code in CGameStateInit to demo the use of PostQuitMessage().
- *      3. Rename OnInitialUpdate() -> OnInit().
- *      4. Fix the bug that OnBeginState() of GameStateInit is not called.
- *      5. Replace AUDIO_CANYON as AUDIO_NTUT.
- *      6. Add help bitmap to CGameStateRun.
- *   2006-09-09 V4.3
- *      1. Rename Move() and Show() as OnMove and OnShow() to emphasize that they are
- *         event driven.
- *   2006-12-30
- *      1. Bug fix: fix a memory leak problem by replacing PostQuitMessage(0) as
- *         PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE,0,0).
- *   2008-02-15 V4.4
- *      1. Add namespace game_framework.
- *      2. Replace the demonstration of animation as a new bouncing ball.
- *      3. Use ShowInitProgress(percent) to display loading progress.
- *   2010-03-23 V4.6
- *      1. Demo MP3 support: use lake.mp3 to replace lake.wav.
-*/
-
 #include <string>
 #include "stdafx.h"
 #include "MainFrm.h"
@@ -70,7 +17,7 @@ namespace game_framework
 const vector<MapPARM> _mapP
 {
     // Define Grounds of Map Default
-    MapPARM("Plain Field", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1, GroundPARM(0, 0, 1, 10, 1, IDB_GROUND1)),
+    MapPARM("Plain Field", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1, GroundPARM(100, 500, 1, 5, 1, IDB_GROUND1)),
     // Define Grounds of Map Test
     MapPARM("Arena", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 2, GroundPARM(560, 500, 0.174, 2, 1, IDB_GROUND2, 0, 900, 900), GroundPARM(400, 340, 0.174, 1, 2, IDB_GROUND2, 0, 900, 900)),
     // Define 3 Grounds

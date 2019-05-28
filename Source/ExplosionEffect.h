@@ -34,8 +34,8 @@ class ExplosionEffect
         void SetXY(const int& newX, const int& newY);
         void SetCurrentAni(const int& newCurrentAni);
         void AddCAnimation(vector<int>*, double = 1.0, int = 10, bool = true, int = 1); // Push (bmps, (optional)size, (op)delay, (op)repeat, (op)repeat times) in vector of CAnimation
-        double GetCurrentAnimationHeight();
-        double GetCurrentAnimationWidth();
+        int GetCurrentAnimationHeight();
+        int GetCurrentAnimationWidth();
         const int& GetCurrentAni() const;
         void SetIsTrigger(bool newIsTrigger);
         const bool& GetIsTrigger() const;
