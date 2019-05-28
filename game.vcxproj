@@ -676,6 +676,9 @@
     <Image Include="RES\tests\lean_left.bmp" />
     <Image Include="RES\tests\lean_right.bmp" />
     <Image Include="res\ui\brawlhalla-logo.bmp" />
+    <Image Include="res\ui\button\about_clk.bmp" />
+    <Image Include="res\ui\button\about_hov.bmp" />
+    <Image Include="res\ui\button\about_out.bmp" />
     <Image Include="res\ui\button\button_clk.bmp" />
     <Image Include="res\ui\button\button_hov.bmp" />
     <Image Include="res\ui\button\button_out.bmp" />

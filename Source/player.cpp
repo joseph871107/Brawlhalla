@@ -38,7 +38,7 @@ const double MOVE_ACCELERATION = 0.5;
 const double STOP_ACCELERATION = 1;
 const double MAX_MOVE_VELOCITY = 10;
 const int INITIAL_TAKEN_DAMAGE = 10;
-const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 2;
+const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 5;
 const int MAX_ATTACK_AFFECTION_FRAMES = 150; // 5 secs
 const int RESPAWN_DISTANCE_ABOVE_GROUND = 100;
 const int RESPAWN_MOVEMENT_OFFSET_MAGNITUDE = 10;
@@ -1725,7 +1725,7 @@ void Player::SetCurrentNonTriggeredAnimationByWeapon()
         case RESPAWN_STATE:
 
             /// Comment for future devs: This special case overrides the others
-            /// where the player is unconscious should be separated as another
+            /// where the player is in respawn state should be separated as another
             /// animation vector, not being put in 'ani'
             if (_dir)
                 SetAnimationStateByWeapon(ANI_WPN_ID_STAND_RIGHT);

@@ -96,18 +96,22 @@ void BattleSystem::InitializePlayersOnBeginState()
     player = new Player();
     _players.push_back(player);
     // Enemy
-	int enemy = 2;
-	for (int i = 0;i < enemy;i++) {
-		player = new Enemy();
-		_players.push_back(player);
-	}
+    int enemy = 2;
+
+    for (int i = 0; i < enemy; i++)
+    {
+        player = new Enemy();
+        _players.push_back(player);
+    }
+
     // Initialize keys for players
     vector<vector<long>> playerKeys =
     {
         {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M}
     };
-	for (int i = 0;i < enemy;i++)
-		playerKeys.push_back({KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X });
+
+    for (int i = 0; i < enemy; i++)
+        playerKeys.push_back({KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X });
     // Initialize explosion effects for every players
     InitializeExplosionEffectsOnBeginState();
     // Initialize other attributes of the players

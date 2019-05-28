@@ -13,7 +13,7 @@ This is the source code file 'TriggeredAnimation.cpp'. This is the implementatio
 namespace game_framework
 {
 //-----------------CONSTANTS DEFINITIONS-----------------//
-const double BITMAP_SIZE = 0.5;
+const double BITMAP_SIZE = 1.5;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 ExplosionEffect::~ExplosionEffect()
@@ -113,14 +113,14 @@ bool ExplosionEffect::IsCurrentAniFinalBitmap()
     return (_anis[_currentAni].IsFinalBitmap());
 }
 
-double ExplosionEffect::GetCurrentAnimationHeight()
+int ExplosionEffect::GetCurrentAnimationHeight()
 {
-    return (_anis[_currentAni].Height() * BITMAP_SIZE);
+    return (_anis[_currentAni].Height());
 }
 
-double ExplosionEffect::GetCurrentAnimationWidth()
+int ExplosionEffect::GetCurrentAnimationWidth()
 {
-    return (_anis[_currentAni].Width() * BITMAP_SIZE);
+    return (_anis[_currentAni].Width());
 }
 
 const int& ExplosionEffect::GetCurrentAni() const

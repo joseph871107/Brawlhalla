@@ -216,38 +216,6 @@ IDB_WEAPON_ROT_R_270    BITMAP                  "..\\RES\\weapons\\DefaultThrowi
 
 IDB_WEAPON_ROT_R_315    BITMAP                  "..\\RES\\weapons\\DefaultThrowingSword\\Jade_Sword_R_315.bmp"
 
-IDB_FX_EXPLO_DOWN0      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_down0.bmp"
-
-IDB_FX_EXPLO_DOWN1      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_down1.bmp"
-
-IDB_FX_EXPLO_DOWN2      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_down2.bmp"
-
-IDB_FX_EXPLO_DOWN3      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_down3.bmp"
-
-IDB_FX_EXPLO_LEFT0      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_left0.bmp"
-
-IDB_FX_EXPLO_LEFT1      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_left1.bmp"
-
-IDB_FX_EXPLO_LEFT2      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_left2.bmp"
-
-IDB_FX_EXPLO_LEFT3      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_left3.bmp"
-
-IDB_FX_EXPLO_RIGHT0     BITMAP                  "..\\RES\\Effects\\Explosion\\explo_right0.bmp"
-
-IDB_FX_EXPLO_RIGHT1     BITMAP                  "..\\RES\\Effects\\Explosion\\explo_right1.bmp"
-
-IDB_FX_EXPLO_RIGHT2     BITMAP                  "..\\RES\\Effects\\Explosion\\explo_right2.bmp"
-
-IDB_FX_EXPLO_RIGHT3     BITMAP                  "..\\RES\\Effects\\Explosion\\explo_right3.bmp"
-
-IDB_FX_EXPLO_UP0        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up0.bmp"
-
-IDB_FX_EXPLO_UP1        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up1.bmp"
-
-IDB_FX_EXPLO_UP2        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up2.bmp"
-
-IDB_FX_EXPLO_UP3        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up3.bmp"
-
 IDB_FX_SKILL0_L0        BITMAP                  "..\\RES\\Effects\\Skill\\skill_0_0.bmp"
 
 IDB_FX_SKILL0_L1        BITMAP                  "..\\RES\\Effects\\Skill\\skill_0_1.bmp"
@@ -307,6 +275,38 @@ IDB_P_COLLISION_BOX     BITMAP                  "..\\RES\\players\\collision_box
 IDB_RESPAWN_COURIER_LEFT BITMAP                  "..\\RES\\players\\respawn_courier_left.bmp"
 
 IDB_RESPAWN_COURIER_RIGHT BITMAP                  "..\\RES\\players\\respawn_courier_right.bmp"
+
+IDB_FX_EXPLO_LEFT0      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_left0.bmp"
+
+IDB_FX_EXPLO_LEFT1      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_left1.bmp"
+
+IDB_FX_EXPLO_LEFT2      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_left2.bmp"
+
+IDB_FX_EXPLO_LEFT3      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_left3.bmp"
+
+IDB_FX_EXPLO_RIGHT0     BITMAP                  "..\\RES\\Effects\\Explosion\\explo_right0.bmp"
+
+IDB_FX_EXPLO_RIGHT1     BITMAP                  "..\\RES\\Effects\\Explosion\\explo_right1.bmp"
+
+IDB_FX_EXPLO_RIGHT2     BITMAP                  "..\\RES\\Effects\\Explosion\\explo_right2.bmp"
+
+IDB_FX_EXPLO_RIGHT3     BITMAP                  "..\\RES\\Effects\\Explosion\\explo_right3.bmp"
+
+IDB_FX_EXPLO_DOWN0      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_down0.bmp"
+
+IDB_FX_EXPLO_DOWN1      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_down1.bmp"
+
+IDB_FX_EXPLO_DOWN2      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_down2.bmp"
+
+IDB_FX_EXPLO_DOWN3      BITMAP                  "..\\RES\\Effects\\Explosion\\explo_down3.bmp"
+
+IDB_FX_EXPLO_UP0        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up0.bmp"
+
+IDB_FX_EXPLO_UP1        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up1.bmp"
+
+IDB_FX_EXPLO_UP2        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up2.bmp"
+
+IDB_FX_EXPLO_UP3        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up3.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
