@@ -14,6 +14,7 @@ namespace game_framework
 const double CAMERA_SIZING_OFFSET = 0.005;
 const double CAMERA_ZOOMOUT = 1;
 const double CAMERA_ZOOMIN = 0.75;
+const int COORDINATES_OFFSET = 3;
 
 Camera::Camera()
 {
@@ -52,39 +53,34 @@ void Camera::SetSize(double s)
 }
 void Camera::SetCameraXY(int tx, int ty)
 {
-    if (gradual)
-    {
-        static double gradientX = tx;
+	if (gradual)
+	{
+		static int gradientX = tx;
+		static int gradientY = ty;
 
-        if (abs(gradientX - tx) >= CAMERA_SIZING_OFFSET)
-        {
-            if (gradientX > tx)
-                gradientX -= CAMERA_SIZING_OFFSET * CAMERA_ZOOMOUT;
-            else
-                gradientX += CAMERA_SIZING_OFFSET * CAMERA_ZOOMIN;
-        }
+		if (abs(gradientX - tx) >= COORDINATES_OFFSET)
+		{
+			if (gradientX > tx)
+				gradientX -= COORDINATES_OFFSET;
+			else
+				gradientX += COORDINATES_OFFSET;
+		}
 
-        x = (int)gradientX;
-    }
-    else
-        x = tx;
+		if (abs(gradientY - ty) >= COORDINATES_OFFSET)
+		{
+			if (gradientY > ty)
+				gradientY -= COORDINATES_OFFSET;
+			else
+				gradientY += COORDINATES_OFFSET;
+		}
 
-    if (gradual)
-    {
-        static double gradientY = ty;
-
-        if (abs(gradientY - tx) >= CAMERA_SIZING_OFFSET)
-        {
-            if (gradientY > tx)
-                gradientY -= CAMERA_SIZING_OFFSET * CAMERA_ZOOMOUT;
-            else
-                gradientY += CAMERA_SIZING_OFFSET * CAMERA_ZOOMIN;
-        }
-
-        y = (int)gradientY;
-    }
-    else
-        y = ty;
+		x = gradientX;
+		y = gradientY;
+	}
+	else {
+		x = tx;
+		y = ty;
+	}
 }
 void Camera::SetCameraOffsetXY(int tx, int ty)
 {

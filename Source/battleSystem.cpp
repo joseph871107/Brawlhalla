@@ -597,7 +597,7 @@ void BattleSystem::ResizeCamera()
         //
         int centerX = minX + (maxX - minX) / 2;
         int centerY = minY + (maxY - minY) / 2;
-        camera.SetCameraXY(centerX, centerY);
+        camera.SetCameraXY(centerX, centerY - 100);
     }
 }
 
