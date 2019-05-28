@@ -18,23 +18,43 @@ class Weapon : public Object
         void OnShow();
         void OnMove();
         void OnKeyDown(UINT);
-		bool IsOutMapBorder();
+        bool IsOutMapBorder();
         void LoadBitmap();
         void Initialize(vector<Ground*>, vector<Player*>);
-		void Throw(bool, Player*);
+        void Throw(bool, Player*);
         Player* HitPlayer();
-		void SetState(long state);
-		bool HasTaken();
-		bool BeThrown();
+        bool HasTaken();
+        bool BeThrown();
     private:
-		CRAnimation bmp, tl, tr, *sbmp;
-		clock_t start;
-        double _velocityX, _velocityY;
+        //-----------------FUNCTIONS DECLARATIONS-----------------//
+        void DoBounceOffGround(int weaponX1, int weaponY1, int weaponX2, int weaponY2, Ground* groundPtr);
+        void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
+        void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
+        void InitiateOffsetUp(double initialOffsetVelocityMagnitude);
+        void InitiateOffsetDown(double initialOffsetVelocityMagnitude);
+        void DoHorizontalOffset();
+        bool IsBeingOffsetHorizontally();
+        bool IsOnGround();
+        void DoWeaponBeingThrown();
+        void DoWeaponDropbox();
+        // Unused functions
+        void SetState(long state);
+        //-----------------VARIABLES DECLARATIONS-----------------//
+        CRAnimation bmp, tl, tr, *sbmp; // Rotate animation
+        clock_t start;
+        vector<Ground*> _grounds;
         Ground* _ground;
         vector<Player*> _player;
-		Player* _throwHost;
-        bool _tDir;
-		long _state;
+        Player* _throwHost;
+        bool _throwDir; // throw direction
+        long _state;
+        //
+        int _width, _height; // true width and height
+		// Since the bitmaps of weapon vary in size, we cannot use 'width' and 'height' given by the 'Object' class
+		// Moreover, since 'GetCor(2)' and 'GetCor(3)' are dependent on 'width' and 'height', they are also deficient
+        bool _isOffsetLeft, _isOffsetRight;
+        double _horizontalVelocity;
+        double _verticalVelocity;
 };
 }
 

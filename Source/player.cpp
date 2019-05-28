@@ -38,7 +38,7 @@ const int GND_ATTACK_MOVEMENT_UNIT = 12;
 const double COLLISION_ERRORS = 1.0;
 const int MAX_LIFE = 3;
 const int INITIAL_TAKEN_DAMAGE = 10;
-const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 5;
+const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 10;
 const int MAX_ATTACK_AFFECTION_FRAMES = 150; // 5 secs
 const int RESPAWN_DISTANCE_ABOVE_GROUND = 100;
 const int RESPAWN_MOVEMENT_OFFSET_MAGNITUDE = 10;
@@ -339,7 +339,7 @@ void Player::OnMoveGameLogic()
     /*	~ RESET JUMP COUNT
     	~ Reset the jump count of the player, so that he can jump when eligible
     */
-    if (IsOnGround() || IsOnLeftEdge() || IsOnRightEdge())
+    if (IsOnGround() || IsOnEdge())
         ResetJumpCount();
 
     /* EVALUATE KILLER AFFECTION */
@@ -629,6 +629,7 @@ void Player::ResetAnimations(int leftAnimationID)
     _aniByWpn[_wpnID][leftAnimationID].Reset(); // Reset left animation
     _aniByWpn[_wpnID][leftAnimationID + 1].Reset(); // Reset right animation
 }
+
 void Player::SetAnimation()
 {
     //-----------------ANIMATION BY WEAPONS-----------------//
@@ -816,22 +817,26 @@ void Player::InitiateOffsetUp(double initialOffsetVelocityMagnitude)
     // since the player is currently on the ground, 'Player::OnMove()' will fix its '_y' onto the surface
     // instead of modifying it as expectation. Thus, '_y' must be altered here to set the player jump his ass up!!
 }
+
 void Player::InitiateOffsetDown(double initialOffsetVelocityMagnitude)
 {
     _verticalVelocity = initialOffsetVelocityMagnitude;
 }
+
 void Player::InitiateOffsetLeft(double initialOffsetVelocityMagnitude)
 {
     _horizontalVelocity = initialOffsetVelocityMagnitude;
     _isOffsetLeft = true;
     _isOffsetRight = false;
 }
+
 void Player::InitiateOffsetRight(double initialOffsetVelocityMagnitude)
 {
     _horizontalVelocity = initialOffsetVelocityMagnitude;
     _isOffsetRight = true;
     _isOffsetLeft = false;
 }
+
 bool Player::IsBeingOffsetHorizontally()
 {
     return (_isOffsetLeft || _isOffsetRight);
@@ -1083,32 +1088,6 @@ void Player::InitializeOnRespawn()
 void Player::SetAnimationStateByWeapon(int num)
 {
     _currentAniByWpn = num;
-}
-
-void Player::AddCollectionOfAnimationsByWeapon(
-    vector<int>& s2l, vector<int>& s2r, vector<int>& al, vector<int>& ar,
-    vector<int>& gmal, vector<int>& gmar, vector<int>& sal, vector<int>& sar,
-    vector<int>& aal, vector<int>& aar, vector<int>& amal, vector<int>& amar,
-    vector<int>& adal, vector<int>& adar, vector<int>& sdl, vector<int>& sdr)
-{
-    vector<CAnimation> tempAniByWpn = vector<CAnimation>();
-    AddCAnimationByWeapon(tempAniByWpn, &s2l, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
-    AddCAnimationByWeapon(tempAniByWpn, &s2r, BITMAP_SIZE); //ani[1] Stand (Idle) Right with sword
-    AddCAnimationByWeapon(tempAniByWpn, &al, BITMAP_SIZE, 3, false); //ani[2] Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &ar, BITMAP_SIZE, 3, false); //ani[3] Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &gmal, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &gmar, BITMAP_SIZE, 3, false); //ani[5] On-Ground-Moving Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &sal, BITMAP_SIZE, 3, false); //ani[6] Slide Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &sar, BITMAP_SIZE, 3, false); //ani[7] Slide Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &aal, BITMAP_SIZE, 3, false); //ani[8] Air Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &aar, BITMAP_SIZE, 3, false); //ani[9] Air Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &amal, BITMAP_SIZE, 3, false); //ani[10] On-Air-Moving Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &amar, BITMAP_SIZE, 3, false); //ani[11] On-Air-Moving Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &adal, BITMAP_SIZE, 3, false); //ani[12] On-Air-Down Attack Left
-    AddCAnimationByWeapon(tempAniByWpn, &adar, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
-    AddCAnimationByWeapon(tempAniByWpn, &sdl, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
-    AddCAnimationByWeapon(tempAniByWpn, &sdr, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
-    _aniByWpn.push_back(tempAniByWpn);
 }
 
 void Player::AddCAnimationByWeapon(vector<CAnimation>& tempAniByWpn, vector<int>* list, double size, int delay, bool repeat, int times)

@@ -53,9 +53,6 @@
     <Filter Include="Brawlhalla\Map">
       <UniqueIdentifier>{91b11b4f-1bf2-4c0c-9542-ee1c534e3f7b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\Map\Ground">
-      <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Player\TriggeredAnimation">
       <UniqueIdentifier>{b21da1f6-fd96-43a6-a2df-2adb57d41fcb}</UniqueIdentifier>
     </Filter>
@@ -70,9 +67,6 @@
     </Filter>
     <Filter Include="Brawlhalla\Enemy">
       <UniqueIdentifier>{427d87f5-bc90-42f6-994a-5b66b01feca3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\ExplosionEffect">
-      <UniqueIdentifier>{34624e8c-9fbc-408f-80ae-46042f364aa0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\Bitmap\Animation">
       <UniqueIdentifier>{fc9b157f-9907-4561-81f4-5f88255d1b29}</UniqueIdentifier>
@@ -92,9 +86,6 @@
     <Filter Include="Resource Files\Bitmap\Animation\Player1\jumpM">
       <UniqueIdentifier>{8790d827-3de7-4b78-ba4f-aa98b676a320}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\UIMessage">
-      <UniqueIdentifier>{e8433d73-925b-4d48-97e9-d1c45631648a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Player\RespawnCourier">
       <UniqueIdentifier>{1e0f1efe-b94a-454a-a42c-d804f85122aa}</UniqueIdentifier>
     </Filter>
@@ -112,6 +103,15 @@
     </Filter>
     <Filter Include="Brawlhalla\Player\PlayerState\PlayerConsciousState">
       <UniqueIdentifier>{9a57bf1d-d183-49e4-9a62-3e695b6b061f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\ExplosionEffect">
+      <UniqueIdentifier>{34624e8c-9fbc-408f-80ae-46042f364aa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\UIMessage">
+      <UniqueIdentifier>{e8433d73-925b-4d48-97e9-d1c45631648a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Map\Ground">
+      <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -247,10 +247,10 @@
       <Filter>Brawlhalla\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\ExplosionEffect.cpp">
-      <Filter>Brawlhalla\ExplosionEffect</Filter>
+      <Filter>Brawlhalla\BattleSystem\ExplosionEffect</Filter>
     </ClCompile>
     <ClCompile Include="Source\UIMessage.cpp">
-      <Filter>Brawlhalla\UIMessage</Filter>
+      <Filter>Brawlhalla\BattleSystem\UIMessage</Filter>
     </ClCompile>
     <ClCompile Include="Source\RespawnCourier.cpp">
       <Filter>Brawlhalla\Player\RespawnCourier</Filter>
@@ -366,10 +366,10 @@
       <Filter>Brawlhalla\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\ExplosionEffect.h">
-      <Filter>Brawlhalla\ExplosionEffect</Filter>
+      <Filter>Brawlhalla\BattleSystem\ExplosionEffect</Filter>
     </ClInclude>
     <ClInclude Include="Source\UIMessage.h">
-      <Filter>Brawlhalla\UIMessage</Filter>
+      <Filter>Brawlhalla\BattleSystem\UIMessage</Filter>
     </ClInclude>
     <ClInclude Include="Source\RespawnCourier.h">
       <Filter>Brawlhalla\Player\RespawnCourier</Filter>

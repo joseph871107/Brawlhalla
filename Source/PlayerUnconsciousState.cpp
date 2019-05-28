@@ -105,6 +105,25 @@ void PlayerUnconsciousState::OnMoveGameLogic()
         _playerPtr->SetConscious();
 }
 
+void PlayerUnconsciousState::OnMoveAnimationLogic()
+{
+    /*	~ RESET UNCONSCIOUSLY FLYING ANIMATION
+    	~ Continuously running the animation until '_unconsciousFramesCount' reaches its maximum value
+    */
+    if (_playerPtr->_aniByWpn[_playerPtr->_wpnID][_playerPtr->_currentAniByWpn]
+            .IsFinalBitmap())
+    {
+        _playerPtr->_aniByWpn[_playerPtr->_wpnID][_playerPtr->_currentAniByWpn].Reset();
+    }
+
+    /*	~ OVERRIDE TRIGGERED ANIMATION
+    	~ If the player is hit and changes his state to unconscious,
+    	~ then his triggered animation (if any) must be forced to stop.
+    */
+    if (_playerPtr->_isTriggeredAni)
+        _playerPtr->FinishTriggeredAnimationAnimationLogic(); // Compel the triggered animation to finish
+}
+
 void PlayerUnconsciousState::DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr)
 {
     if (groundPtr->IsOnGroundLeftEdge(playerX1, playerY1, playerX2, playerY2))
@@ -125,25 +144,6 @@ void PlayerUnconsciousState::DoBounceOffGround(int playerX1, int playerY1, int p
     {
         _playerPtr->InitiateOffsetUp(abs(_playerPtr->_verticalVelocity));
     }
-}
-
-void PlayerUnconsciousState::OnMoveAnimationLogic()
-{
-    /*	~ RESET UNCONSCIOUSLY FLYING ANIMATION
-    	~ Continuously running the animation until '_unconsciousFramesCount' reaches its maximum value
-    */
-    if (_playerPtr->_aniByWpn[_playerPtr->_wpnID][_playerPtr->_currentAniByWpn]
-            .IsFinalBitmap())
-    {
-        _playerPtr->_aniByWpn[_playerPtr->_wpnID][_playerPtr->_currentAniByWpn].Reset();
-    }
-
-    /*	~ OVERRIDE TRIGGERED ANIMATION
-    	~ If the player is hit and changes his state to unconscious,
-    	~ then his triggered animation (if any) must be forced to stop.
-    */
-    if (_playerPtr->_isTriggeredAni)
-		_playerPtr->FinishTriggeredAnimationAnimationLogic(); // Compel the triggered animation to finish
 }
 
 }

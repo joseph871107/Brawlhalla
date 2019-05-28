@@ -191,8 +191,4 @@ bool Ground::IsOnGround(int objectX1, int objectY1, int objectX2, int objectY2)
             groundX1 <= objectX1 && objectX2 <= groundX2);
 }
 
-
-
-
-
 }

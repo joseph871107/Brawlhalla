@@ -25,11 +25,13 @@ class PlayerUnconsciousState
         PlayerUnconsciousState& operator=(const PlayerUnconsciousState& rightObject);
         //Operator overloading function of the assignment operator
 
-		void OnMoveGameLogic();
-		void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
-		void OnMoveAnimationLogic();
+        void OnMoveGameLogic();
+        void OnMoveAnimationLogic();
 
     private:
+        //-----------------FUNCTIONS DECLARATIONS-----------------//
+        void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
+        //-----------------VARIABLES DECLARATIONS-----------------//
         Player* _playerPtr;
 };
 #endif

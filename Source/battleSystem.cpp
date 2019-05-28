@@ -107,7 +107,7 @@ void BattleSystem::InitializePlayersOnBeginState()
     // Initialize keys for players
     vector<vector<long>> playerKeys =
     {
-        {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M}
+        {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M},
     };
 
     for (int i = 0; i < enemy; i++)

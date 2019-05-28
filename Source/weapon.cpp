@@ -14,6 +14,10 @@ const long STATE_HOLDING = 1;
 const long STATE_FLYING = 2;
 const long STATE_HITTED = 3;
 const long STATE_TIMESUP = 4;
+const double INITIAL_ACCELERATION = 1.2;
+const int OFFSET_INITIAL_VELOCITY = 45;
+const double INITIAL_VELOCITY = 18;
+const int WEAPON_EXPIRED_TIME = 2;
 
 /////////////////////////////////////////////////////////////////////////////
 // Weapom class
@@ -22,9 +26,9 @@ const long STATE_TIMESUP = 4;
 const double ACCELERATION_UNIT = 0.5;
 Weapon::Weapon()
 {
-    _velocityX = _velocityY = start = 0;
+    _horizontalVelocity = _verticalVelocity = start = 0;
     _size = 0.2;
-    _tDir = false;
+    _throwDir = false;
     _state = STATE_NORMAL;
     LoadBitmap();
 }
@@ -43,20 +47,35 @@ void Weapon::LoadBitmap()
 
 void Weapon::Initialize(vector<Ground*> ground, vector<Player*> player)
 {
+    _grounds = ground;
     _ground = GetRandomGround(&ground);		// Randomly select Ground
     x = random(_ground->GetCor(0), _ground->GetCor(2) - width);		// Randomly set x coordinate within Ground's width
     y = _ground->GetCor(1) - 400;						// Set y with Ground's top adding 400 pixels
     _player = player;
     sbmp = &bmp;
+    //
+    _width = DoubleToInteger(bmp.Width() * _size);
+    _height = DoubleToInteger(bmp.Height() * _size);
+    //
+    _horizontalVelocity = 0;
+    _isOffsetLeft = _isOffsetRight = false;
+    _verticalVelocity = 0;
 }
 
 void Weapon::Throw(bool dir, Player* player)
 {
-    _velocityX = 20;
-    _velocityY = 20;
     _throwHost = player;
-    _tDir = dir;
+    _throwDir = dir;
+
+    if (_throwDir) // right
+        InitiateOffsetRight(abs(OFFSET_INITIAL_VELOCITY));
+    else // left
+        InitiateOffsetLeft(abs(OFFSET_INITIAL_VELOCITY));
+
+    _verticalVelocity = 0;
     _state = STATE_FLYING;
+    // Set the expired time of the weapon being thrown
+    start = clock();
 }
 
 Player* Weapon::HitPlayer()
@@ -88,19 +107,19 @@ bool Weapon::BeThrown()
 void Weapon::OnShow()
 {
     double size = _size;
-    int _x = x, _y = y;
+    int tempX = x, tempY = y;
 
     if (camera != nullptr)
     {
         CPoint cam = camera->GetXY(x, y);
         size = _size * camera->GetSize();
-        _x = cam.x;
-        _y = cam.y;
+        tempX = cam.x;
+        tempY = cam.y;
     }
 
-    if (BeThrown() && !_tDir)
+    if (BeThrown() && !_throwDir)
         sbmp = &tl;
-    else if (BeThrown() && _tDir)
+    else if (BeThrown() && _throwDir)
         sbmp = &tr;
     else if (_state == STATE_NORMAL)
         sbmp = &bmp;
@@ -109,7 +128,7 @@ void Weapon::OnShow()
 
     if (sbmp != nullptr)
     {
-        sbmp->SetTopLeft(_x, _y);
+        sbmp->SetTopLeft(tempX, tempY);
         sbmp->OnShow(size);
         width = (int)(sbmp->Width() * _size);
         height = (int)(sbmp->Height() * _size);
@@ -118,59 +137,108 @@ void Weapon::OnShow()
 void Weapon::OnMove()
 {
     sbmp->OnMove();
-    int groundCmpY = _ground->GetCor(1) - height + 3;
 
-    if (y >= groundCmpY && x >= _ground->GetCor(0) && x < _ground->GetCor(2) - width) // On the ground
-    {
-        _velocityY = 0;
-
-        if (_velocityX > 0)
-            _velocityX -= ACCELERATION_UNIT;
-        else
-        {
-            _velocityX = 0;
-            _state = STATE_NORMAL;
-        }
-
-        y = groundCmpY;
-    }
-    else	// If not yet hitting the ground
-    {
-        _velocityY += ACCELERATION_UNIT;
-        y += (int)(_velocityY * (BeThrown() && x > _ground->GetCor(0) && x < _ground->GetCor(2) - width ? 0.1 : 1.0));
-    }
-
-    if (_state == STATE_FLYING)
-    {
-        static int distance = 0;
-        distance += (int)(_velocityX * 2);
-
-        if (distance > 20)
-        {
-            sbmp->NextPtr();
-            distance = 0;
-        }
-
-        Player* _hitPlayer = HitPlayer();
-
-        if (_hitPlayer != nullptr && _hitPlayer != _throwHost)
-        {
-            _throwHost->PerformAttack(_hitPlayer, _tDir);
-            _tDir = !_tDir;
-            _velocityX = 5;
-            start = clock();
-            _state = STATE_HITTED;
-        }
-
-        if (_tDir)
-            x += (int)(_velocityX * 2);
-        else
-            x -= (int)(_velocityX * 2);
-    }
-
-    if (start != 0 && (clock() - start) / CLOCKS_PER_SEC > 1)
-        _state = STATE_TIMESUP;
+    if (_state == STATE_FLYING || _state == STATE_HITTED)
+        DoWeaponBeingThrown();
+    else
+        DoWeaponDropbox();
 }
+
+void Weapon::DoWeaponBeingThrown()
+{
+    static int distance = 0; // weapon flying animation loop interval
+    distance += (int)(_horizontalVelocity * 2);
+
+    if (distance > 20)
+    {
+        sbmp->NextPtr();
+        distance = 0;
+    }
+
+    /*	~ VERTICAL OFFSET
+    	~ Gravity
+    */
+    _verticalVelocity += INITIAL_ACCELERATION;
+    y += DoubleToInteger(_verticalVelocity);
+
+    /*	~ HORIZONTAL OFFSET
+    	~ Horizontal offset by being thrown
+    */
+    if (IsBeingOffsetHorizontally())
+        DoHorizontalOffset(); // Modify the x-coordinate of the waepon
+
+    /* WEAPON BOUNCES OFF THE GROUNDS */
+    int weaponX1 = GetCor(0);
+    int weaponY1 = GetCor(1);
+    int weaponX2 = weaponX1 + _width;
+    int weaponY2 = weaponY1 + _height;
+
+    for (auto groundPtr : _grounds)
+    {
+        int groundX1 = groundPtr->GetCor(0);
+        int groundY1 = groundPtr->GetCor(1);
+        int groundX2 = groundPtr->GetCor(2);
+        int groundY2 = groundPtr->GetCor(3);
+
+        if (groundPtr->IsIntersectGround(weaponX1, weaponY1, weaponX2, weaponY2))
+            DoBounceOffGround(weaponX1, weaponY1, weaponX2, weaponY2, groundPtr);
+    }
+
+    /* WEAPON HITS ENEMY */
+    Player* _hitPlayer = HitPlayer();
+
+    if (_hitPlayer != nullptr && _hitPlayer != _throwHost)
+    {
+        _throwHost->PerformAttack(_hitPlayer, _throwDir);
+
+        // Weapon bounces off after hit player
+        if (_throwDir) // right
+        {
+            InitiateOffsetLeft(abs(_horizontalVelocity));
+            _throwDir = false; // left
+        }
+        else // left
+        {
+            InitiateOffsetRight(abs(_horizontalVelocity));
+            _throwDir = true; // right
+        }
+
+        start = clock(); // If hit, then reset the expired time of the weapon
+        _state = STATE_HITTED;
+    }
+
+    // Delete the weapon being thrown after its expiry time
+    if (start != 0 && (clock() - start) / CLOCKS_PER_SEC > WEAPON_EXPIRED_TIME)
+    {
+        _state = STATE_TIMESUP;
+        start = 0;
+    }
+}
+
+void Weapon::DoWeaponDropbox()
+{
+    /* REPOSITION PLAYER ABOUT GROUNDS */
+    int weaponX1 = GetCor(0);
+    int weaponY1 = GetCor(1);
+    int weaponX2 = weaponX1 + _width;
+    int weaponY2 = weaponY1 + _height;
+
+    for (auto groundPtr : _grounds)
+        if (groundPtr->IsOnGround(weaponX1, weaponY1, weaponX2, weaponY2))
+            y = groundPtr->GetCor(1) - _height;
+
+    // Gravity
+    if (!IsOnGround())
+    {
+        _verticalVelocity += INITIAL_ACCELERATION;
+        y += DoubleToInteger(_verticalVelocity);
+    }
+    else
+    {
+        _verticalVelocity = 0;
+    }
+}
+
 void Weapon::OnKeyDown(UINT nChar)
 {
     Player* _hitPlayer = HitPlayer();
@@ -198,5 +266,109 @@ bool Weapon::IsOutMapBorder()
                 &&
                 ((MAP_BORDER_Y1 <= GetCor(1)/*y1*/) && (GetCor(3)/*y2*/ <= MAP_BORDER_Y2))
             ));
+}
+
+void Weapon::DoBounceOffGround(int weaponX1, int weaponY1, int weaponX2, int weaponY2, Ground* groundPtr)
+{
+    if (groundPtr->IsOnGroundLeftEdge(weaponX1, weaponY1, weaponX2, weaponY2))
+    {
+        InitiateOffsetLeft(abs(_horizontalVelocity));
+        _throwDir = false; // left
+    }
+    else if (groundPtr->IsOnGroundRightEdge(weaponX1, weaponY1, weaponX2, weaponY2))
+    {
+        InitiateOffsetRight(abs(_horizontalVelocity));
+        _throwDir = true; // right
+    }
+    else if (groundPtr->IsOnGroundUnderside(weaponX1, weaponY1, weaponX2, weaponY2))
+    {
+        InitiateOffsetDown(abs(_verticalVelocity));
+    }
+    else if (groundPtr->IsOnGround(weaponX1, weaponY1, weaponX2, weaponY2))
+    {
+        InitiateOffsetUp(abs(_verticalVelocity));
+    }
+}
+
+void Weapon::InitiateOffsetUp(double initialOffsetVelocityMagnitude)
+{
+    _verticalVelocity = -initialOffsetVelocityMagnitude;
+    y -= DoubleToInteger(initialOffsetVelocityMagnitude); //Trick explaination: By intuition, 'y' of the player should not be
+    // modified here, because it is expected to be modified whenever 'Player::OnMove()' is called. However,
+    // since the player is currently on the ground, 'Player::OnMove()' will fix its 'y' onto the surface
+    // instead of modifying it as expectation. Thus, 'y' must be altered here to set the player jump his ass up!!
+}
+
+void Weapon::InitiateOffsetDown(double initialOffsetVelocityMagnitude)
+{
+    _verticalVelocity = initialOffsetVelocityMagnitude;
+}
+
+void Weapon::InitiateOffsetLeft(double initialOffsetVelocityMagnitude)
+{
+    _horizontalVelocity = initialOffsetVelocityMagnitude;
+    _isOffsetLeft = true;
+    _isOffsetRight = false;
+}
+
+void Weapon::InitiateOffsetRight(double initialOffsetVelocityMagnitude)
+{
+    _horizontalVelocity = initialOffsetVelocityMagnitude;
+    _isOffsetRight = true;
+    _isOffsetLeft = false;
+}
+
+void Weapon::DoHorizontalOffset()
+{
+    if (_isOffsetLeft)
+    {
+        if (_horizontalVelocity > 0)
+        {
+            _horizontalVelocity--;
+            x -= DoubleToInteger(_horizontalVelocity);
+        }
+        else
+        {
+            _isOffsetLeft = false;
+        }
+    }
+    else if (_isOffsetRight)
+    {
+        if (_horizontalVelocity > 0)
+        {
+            _horizontalVelocity--;
+            x += DoubleToInteger(_horizontalVelocity);
+        }
+        else
+        {
+            _isOffsetRight = false;
+        }
+    }
+}
+
+bool Weapon::IsBeingOffsetHorizontally()
+{
+    return (_isOffsetLeft || _isOffsetRight);
+}
+
+bool Weapon::IsOnGround()
+{
+    int weaponX1 = GetCor(0);
+    int weaponY1 = GetCor(1);
+    int weaponX2 = weaponX1 + _width;
+    int weaponY2 = weaponY1 + _height;
+
+    for (auto groundPtr : _grounds)
+    {
+        int groundX1 = groundPtr->GetCor(0);
+        int groundY1 = groundPtr->GetCor(1);
+        int groundX2 = groundPtr->GetCor(2);
+        int groundY2 = groundPtr->GetCor(3);
+
+        if (groundPtr->IsOnGround(weaponX1, weaponY1, weaponX2, weaponY2))
+            return true;
+    }
+
+    return false;
 }
 }

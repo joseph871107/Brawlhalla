@@ -16,13 +16,20 @@ namespace game_framework
 
 const vector<MapPARM> _mapP
 {
-    // Define Grounds of Map Default
-    MapPARM("Plain Field", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1, GroundPARM(100, 500, 1, 5, 1, IDB_GROUND1)),
-    // Define Grounds of Map Test
-    MapPARM("Arena", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 2, GroundPARM(560, 500, 0.174, 2, 1, IDB_GROUND2, 0, 900, 900), GroundPARM(400, 340, 0.174, 1, 2, IDB_GROUND2, 0, 900, 900)),
-    // Define 3 Grounds
-    MapPARM("Test", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3, GroundPARM(0, 300, 1, 3, 1, IDB_GROUND1), GroundPARM(500, 400, 1, 3, 1, IDB_GROUND1), GroundPARM(1000, 500, 1, 3, 1, IDB_GROUND1))
+    // Grounds of Plain Field
+    MapPARM("Plain Field", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1,
+            GroundPARM(100, 500, 1, 8, 1, IDB_GROUND1)),
+    // Grounds of Arena
+    MapPARM("Arena", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 2,
+            GroundPARM(560, 500, 0.174, 2, 1, IDB_GROUND2, 0, 900, 900), GroundPARM(400, 340, 0.174, 1, 2, IDB_GROUND2, 0, 900, 900)),
+    // Grounds of Stair
+    MapPARM("Stair", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3,
+            GroundPARM(0, 300, 1, 3, 1, IDB_GROUND1), GroundPARM(500, 400, 1, 3, 1, IDB_GROUND1), GroundPARM(1000, 500, 1, 3, 1, IDB_GROUND1)),
+	// Bounces Off Ground Map Test
+	MapPARM("Bounces Test", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3,
+			GroundPARM(0, 100, 1, 3, 5, IDB_GROUND1), GroundPARM(300, 500, 1, 10, 1, IDB_GROUND1), GroundPARM(1200, 100, 1, 3, 5, IDB_GROUND1)),
 };
+
 // Initialize static variable
 bool CGameStateInit::_fullscreenEnabled = OPEN_AS_FULLSCREEN;
 bool CGameStateInit::_closing = false;
@@ -98,25 +105,25 @@ void CGameStateInit::OnInit()
     ui_info4->SetSize((float)(ui_info1->GetWidth()) / (float)(ui_info4->GetWidth()));
     ui_info4->SetXY(refX, refY + ui_info1->GetHeight());
     welcomeWindow.AddItem(ui_info4);
-	//
+    //
     int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() + ui_info4->GetHeight()) / 4;
     welcomeWindow.Initialize(4, 1);
     welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, RGB(0, 255, 0), IDB_UI_BUTTON1_OUT, IDB_UI_BUTTON1_HOV, IDB_UI_BUTTON1_CLK, 0, 0);
     welcomeWindow.GetUI()->AddButton("settings", refX - butW, refY + butH, RGB(0, 255, 0), IDB_UI_BUTTON2_OUT, IDB_UI_BUTTON2_HOV, IDB_UI_BUTTON2_CLK, 1, 0);
-	welcomeWindow.GetUI()->AddButton("about", refX - butW, refY + butH * 2, RGB(0, 255, 0), IDB_UI_BUTTON3_OUT, IDB_UI_BUTTON3_HOV, IDB_UI_BUTTON3_CLK, 2, 0);
-	welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 3, RGB(0, 255, 0), IDB_UI_BUTTON4_OUT, IDB_UI_BUTTON4_HOV, IDB_UI_BUTTON4_CLK, 3, 0);
+    welcomeWindow.GetUI()->AddButton("about", refX - butW, refY + butH * 2, RGB(0, 255, 0), IDB_UI_BUTTON3_OUT, IDB_UI_BUTTON3_HOV, IDB_UI_BUTTON3_CLK, 2, 0);
+    welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 3, RGB(0, 255, 0), IDB_UI_BUTTON4_OUT, IDB_UI_BUTTON4_HOV, IDB_UI_BUTTON4_CLK, 3, 0);
     settingWindow.Initialize(2, 2, false, false);
-	//
+    //
     butW = 350;
-	settingWindow.SetXY((SIZE_X - butW * 2) / 2, 300);
-	settingWindow.GetUI()->AddButton("camera", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "CAMERA : TRUE");
-	settingWindow.GetUI()->AddButton("maps", butW, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 1, "MAP : " + _mapP[_mapSelected]._name);
-	settingWindow.GetUI()->AddButton("fullScreen", 0, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 0, (OPEN_AS_FULLSCREEN ? "FULLSCREEN : TRUE" : "FULLSCREEN : FALSE"));
-	settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
-	//
-	aboutWindow.Initialize(1, 1, false, false);
-	aboutWindow.SetXY(300, 300);
-	aboutWindow.GetUI()->AddButton("back", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "BACK");
+    settingWindow.SetXY((SIZE_X - butW * 2) / 2, 300);
+    settingWindow.GetUI()->AddButton("camera", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "CAMERA : TRUE");
+    settingWindow.GetUI()->AddButton("maps", butW, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 1, "MAP : " + _mapP[_mapSelected]._name);
+    settingWindow.GetUI()->AddButton("fullScreen", 0, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 0, (OPEN_AS_FULLSCREEN ? "FULLSCREEN : TRUE" : "FULLSCREEN : FALSE"));
+    settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
+    //
+    aboutWindow.Initialize(1, 1, false, false);
+    aboutWindow.SetXY(300, 300);
+    aboutWindow.GetUI()->AddButton("back", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "BACK");
     ShowInitProgress(20);
 }
 
@@ -134,8 +141,8 @@ void CGameStateInit::OnBeginState()
     else
     {
         welcomeWindow.GetUI()->Reset();
-		settingWindow.GetUI()->Reset();
-		aboutWindow.GetUI()->Reset();
+        settingWindow.GetUI()->Reset();
+        aboutWindow.GetUI()->Reset();
         CAudio::Instance()->Play(AUDIO_MENU_MUSIC, true);
     }
 }
@@ -143,36 +150,36 @@ void CGameStateInit::OnBeginState()
 void CGameStateInit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     welcomeWindow.OnKeyDown(nChar, nRepCnt, nFlags);
-	settingWindow.OnKeyDown(nChar, nRepCnt, nFlags);
-	aboutWindow.OnKeyDown(nChar, nRepCnt, nFlags);
+    settingWindow.OnKeyDown(nChar, nRepCnt, nFlags);
+    aboutWindow.OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     welcomeWindow.OnKeyUp(nChar, nRepCnt, nFlags);
-	settingWindow.OnKeyUp(nChar, nRepCnt, nFlags);
-	aboutWindow.OnKeyUp(nChar, nRepCnt, nFlags);
+    settingWindow.OnKeyUp(nChar, nRepCnt, nFlags);
+    aboutWindow.OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
     welcomeWindow.OnLButtonDown(nFlags, point);
-	settingWindow.OnLButtonDown(nFlags, point);
-	aboutWindow.OnLButtonDown(nFlags, point);
+    settingWindow.OnLButtonDown(nFlags, point);
+    aboutWindow.OnLButtonDown(nFlags, point);
 }
 
 void CGameStateInit::OnLButtonUp(UINT nFlags, CPoint point)
 {
     welcomeWindow.OnLButtonUp(nFlags, point);
-	settingWindow.OnLButtonUp(nFlags, point);
-	aboutWindow.OnLButtonUp(nFlags, point);
+    settingWindow.OnLButtonUp(nFlags, point);
+    aboutWindow.OnLButtonUp(nFlags, point);
 }
 
 void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 {
     welcomeWindow.OnMouseMove(nFlags, point);
-	settingWindow.OnMouseMove(nFlags, point);
-	aboutWindow.OnMouseMove(nFlags, point);
+    settingWindow.OnMouseMove(nFlags, point);
+    aboutWindow.OnMouseMove(nFlags, point);
 }
 
 void CGameStateInit::OnRButtonDown(UINT nFlags, CPoint point)
@@ -186,8 +193,8 @@ void CGameStateInit::OnRButtonUp(UINT nFlags, CPoint point)
 void CGameStateInit::OnShow()
 {
     welcomeWindow.OnShow();
-	settingWindow.OnShow();
-	aboutWindow.OnShow();
+    settingWindow.OnShow();
+    aboutWindow.OnShow();
 
     if (_closing)
     {
@@ -223,29 +230,30 @@ void CGameStateInit::OnMove()
     CMainFrame* pMainWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;	// Get MainFrm instance
     _fullscreenEnabled = pMainWnd->IsFullScreen();					// Fix state of _fullscreenEnabled was not changed after ctrl+F (afx btn event triggered fullscreen)
     welcomeWindow.OnMove();
-	settingWindow.OnMove();
-	aboutWindow.OnMove();
+    settingWindow.OnMove();
+    aboutWindow.OnMove();
     string chosenBut = welcomeWindow.GetUI()->ChosenButton();
 
-	if (chosenBut == "start")
-	{
-		CAudio::Instance()->Stop(AUDIO_MENU_MUSIC);
-		CAudio::Instance()->Play(AUDIO_CLICK_START);
-		GotoGameState(GAME_STATE_RUN);
-	}
-	else if (chosenBut == "settings")
-	{
-		welcomeWindow.SetButtonEnable(false);
-		settingWindow.SetButtonEnable(true);
-		settingWindow.SetVisible(true);
-	}
-	else if (chosenBut == "about") {
-		welcomeWindow.SetButtonEnable(false);
-		aboutWindow.SetButtonEnable(true);
-		aboutWindow.SetVisible(true);
-	}
-	else if (chosenBut == "exit")
-		_closing = true;
+    if (chosenBut == "start")
+    {
+        CAudio::Instance()->Stop(AUDIO_MENU_MUSIC);
+        CAudio::Instance()->Play(AUDIO_CLICK_START);
+        GotoGameState(GAME_STATE_RUN);
+    }
+    else if (chosenBut == "settings")
+    {
+        welcomeWindow.SetButtonEnable(false);
+        settingWindow.SetButtonEnable(true);
+        settingWindow.SetVisible(true);
+    }
+    else if (chosenBut == "about")
+    {
+        welcomeWindow.SetButtonEnable(false);
+        aboutWindow.SetButtonEnable(true);
+        aboutWindow.SetVisible(true);
+    }
+    else if (chosenBut == "exit")
+        _closing = true;
 
     chosenBut = settingWindow.GetUI()->ChosenButton();
 
@@ -282,15 +290,15 @@ void CGameStateInit::OnMove()
             _fullscreenEnabled = true;
     }
 
-	chosenBut = aboutWindow.GetUI()->ChosenButton();
+    chosenBut = aboutWindow.GetUI()->ChosenButton();
 
-	if (chosenBut == "back")
-	{
-		welcomeWindow.SetButtonEnable(true);
-		aboutWindow.SetButtonEnable(false);
-		aboutWindow.SetVisible(false);
-		aboutWindow.GetUI()->Reset();
-	}
+    if (chosenBut == "back")
+    {
+        welcomeWindow.SetButtonEnable(true);
+        aboutWindow.SetButtonEnable(false);
+        aboutWindow.SetVisible(false);
+        aboutWindow.GetUI()->Reset();
+    }
 
     static bool _fullscreenEnabledLast = _fullscreenEnabled;
 

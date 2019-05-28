@@ -77,9 +77,7 @@ void ExplosionEffect::OnShow()
 {
     if (_isTrigger) // Animation only display when triggered
     {
-        CPoint cam = _cameraPtr->GetXY(_x, _y);
-        _anis[_currentAni].SetSize(BITMAP_SIZE * _cameraPtr->GetSize());
-        _anis[_currentAni].SetTopLeft(_x, _y);
+        _anis[_currentAni].SetTopLeft(_x, _y); // Fixed position on the screen
         _anis[_currentAni].OnShow();
     }
 }
