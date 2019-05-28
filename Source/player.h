@@ -3,6 +3,10 @@
 #include "camera.h"
 #include "Vector2.h"
 #include "RespawnCourier.h"
+// Player states
+#include "PlayerConsciousState.h"
+#include "PlayerUnconsciousState.h"
+#include "PlayerRespawnState.h"
 
 #define _PLAYER_DEBUG false
 
@@ -55,6 +59,7 @@ class Player
         void ResetWeaponID();
         void PerformAttack(Player* targetPlayer, bool attackDirection);
         ExplosionEffect* GetExplosionEffect();
+        void DoLand();
 
         // Used by Triggered Animation classes
         void SetTriggeredAnimation(bool newIsTriggeredAni);
@@ -63,7 +68,6 @@ class Player
         const bool& GetTriggeredAnimationDirection() const;
         void SetTriggeredAnimationAnimationID(const int& newTriggeredAniAnimationID);
         void DoAttack();
-        void DoLand();
         void SetIsTriggerAttack(const bool& newIsTriggerAttack);
         void InitiateOffsetLeft(double initialOffsetVelocityMagnitude);
         void InitiateOffsetRight(double initialOffsetVelocityMagnitude);
@@ -109,10 +113,43 @@ class Player
         static const int ANI_WPN_ID_UNCONSCIOUS_FLYING_RIGHT = 25;
         static const int ANI_WPN_ID_DODGE_LEFT = 26;
         static const int ANI_WPN_ID_DODGE_RIGHT = 27;
+        // Triggered Animation Key ID
+        static const int KEY_GND_ATTACK = 112;
+        static const int KEY_GND_MOVE_RIGHT_ATTACK = 122;
+        static const int KEY_GND_MOVE_LEFT_ATTACK = 132;
+        static const int KEY_GND_LAND_DOWN_ATTACK = 142;
+        static const int KEY_DRAW_SWORD = 113;
+        static const int KEY_DODGE = 114;
+        static const int KEY_AIR_ATTACK = 212;
+        static const int KEY_AIR_MOVE_RIGHT_ATTACK = 222;
+        static const int KEY_AIR_MOVE_LEFT_ATTACK = 232;
+        static const int KEY_AIR_LAND_DOWN_ATTACK = 242;
+        // Non-triggered Animation Key ID
+        static const int KEY_GND_IDLE = 111;
+        static const int KEY_GND_MOVE_RIGHT = 121;
+        static const int KEY_GND_MOVE_LEFT = 131;
+        static const int KEY_GND_LAND_DOWN = 141;
+        static const int KEY_AIR_IDLE = 211;
+        static const int KEY_AIR_MOVE_RIGHT = 221;
+        static const int KEY_AIR_MOVE_LEFT = 231;
+        static const int KEY_AIR_LAND_DOWN = 241;
         // Others
+        static const double INITIAL_ACCELERATION;
         static const int OFFSET_INITIAL_VELOCITY = 20;
+        static const double EDGE_SLIDING_ACCELERATION;
+        static const double MOVE_ACCELERATION;
+        static const double MAX_MOVE_VELOCITY;
+        static const int MOVEMENT_UNIT = 10;
+        static const double LANDING_ACCELERATION;
+        static const double INITIAL_VELOCITY;
+        static const double STOP_ACCELERATION;
+        static const int INITIAL_MAX_CONSCIOUS_FRAME = 10;
 
     protected:
+        //-----------------FRIEND CLASSES-----------------//
+        friend class PlayerConsciousState;
+        friend class PlayerUnconsciousState;
+        friend class PlayerRespawnState;
         //-----------------FUNCTIONS DECLARATIONS-----------------//
         //Animations
         void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
@@ -122,6 +159,7 @@ class Player
         void ShowCurrentAnimation();			// Show CAnimation by currentAni
 
         //Position
+        bool IsOnEdge();
         bool IsOnLeftEdge();
         bool IsOnRightEdge();
         bool IsOutMapBorder();
@@ -129,20 +167,11 @@ class Player
         //Offsets
         void InitiateOffsetUp(double initialOffsetVelocityMagnitude);
         void InitiateOffsetDown(double initialOffsetVelocityMagnitude);
-
-        bool IsBeingOffsetHorizontally();
         void DoHorizontalOffset();
-
-        //Movements
-        void DoMoveLeft(int movementUnit);
-        void DoMoveRight(int movementUnit);
+        bool IsBeingOffsetHorizontally();
 
         //Jump
-        void DoJump();
         void ResetJumpCount();
-
-        //Wall jump
-        void InitiateWallJump();
 
         //Attack
         bool HitPlayer(Player* targetPlayer, bool attackDirection);
@@ -155,8 +184,7 @@ class Player
 
         //Unconscious state
         void InitializeUnconsciousState(bool beingAttackedDirection);
-        void ConsciouslyOnMoveGameLogic();
-        void UnconsciouslyOnMoveGameLogic();
+
         void SetConscious();
 
         //Others
@@ -164,10 +192,9 @@ class Player
         void SetRespawnMovementVector(const int& startPosX, const int& startPosY, const int& destinationPosX, const int& destinationPosY);
         void DoRespawn();
         void InitializeOnRespawn();
-        int Round(double i);
         bool StateChanged();
         bool WpnStateChanged();
-        void ModifyVerticalOffsetVariablesFunctions();
+
 
         /// Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
         //Weapon
@@ -184,64 +211,27 @@ class Player
         //Key combination
         int GetKeyCombination();
 
-        void ProcessCurrentKeyCombinationGameLogic();
-
         //Triggered animation concept
         void ResetTriggeredAnimationVariables();
         void SetTriggeredAnimationVariables(int keyCombInt);
-
-        void InitiateTriggeredAction();
-        void DoTriggeredAction();
         bool IsFinishedTriggeredAnimation();
-
-
-
-        void DoNonTriggeredAction();
-
-        //Edges
-        bool IsOnEdge();
-        bool IsFirstTimeOnEdge();
-        void InitiateOnEdge();
-        void DoOnEdge();
-        void DoLeaveEdge();
-
-        //Ground
-        void DoOnGround();
-        void DoRepositionAboutGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
         bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
-        void DoBounceOffGround(int playerX1, int playerY1, int playerX2, int playerY2, Ground* groundPtr);
-
         //
         void SetCurrentAnimation();
-        void UnconsciouslyOnMoveAnimationLogic();
         void FinishTriggeredAnimationAnimationLogic();
         void FinishTriggeredAnimationGameLogic();
-        void ConsciouslyOnMoveAnimationLogic();
         void MoveCurrentAnimation();
-        void RespawnOnMoveAnimationLogic();
         void OnMoveAnimationLogic();
-        void RespawnOnMoveGameLogic();
         void DoReturnHomeRespawnCourier();
         void OnMoveGameLogic();
-
         void SetCurrentNonTriggeredAnimationByWeapon();
         void SetCurrentTriggeredAnimationByWeapon();
         void SetCurrentAniByWeapon();
-
         void InitializeTriggeredAnimations();
-
         void SetAttacker(Player* const& newAttacker, const int& attackerAffectionFrameCountValue);
-
         bool IsAttackable(Player* potentialTargetPlayer);
-
-        void DoMoveLeftWithAcceleration();
-
-        void DoMoveRightWithAcceleration();
-
         void ResetMovementVelocity();
-
         void DoParseKeyPressed();
-
         void SetState(const int& newState);
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
@@ -379,14 +369,17 @@ class Player
         int _attackerAffectionFrameCount;
         bool _isDead;
 
-        // State
-        int _state;
-
         // Repawn
         Vector2 _vectorRespawnMovement;
         int _resDestPosX, _resDestPosY;
         double _preDistance; // used in combination with _vectorRespawnMovement
         RespawnCourier _respawnCourier;
+
+        // State
+        int _state;
+        PlayerConsciousState _consciousState;
+        PlayerUnconsciousState _unconsciousState;
+        PlayerRespawnState _respawnState;
 };
 #endif
 }

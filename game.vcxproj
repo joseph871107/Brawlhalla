@@ -255,6 +255,9 @@
     <ClCompile Include="Source\GroundLandDownAttackTriggeredAnimation.cpp" />
     <ClCompile Include="Source\GroundMoveLeftAttackTriggeredAnimation.cpp" />
     <ClCompile Include="Source\GroundMoveRightAttackTriggeredAnimation.cpp" />
+    <ClCompile Include="Source\PlayerConsciousState.cpp" />
+    <ClCompile Include="Source\PlayerRespawnState.cpp" />
+    <ClCompile Include="Source\PlayerUnconsciousState.cpp" />
     <ClCompile Include="Source\RespawnCourier.cpp" />
     <ClCompile Include="Source\TriggeredAnimation.cpp" />
     <ClCompile Include="Source\battleSystem.cpp" />
@@ -331,6 +334,9 @@
     <ClInclude Include="Source\GroundMoveLeftAttackTriggeredAnimation.h" />
     <ClInclude Include="Source\GroundMoveRightAttackTriggeredAnimation.h" />
     <ClInclude Include="Source\map.h" />
+    <ClInclude Include="Source\PlayerConsciousState.h" />
+    <ClInclude Include="Source\PlayerRespawnState.h" />
+    <ClInclude Include="Source\PlayerUnconsciousState.h" />
     <ClInclude Include="Source\RespawnCourier.h" />
     <ClInclude Include="Source\ui.h" />
     <ClInclude Include="Source\UIMessage.h" />

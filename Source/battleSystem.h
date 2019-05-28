@@ -68,7 +68,6 @@ class BattleSystem : public CGameState
         int GetCurrentRemainTime();
         void LoadSoundOnInit();
         void GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, int* posYPtr);
-        int DoubleToInteger(double mDouble);
         void ClearExplosionEffects();
         void InitializeExplosionEffectsOnBeginState();
         void InitializePlayersOnBeginState();

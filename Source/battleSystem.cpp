@@ -228,11 +228,6 @@ void BattleSystem::GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, 
         *posYPtr = DoubleToInteger(SIZE_Y - explosionEffectPtr->GetCurrentAnimationHeight());
 }
 
-int BattleSystem::DoubleToInteger(double mDouble)
-{
-    return ((int)(mDouble + 0.5));
-}
-
 void BattleSystem::TriggerExplosionEffect(Player* deadPlayer)
 {
     ExplosionEffect* explosionEffectPtr = deadPlayer->GetExplosionEffect();
