@@ -47,9 +47,6 @@
     <Filter Include="Brawlhalla\Window\UI">
       <UniqueIdentifier>{f46e6c8d-3b0d-44a2-b992-0d6f80a81215}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\Player\Weapon">
-      <UniqueIdentifier>{418f50f4-226b-4692-b861-52f39d442a2d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Map">
       <UniqueIdentifier>{91b11b4f-1bf2-4c0c-9542-ee1c534e3f7b}</UniqueIdentifier>
     </Filter>
@@ -112,6 +109,9 @@
     </Filter>
     <Filter Include="Brawlhalla\Map\Ground">
       <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Weapon">
+      <UniqueIdentifier>{418f50f4-226b-4692-b861-52f39d442a2d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +190,7 @@
       <Filter>Brawlhalla\BattleSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\weapon.cpp">
-      <Filter>Brawlhalla\Player\Weapon</Filter>
+      <Filter>Brawlhalla\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="Source\ui.cpp">
       <Filter>Brawlhalla\Window\UI</Filter>
@@ -309,7 +309,7 @@
       <Filter>Brawlhalla\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\weapon.h">
-      <Filter>Brawlhalla\Player\Weapon</Filter>
+      <Filter>Brawlhalla\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Source\ui.h">
       <Filter>Brawlhalla\Window\UI</Filter>

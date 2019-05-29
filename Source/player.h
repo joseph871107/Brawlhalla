@@ -81,6 +81,9 @@ class Player
         void SetX(const int& newX);
         void SetY(const int& newY);
 
+		//
+		const double& GetVerticalVelocity() const;
+
         //-----------------STATIC VARIABLES DECLARATIONS-----------------//
         // Animations ID of 'ani'
 

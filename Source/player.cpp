@@ -30,7 +30,7 @@ const double Player::EDGE_SLIDING_ACCELERATION = 0.1;
 const double Player::MOVE_ACCELERATION = 0.5;
 const double Player::MAX_MOVE_VELOCITY = 10;
 const double Player::LANDING_ACCELERATION = 5;
-const double Player::INITIAL_VELOCITY = 18;
+const double Player::INITIAL_VELOCITY = 20;
 const double Player::STOP_ACCELERATION = 1;
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MAX_JUMP_COUNT = 2;
@@ -38,7 +38,7 @@ const int GND_ATTACK_MOVEMENT_UNIT = 12;
 const double COLLISION_ERRORS = 1.0;
 const int MAX_LIFE = 3;
 const int INITIAL_TAKEN_DAMAGE = 10;
-const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 10;
+const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 3;
 const int MAX_ATTACK_AFFECTION_FRAMES = 150; // 5 secs
 const int RESPAWN_DISTANCE_ABOVE_GROUND = 100;
 const int RESPAWN_MOVEMENT_OFFSET_MAGNITUDE = 10;
@@ -1396,6 +1396,10 @@ void Player::DoHorizontalOffset()
 void Player::DoLand()
 {
     _verticalAcceleration = LANDING_ACCELERATION;
+}
+
+const double& Player::GetVerticalVelocity() const {
+	return(_verticalVelocity);
 }
 
 }

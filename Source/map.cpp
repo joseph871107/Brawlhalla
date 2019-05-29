@@ -27,8 +27,7 @@ Map::Map(vector<Player*>* players)
 }
 Map::~Map()
 {
-    for (auto element : _weapons)
-        delete element;
+	ClearWeapons();
 
     for (auto element : _grounds)
         delete element;
@@ -41,10 +40,15 @@ void Map::OnBeginState()
     if (camera != nullptr)
         camera->Reset();
 
-    for (auto element : _weapons)
-        delete element;
+	ClearWeapons();
 
-    _weapons.clear();
+}
+
+void Map::ClearWeapons() {
+	for (auto element : _weapons)
+		delete element;
+
+	_weapons.clear();
 }
 
 void Map::OnInit()
@@ -54,7 +58,7 @@ void Map::OnInit()
 
 void Map::OnKeyDown(UINT nChar)
 {
-    // If player takes the weapon //
+    // If player takes the weapon
     vector<Weapon*>::iterator erase = _weapons.end();
 
     for (auto i = _weapons.begin(); i != _weapons.end(); i++)
@@ -67,7 +71,7 @@ void Map::OnKeyDown(UINT nChar)
 
     if (erase != _weapons.end())
     {
-        delete (*erase); //Resolve memory leak of weapons
+        delete (*erase); // Resolve memory leak of weapons
         _weapons.erase(erase);
     }
 }
