@@ -264,12 +264,15 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 {
     map->OnMove();
 
-    for (auto player : _players)
+    for (auto playerPtr : _players)
     {
-        if (player->IsPlayer())
-            player->OnMove();
-        else if (!enemyPause)
-            player->OnMove();
+        if (!playerPtr->IsOutOfLife())
+        {
+            if (playerPtr->IsPlayer())
+                playerPtr->OnMove();
+            else if (!enemyPause)
+                playerPtr->OnMove();
+        }
     }
 
     settingWindow.OnMove();
@@ -480,7 +483,7 @@ void BattleSystem::ClearUIMessages()
 void BattleSystem::OnShow()
 {
     map->OnShow();
-    // Showing the remain time
+    /* DISPLAY MATCH TIME */
     // Display minute
     int now_time = GetCurrentRemainTime();
     integer.SetInteger(now_time / 60);
@@ -495,7 +498,9 @@ void BattleSystem::OnShow()
     for (auto i = _players.begin(); i != _players.end(); i++)
     {
         // Show player
-        (*i)->OnShow();
+        if (!(*i)->IsOutOfLife())
+            (*i)->OnShow();
+
         // Show player's life
         ShowPlayerLife((**i), 1150, 100 * (i - _players.begin()));
     }
@@ -606,43 +611,61 @@ void BattleSystem::AddMap(shared_ptr<Map> m)
     map = m;
 }
 
+int BattleSystem::GetNumberOfRemainingPlayers()
+{
+    int remainingPlayers = 0;
+
+    for (auto playerPtr : _players)
+        if (!playerPtr->IsOutOfLife())
+            remainingPlayers++;
+
+    return (remainingPlayers);
+}
+
+bool BattleSystem::IsFinishedPlayingAllEffects()
+{
+    for (auto explosionEffectPtr : _explosionEffects)
+        if (explosionEffectPtr->GetIsTrigger())
+            return (false);
+
+    return (true);
+}
+
 bool BattleSystem::IsGameOver()
 {
-    bool isFinishedPlayingAllEffects = true;
-
-    for (auto explosionEffectPtr : _explosionEffects)
-    {
-        if (explosionEffectPtr->GetIsTrigger())
-        {
-            isFinishedPlayingAllEffects = false;
-            break;
-        }
-    }
-
-    for (auto i : _players)
-        if (isFinishedPlayingAllEffects && i->IsOutOfLife() && !i->IsPlayer())
-            return true;
-
-    return (GetCurrentRemainTime() == 0); // Draw
+    int remainingPlayers = GetNumberOfRemainingPlayers();
+    return (
+               (IsFinishedPlayingAllEffects() && remainingPlayers == 1) // There is a winner
+               ||
+               remainingPlayers == 0 // Draw
+               ||
+               GetCurrentRemainTime() == 0 // Out of time - Draw
+           );
 }
 
 string BattleSystem::GetGameResult()
 {
-    Player* max = *(_players.begin());
-    bool draw = true;
+    int remainingPlayers = GetNumberOfRemainingPlayers();
 
-    for (auto i : _players)
-        if (i->GetLife() > max->GetLife())
-            max = i;
+    if (remainingPlayers == 1) // There is a winner
+    {
+        string winnerName;
 
-    for (auto i : _players)
-        if (i->GetLife() < max->GetLife())
-            draw = false;
+        for (auto playerPtr : _players)
+        {
+            if (!playerPtr->IsOutOfLife())
+            {
+                winnerName = playerPtr->GetName();
+                break;
+            }
+        }
 
-    if (draw)
-        return ("Draw.");
+        return (winnerName + " win.");
+    }
     else
-        return (max->GetName() + " win.");
+    {
+        return ("Draw.");
+    }
 }
 
 void BattleSystem::ClearPlayers()

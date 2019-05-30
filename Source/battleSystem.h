@@ -64,6 +64,8 @@ class BattleSystem : public CGameState
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
+		int GetNumberOfRemainingPlayers();
+		bool IsFinishedPlayingAllEffects();
         void ClearPlayers();
         void ShowPlayerLife(const Player& player, int posXValue, int posYValue);
         int GetCurrentRemainTime();

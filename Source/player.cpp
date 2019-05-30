@@ -126,7 +126,7 @@ void Player::Initialize(BattleSystem* battleSystemPtrValue, vector<Ground*> grou
     //
     _hitTargetPlayers = vector<Player*>();
     //
-	_battleSystemPtr = battleSystemPtrValue;
+    _battleSystemPtr = battleSystemPtrValue;
     //
     _explosionEffectPtr = explosionEffectPtrValue;
     //
@@ -272,7 +272,10 @@ void Player::OnMoveGameLogic()
     */
 
     //-----------------PRIOR COMMON SECTION-----------------//
-    /* DEAD & RESPAWN */
+    /*	~	DEAD & RESPAWN
+    	~	Remark: When the player is out of life, the player's 'OnMove()' and 'OnShow()' will
+    	~	no longer being called by the 'BattleSystem'
+    */
     if (!_isDead && IsOutMapBorder())
         DoDead();
 
@@ -280,13 +283,8 @@ void Player::OnMoveGameLogic()
     {
         if (_explosionEffectPtr->GetIsTrigger()) // If the dead explosion effect has not been finished, then halt all the movement of the player
             return;
-        else // If the dead explosion effect is finished, then mark that the player is dead
-        {
-            _isDead = false;
-
-            if (!IsOutOfLife())// If the player is respawnable, then respawn him
-                DoRespawn();
-        }
+        else // If the dead explosion effect is finished, then respawn the player
+            DoRespawn();
     }
 
     //-----------------STATE SECTION-----------------//
@@ -400,10 +398,9 @@ void Player::OnKeyDown(const UINT& nChar)
     else if (nChar == _keys[4]) // Attack
     {
         _isTriggerAttack = true;
-
-  //      if (_flyingWeapon != nullptr)
-  //          _flyingWeapon->OnKeyDown(nChar);
-  //      DeleteFlyingWeapon();
+        //      if (_flyingWeapon != nullptr)
+        //          _flyingWeapon->OnKeyDown(nChar);
+        //      DeleteFlyingWeapon();
     }
     else if (nChar == _keys[5]) //Dodge
     {
@@ -412,7 +409,7 @@ void Player::OnKeyDown(const UINT& nChar)
     else if (nChar == _keys[6])	//Throw
     {
         if (GetHoldWeapon())
-			DoThrowWeapon();
+            DoThrowWeapon();
     }
     else
     {
@@ -420,11 +417,12 @@ void Player::OnKeyDown(const UINT& nChar)
     }
 }
 
-void Player::DoThrowWeapon() {
-	_battleSystemPtr->GetReferenceMap()->PlayerThrowWeapon(this);
-	SetHoldWeapon(false);
-	/// Comment for future devs: ¼Ú¶§ wrote the line below, but I don't understand why reseting the weapon ID is required
-	ResetWeaponID();
+void Player::DoThrowWeapon()
+{
+    _battleSystemPtr->GetReferenceMap()->PlayerThrowWeapon(this);
+    SetHoldWeapon(false);
+    /// Comment for future devs: ¼Ú¶§ wrote the line below, but I don't understand why reseting the weapon ID is required
+    ResetWeaponID();
 }
 
 
@@ -941,21 +939,21 @@ void Player::PlayAudioByState()
 
 void Player::DoDead()
 {
+    // Set the player to be dead
+    _isDead = true;
     // Reset weapon
     SetHoldWeapon(false);
     ResetWeaponID(); // reset to the default weapon - punch
-    // Set the player to be dead
-    _isDead = true;
     // Decrement the player's life
     _life--;
     // Activate dead effect
-	_battleSystemPtr->TriggerExplosionEffect(this);
+    _battleSystemPtr->TriggerExplosionEffect(this);
 
     // Display the attacker
     if (_attacker == nullptr)
-		_battleSystemPtr->TriggerDisplayMessage(_name + " suicided!", 350, 200, 150); // 5 secs
+        _battleSystemPtr->TriggerDisplayMessage(_name + " suicided!", 350, 200, 150); // 5 secs
     else
-		_battleSystemPtr->TriggerDisplayMessage(_attacker->_name + " killed " + _name + "!", 300, 200, 150); // 5 secs
+        _battleSystemPtr->TriggerDisplayMessage(_attacker->_name + " killed " + _name + "!", 300, 200, 150); // 5 secs
 }
 
 void Player::SetRespawnMovementVector(const int& startPosX, const int& startPosY, const int& destinationPosX, const int& destinationPosY)
@@ -969,6 +967,8 @@ void Player::SetRespawnMovementVector(const int& startPosX, const int& startPosY
 
 void Player::DoRespawn()
 {
+	// Set the player to be alive
+	_isDead = false;
     // Set the state of the player to be 'RESPAWN_STATE'
     SetState(RESPAWN_STATE);
     // Set prev length to max integer value
