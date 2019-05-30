@@ -975,9 +975,9 @@ void Player::DoDead()
 
     // Display the attacker
     if (_attacker == nullptr)
-        _battleSystemPtr->TriggerDisplayMessage(_name + " suicided!", 350, 200, 150); // 5 secs
+        _battleSystemPtr->TriggerDisplayMessage(_name + " suicided!", 350, 200, 80); // 2.5 secs
     else
-        _battleSystemPtr->TriggerDisplayMessage(_attacker->_name + " killed " + _name + "!", 300, 200, 150); // 5 secs
+        _battleSystemPtr->TriggerDisplayMessage(_attacker->_name + " killed " + _name + "!", 300, 200, 80); // 2.5 secs
 }
 
 void Player::SetRespawnMovementVector(const int& startPosX, const int& startPosY, const int& destinationPosX, const int& destinationPosY)
