@@ -8,6 +8,7 @@
 #include "brawlhalla.h"
 #include "battleSystem.h"
 #include "enemy.h"
+#include "boss.h"
 #include "map.h"
 #include "UIMessage.h"
 
@@ -89,29 +90,46 @@ void BattleSystem::InitializeExplosionEffectsOnBeginState()
     }
 }
 
-void BattleSystem::InitializePlayersOnBeginState()
+void BattleSystem::InitializePlayersOnBeginState(int mode, int enemy, int diff)
 {
     Player* player;
-    // Player
-    player = new Player();
-    _players.push_back(player);
-    // Enemy
-    int enemy = 2;
+	vector<vector<long>> playerKeys ={{KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M}};
+	// Player
+	player = new Player();
+	_players.push_back(player);
+	if (mode == GAME_MODE_PVP) {
+		// Player2
+		player = new Player();
+		_players.push_back(player);
 
-    for (int i = 0; i < enemy; i++)
-    {
-        player = new Enemy();
-        _players.push_back(player);
-    }
+		// Initialize keys for player2
+		playerKeys.push_back({ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X });
+	}
+	else if (mode == GAME_MODE_PVC) {
+		// Enemy
+		for (int i = 0; i < enemy; i++)
+		{
+			player = new Enemy(diff);
+			_players.push_back(player);
+		}
+	}
+	else if (mode == GAME_MODE_BOSS) {
+		// Enemy
+		for (int i = 0; i < enemy; i++)
+		{
+			player = new Enemy(diff);
+			_players.push_back(player);
+		}
+		// Boss
+		player = new Boss(diff);
+		player->SetRespawn(false);
+		for (auto i : _players)
+			i->SetAttackList(vector<Player*>{player});
+		_players.push_back(player);
+	}
 
-    // Initialize keys for players
-    vector<vector<long>> playerKeys =
-    {
-        {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M},
-    };
-
-    for (int i = 0; i < enemy; i++)
-        playerKeys.push_back({KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X });
+	for (int i = 0; i < enemy + (mode == GAME_MODE_BOSS ? 1 : 0); i++)
+		playerKeys.push_back({ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X });
     // Initialize explosion effects for every players
     InitializeExplosionEffectsOnBeginState();
     // Initialize other attributes of the players
@@ -125,24 +143,26 @@ void BattleSystem::InitializePlayersOnBeginState()
         (*i)->weapons = map->GetWeapons();
         //
         char str[80];
-
-        if ((*i)->IsPlayer())
-        {
-            sprintf(str, "Player %d", pNum++);
-            (*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
-        }
-        else
-        {
-            sprintf(str, "Enemy %d", eNum++);
-            (*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
-        }
+		switch ((*i)->GetPlayerMode()) {
+		case PLAYER_MODE_PLAYER:
+			sprintf(str, "Player %d", pNum++);
+			(*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+			break;
+		case PLAYER_MODE_ENEMY:
+			sprintf(str, "AI %d", eNum++);
+			(*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+			break;
+		case PLAYER_MODE_BOSS:
+			(*i)->Initialize(this, *_grounds, &_players, "BOSS", playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+			break;
+		}
     }
 
     //
     map->AddPlayers(&_players);
 }
 
-void BattleSystem::OnBeginState()
+void BattleSystem::OnBeginState(int mode, int enemy, int diff)
 {
     /*	~ Remark:
     	~ This function is called whenever the game state turns into 'CGameStateRun';
@@ -169,7 +189,7 @@ void BattleSystem::OnBeginState()
     background = &map->background;
     background->AddCamera(&camera);
     // Player
-    InitializePlayersOnBeginState();
+    InitializePlayersOnBeginState(mode, enemy, diff);
     // Setting Window
     settingWindow.GetUI()->Reset();
     // UI Messages
@@ -266,10 +286,18 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 
     for (auto player : _players)
     {
-        if (player->IsPlayer())
-            player->OnMove();
-        else if (!enemyPause)
-            player->OnMove();
+		switch (player->GetPlayerMode()) {
+		case PLAYER_MODE_PLAYER:
+			player->OnMove();
+			break;
+		case PLAYER_MODE_ENEMY:
+			if (!enemyPause)
+				player->OnMove();
+			break;
+		case PLAYER_MODE_BOSS:
+			player->OnMove();
+			break;
+		}
     }
 
     settingWindow.OnMove();
@@ -385,7 +413,7 @@ void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
     for (auto i : _players)
     {
-        if (i->IsPlayer())
+        if (i->GetPlayerMode() == PLAYER_MODE_PLAYER)
             i->OnKeyDown(nChar);
     }
 
@@ -402,7 +430,7 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
     for (auto i : _players)
     {
-        if (i->IsPlayer())
+        if (i->GetPlayerMode() == PLAYER_MODE_PLAYER)
             i->OnKeyUp(nChar);
     }
 }
@@ -620,7 +648,7 @@ bool BattleSystem::IsGameOver()
     }
 
     for (auto i : _players)
-        if (isFinishedPlayingAllEffects && i->IsOutOfLife() && !i->IsPlayer())
+        if (isFinishedPlayingAllEffects && i->IsOutOfLife() && i->GetPlayerMode() != PLAYER_MODE_PLAYER)
             return true;
 
     return (GetCurrentRemainTime() == 0); // Draw

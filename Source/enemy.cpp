@@ -13,62 +13,68 @@ const vector<long> keys{ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X };
 
 Enemy::Enemy()
 {
-    _isPlayer = false;
+	_identifier = PLAYER_MODE_ENEMY;
     _difficulty = 0;
 }
 
 Enemy::Enemy(int diff)
 {
-    _isPlayer = false;
-    _difficulty = diff;
+	_identifier = PLAYER_MODE_ENEMY;
+	_difficulty = diff;
 }
 
 void Enemy::DoAttack(vector<Player*>::iterator target)
 {
-	if (target == _playersPtr->end())
+	static int counter = 0;
+	if (target == attackList.end())
 		return;
-    if (IsCollide(GetCor(0), GetCor(1), GetCor(2), GetCor(3), (*target)->GetCor(0), (*target)->GetCor(1), (*target)->GetCor(2), (*target)->GetCor(3)))
-        OnKeyDown(keys[4]);
-    else
-        OnKeyUp(keys[4]);
+	if (IsCollide(GetCor(0), GetCor(1), GetCor(2), GetCor(3), (*target)->GetCor(0), (*target)->GetCor(1), (*target)->GetCor(2), (*target)->GetCor(3)))
+		counter++;
+	if (counter > (5 - _difficulty) * 5) {
+		OnKeyDown(keys[4]);
+		counter = 0;
+	}
+	else
+		OnKeyUp(keys[4]);
 }
 bool Enemy::ChaseTarget(CPoint point, int width, int height)
 {
+	Ground *min = *_grounds.begin(), *max = min;
+	for (auto i : _grounds) {
+		if (min->GetCor(0) > i->GetCor(0))
+			min = i;
+		if (max->GetCor(0) < i->GetCor(0))
+			max = i;
+	}
+	//
 	bool tri = true;
-	if (GetCor(0) > point.x + width) {
+	int offset = (int)(BITMAP_SIZE * _difficulty * 10);
+	if (GetCor(0) > point.x + width && min->GetCor(0) + 60 < GetCor(0)) {	// Go left
 		OnKeyDown(keys[3]);
 		tri = false;
 	}
     else
         OnKeyUp(keys[3]);
-
-    if (GetCor(2) < point.x) {
+	//
+    if (GetCor(2) < point.x && max->GetCor(2) - 60 > GetCor(2)) {	// Go right
         OnKeyDown(keys[1]);
-	tri = false;
+		tri = false;
 	}
     else
         OnKeyUp(keys[1]);
-
-    if (GetCor(1) - point.y > 10 && abs(GetCor(0) - point.x) < GetWidth() * 1.5) {
+	//
+    if (GetCor(1) - point.y > 10 && abs(GetCor(0) - point.x) < GetWidth() * 1.5 || 	// Do jump
+		(GetCor(1) - point.y > 10 && abs(GetCor(0) - point.x) < GetWidth() * 1.5) ||
+		IsOnEdge() || 
+		(IsOnGround() && (OnGround()->GetCor(2) - 10 <= GetCor(2) || OnGround()->GetCor(0) +10 >= GetCor(0))) || 
+		_isTriggerJump )
+	{
         OnKeyDown(keys[0]);
-	tri = false;
+		tri = false;
 	}
     else
         OnKeyUp(keys[0]);
-
-    if (GetCor(2) < point.x){
-        OnKeyDown(keys[1]);
-	tri = false;
-	}
-    else
-        OnKeyUp(keys[1]);
-
-    if (GetCor(1) - point.y > 10 && abs(GetCor(0) - point.x) < GetWidth() * 1.5) {	// Y of Enemy were lower than Y of target and
-        OnKeyDown(keys[0]);
-	tri = false;
-	}
-    else
-        OnKeyUp(keys[0]);
+	//
 	return tri;
 }
 
@@ -76,7 +82,7 @@ void Enemy::OnMove()
 {
     static int counter = 0, ptr = 0;
 	CPoint targetPos;
-	int width, height;
+	attackList = (_attackList.size() == 0 ? *_playersPtr : _attackList);
 	if (!_isHoldingWeapon && weapons->size()>0) {
 		vector<Weapon*>::iterator tar = WeaponNearby();
 		if (ChaseTarget(CPoint((*tar)->GetCor(0), (*tar)->GetCor(3)), (*tar)->GetWidth(), (*tar)->GetHeight())) {
@@ -86,17 +92,35 @@ void Enemy::OnMove()
 		}
 	}
 	else {
-		vector<Player*>::iterator target = PlayerNearby();
-		targetPos = CPoint((*target)->GetCor(0), (*target)->GetCor(1));
-		width = (*target)->GetWidth();
-		height = (*target)->GetHeight();
-		ChaseTarget(targetPos, width, height);
-		DoAttack(target);
+		vector<Player*>::iterator targ = PlayerNearby(&attackList);
+		if(targ != attackList.end())
+			ChaseTarget(CPoint((*targ)->GetCor(0), (*targ)->GetCor(3)), (*targ)->GetWidth(), (*targ)->GetHeight());
+		DoAttack(targ);
 	}
     DoParseKeyPressed();
     _currentKeyID = GetKeyCombination();
     OnMoveAnimationLogic();
     OnMoveGameLogic();
+}
+void Enemy::OnShow()
+{
+	if (_flyingWeapon != nullptr)
+		_flyingWeapon->OnShow();
+
+	// Show respawn courier
+	_respawnCourier.OnShow();
+	// Show current animation
+	ShowCurrentAnimation();
+	// Play current audio
+	PlayAudioByState();
+	// Set the camera for showing name tag
+	CPoint cam = camera->GetXY(DoubleToInteger(_x - 4 * BITMAP_SIZE), DoubleToInteger(_y + _collision_box.Height() * BITMAP_SIZE));
+	// Show the name tag
+	CString playerName;
+	playerName.SetString(_name);
+	playerName.SetSize(camera->GetSize() / 2);
+	playerName.SetTopLeft(cam.x - 60, cam.y);
+	playerName.ShowBitmap();
 }
 void Enemy::SetAnimation()
 {
@@ -207,12 +231,12 @@ vector<Weapon*>::iterator Enemy::WeaponNearby()
 	}
 	return tar;
 }
-vector<Player*>::iterator Enemy::PlayerNearby()
+vector<Player*>::iterator Enemy::PlayerNearby(vector<Player*> *playerList)
 {
-	vector<Player*>::iterator tar = _playersPtr->end();
-	if (_playersPtr->size() > 0)
-		tar = _playersPtr->begin();
-	for (auto player = _playersPtr->begin(); player != _playersPtr->end(); player++) {
+	vector<Player*>::iterator tar = playerList->end();
+	if (playerList->size() > 0)
+		tar = playerList->begin();
+	for (auto player = playerList->begin(); player != playerList->end(); player++) {
 		Vector2 diffO((*tar)->GetCor(0) - GetCor(0), (*tar)->GetCor(1) - GetCor(1));
 		Vector2 diffT((*player)->GetCor(0) - GetCor(0), (*player)->GetCor(1) - GetCor(1));
 		if (diffT.GetLength() < diffO.GetLength() && (*player)->GetName() != this->GetName())

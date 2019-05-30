@@ -13,21 +13,27 @@ namespace game_framework
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲開頭畫面物件
 /////////////////////////////////////////////////////////////////////////////
-
+int _gameMode = 1, _aiNum = 1, _aiDiff = 2;
 const vector<MapPARM> _mapP
 {
     // Grounds of Plain Field
     MapPARM("Plain Field", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1,
             GroundPARM(100, 500, 1, 8, 1, IDB_GROUND1)),
     // Grounds of Arena
-    MapPARM("Arena", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 2,
-            GroundPARM(560, 500, 0.174, 2, 1, IDB_GROUND2, 0, 900, 900), GroundPARM(400, 340, 0.174, 1, 2, IDB_GROUND2, 0, 900, 900)),
+    MapPARM("Arena", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 3,
+            GroundPARM(400, 400, 0.087, 10, 1, IDB_GROUND2, 0, 900, 900),
+			GroundPARM(0, 300, 0.087, 4, 1, IDB_GROUND2, 0, 900, 900),
+			GroundPARM(1300, 300, 0.087, 4, 1, IDB_GROUND2, 0, 900, 900)),
     // Grounds of Stair
-    MapPARM("Stair", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3,
-            GroundPARM(0, 300, 1, 3, 1, IDB_GROUND1), GroundPARM(500, 400, 1, 3, 1, IDB_GROUND1), GroundPARM(1000, 500, 1, 3, 1, IDB_GROUND1)),
+    MapPARM("Stair",BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3,
+            GroundPARM(0, 300, 1, 3, 1, IDB_GROUND1),
+			GroundPARM(500, 400, 1, 3, 1, IDB_GROUND1),
+			GroundPARM(1000, 500, 1, 3, 1, IDB_GROUND1)),
 	// Bounces Off Ground Map Test
 	MapPARM("Bounces Test", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3,
-			GroundPARM(0, 100, 1, 3, 5, IDB_GROUND1), GroundPARM(300, 500, 1, 10, 1, IDB_GROUND1), GroundPARM(1200, 100, 1, 3, 5, IDB_GROUND1)),
+			GroundPARM(0, 100, 1, 3, 5, IDB_GROUND1),
+			GroundPARM(300, 500, 1, 10, 1, IDB_GROUND1),
+			GroundPARM(1200, 100, 1, 3, 5, IDB_GROUND1)),
 };
 
 // Initialize static variable
@@ -38,7 +44,7 @@ int CGameStateInit::_mapSelected = 0;
 vector<shared_ptr<Map>> CGameStateInit::maps;
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g), welcomeWindow(Window(g)), settingWindow(Window(g)), aboutWindow(Window(g))
+    : CGameState(g), startWindow(Window(g)), welcomeWindow(Window(g)), settingWindow(Window(g)), aboutWindow(Window(g))
 {
     /*camera.SetSize(0.5);
     welcomeWindow.AddCamera(&camera);
@@ -74,8 +80,8 @@ void CGameStateInit::OnInit()
 
     for (auto map : maps)
         map->OnInit();
-
     ShowInitProgress(15);
+	//
     Object* uiPtr, *ui_info1, *ui_info2, *ui_info3, *ui_info4;
     uiPtr = new Object();
     uiPtr->LoadBitmap(IDB_UI_BACKGROUND);
@@ -106,24 +112,37 @@ void CGameStateInit::OnInit()
     ui_info4->SetXY(refX, refY + ui_info1->GetHeight());
     welcomeWindow.AddItem(ui_info4);
     //
-    int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() + ui_info4->GetHeight()) / 4;
+	int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() + ui_info4->GetHeight()) / 4;
     welcomeWindow.Initialize(4, 1);
     welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, RGB(0, 255, 0), IDB_UI_BUTTON1_OUT, IDB_UI_BUTTON1_HOV, IDB_UI_BUTTON1_CLK, 0, 0);
     welcomeWindow.GetUI()->AddButton("settings", refX - butW, refY + butH, RGB(0, 255, 0), IDB_UI_BUTTON2_OUT, IDB_UI_BUTTON2_HOV, IDB_UI_BUTTON2_CLK, 1, 0);
     welcomeWindow.GetUI()->AddButton("about", refX - butW, refY + butH * 2, RGB(0, 255, 0), IDB_UI_BUTTON3_OUT, IDB_UI_BUTTON3_HOV, IDB_UI_BUTTON3_CLK, 2, 0);
     welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 3, RGB(0, 255, 0), IDB_UI_BUTTON4_OUT, IDB_UI_BUTTON4_HOV, IDB_UI_BUTTON4_CLK, 3, 0);
-    settingWindow.Initialize(2, 2, false, false);
+	windows.push_back(&welcomeWindow);
+	//
+	butW = 350;
+	startWindow.Initialize(2, 3, false, false);
+	startWindow.SetXY((SIZE_X - butW * 3) / 2, 300);
+	startWindow.GetUI()->AddButton("gameMode", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "Game Mode : PvC");
+	startWindow.GetUI()->AddButton("aiNum", butW, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 1, "How many AI : 1");
+	startWindow.GetUI()->AddButton("aiDiff", butW * 2, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 2, "AI Difficulty : Normal");
+	startWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
+	startWindow.GetUI()->AddButton("start", butW * 2, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 2, "START");
+	windows.push_back(&startWindow);
     //
     butW = 350;
+	settingWindow.Initialize(2, 2, false, false);
     settingWindow.SetXY((SIZE_X - butW * 2) / 2, 300);
     settingWindow.GetUI()->AddButton("camera", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "CAMERA : TRUE");
     settingWindow.GetUI()->AddButton("maps", butW, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 1, "MAP : " + _mapP[_mapSelected]._name);
     settingWindow.GetUI()->AddButton("fullScreen", 0, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 0, (OPEN_AS_FULLSCREEN ? "FULLSCREEN : TRUE" : "FULLSCREEN : FALSE"));
-    settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
+	settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
+	windows.push_back(&settingWindow);
     //
     aboutWindow.Initialize(1, 1, false, false);
     aboutWindow.SetXY(300, 300);
     aboutWindow.GetUI()->AddButton("back", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "BACK");
+	windows.push_back(&aboutWindow);
     ShowInitProgress(20);
 }
 
@@ -140,46 +159,40 @@ void CGameStateInit::OnBeginState()
     }
     else
     {
-        welcomeWindow.GetUI()->Reset();
-        settingWindow.GetUI()->Reset();
-        aboutWindow.GetUI()->Reset();
+		for (auto window : windows)
+			window->GetUI()->Reset();
         CAudio::Instance()->Play(AUDIO_MENU_MUSIC, true);
     }
 }
 
 void CGameStateInit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    welcomeWindow.OnKeyDown(nChar, nRepCnt, nFlags);
-    settingWindow.OnKeyDown(nChar, nRepCnt, nFlags);
-    aboutWindow.OnKeyDown(nChar, nRepCnt, nFlags);
+	for (auto window : windows)
+		window->OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    welcomeWindow.OnKeyUp(nChar, nRepCnt, nFlags);
-    settingWindow.OnKeyUp(nChar, nRepCnt, nFlags);
-    aboutWindow.OnKeyUp(nChar, nRepCnt, nFlags);
+	for (auto window : windows)
+		window->OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-    welcomeWindow.OnLButtonDown(nFlags, point);
-    settingWindow.OnLButtonDown(nFlags, point);
-    aboutWindow.OnLButtonDown(nFlags, point);
+	for (auto window : windows)
+		window->OnLButtonDown(nFlags, point);
 }
 
 void CGameStateInit::OnLButtonUp(UINT nFlags, CPoint point)
 {
-    welcomeWindow.OnLButtonUp(nFlags, point);
-    settingWindow.OnLButtonUp(nFlags, point);
-    aboutWindow.OnLButtonUp(nFlags, point);
+	for (auto window : windows)
+		window->OnLButtonUp(nFlags, point);
 }
 
 void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 {
-    welcomeWindow.OnMouseMove(nFlags, point);
-    settingWindow.OnMouseMove(nFlags, point);
-    aboutWindow.OnMouseMove(nFlags, point);
+	for (auto window : windows)
+		window->OnMouseMove(nFlags, point);
 }
 
 void CGameStateInit::OnRButtonDown(UINT nFlags, CPoint point)
@@ -192,9 +205,8 @@ void CGameStateInit::OnRButtonUp(UINT nFlags, CPoint point)
 
 void CGameStateInit::OnShow()
 {
-    welcomeWindow.OnShow();
-    settingWindow.OnShow();
-    aboutWindow.OnShow();
+	for (auto window : windows)
+		window->OnShow();
 
     if (_closing)
     {
@@ -225,35 +237,93 @@ shared_ptr<Map> CGameStateInit::GetMap()
     return maps[CGameStateInit::_mapSelected];
 }
 
+string CGameStateInit::GetGameMode(int mode)
+{
+	vector<string> modeList = {
+		"PvP",
+		"PvC",
+		"Boss"
+	};
+	return modeList[mode];
+}
+
+string CGameStateInit::GetAiDifficulty(int diff)
+{
+	vector<string> diffList = {
+		"Super Easy",
+		"Easy",
+		"Normal",
+		"Hard",
+		"Super Hard"
+	};
+	return diffList[diff];
+}
+
 void CGameStateInit::OnMove()
 {
     CMainFrame* pMainWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;	// Get MainFrm instance
     _fullscreenEnabled = pMainWnd->IsFullScreen();					// Fix state of _fullscreenEnabled was not changed after ctrl+F (afx btn event triggered fullscreen)
-    welcomeWindow.OnMove();
-    settingWindow.OnMove();
-    aboutWindow.OnMove();
-    string chosenBut = welcomeWindow.GetUI()->ChosenButton();
 
-    if (chosenBut == "start")
-    {
-        CAudio::Instance()->Stop(AUDIO_MENU_MUSIC);
-        CAudio::Instance()->Play(AUDIO_CLICK_START);
-        GotoGameState(GAME_STATE_RUN);
-    }
-    else if (chosenBut == "settings")
-    {
-        welcomeWindow.SetButtonEnable(false);
-        settingWindow.SetButtonEnable(true);
-        settingWindow.SetVisible(true);
-    }
-    else if (chosenBut == "about")
-    {
-        welcomeWindow.SetButtonEnable(false);
-        aboutWindow.SetButtonEnable(true);
-        aboutWindow.SetVisible(true);
-    }
-    else if (chosenBut == "exit")
-        _closing = true;
+	for (auto window : windows)
+		window->OnMove();
+
+	string chosenBut = welcomeWindow.GetUI()->ChosenButton();
+
+	if (chosenBut == "start")
+	{
+		welcomeWindow.SetButtonEnable(false);
+		startWindow.SetButtonEnable(true);
+		startWindow.SetVisible(true);
+	}
+	else if (chosenBut == "settings")
+	{
+		welcomeWindow.SetButtonEnable(false);
+		settingWindow.SetButtonEnable(true);
+		settingWindow.SetVisible(true);
+	}
+	else if (chosenBut == "about")
+	{
+		welcomeWindow.SetButtonEnable(false);
+		aboutWindow.SetButtonEnable(true);
+		aboutWindow.SetVisible(true);
+	}
+	else if (chosenBut == "exit")
+		_closing = true;
+
+	chosenBut = startWindow.GetUI()->ChosenButton();
+
+	if (chosenBut == "start")
+	{
+		welcomeWindow.SetButtonEnable(true);
+		startWindow.SetButtonEnable(false);
+		startWindow.SetVisible(false);
+		startWindow.GetUI()->Reset();
+		CAudio::Instance()->Stop(AUDIO_MENU_MUSIC);
+		CAudio::Instance()->Play(AUDIO_CLICK_START);
+		GotoGameState(GAME_STATE_RUN);
+	}
+	else if (chosenBut == "back")
+	{
+		welcomeWindow.SetButtonEnable(true);
+		startWindow.SetButtonEnable(false);
+		startWindow.SetVisible(false);
+		startWindow.GetUI()->Reset();
+	}
+	else if (chosenBut == "aiNum")
+	{
+		_aiNum = (_aiNum + 1) % 7;
+		stringstream ss;
+		ss << _aiNum;
+		(*startWindow.GetUI()->Index("aiNum"))->SetStr("How many AI : " + ss.str());
+	}
+	else if (chosenBut == "aiDiff") {
+		_aiDiff = (_aiDiff + 1) % 5;
+		(*startWindow.GetUI()->Index("aiDiff"))->SetStr("AI Difficulty : " + GetAiDifficulty(_aiDiff));
+	}
+	else if (chosenBut == "gameMode") {
+		_gameMode = (_gameMode + 1) % 3;
+		(*startWindow.GetUI()->Index("gameMode"))->SetStr("Game Mode : " + GetGameMode(_gameMode));
+	}
 
     chosenBut = settingWindow.GetUI()->ChosenButton();
 
@@ -415,7 +485,7 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-    battleSystem.OnBeginState();
+    battleSystem.OnBeginState(_gameMode, _aiNum, _aiDiff);
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素

@@ -45,7 +45,7 @@ class BattleSystem : public CGameState
         BattleSystem(CGame* g);
         BattleSystem(CGame* g, shared_ptr<Map> m);
         ~BattleSystem();
-        void OnBeginState();							// 設定每次重玩所需的變數
+        void OnBeginState(int mode, int enemy, int diff);							// 設定每次重玩所需的變數
         void OnInit();  								// 遊戲的初值及圖形設定
         void OnKeyDown(UINT, UINT, UINT);				// 鍵盤按下
         void OnKeyUp(UINT, UINT, UINT);					// 鍵盤釋放
@@ -70,7 +70,7 @@ class BattleSystem : public CGameState
         void GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, int* posYPtr);
         void ClearExplosionEffects();
         void InitializeExplosionEffectsOnBeginState();
-        void InitializePlayersOnBeginState();
+        void InitializePlayersOnBeginState(int mode, int enemy, int diff);
         void RemoveFinishedDisplayMessages();
         void ClearUIMessages();
         //-----------------VARIABLES DECLARATIONS-----------------//

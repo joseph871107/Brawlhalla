@@ -25,7 +25,7 @@
 namespace game_framework
 {
 //-----------------STATIC DEFINITIONS-----------------//
-const double Player::INITIAL_ACCELERATION = 1.2;
+double Player::INITIAL_ACCELERATION = 1.2;
 const double Player::EDGE_SLIDING_ACCELERATION = 0.1;
 const double Player::MOVE_ACCELERATION = 0.5;
 const double Player::MAX_MOVE_VELOCITY = 10;
@@ -36,9 +36,8 @@ const double Player::STOP_ACCELERATION = 1;
 const int MAX_JUMP_COUNT = 2;
 const int GND_ATTACK_MOVEMENT_UNIT = 12;
 const double COLLISION_ERRORS = 1.0;
-const int MAX_LIFE = 3;
 const int INITIAL_TAKEN_DAMAGE = 10;
-const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 10;
+const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 5;
 const int MAX_ATTACK_AFFECTION_FRAMES = 150; // 5 secs
 const int RESPAWN_DISTANCE_ABOVE_GROUND = 100;
 const int RESPAWN_MOVEMENT_OFFSET_MAGNITUDE = 10;
@@ -52,14 +51,7 @@ const int UNCONSCIOUS_STATE = 1;
 const int RESPAWN_STATE = 2;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
-Player::Player() :
-    _x(int()), _y(int()),
-    bmp_iter(vector<vector<int>*>()), _width(int()),
-    _height(int()), _isPressingLeft(bool()),
-    _isPressingRight(bool()), _dir(bool()), _isTriggerJump(bool()), _jumpCount(bool()),
-    _horizontalVelocity(int()), _isOffsetLeft(bool()), _isOffsetRight(bool()),
-    _verticalVelocity(double()), _grounds(vector<Ground*>()), _collision_box(CMovingBitmap()), _life(int()),
-    _name(string()), _isPlayer(true) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
+Player::Player() : _identifier(PLAYER_MODE_PLAYER), _allowRespawn(true) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
 {
     /* Body intentionally empty */
 }
@@ -137,7 +129,7 @@ void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> grounds
     _consciousState = PlayerConsciousState(this);
     _unconsciousState = PlayerUnconsciousState(this);
     _respawnState = PlayerRespawnState(this);
-    //
+	//
     InitializeOnRespawn();
     //
     DoRespawn();
@@ -864,18 +856,34 @@ bool Player::IsAttackable(Player* potentialTargetPlayer)
 
 void Player::DoAttack()
 {
-    for (auto eachPlayerPtr : (*_playersPtr))
-    {
-        if (IsAttackable(eachPlayerPtr))
-        {
-            if (_isHoldingWeapon)
-                CAudio::Instance()->Play(AUDIO_SWOOSH);
-            else
-                CAudio::Instance()->Play(AUDIO_PUNCH);
+	if (_attackList.size() == 0) {
+		for (auto eachPlayerPtr : (*_playersPtr))
+		{
+			if (IsAttackable(eachPlayerPtr))
+			{
+				if (_isHoldingWeapon)
+					CAudio::Instance()->Play(AUDIO_SWOOSH);
+				else
+					CAudio::Instance()->Play(AUDIO_PUNCH);
 
-            PerformAttack(eachPlayerPtr, _triggeredAniDir);
-        }
-    }
+				PerformAttack(eachPlayerPtr, _triggeredAniDir);
+			}
+		}
+	}
+	else {
+		for (auto eachPlayerPtr : _attackList)
+		{
+			if (IsAttackable(eachPlayerPtr))
+			{
+				if (_isHoldingWeapon)
+					CAudio::Instance()->Play(AUDIO_SWOOSH);
+				else
+					CAudio::Instance()->Play(AUDIO_PUNCH);
+
+				PerformAttack(eachPlayerPtr, _triggeredAniDir);
+			}
+		}
+	}
 }
 
 void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
@@ -888,7 +896,8 @@ void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
     Vector2 vectorAttackerToTargetPlayer;
     vectorAttackerToTargetPlayer.SetXY(GetCor(0), GetCor(1), targetPlayer->GetCor(0), targetPlayer->GetCor(1));
     // Increment the taken damage of the target player
-    targetPlayer->_takenDmg += INCREMENT_AMOUNT_OF_TAKEN_DAMAGE;
+	if(targetPlayer->GetPlayerMode() != PLAYER_MODE_BOSS)
+		targetPlayer->_takenDmg += INCREMENT_AMOUNT_OF_TAKEN_DAMAGE;
     // Set the offset magnitude of the attack 2D Vector
     int attackOffsetMagnitude = targetPlayer->_takenDmg;
     // Determine the attack 2D vector
@@ -922,6 +931,11 @@ bool Player::HitPlayer(Player* targetPlayer, bool attackDirection)
     return (targetPlayer->GetCor(2) >= attackRangeX1 && targetPlayer->GetCor(0) <= attackRangeX2
             &&
             targetPlayer->GetCor(3) >= attackRangeY1 && targetPlayer->GetCor(1) <= attackRangeY2);
+}
+
+void Player::SetAttackList(vector<Player*> list)
+{
+	_attackList = list;
 }
 
 void Player::DoThrowingWeapon()
@@ -1005,33 +1019,35 @@ void Player::SetRespawnMovementVector(const int& startPosX, const int& startPosY
 
 void Player::DoRespawn()
 {
-    // Set the state of the player to be 'RESPAWN_STATE'
-    SetState(RESPAWN_STATE);
-    // Set prev length to max integer value
-    _preDistance = 10E5;
-    // Set the player to be able to dodge while respawning
-    SetIsDodging(true);
+	if (_allowRespawn) {
+		// Set the state of the player to be 'RESPAWN_STATE'
+		SetState(RESPAWN_STATE);
+		// Set prev length to max integer value
+		_preDistance = 10E5;
+		// Set the player to be able to dodge while respawning
+		SetIsDodging(true);
 
-    // Get the dead position of the player, which is now the current position
-    if (_x < SIZE_X / 2) // Respawn from left side
-    {
-        _x = RESPAWN_LEFT_START_POS_X;
-        _y = RESPAWN_LEFT_START_POS_Y;
-        _respawnCourier.SetDir(true); // Set the respawn courier direction to face left
-    }
-    else // Respawn from right side
-    {
-        _x = RESPAWN_RIGHT_START_POS_X;
-        _y = RESPAWN_RIGHT_START_POS_Y;
-        _respawnCourier.SetDir(false); // Set the respawn courier direction to face left
-    }
+		// Get the dead position of the player, which is now the current position
+		if (_x < SIZE_X / 2) // Respawn from left side
+		{
+			_x = RESPAWN_LEFT_START_POS_X;
+			_y = RESPAWN_LEFT_START_POS_Y;
+			_respawnCourier.SetDir(true); // Set the respawn courier direction to face left
+		}
+		else // Respawn from right side
+		{
+			_x = RESPAWN_RIGHT_START_POS_X;
+			_y = RESPAWN_RIGHT_START_POS_Y;
+			_respawnCourier.SetDir(false); // Set the respawn courier direction to face left
+		}
 
-    // Set the respawn position
-    Ground* g = GetRandomGround(&_grounds);		// Randomly select Ground
-    _resDestPosX = random(g->GetCor(0), g->GetCor(2) - GetWidth());		// Randomly set x coordinate within Ground's width
-    _resDestPosY = g->GetCor(1) - GetHeight() - RESPAWN_DISTANCE_ABOVE_GROUND;
-    //
-    SetRespawnMovementVector(_x, _y, _resDestPosX, _resDestPosY);
+		// Set the respawn position
+		Ground* g = GetRandomGround(&_grounds);		// Randomly select Ground
+		_resDestPosX = random(g->GetCor(0), g->GetCor(2) - GetWidth());		// Randomly set x coordinate within Ground's width
+		_resDestPosY = g->GetCor(1) - GetHeight() - RESPAWN_DISTANCE_ABOVE_GROUND;
+		//
+		SetRespawnMovementVector(_x, _y, _resDestPosX, _resDestPosY);
+	}
 }
 
 void Player::InitializeOnRespawn()
@@ -1235,14 +1251,14 @@ void Player::AddCamera(Camera* cam)
     camera = cam;
 }
 
-void Player::SetPlayer(bool tri)
+void Player::SetPlayer(int id)
 {
-    _isPlayer = tri;
+	_identifier = id;
 }
 
-bool Player::IsPlayer()
+int Player::GetPlayerMode()
 {
-    return _isPlayer;
+    return _identifier;
 }
 
 void Player::SetSize(double size)
@@ -1253,6 +1269,11 @@ void Player::SetSize(double size)
 double Player::GetSize()
 {
     return BITMAP_SIZE;
+}
+
+void Player::SetRespawn(bool tri)
+{
+	_allowRespawn = tri;
 }
 
 bool Player::StateChanged()
@@ -1331,23 +1352,29 @@ void Player::SetY(const int& newY)
 
 bool Player::IsOnGround()
 {
-    int playerX1 = GetCor(0);
-    int playerY1 = GetCor(1);
-    int playerX2 = GetCor(2);
-    int playerY2 = GetCor(3);
+	Ground* ground = OnGround();
+    return (ground != nullptr ? true : false);
+}
 
-    for (auto groundPtr : _grounds)
-    {
-        int groundX1 = groundPtr->GetCor(0);
-        int groundY1 = groundPtr->GetCor(1);
-        int groundX2 = groundPtr->GetCor(2);
-        int groundY2 = groundPtr->GetCor(3);
+Ground * Player::OnGround()
+{
+	int playerX1 = GetCor(0);
+	int playerY1 = GetCor(1);
+	int playerX2 = GetCor(2);
+	int playerY2 = GetCor(3);
 
-        if (groundPtr->IsOnGround(playerX1, playerY1, playerX2, playerY2))
-            return true;
-    }
+	for (auto groundPtr : _grounds)
+	{
+		int groundX1 = groundPtr->GetCor(0);
+		int groundY1 = groundPtr->GetCor(1);
+		int groundX2 = groundPtr->GetCor(2);
+		int groundY2 = groundPtr->GetCor(3);
 
-    return false;
+		if (groundPtr->IsOnGround(playerX1, playerY1, playerX2, playerY2))
+			return groundPtr;
+	}
+
+	return nullptr;
 }
 
 ExplosionEffect* Player::GetExplosionEffect()
@@ -1371,7 +1398,7 @@ void Player::DoHorizontalOffset()
     {
         if (_horizontalVelocity > 0)
         {
-            _horizontalVelocity--;
+			_horizontalVelocity--;
             _x -= DoubleToInteger(_horizontalVelocity);
         }
         else
@@ -1383,7 +1410,7 @@ void Player::DoHorizontalOffset()
     {
         if (_horizontalVelocity > 0)
         {
-            _horizontalVelocity--;
+			_horizontalVelocity--;
             _x += DoubleToInteger(_horizontalVelocity);
         }
         else

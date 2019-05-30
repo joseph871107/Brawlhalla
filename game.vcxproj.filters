@@ -113,6 +113,9 @@
     <Filter Include="Brawlhalla\Map\Ground">
       <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\Boss">
+      <UniqueIdentifier>{c6e8c15e-ba65-4f52-ab60-42a4ebd31bc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\continue.bmp">
@@ -264,6 +267,9 @@
     <ClCompile Include="Source\PlayerRespawnState.cpp">
       <Filter>Brawlhalla\Player\PlayerState\PlayerRespawnState</Filter>
     </ClCompile>
+    <ClCompile Include="Source\boss.cpp">
+      <Filter>Brawlhalla\Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -382,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="Source\PlayerRespawnState.h">
       <Filter>Brawlhalla\Player\PlayerState\PlayerRespawnState</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\boss.h">
+      <Filter>Brawlhalla\Boss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,9 @@
 #include "ui.h"
 #include "fImage.h"
 #include "window.h"
+#define GAME_MODE_PVP 0
+#define GAME_MODE_PVC 1
+#define GAME_MODE_BOSS 2
 
 namespace game_framework
 {
@@ -16,6 +19,7 @@ namespace game_framework
 // 這個class為遊戲的遊戲開頭畫面物件
 // 每個Member function的Implementation都要弄懂
 /////////////////////////////////////////////////////////////////////////////
+extern int _gameMode, _aiNum, _aiDiff;
 
 class CGameStateInit : public CGameState
 {
@@ -38,14 +42,18 @@ class CGameStateInit : public CGameState
         static shared_ptr<Map> GetMap();
     private:
         Window welcomeWindow;
+		Window startWindow;
 		Window settingWindow;
 		Window aboutWindow;
+		vector<Window*> windows;
         Camera camera;
         static bool _fullscreenEnabled;
         static bool _closing;
         static bool _cameraEnabled;
         static int _mapSelected;
         static vector<shared_ptr<Map>> maps;
+		string GetGameMode(int mode);
+		string GetAiDifficulty(int diff);
 };
 
 /////////////////////////////////////////////////////////////////////////////

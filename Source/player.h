@@ -9,6 +9,10 @@
 #include "PlayerRespawnState.h"
 
 #define _PLAYER_DEBUG false
+//
+#define PLAYER_MODE_PLAYER 0
+#define PLAYER_MODE_ENEMY 1
+#define PLAYER_MODE_BOSS 2
 
 namespace game_framework
 {
@@ -30,7 +34,7 @@ class Player
         void Initialize(BattleSystem* battleSystemValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue, ExplosionEffect* const explosionEffectPtrValue);
         void LoadBitmap();
         virtual void OnMove();
-        void OnShow();
+        virtual void OnShow();
         void OnKeyDown(const UINT& nChar);
         void OnKeyUp(const UINT& nChar);
 
@@ -44,11 +48,13 @@ class Player
         int GetWidth();
         int GetHeight();
         void AddCamera(Camera* cam);	// Camera
-        void SetPlayer(bool tri);
-        bool IsPlayer();
+        void SetPlayer(int id);
+        int GetPlayerMode();
         void SetSize(double);
         double GetSize();
         vector<Weapon*>* weapons;
+		void SetRespawn(bool tri);
+		void SetAttackList(vector<Player*> list);
 
         //Others - Bill
         const string& GetName() const;
@@ -134,7 +140,7 @@ class Player
         static const int KEY_AIR_MOVE_LEFT = 231;
         static const int KEY_AIR_LAND_DOWN = 241;
         // Others
-        static const double INITIAL_ACCELERATION;
+        static double INITIAL_ACCELERATION;
         static const int OFFSET_INITIAL_VELOCITY = 20;
         static const double EDGE_SLIDING_ACCELERATION;
         static const double MOVE_ACCELERATION;
@@ -189,9 +195,9 @@ class Player
 
         //Others
         void DoDead();
-        void SetRespawnMovementVector(const int& startPosX, const int& startPosY, const int& destinationPosX, const int& destinationPosY);
-        void DoRespawn();
-        void InitializeOnRespawn();
+        virtual void SetRespawnMovementVector(const int& startPosX, const int& startPosY, const int& destinationPosX, const int& destinationPosY);
+        virtual void DoRespawn();
+        virtual void InitializeOnRespawn();
         bool StateChanged();
         bool WpnStateChanged();
 
@@ -210,7 +216,8 @@ class Player
         void ResetTriggeredAnimationVariables();
         void SetTriggeredAnimationVariables(int keyCombInt);
         bool IsFinishedTriggeredAnimation();
-        bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
+		bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
+		Ground* OnGround();
         //
         void SetCurrentAnimation();
         void FinishTriggeredAnimationAnimationLogic();
@@ -246,7 +253,7 @@ class Player
 
         //Offsets
         bool _isOffsetLeft, _isOffsetRight;
-        double _horizontalVelocity;
+		double _horizontalVelocity;
 
         //Movements
         bool _isPressingLeft, _isPressingRight, _isPressingDown, _isTriggerPressingLeft;
@@ -267,6 +274,8 @@ class Player
         bool _isHoldingWeapon;
         bool _isTriggerAttack;
         int _takenDmg;
+		int MAX_LIFE = 3;
+		vector<Player*> _attackList = vector<Player*>{};
 
         //Throw weapon
         Weapon* _flyingWeapon;
@@ -275,7 +284,7 @@ class Player
         // how long he would be in the unconscious state '_unconsciousFramesCount'
 
         vector<Player*>* _playersPtr;
-        bool _isPlayer;
+        int _identifier;
 
         //Dodge
         bool _isTriggerDodge;
@@ -369,6 +378,7 @@ class Player
         int _resDestPosX, _resDestPosY;
         double _preDistance; // used in combination with _vectorRespawnMovement
         RespawnCourier _respawnCourier;
+		bool _allowRespawn;
 
         // State
         int _state;
