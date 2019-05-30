@@ -52,7 +52,7 @@ BattleSystem::BattleSystem(CGame* g) : CGameState(g), settingWindow(Window(g))
     map = nullptr;
     background = &map->background;
     _grounds = map->GetGrounds();
-    _weapons = map->GetWeapons();
+    _weapons = map->GetDroppingWeapons();
 }
 
 BattleSystem::BattleSystem(CGame* g, shared_ptr<Map> m) : CGameState(g), settingWindow(Window(g))
@@ -122,7 +122,7 @@ void BattleSystem::InitializePlayersOnBeginState()
         //
         (*i)->LoadBitmap();
         (*i)->AddCamera(&camera);
-        (*i)->weapons = map->GetWeapons();
+        (*i)->weapons = map->GetDroppingWeapons();
         //
         char str[80];
 
@@ -158,7 +158,7 @@ void BattleSystem::OnBeginState()
     //
     map = CGameStateInit::GetMap();
     _grounds = map->GetGrounds();
-    _weapons = map->GetWeapons();
+    _weapons = map->GetDroppingWeapons();
     camera = Camera();
     camera.SetGradual(true);
     map->AddCamera(&camera);
@@ -671,4 +671,8 @@ int BattleSystem::GetCurrentRemainTime()
     return MATCH_TIME - map->GetTime();
 }
 
+shared_ptr<Map> BattleSystem::GetReferenceMap()
+{
+    return (map);
+}
 }

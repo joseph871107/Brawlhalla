@@ -66,8 +66,6 @@ Player::Player() :
 
 Player::~Player()
 {
-    delete _flyingWeapon;
-
     for (auto elementPtr : _triggeredAnis)
     {
         delete elementPtr;
@@ -97,7 +95,7 @@ void Player::SetAttacker(Player* const& newAttacker, const int& newAttackerAffec
     _attackerAffectionFrameCount = newAttackerAffectionFrameCount;
 }
 
-void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue, ExplosionEffect* const explosionEffectPtrValue)
+void Player::Initialize(BattleSystem* battleSystemPtrValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue, ExplosionEffect* const explosionEffectPtrValue)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
     Ground* g = GetRandomGround(&groundsValue);		// Randomly select Ground
@@ -128,7 +126,7 @@ void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> grounds
     //
     _hitTargetPlayers = vector<Player*>();
     //
-    _battleSystem = battleSystemValue;
+	_battleSystemPtr = battleSystemPtrValue;
     //
     _explosionEffectPtr = explosionEffectPtrValue;
     //
@@ -150,17 +148,7 @@ void Player::LoadBitmap()
     SetAnimation();
 }
 
-void Player::DeleteFlyingWeapon()
-{
-    if (_flyingWeapon != nullptr)
-    {
-        if (_flyingWeapon->HasTaken() || _flyingWeapon->IsOutMapBorder())
-        {
-            delete _flyingWeapon;
-            _flyingWeapon = nullptr;
-        }
-    }
-}
+
 
 void Player::SetCurrentTriggeredAnimationByWeapon()
 {
@@ -347,12 +335,6 @@ void Player::OnMoveGameLogic()
         SetAttacker(nullptr, 0); // Discard the affection of the attacker
     else
         _attackerAffectionFrameCount++;
-
-    /* UNTITLED ¼Ú¶§ */
-    if (_flyingWeapon != nullptr)
-        _flyingWeapon->OnMove();
-
-    DeleteFlyingWeapon();
 }
 
 void Player::DoParseKeyPressed()
@@ -379,10 +361,6 @@ void Player::OnMove()
 
 void Player::OnShow()
 {
-    // Show throwing weapons
-    if (_flyingWeapon != nullptr)
-        _flyingWeapon->OnShow();
-
     // Show respawn courier
     _respawnCourier.OnShow();
     // Show current animation
@@ -419,14 +397,13 @@ void Player::OnKeyDown(const UINT& nChar)
     {
         _isTriggerPressingLeft = true;
     }
-    else if (nChar == _keys[4]) //Attack
+    else if (nChar == _keys[4]) // Attack
     {
         _isTriggerAttack = true;
 
-        if (_flyingWeapon != nullptr)
-            _flyingWeapon->OnKeyDown(nChar);
-
-        DeleteFlyingWeapon();
+  //      if (_flyingWeapon != nullptr)
+  //          _flyingWeapon->OnKeyDown(nChar);
+  //      DeleteFlyingWeapon();
     }
     else if (nChar == _keys[5]) //Dodge
     {
@@ -435,28 +412,21 @@ void Player::OnKeyDown(const UINT& nChar)
     else if (nChar == _keys[6])	//Throw
     {
         if (GetHoldWeapon())
-        {
-            Weapon* weapon = new Weapon();
-            weapon->AddCamera(camera);
-            weapon->Initialize(_grounds, *_playersPtr);
-            bool dir = GetDirection();
-
-            if (!dir)
-                weapon->SetXY(GetCor(0) - 100, GetCor(1) + 10);
-            else
-                weapon->SetXY(GetCor(2) + 20, GetCor(1) + 10);
-
-            weapon->Throw(GetDirection(), this);
-            _flyingWeapon = weapon;
-            SetHoldWeapon(false);
-            ResetWeaponID();
-        }
+			DoThrowWeapon();
     }
     else
     {
         // Do nothing
     }
 }
+
+void Player::DoThrowWeapon() {
+	_battleSystemPtr->GetReferenceMap()->PlayerThrowWeapon(this);
+	SetHoldWeapon(false);
+	/// Comment for future devs: ¼Ú¶§ wrote the line below, but I don't understand why reseting the weapon ID is required
+	ResetWeaponID();
+}
+
 
 void Player::OnKeyUp(const UINT& nChar)
 {
@@ -924,12 +894,6 @@ bool Player::HitPlayer(Player* targetPlayer, bool attackDirection)
             targetPlayer->GetCor(3) >= attackRangeY1 && targetPlayer->GetCor(1) <= attackRangeY2);
 }
 
-void Player::DoThrowingWeapon()
-{
-    Weapon throwing;
-    throwing.Initialize(vector<Ground*> {}, vector<Player*> {this});
-}
-
 void Player::PlayAudioByState()
 {
     int aboutToPlay = -1;
@@ -985,13 +949,13 @@ void Player::DoDead()
     // Decrement the player's life
     _life--;
     // Activate dead effect
-    _battleSystem->TriggerExplosionEffect(this);
+	_battleSystemPtr->TriggerExplosionEffect(this);
 
     // Display the attacker
     if (_attacker == nullptr)
-        _battleSystem->TriggerDisplayMessage(_name + " suicided!", 350, 200, 150); // 5 secs
+		_battleSystemPtr->TriggerDisplayMessage(_name + " suicided!", 350, 200, 150); // 5 secs
     else
-        _battleSystem->TriggerDisplayMessage(_attacker->_name + " killed " + _name + "!", 300, 200, 150); // 5 secs
+		_battleSystemPtr->TriggerDisplayMessage(_attacker->_name + " killed " + _name + "!", 300, 200, 150); // 5 secs
 }
 
 void Player::SetRespawnMovementVector(const int& startPosX, const int& startPosY, const int& destinationPosX, const int& destinationPosY)
@@ -1069,8 +1033,6 @@ void Player::InitializeOnRespawn()
     SetConscious();
     //
     _isFirstTimeOnEdge = true;
-    //
-    _flyingWeapon = nullptr;
     //
     ResetMovementVelocity();
     //
@@ -1398,8 +1360,9 @@ void Player::DoLand()
     _verticalAcceleration = LANDING_ACCELERATION;
 }
 
-const double& Player::GetVerticalVelocity() const {
-	return(_verticalVelocity);
+const double& Player::GetVerticalVelocity() const
+{
+    return (_verticalVelocity);
 }
 
 }

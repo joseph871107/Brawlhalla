@@ -154,6 +154,7 @@ class Player
         friend class PlayerUnconsciousState;
         friend class PlayerRespawnState;
         //-----------------FUNCTIONS DECLARATIONS-----------------//
+		void DoThrowWeapon();
         //Animations
         void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
         void ResetAnimations(int animationID);
@@ -178,9 +179,6 @@ class Player
 
         //Attack
         bool HitPlayer(Player* targetPlayer, bool attackDirection);
-
-        //Throw weapon
-        void DoThrowingWeapon(); /// Unused function
 
         //Audio management
         void PlayAudioByState();
@@ -270,10 +268,6 @@ class Player
         bool _isHoldingWeapon;
         bool _isTriggerAttack;
         int _takenDmg;
-
-        //Throw weapon
-        Weapon* _flyingWeapon;
-        void DeleteFlyingWeapon();
         // The taken damage will determine how far the target player would fly 'attackOffsetMagnitude', and
         // how long he would be in the unconscious state '_unconsciousFramesCount'
 
@@ -359,7 +353,7 @@ class Player
         double _moveVelocity;
 
         // Game Effect
-        BattleSystem* _battleSystem;
+        BattleSystem* _battleSystemPtr;
         ExplosionEffect* _explosionEffectPtr;
 
         // Display killer

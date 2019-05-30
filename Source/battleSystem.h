@@ -60,6 +60,7 @@ class BattleSystem : public CGameState
         bool IsGameOver();
         string GetGameResult();
         void TriggerExplosionEffect(Player* deadPlayer);
+		shared_ptr<Map> GetReferenceMap();
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//

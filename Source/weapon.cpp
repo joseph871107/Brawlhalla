@@ -97,9 +97,14 @@ void Weapon::SetState(long state)
     _state = state;
 }
 
-bool Weapon::HasTaken()
+bool Weapon::IsPickedUp()
 {
-    return (_state == STATE_HOLDING || _state == STATE_TIMESUP ? true : false);
+    return (_state == STATE_HOLDING);
+}
+
+bool Weapon::IsExpired()
+{
+    return (_state == STATE_TIMESUP);
 }
 
 bool Weapon::BeThrown()
