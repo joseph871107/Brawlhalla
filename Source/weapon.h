@@ -23,7 +23,8 @@ class Weapon : public Object
         void Initialize(vector<Ground*>, vector<Player*>);
         void Throw(bool, Player*);
         Player* HitPlayer();
-        bool HasTaken();
+        bool IsPickedUp();
+        bool IsExpired();
         bool BeThrown();
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -50,8 +51,8 @@ class Weapon : public Object
         long _state;
         //
         int _width, _height; // true width and height
-		// Since the bitmaps of weapon vary in size, we cannot use 'width' and 'height' given by the 'Object' class
-		// Moreover, since 'GetCor(2)' and 'GetCor(3)' are dependent on 'width' and 'height', they are also deficient
+        // Since the bitmaps of weapon vary in size, we cannot use 'width' and 'height' given by the 'Object' class
+        // Moreover, since 'GetCor(2)' and 'GetCor(3)' are dependent on 'width' and 'height', they are also deficient
         bool _isOffsetLeft, _isOffsetRight;
         double _horizontalVelocity;
         double _verticalVelocity;

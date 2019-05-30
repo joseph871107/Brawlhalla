@@ -53,7 +53,7 @@ BattleSystem::BattleSystem(CGame* g) : CGameState(g), settingWindow(Window(g))
     map = nullptr;
     background = &map->background;
     _grounds = map->GetGrounds();
-    _weapons = map->GetWeapons();
+    _weapons = map->GetDroppingWeapons();
 }
 
 BattleSystem::BattleSystem(CGame* g, shared_ptr<Map> m) : CGameState(g), settingWindow(Window(g))
@@ -140,7 +140,7 @@ void BattleSystem::InitializePlayersOnBeginState(int mode, int enemy, int diff)
         //
         (*i)->LoadBitmap();
         (*i)->AddCamera(&camera);
-        (*i)->weapons = map->GetWeapons();
+        (*i)->weapons = map->GetDroppingWeapons();
         //
         char str[80];
 		switch ((*i)->GetPlayerMode()) {
@@ -178,7 +178,7 @@ void BattleSystem::OnBeginState(int mode, int enemy, int diff)
     //
     map = CGameStateInit::GetMap();
     _grounds = map->GetGrounds();
-    _weapons = map->GetWeapons();
+    _weapons = map->GetDroppingWeapons();
     camera = Camera();
     camera.SetGradual(true);
     map->AddCamera(&camera);
@@ -284,18 +284,18 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 {
     map->OnMove();
 
-    for (auto player : _players)
+    for (auto playerPtr : _players)
     {
-		switch (player->GetPlayerMode()) {
+		switch (playerPtr->GetPlayerMode()) {
 		case PLAYER_MODE_PLAYER:
-			player->OnMove();
+			playerPtr->OnMove();
 			break;
 		case PLAYER_MODE_ENEMY:
 			if (!enemyPause)
-				player->OnMove();
+				playerPtr->OnMove();
 			break;
 		case PLAYER_MODE_BOSS:
-			player->OnMove();
+			playerPtr->OnMove();
 			break;
 		}
     }
@@ -347,6 +347,10 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     integer.LoadBitmap();
     // String
     mString.LoadBitmap();
+    // Taken damages
+    takenDmgR.LoadBitmap(IDB_TAKEN_DMG_RED, RGB(0, 0, 0));
+    takenDmgY.LoadBitmap(IDB_TAKEN_DMG_YELLOW, RGB(0, 0, 0));
+    takenDmgG.LoadBitmap(IDB_TAKEN_DMG_GREEN, RGB(0, 0, 0));
     // Setting Window (for controlling the CPU player a.k.a Enemy)
     settingWindow.Initialize(1, 1);
     settingWindow.SetXY(0, 0);
@@ -508,7 +512,7 @@ void BattleSystem::ClearUIMessages()
 void BattleSystem::OnShow()
 {
     map->OnShow();
-    // Showing the remain time
+    /* DISPLAY MATCH TIME */
     // Display minute
     int now_time = GetCurrentRemainTime();
     integer.SetInteger(now_time / 60);
@@ -520,14 +524,15 @@ void BattleSystem::OnShow()
     integer.ShowBitmap();
 
     // Show player
-    for (auto i = _players.begin(); i != _players.end(); i++)
+    for (unsigned int index = 0; index < _players.size(); index++)
     {
-        // Show player
-        (*i)->OnShow();
-        // Show player's life
-        ShowPlayerLife((**i), 1150, 100 * (i - _players.begin()));
+        if (!_players[index]->IsOutOfLife())
+            _players[index]->OnShow();
+
+        ShowPlayerLife((*_players[index]), 1300, 100 * index);
     }
 
+    // Show setting window
     settingWindow.OnShow();
 
     // Explosion Effect
@@ -634,43 +639,60 @@ void BattleSystem::AddMap(shared_ptr<Map> m)
     map = m;
 }
 
+int BattleSystem::GetNumberOfRemainingPlayers()
+{
+    int remainingPlayers = 0;
+
+    for (auto playerPtr : _players)
+        if (!playerPtr->IsOutOfLife())
+            remainingPlayers++;
+
+    return (remainingPlayers);
+}
+
+bool BattleSystem::IsFinishedPlayingAllEffects()
+{
+    for (auto explosionEffectPtr : _explosionEffects)
+        if (explosionEffectPtr->GetIsTrigger())
+            return (false);
+    return (true);
+}
+
 bool BattleSystem::IsGameOver()
 {
-    bool isFinishedPlayingAllEffects = true;
-
-    for (auto explosionEffectPtr : _explosionEffects)
-    {
-        if (explosionEffectPtr->GetIsTrigger())
-        {
-            isFinishedPlayingAllEffects = false;
-            break;
-        }
-    }
-
-    for (auto i : _players)
-        if (isFinishedPlayingAllEffects && i->IsOutOfLife() && i->GetPlayerMode() != PLAYER_MODE_PLAYER)
-            return true;
-
-    return (GetCurrentRemainTime() == 0); // Draw
+    int remainingPlayers = GetNumberOfRemainingPlayers();
+    return (
+               (IsFinishedPlayingAllEffects() && remainingPlayers == 1) // There is a winner
+               ||
+               remainingPlayers == 0 // Draw
+               ||
+               GetCurrentRemainTime() == 0 // Out of time - Draw
+           );
 }
 
 string BattleSystem::GetGameResult()
 {
-    Player* max = *(_players.begin());
-    bool draw = true;
+    int remainingPlayers = GetNumberOfRemainingPlayers();
 
-    for (auto i : _players)
-        if (i->GetLife() > max->GetLife())
-            max = i;
+    if (remainingPlayers == 1) // There is a winner
+    {
+        string winnerName;
 
-    for (auto i : _players)
-        if (i->GetLife() < max->GetLife())
-            draw = false;
+        for (auto playerPtr : _players)
+        {
+            if (!playerPtr->IsOutOfLife())
+            {
+                winnerName = playerPtr->GetName();
+                break;
+            }
+        }
 
-    if (draw)
-        return ("Draw.");
+        return (winnerName + " Wins.");
+    }
     else
-        return (max->GetName() + " win.");
+    {
+        return ("Draw.");
+    }
 }
 
 void BattleSystem::ClearPlayers()
@@ -684,14 +706,41 @@ void BattleSystem::ClearPlayers()
 void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)
 {
     // Display player's name
-    mString.SetString(player.GetName() + " Life");
+    mString.SetString(player.GetName());
     mString.SetSize(0.5);
     mString.SetTopLeft(posXValue, posYValue + 20);
     mString.ShowBitmap();
-    // Displayer player's life
+    // Display player's life
     integer.SetInteger(player.GetLife()); //CInteger integer
-    integer.SetTopLeft(posXValue + 350, posYValue);
+    integer.SetTopLeft(posXValue + 200, posYValue);
     integer.ShowBitmap();
+    // Display player's taken damage
+
+    if (player.GetState() == Player::RESPAWN_STATE)
+    {
+        takenDmgG.SetTopLeft(posXValue + 200, posYValue);
+        takenDmgG.ShowBitmap();
+    }
+    else
+    {
+        int playerTakenDmg = player.GetTakenDamage();
+
+        if (playerTakenDmg >= Player::TAKEN_DMG_DANGER_HIGH)
+        {
+            takenDmgR.SetTopLeft(posXValue + 200, posYValue);
+            takenDmgR.ShowBitmap();
+        }
+        else if (playerTakenDmg >= Player::TAKEN_DMG_DANGER_MEDIUM)
+        {
+            takenDmgY.SetTopLeft(posXValue + 200, posYValue);
+            takenDmgY.ShowBitmap();
+        }
+        else if (playerTakenDmg >= Player::TAKEN_DMG_DANGER_LOW)
+        {
+            takenDmgG.SetTopLeft(posXValue + 200, posYValue);
+            takenDmgG.ShowBitmap();
+        }
+    }
 }
 
 int BattleSystem::GetCurrentRemainTime()
@@ -699,4 +748,8 @@ int BattleSystem::GetCurrentRemainTime()
     return MATCH_TIME - map->GetTime();
 }
 
+shared_ptr<Map> BattleSystem::GetReferenceMap()
+{
+    return (map);
+}
 }

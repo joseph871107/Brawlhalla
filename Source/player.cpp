@@ -30,14 +30,14 @@ const double Player::EDGE_SLIDING_ACCELERATION = 0.1;
 const double Player::MOVE_ACCELERATION = 0.5;
 const double Player::MAX_MOVE_VELOCITY = 10;
 const double Player::LANDING_ACCELERATION = 5;
-const double Player::INITIAL_VELOCITY = 18;
+const double Player::INITIAL_VELOCITY = 20;
 const double Player::STOP_ACCELERATION = 1;
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MAX_JUMP_COUNT = 2;
 const int GND_ATTACK_MOVEMENT_UNIT = 12;
 const double COLLISION_ERRORS = 1.0;
 const int INITIAL_TAKEN_DAMAGE = 10;
-const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 5;
+const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 3;
 const int MAX_ATTACK_AFFECTION_FRAMES = 150; // 5 secs
 const int RESPAWN_DISTANCE_ABOVE_GROUND = 100;
 const int RESPAWN_MOVEMENT_OFFSET_MAGNITUDE = 10;
@@ -45,10 +45,7 @@ const int RESPAWN_LEFT_START_POS_X = 0;
 const int RESPAWN_LEFT_START_POS_Y = 0;
 const int RESPAWN_RIGHT_START_POS_X = SIZE_X;
 const int RESPAWN_RIGHT_START_POS_Y = 0;
-// States
-const int CONSCIOUS_STATE = 0;
-const int UNCONSCIOUS_STATE = 1;
-const int RESPAWN_STATE = 2;
+const int IMMUNE_FLASHING_FRAME = 11 ;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 Player::Player() : _identifier(PLAYER_MODE_PLAYER), _allowRespawn(true) // §ÚÄ±±o¤§«áÀ³¸Ó¥ý¤£¥Î§ó§ï³o­Óconstructor¡A¦n¦h³á¡C¡C¡C
@@ -58,8 +55,6 @@ Player::Player() : _identifier(PLAYER_MODE_PLAYER), _allowRespawn(true) // §ÚÄ±±
 
 Player::~Player()
 {
-    delete _flyingWeapon;
-
     for (auto elementPtr : _triggeredAnis)
     {
         delete elementPtr;
@@ -89,7 +84,7 @@ void Player::SetAttacker(Player* const& newAttacker, const int& newAttackerAffec
     _attackerAffectionFrameCount = newAttackerAffectionFrameCount;
 }
 
-void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue, ExplosionEffect* const explosionEffectPtrValue)
+void Player::Initialize(BattleSystem* battleSystemPtrValue, vector<Ground*> groundsValue, vector<Player*>* playersPtrValue, string nameValue, vector<long> keysValue, ExplosionEffect* const explosionEffectPtrValue)
 {
     /* Remarks: all Animation and Bitmaps variables are initialized in 'LoadBitmap()' */
     Ground* g = GetRandomGround(&groundsValue);		// Randomly select Ground
@@ -120,7 +115,7 @@ void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> grounds
     //
     _hitTargetPlayers = vector<Player*>();
     //
-    _battleSystem = battleSystemValue;
+    _battleSystemPtr = battleSystemPtrValue;
     //
     _explosionEffectPtr = explosionEffectPtrValue;
     //
@@ -129,7 +124,8 @@ void Player::Initialize(BattleSystem* battleSystemValue, vector<Ground*> grounds
     _consciousState = PlayerConsciousState(this);
     _unconsciousState = PlayerUnconsciousState(this);
     _respawnState = PlayerRespawnState(this);
-	//
+    _immuneState = PlayerImmuneState(this, 0);
+    //
     InitializeOnRespawn();
     //
     DoRespawn();
@@ -142,17 +138,7 @@ void Player::LoadBitmap()
     SetAnimation();
 }
 
-void Player::DeleteFlyingWeapon()
-{
-    if (_flyingWeapon != nullptr)
-    {
-        if (_flyingWeapon->HasTaken() || _flyingWeapon->IsOutMapBorder())
-        {
-            delete _flyingWeapon;
-            _flyingWeapon = nullptr;
-        }
-    }
-}
+
 
 void Player::SetCurrentTriggeredAnimationByWeapon()
 {
@@ -234,6 +220,10 @@ void Player::OnMoveAnimationLogic()
             _respawnState.OnMoveAnimationLogic();
             break;
 
+        case IMMUNE_STATE:
+            _immuneState.OnMoveAnimationLogic();
+            break;
+
         default:
             // Never happen
             return;
@@ -276,7 +266,10 @@ void Player::OnMoveGameLogic()
     */
 
     //-----------------PRIOR COMMON SECTION-----------------//
-    /* DEAD & RESPAWN */
+    /*	~	DEAD & RESPAWN
+    	~	Remark: When the player is out of life, the player's 'OnMove()' and 'OnShow()' will
+    	~	no longer being called by the 'BattleSystem'
+    */
     if (!_isDead && IsOutMapBorder())
         DoDead();
 
@@ -284,13 +277,8 @@ void Player::OnMoveGameLogic()
     {
         if (_explosionEffectPtr->GetIsTrigger()) // If the dead explosion effect has not been finished, then halt all the movement of the player
             return;
-        else // If the dead explosion effect is finished, then mark that the player is dead
-        {
-            _isDead = false;
-
-            if (!IsOutOfLife())// If the player is respawnable, then respawn him
-                DoRespawn();
-        }
+        else // If the dead explosion effect is finished, then respawn the player
+            DoRespawn();
     }
 
     //-----------------STATE SECTION-----------------//
@@ -306,6 +294,10 @@ void Player::OnMoveGameLogic()
 
         case RESPAWN_STATE:
             _respawnState.OnMoveGameLogic();
+            break;
+
+        case IMMUNE_STATE:
+            _immuneState.OnMoveGameLogic();
             break;
 
         default:
@@ -339,12 +331,6 @@ void Player::OnMoveGameLogic()
         SetAttacker(nullptr, 0); // Discard the affection of the attacker
     else
         _attackerAffectionFrameCount++;
-
-    /* UNTITLED ¼Ú¶§ */
-    if (_flyingWeapon != nullptr)
-        _flyingWeapon->OnMove();
-
-    DeleteFlyingWeapon();
 }
 
 void Player::DoParseKeyPressed()
@@ -371,10 +357,6 @@ void Player::OnMove()
 
 void Player::OnShow()
 {
-    // Show throwing weapons
-    if (_flyingWeapon != nullptr)
-        _flyingWeapon->OnShow();
-
     // Show respawn courier
     _respawnCourier.OnShow();
     // Show current animation
@@ -411,14 +393,9 @@ void Player::OnKeyDown(const UINT& nChar)
     {
         _isTriggerPressingLeft = true;
     }
-    else if (nChar == _keys[4]) //Attack
+    else if (nChar == _keys[4]) // Attack
     {
         _isTriggerAttack = true;
-
-        if (_flyingWeapon != nullptr)
-            _flyingWeapon->OnKeyDown(nChar);
-
-        DeleteFlyingWeapon();
     }
     else if (nChar == _keys[5]) //Dodge
     {
@@ -427,28 +404,22 @@ void Player::OnKeyDown(const UINT& nChar)
     else if (nChar == _keys[6])	//Throw
     {
         if (GetHoldWeapon())
-        {
-            Weapon* weapon = new Weapon();
-            weapon->AddCamera(camera);
-            weapon->Initialize(_grounds, *_playersPtr);
-            bool dir = GetDirection();
-
-            if (!dir)
-                weapon->SetXY(GetCor(0) - 100, GetCor(1) + 10);
-            else
-                weapon->SetXY(GetCor(2) + 20, GetCor(1) + 10);
-
-            weapon->Throw(GetDirection(), this);
-            _flyingWeapon = weapon;
-            SetHoldWeapon(false);
-            ResetWeaponID();
-        }
+            DoThrowWeapon();
     }
     else
     {
         // Do nothing
     }
 }
+
+void Player::DoThrowWeapon()
+{
+    _battleSystemPtr->GetReferenceMap()->PlayerThrowWeapon(this);
+    SetHoldWeapon(false);
+    /// Comment for future devs: ¼Ú¶§ wrote the line below, but I don't understand why reseting the weapon ID is required
+    ResetWeaponID();
+}
+
 
 void Player::OnKeyUp(const UINT& nChar)
 {
@@ -743,11 +714,18 @@ void Player::ShowCurrentAnimation()
         _collision_box.ShowBitmap(BITMAP_SIZE * camera->GetSize());
     }
 
-    //Calculate and set the position of the player current animation in respect to the collision box's
-    CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
-    _aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
-    _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(cam.x, cam.y);
-    _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
+    // Calculate and set the position of the player current animation in respect to the collision box's
+    if (
+        _state != IMMUNE_STATE
+        ||
+        (_state == IMMUNE_STATE && _immuneState.GetFrameCounter() % IMMUNE_FLASHING_FRAME == 1)
+    )
+    {
+        CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
+        _aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
+        _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(cam.x, cam.y);
+        _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
+    }
 }
 
 bool Player::IsOnLeftEdge()
@@ -938,12 +916,6 @@ void Player::SetAttackList(vector<Player*> list)
 	_attackList = list;
 }
 
-void Player::DoThrowingWeapon()
-{
-    Weapon throwing;
-    throwing.Initialize(vector<Ground*> {}, vector<Player*> {this});
-}
-
 void Player::PlayAudioByState()
 {
     int aboutToPlay = -1;
@@ -991,21 +963,21 @@ void Player::PlayAudioByState()
 
 void Player::DoDead()
 {
+    // Set the player to be dead
+    _isDead = true;
     // Reset weapon
     SetHoldWeapon(false);
     ResetWeaponID(); // reset to the default weapon - punch
-    // Set the player to be dead
-    _isDead = true;
     // Decrement the player's life
     _life--;
     // Activate dead effect
-    _battleSystem->TriggerExplosionEffect(this);
+    _battleSystemPtr->TriggerExplosionEffect(this);
 
     // Display the attacker
     if (_attacker == nullptr)
-        _battleSystem->TriggerDisplayMessage(_name + " suicided!", 350, 200, 150); // 5 secs
+        _battleSystemPtr->TriggerDisplayMessage(_name + " suicided!", 350, 200, 150); // 5 secs
     else
-        _battleSystem->TriggerDisplayMessage(_attacker->_name + " killed " + _name + "!", 300, 200, 150); // 5 secs
+        _battleSystemPtr->TriggerDisplayMessage(_attacker->_name + " killed " + _name + "!", 300, 200, 150); // 5 secs
 }
 
 void Player::SetRespawnMovementVector(const int& startPosX, const int& startPosY, const int& destinationPosX, const int& destinationPosY)
@@ -1020,6 +992,8 @@ void Player::SetRespawnMovementVector(const int& startPosX, const int& startPosY
 void Player::DoRespawn()
 {
 	if (_allowRespawn) {
+		// Set the player to be alive
+		_isDead = false;
 		// Set the state of the player to be 'RESPAWN_STATE'
 		SetState(RESPAWN_STATE);
 		// Set prev length to max integer value
@@ -1085,8 +1059,6 @@ void Player::InitializeOnRespawn()
     SetConscious();
     //
     _isFirstTimeOnEdge = true;
-    //
-    _flyingWeapon = nullptr;
     //
     ResetMovementVelocity();
     //
@@ -1238,6 +1210,10 @@ void Player::SetCurrentNonTriggeredAnimationByWeapon()
             else
                 SetAnimationStateByWeapon(ANI_WPN_ID_STAND_LEFT);
 
+            break;
+
+        case IMMUNE_STATE:
+            _immuneState.SetCurrentNonTriggeredAnimationByWeapon();
             break;
 
         default:
@@ -1423,6 +1399,21 @@ void Player::DoHorizontalOffset()
 void Player::DoLand()
 {
     _verticalAcceleration = LANDING_ACCELERATION;
+}
+
+const double& Player::GetVerticalVelocity() const
+{
+    return (_verticalVelocity);
+}
+
+const int& Player::GetTakenDamage() const
+{
+    return (_takenDmg);
+}
+
+const int& Player::GetState() const
+{
+    return (_state);
 }
 
 }

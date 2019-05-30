@@ -18,7 +18,7 @@ const vector<MapPARM> _mapP
 {
     // Grounds of Plain Field
     MapPARM("Plain Field", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 1,
-            GroundPARM(100, 500, 1, 8, 1, IDB_GROUND1)),
+            GroundPARM(100, 500, 1, 12, 1, IDB_GROUND1)),
     // Grounds of Arena
     MapPARM("Arena", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 3,
             GroundPARM(400, 400, 0.087, 10, 1, IDB_GROUND2, 0, 900, 900),

@@ -102,26 +102,6 @@ void Enemy::OnMove()
     OnMoveAnimationLogic();
     OnMoveGameLogic();
 }
-void Enemy::OnShow()
-{
-	if (_flyingWeapon != nullptr)
-		_flyingWeapon->OnShow();
-
-	// Show respawn courier
-	_respawnCourier.OnShow();
-	// Show current animation
-	ShowCurrentAnimation();
-	// Play current audio
-	PlayAudioByState();
-	// Set the camera for showing name tag
-	CPoint cam = camera->GetXY(DoubleToInteger(_x - 4 * BITMAP_SIZE), DoubleToInteger(_y + _collision_box.Height() * BITMAP_SIZE));
-	// Show the name tag
-	CString playerName;
-	playerName.SetString(_name);
-	playerName.SetSize(camera->GetSize() / 2);
-	playerName.SetTopLeft(cam.x - 60, cam.y);
-	playerName.ShowBitmap();
-}
 void Enemy::SetAnimation()
 {
 	_OFFSET_Y = 30;

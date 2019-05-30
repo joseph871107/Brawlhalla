@@ -308,6 +308,12 @@ IDB_FX_EXPLO_UP2        BITMAP                  "..\\RES\\Effects\\Explosion\\ex
 
 IDB_FX_EXPLO_UP3        BITMAP                  "..\\RES\\Effects\\Explosion\\explo_up3.bmp"
 
+IDB_TAKEN_DMG_GREEN     BITMAP                  "..\\RES\\TakenDamage\\taken_dmg_green.bmp"
+
+IDB_TAKEN_DMG_RED       BITMAP                  "..\\RES\\TakenDamage\\taken_dmg_red.bmp"
+
+IDB_TAKEN_DMG_YELLOW    BITMAP                  "..\\RES\\TakenDamage\\taken_dmg_yellow.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

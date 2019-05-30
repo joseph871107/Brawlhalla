@@ -27,7 +27,10 @@ class PlayerConsciousState
 
         void OnMoveAnimationLogic();
         void OnMoveGameLogic();
-		void SetCurrentNonTriggeredAnimationByWeapon();
+        void SetCurrentNonTriggeredAnimationByWeapon();
+
+    protected:
+        Player* _playerPtr;
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
@@ -48,8 +51,6 @@ class PlayerConsciousState
         void DoMoveRight(int movementUnit);
         void DoJump();
         void InitiateWallJump();
-        //-----------------VARIABLES DECLARATIONS-----------------//
-        Player* _playerPtr;
 
 };
 #endif

@@ -67,12 +67,15 @@ void Weapon::Throw(bool dir, Player* player)
     _throwHost = player;
     _throwDir = dir;
 
+    // Set the initial horizontal velocity of the weapon
     if (_throwDir) // right
         InitiateOffsetRight(abs(OFFSET_INITIAL_VELOCITY));
     else // left
         InitiateOffsetLeft(abs(OFFSET_INITIAL_VELOCITY));
 
-    _verticalVelocity = 0;
+    // Set the initial vertical velocity of the weapon
+    _verticalVelocity = player->GetVerticalVelocity() < 0 ? player->GetVerticalVelocity() * 2 : 0; // The weapon flys up as the player throws while jumping up
+    // Set the state of the weapon
     _state = STATE_FLYING;
     // Set the expired time of the weapon being thrown
     start = clock();
@@ -94,9 +97,14 @@ void Weapon::SetState(long state)
     _state = state;
 }
 
-bool Weapon::HasTaken()
+bool Weapon::IsPickedUp()
 {
-    return (_state == STATE_HOLDING || _state == STATE_TIMESUP ? true : false);
+    return (_state == STATE_HOLDING);
+}
+
+bool Weapon::IsExpired()
+{
+    return (_state == STATE_TIMESUP);
 }
 
 bool Weapon::BeThrown()

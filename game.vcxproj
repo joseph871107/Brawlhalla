@@ -230,6 +230,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="res\player11.bin" />
     <None Include="RES\continue.bmp" />
     <None Include="Res\corner.bmp" />
@@ -257,6 +258,7 @@
     <ClCompile Include="Source\GroundMoveLeftAttackTriggeredAnimation.cpp" />
     <ClCompile Include="Source\GroundMoveRightAttackTriggeredAnimation.cpp" />
     <ClCompile Include="Source\PlayerConsciousState.cpp" />
+    <ClCompile Include="Source\PlayerImmuneState.cpp" />
     <ClCompile Include="Source\PlayerRespawnState.cpp" />
     <ClCompile Include="Source\PlayerUnconsciousState.cpp" />
     <ClCompile Include="Source\RespawnCourier.cpp" />
@@ -337,6 +339,7 @@
     <ClInclude Include="Source\GroundMoveRightAttackTriggeredAnimation.h" />
     <ClInclude Include="Source\map.h" />
     <ClInclude Include="Source\PlayerConsciousState.h" />
+    <ClInclude Include="Source\PlayerImmuneState.h" />
     <ClInclude Include="Source\PlayerRespawnState.h" />
     <ClInclude Include="Source\PlayerUnconsciousState.h" />
     <ClInclude Include="Source\RespawnCourier.h" />
@@ -681,6 +684,9 @@
     <Image Include="RES\players\respawn_courier_right.bmp" />
     <Image Include="res\player\player.bmp" />
     <Image Include="RES\RespawnCourier.bmp" />
+    <Image Include="RES\TakenDamage\taken_dmg_green.bmp" />
+    <Image Include="RES\TakenDamage\taken_dmg_red.bmp" />
+    <Image Include="RES\TakenDamage\taken_dmg_yellow.bmp" />
     <Image Include="RES\tests\lean_left.bmp" />
     <Image Include="RES\tests\lean_right.bmp" />
     <Image Include="res\ui\brawlhalla-logo.bmp" />
