@@ -62,8 +62,11 @@ void PlayerRespawnState::OnMoveGameLogic()
     vectorToRespawnDestination.SetXY(_playerPtr->_x, _playerPtr->_y, _playerPtr->_resDestPosX, _playerPtr->_resDestPosY);
     double distance = vectorToRespawnDestination.GetLength();
 
-    if (distance > _playerPtr->_preDistance) // If the player is nearest from the destination, then end respawning
+    if (distance > _playerPtr->_preDistance) // If the player is nearest from the destination, then end respawning state and proceed to immune state
+    {
         _playerPtr->InitializeOnRespawn();
+        _playerPtr->SetState(Player::IMMUNE_STATE);
+    }
     else
     {
         _playerPtr->_preDistance = distance;

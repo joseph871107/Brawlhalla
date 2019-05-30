@@ -7,6 +7,7 @@
 #include "PlayerConsciousState.h"
 #include "PlayerUnconsciousState.h"
 #include "PlayerRespawnState.h"
+#include "PlayerImmuneState.h"
 
 #define _PLAYER_DEBUG false
 
@@ -51,7 +52,7 @@ class Player
         vector<Weapon*>* weapons;
 
         //Others - Bill
-		const int& GetState() const;
+        const int& GetState() const;
         const int& GetTakenDamage() const;
         const string& GetName() const;
         const int& GetLife() const;
@@ -61,6 +62,7 @@ class Player
         void ResetWeaponID();
         void PerformAttack(Player* targetPlayer, bool attackDirection);
         ExplosionEffect* GetExplosionEffect();
+		void SetState(const int& newState);
         void DoLand();
 
         // Used by Triggered Animation classes
@@ -138,10 +140,11 @@ class Player
         static const int KEY_AIR_MOVE_RIGHT = 221;
         static const int KEY_AIR_MOVE_LEFT = 231;
         static const int KEY_AIR_LAND_DOWN = 241;
-		// States
-		static const int CONSCIOUS_STATE = 0;
-		static const int UNCONSCIOUS_STATE = 1;
-		static const int RESPAWN_STATE = 2;
+        // States
+        static const int CONSCIOUS_STATE = 0;
+        static const int UNCONSCIOUS_STATE = 1;
+        static const int RESPAWN_STATE = 2;
+        static const int IMMUNE_STATE = 3;
         // Others
         static const double INITIAL_ACCELERATION;
         static const int OFFSET_INITIAL_VELOCITY = 20;
@@ -156,6 +159,7 @@ class Player
         static const int TAKEN_DMG_DANGER_HIGH = 35;
         static const int TAKEN_DMG_DANGER_MEDIUM = 20;
         static const int TAKEN_DMG_DANGER_LOW = 0;
+		static const int MAX_IMMUNE_FRAMES = 60; // 2 secs
 
     protected:
         //-----------------FRIEND CLASSES-----------------//
@@ -237,7 +241,6 @@ class Player
         bool IsAttackable(Player* potentialTargetPlayer);
         void ResetMovementVelocity();
         void DoParseKeyPressed();
-        void SetState(const int& newState);
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
@@ -381,6 +384,7 @@ class Player
         PlayerConsciousState _consciousState;
         PlayerUnconsciousState _unconsciousState;
         PlayerRespawnState _respawnState;
+		PlayerImmuneState _immuneState;
 };
 #endif
 }

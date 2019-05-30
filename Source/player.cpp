@@ -46,6 +46,7 @@ const int RESPAWN_LEFT_START_POS_X = 0;
 const int RESPAWN_LEFT_START_POS_Y = 0;
 const int RESPAWN_RIGHT_START_POS_X = SIZE_X;
 const int RESPAWN_RIGHT_START_POS_Y = 0;
+const int IMMUNE_FLASHING_FRAME = 11 ;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 Player::Player() :
@@ -131,6 +132,7 @@ void Player::Initialize(BattleSystem* battleSystemPtrValue, vector<Ground*> grou
     _consciousState = PlayerConsciousState(this);
     _unconsciousState = PlayerUnconsciousState(this);
     _respawnState = PlayerRespawnState(this);
+    _immuneState = PlayerImmuneState(this, 0);
     //
     InitializeOnRespawn();
     //
@@ -226,6 +228,10 @@ void Player::OnMoveAnimationLogic()
             _respawnState.OnMoveAnimationLogic();
             break;
 
+        case IMMUNE_STATE:
+            _immuneState.OnMoveAnimationLogic();
+            break;
+
         default:
             // Never happen
             return;
@@ -296,6 +302,10 @@ void Player::OnMoveGameLogic()
 
         case RESPAWN_STATE:
             _respawnState.OnMoveGameLogic();
+            break;
+
+        case IMMUNE_STATE:
+            _immuneState.OnMoveGameLogic();
             break;
 
         default:
@@ -712,11 +722,18 @@ void Player::ShowCurrentAnimation()
         _collision_box.ShowBitmap(BITMAP_SIZE * camera->GetSize());
     }
 
-    //Calculate and set the position of the player current animation in respect to the collision box's
-    CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
-    _aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
-    _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(cam.x, cam.y);
-    _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
+    // Calculate and set the position of the player current animation in respect to the collision box's
+    if (
+        _state != IMMUNE_STATE
+        ||
+        (_state == IMMUNE_STATE && _immuneState.GetFrameCounter() % IMMUNE_FLASHING_FRAME == 1)
+    )
+    {
+        CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
+        _aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
+        _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(cam.x, cam.y);
+        _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
+    }
 }
 
 bool Player::IsOnLeftEdge()
@@ -1177,6 +1194,10 @@ void Player::SetCurrentNonTriggeredAnimationByWeapon()
             else
                 SetAnimationStateByWeapon(ANI_WPN_ID_STAND_LEFT);
 
+            break;
+
+        case IMMUNE_STATE:
+            _immuneState.SetCurrentNonTriggeredAnimationByWeapon();
             break;
 
         default:

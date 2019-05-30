@@ -663,7 +663,7 @@ string BattleSystem::GetGameResult()
             }
         }
 
-        return (winnerName + " wins.");
+        return (winnerName + " Wins.");
     }
     else
     {
