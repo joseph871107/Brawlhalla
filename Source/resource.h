@@ -24,11 +24,14 @@
 #define IDR_MAINFRAME                   128
 #define IDR_GAMETYPE                    129
 #define IDB_FX_EXPLO_DOWN3              129
-#define IDB_FX_EXLO_UP0                 130
 #define IDB_FX_EXPLO_UP0                130
 #define IDB_FX_EXPLO_UP1                131
 #define IDB_FX_EXPLO_UP2                132
 #define IDB_FX_EXPLO_UP3                133
+#define IDB_TAKEN_DMG_GREEN             134
+#define IDB_TAKEN_DMG_RED               135
+#define IDB_BITMAP5                     136
+#define IDB_TAKEN_DMG_YELLOW            136
 #define IDC_GAMECURSOR                  153
 #define IDB_LOADING                     156
 #define IDB_CONTINUE                    158
@@ -133,7 +136,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        134
+#define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101

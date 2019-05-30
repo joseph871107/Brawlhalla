@@ -60,12 +60,12 @@ class BattleSystem : public CGameState
         bool IsGameOver();
         string GetGameResult();
         void TriggerExplosionEffect(Player* deadPlayer);
-		shared_ptr<Map> GetReferenceMap();
+        shared_ptr<Map> GetReferenceMap();
 
     private:
         //-----------------FUNCTIONS DECLARATIONS-----------------//
-		int GetNumberOfRemainingPlayers();
-		bool IsFinishedPlayingAllEffects();
+        int GetNumberOfRemainingPlayers();
+        bool IsFinishedPlayingAllEffects();
         void ClearPlayers();
         void ShowPlayerLife(const Player& player, int posXValue, int posYValue);
         int GetCurrentRemainTime();
@@ -90,6 +90,7 @@ class BattleSystem : public CGameState
         Window settingWindow;
         vector<ExplosionEffect*> _explosionEffects;
         vector<UIMessage*> _uiMessages;
+        CMovingBitmap takenDmgR, takenDmgY, takenDmgG;
 
 };
 

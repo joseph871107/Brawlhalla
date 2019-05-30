@@ -322,6 +322,10 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     integer.LoadBitmap();
     // String
     mString.LoadBitmap();
+    // Taken damages
+    takenDmgR.LoadBitmap(IDB_TAKEN_DMG_RED, RGB(0, 0, 0));
+    takenDmgY.LoadBitmap(IDB_TAKEN_DMG_YELLOW, RGB(0, 0, 0));
+    takenDmgG.LoadBitmap(IDB_TAKEN_DMG_GREEN, RGB(0, 0, 0));
     // Setting Window (for controlling the CPU player a.k.a Enemy)
     settingWindow.Initialize(1, 1);
     settingWindow.SetXY(0, 0);
@@ -495,16 +499,15 @@ void BattleSystem::OnShow()
     integer.ShowBitmap();
 
     // Show player
-    for (auto i = _players.begin(); i != _players.end(); i++)
+    for (unsigned int index = 0; index < _players.size(); index++)
     {
-        // Show player
-        if (!(*i)->IsOutOfLife())
-            (*i)->OnShow();
+        if (!_players[index]->IsOutOfLife())
+            _players[index]->OnShow();
 
-        // Show player's life
-        ShowPlayerLife((**i), 1150, 100 * (i - _players.begin()));
+        ShowPlayerLife((*_players[index]), 1300, 100 * index);
     }
 
+    // Show setting window
     settingWindow.OnShow();
 
     // Explosion Effect
@@ -660,7 +663,7 @@ string BattleSystem::GetGameResult()
             }
         }
 
-        return (winnerName + " win.");
+        return (winnerName + " wins.");
     }
     else
     {
@@ -679,14 +682,41 @@ void BattleSystem::ClearPlayers()
 void BattleSystem::ShowPlayerLife(const Player& player, int posXValue, int posYValue)
 {
     // Display player's name
-    mString.SetString(player.GetName() + " Life");
+    mString.SetString(player.GetName());
     mString.SetSize(0.5);
     mString.SetTopLeft(posXValue, posYValue + 20);
     mString.ShowBitmap();
-    // Displayer player's life
+    // Display player's life
     integer.SetInteger(player.GetLife()); //CInteger integer
-    integer.SetTopLeft(posXValue + 350, posYValue);
+    integer.SetTopLeft(posXValue + 200, posYValue);
     integer.ShowBitmap();
+    // Display player's taken damage
+
+    if (player.GetState() == Player::RESPAWN_STATE)
+    {
+        takenDmgG.SetTopLeft(posXValue + 200, posYValue);
+        takenDmgG.ShowBitmap();
+    }
+    else
+    {
+        int playerTakenDmg = player.GetTakenDamage();
+
+        if (playerTakenDmg >= Player::TAKEN_DMG_DANGER_HIGH)
+        {
+            takenDmgR.SetTopLeft(posXValue + 200, posYValue);
+            takenDmgR.ShowBitmap();
+        }
+        else if (playerTakenDmg >= Player::TAKEN_DMG_DANGER_MEDIUM)
+        {
+            takenDmgY.SetTopLeft(posXValue + 200, posYValue);
+            takenDmgY.ShowBitmap();
+        }
+        else if (playerTakenDmg >= Player::TAKEN_DMG_DANGER_LOW)
+        {
+            takenDmgG.SetTopLeft(posXValue + 200, posYValue);
+            takenDmgG.ShowBitmap();
+        }
+    }
 }
 
 int BattleSystem::GetCurrentRemainTime()

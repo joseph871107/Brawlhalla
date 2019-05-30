@@ -1455,6 +1455,15 @@
     <Image Include="res\ui\button\about_clk.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="RES\TakenDamage\taken_dmg_green.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\TakenDamage\taken_dmg_red.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\TakenDamage\taken_dmg_yellow.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\BattleMusic.mp3">

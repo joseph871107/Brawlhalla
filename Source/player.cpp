@@ -46,10 +46,6 @@ const int RESPAWN_LEFT_START_POS_X = 0;
 const int RESPAWN_LEFT_START_POS_Y = 0;
 const int RESPAWN_RIGHT_START_POS_X = SIZE_X;
 const int RESPAWN_RIGHT_START_POS_Y = 0;
-// States
-const int CONSCIOUS_STATE = 0;
-const int UNCONSCIOUS_STATE = 1;
-const int RESPAWN_STATE = 2;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
 Player::Player() :
@@ -1360,6 +1356,16 @@ void Player::DoLand()
 const double& Player::GetVerticalVelocity() const
 {
     return (_verticalVelocity);
+}
+
+const int& Player::GetTakenDamage() const
+{
+    return (_takenDmg);
+}
+
+const int& Player::GetState() const
+{
+    return (_state);
 }
 
 }

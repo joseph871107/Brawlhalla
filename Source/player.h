@@ -51,6 +51,8 @@ class Player
         vector<Weapon*>* weapons;
 
         //Others - Bill
+		const int& GetState() const;
+        const int& GetTakenDamage() const;
         const string& GetName() const;
         const int& GetLife() const;
         const bool IsOutOfLife() const;
@@ -81,8 +83,8 @@ class Player
         void SetX(const int& newX);
         void SetY(const int& newY);
 
-		//
-		const double& GetVerticalVelocity() const;
+        //
+        const double& GetVerticalVelocity() const;
 
         //-----------------STATIC VARIABLES DECLARATIONS-----------------//
         // Animations ID of 'ani'
@@ -136,6 +138,10 @@ class Player
         static const int KEY_AIR_MOVE_RIGHT = 221;
         static const int KEY_AIR_MOVE_LEFT = 231;
         static const int KEY_AIR_LAND_DOWN = 241;
+		// States
+		static const int CONSCIOUS_STATE = 0;
+		static const int UNCONSCIOUS_STATE = 1;
+		static const int RESPAWN_STATE = 2;
         // Others
         static const double INITIAL_ACCELERATION;
         static const int OFFSET_INITIAL_VELOCITY = 20;
@@ -147,6 +153,9 @@ class Player
         static const double INITIAL_VELOCITY;
         static const double STOP_ACCELERATION;
         static const int INITIAL_MAX_CONSCIOUS_FRAME = 10;
+        static const int TAKEN_DMG_DANGER_HIGH = 35;
+        static const int TAKEN_DMG_DANGER_MEDIUM = 20;
+        static const int TAKEN_DMG_DANGER_LOW = 0;
 
     protected:
         //-----------------FRIEND CLASSES-----------------//
@@ -154,7 +163,7 @@ class Player
         friend class PlayerUnconsciousState;
         friend class PlayerRespawnState;
         //-----------------FUNCTIONS DECLARATIONS-----------------//
-		void DoThrowWeapon();
+        void DoThrowWeapon();
         //Animations
         void AddCAnimationWithSprite(vector<CAnimation>*, vector< vector<CMovingBitmap>>*, vector<CPoint>*, double = 1.0, int = 5, bool = true, int = 1);
         void ResetAnimations(int animationID);

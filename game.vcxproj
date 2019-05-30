@@ -679,6 +679,9 @@
     <Image Include="RES\players\respawn_courier_right.bmp" />
     <Image Include="res\player\player.bmp" />
     <Image Include="RES\RespawnCourier.bmp" />
+    <Image Include="RES\TakenDamage\taken_dmg_green.bmp" />
+    <Image Include="RES\TakenDamage\taken_dmg_red.bmp" />
+    <Image Include="RES\TakenDamage\taken_dmg_yellow.bmp" />
     <Image Include="RES\tests\lean_left.bmp" />
     <Image Include="RES\tests\lean_right.bmp" />
     <Image Include="res\ui\brawlhalla-logo.bmp" />
