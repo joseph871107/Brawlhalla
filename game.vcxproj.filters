@@ -214,9 +214,6 @@
     <ClCompile Include="Source\Vector2.cpp">
       <Filter>Brawlhalla\Basic\Vector2</Filter>
     </ClCompile>
-    <ClCompile Include="Source\map.cpp">
-      <Filter>Brawlhalla\Map</Filter>
-    </ClCompile>
     <ClCompile Include="Source\TriggeredAnimation.cpp">
       <Filter>Brawlhalla\Player\TriggeredAnimation</Filter>
     </ClCompile>
@@ -274,7 +271,12 @@
     <ClCompile Include="Source\PlayerImmuneState.cpp">
       <Filter>Brawlhalla\Player\PlayerStates\PlayerImmuneState</Filter>
     </ClCompile>
-    <ClCompile Include="Source\boss.cpp" />
+    <ClCompile Include="Source\boss.cpp">
+      <Filter>Brawlhalla\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\map.cpp">
+      <Filter>Brawlhalla\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -337,9 +339,6 @@
     <ClInclude Include="Source\Vector2.h">
       <Filter>Brawlhalla\Basic\Vector2</Filter>
     </ClInclude>
-    <ClInclude Include="Source\map.h">
-      <Filter>Brawlhalla\Map</Filter>
-    </ClInclude>
     <ClInclude Include="Source\TriggeredAnimation.h">
       <Filter>Brawlhalla\Player\TriggeredAnimation</Filter>
     </ClInclude>
@@ -397,7 +396,12 @@
     <ClInclude Include="Source\PlayerImmuneState.h">
       <Filter>Brawlhalla\Player\PlayerStates\PlayerImmuneState</Filter>
     </ClInclude>
-    <ClInclude Include="Source\boss.h" />
+    <ClInclude Include="Source\boss.h">
+      <Filter>Brawlhalla\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\map.h">
+      <Filter>Brawlhalla\Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\game.rc">
