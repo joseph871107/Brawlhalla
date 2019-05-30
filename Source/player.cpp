@@ -398,9 +398,6 @@ void Player::OnKeyDown(const UINT& nChar)
     else if (nChar == _keys[4]) // Attack
     {
         _isTriggerAttack = true;
-        //      if (_flyingWeapon != nullptr)
-        //          _flyingWeapon->OnKeyDown(nChar);
-        //      DeleteFlyingWeapon();
     }
     else if (nChar == _keys[5]) //Dodge
     {
@@ -967,8 +964,8 @@ void Player::SetRespawnMovementVector(const int& startPosX, const int& startPosY
 
 void Player::DoRespawn()
 {
-	// Set the player to be alive
-	_isDead = false;
+    // Set the player to be alive
+    _isDead = false;
     // Set the state of the player to be 'RESPAWN_STATE'
     SetState(RESPAWN_STATE);
     // Set prev length to max integer value
