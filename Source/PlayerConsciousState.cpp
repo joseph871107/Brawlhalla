@@ -217,8 +217,6 @@ void PlayerConsciousState::DoOnEdge()
     _playerPtr->_verticalAcceleration = Player::EDGE_SLIDING_ACCELERATION;
 }
 
-
-
 void PlayerConsciousState::DoLeaveEdge()
 {
     _playerPtr->_isFirstTimeOnEdge = true;
@@ -355,8 +353,6 @@ void PlayerConsciousState::DoMoveRight(int movementUnit)
 {
     _playerPtr->_x += movementUnit;
 }
-
-
 
 void PlayerConsciousState::DoJump()
 {
