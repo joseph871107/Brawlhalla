@@ -288,7 +288,7 @@ class Player
         bool _isTriggerAttack;
         int _takenDmg;
 		int MAX_LIFE = 3;
-		vector<Player*> _attackList = vector<Player*>{};
+		vector<Player*> _attackList;
 
         //Throw weapon
         Weapon* _flyingWeapon;

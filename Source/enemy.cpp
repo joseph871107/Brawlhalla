@@ -23,10 +23,10 @@ Enemy::Enemy(int diff)
 	_difficulty = diff;
 }
 
-void Enemy::DoAttack(vector<Player*>::iterator target)
+void Enemy::DoAttack(vector<Player*> attackList, vector<Player*>::iterator target)
 {
 	static int counter = 0;
-	if (target == attackList.end())
+	if (attackList.size() == 0)
 		return;
 	if (IsCollide(GetCor(0), GetCor(1), GetCor(2), GetCor(3), (*target)->GetCor(0), (*target)->GetCor(1), (*target)->GetCor(2), (*target)->GetCor(3)))
 		counter++;
@@ -82,7 +82,6 @@ void Enemy::OnMove()
 {
     static int counter = 0, ptr = 0;
 	CPoint targetPos;
-	attackList = (_attackList.size() == 0 ? *_playersPtr : _attackList);
 	if (!_isHoldingWeapon && weapons->size()>0) {
 		vector<Weapon*>::iterator tar = WeaponNearby();
 		if (ChaseTarget(CPoint((*tar)->GetCor(0), (*tar)->GetCor(3)), (*tar)->GetWidth(), (*tar)->GetHeight())) {
@@ -92,15 +91,21 @@ void Enemy::OnMove()
 		}
 	}
 	else {
-		vector<Player*>::iterator targ = PlayerNearby(&attackList);
-		if(targ != attackList.end())
-			ChaseTarget(CPoint((*targ)->GetCor(0), (*targ)->GetCor(3)), (*targ)->GetWidth(), (*targ)->GetHeight());
-		DoAttack(targ);
+		vector<Player*>::iterator targ;
+		if (_attackList.size() == 0) {
+			targ = PlayerNearby(_playersPtr);
+			if (targ != _playersPtr->end())
+				ChaseTarget(CPoint((*targ)->GetCor(0), (*targ)->GetCor(3)), (*targ)->GetWidth(), (*targ)->GetHeight());
+			DoAttack(*_playersPtr, targ);
+		}
+		else{
+			targ = PlayerNearby(&_attackList);
+			if (targ != _attackList.end())
+				ChaseTarget(CPoint((*targ)->GetCor(0), (*targ)->GetCor(3)), (*targ)->GetWidth(), (*targ)->GetHeight());
+			DoAttack(_attackList, targ);
+		}
 	}
-    DoParseKeyPressed();
-    _currentKeyID = GetKeyCombination();
-    OnMoveAnimationLogic();
-    OnMoveGameLogic();
+	Player::OnMove();
 }
 void Enemy::SetAnimation()
 {

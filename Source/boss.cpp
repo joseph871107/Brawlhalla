@@ -68,15 +68,20 @@ namespace game_framework
 	{
 		static int counter = 0, ptr = 0;
 		CPoint targetPos;
-		attackList = (_attackList.size() == 0 ? *_playersPtr : _attackList);
-		vector<Player*>::iterator targ = PlayerNearby(&attackList);
-		if (targ != attackList.end())
-			ChaseTarget(CPoint((*targ)->GetCor(0), (*targ)->GetCor(3)), (*targ)->GetWidth(), (*targ)->GetHeight());
-		DoAttack(targ);
-		DoParseKeyPressed();
-		_currentKeyID = GetKeyCombination();
-		OnMoveAnimationLogic();
-		OnMoveGameLogic();
+		vector<Player*>::iterator targ;
+		if (_attackList.size() == 0) {
+			targ = PlayerNearby(_playersPtr);
+			if (targ != _playersPtr->end())
+				ChaseTarget(CPoint((*targ)->GetCor(0), (*targ)->GetCor(3)), (*targ)->GetWidth(), (*targ)->GetHeight());
+			DoAttack(*_playersPtr, targ);
+		}
+		else {
+			targ = PlayerNearby(&_attackList);
+			if (targ != _attackList.end())
+				ChaseTarget(CPoint((*targ)->GetCor(0), (*targ)->GetCor(3)), (*targ)->GetWidth(), (*targ)->GetHeight());
+			DoAttack(_attackList, targ);
+		}
+		Player::OnMove();
 	}
 	void Boss::SetAnimation()
 	{
