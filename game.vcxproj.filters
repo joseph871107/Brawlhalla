@@ -101,23 +101,23 @@
     <Filter Include="Brawlhalla\Map\Weapon">
       <UniqueIdentifier>{418f50f4-226b-4692-b861-52f39d442a2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\Player\PlayerStates">
-      <UniqueIdentifier>{d937a507-ce6a-4230-b6ff-6cb8e852e477}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\PlayerStates\PlayerUnconsciousState">
-      <UniqueIdentifier>{a1ec8f1c-b53e-4c22-98e8-d942099402b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\PlayerStates\PlayerRespawnState">
-      <UniqueIdentifier>{fa8ec0a7-b454-48af-bd6e-92b5b26b0220}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\PlayerStates\PlayerConsciousState">
-      <UniqueIdentifier>{9a57bf1d-d183-49e4-9a62-3e695b6b061f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\PlayerStates\PlayerImmuneState">
-      <UniqueIdentifier>{d6de6ff4-280b-41df-a17a-7f4ba5888c22}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Boss">
       <UniqueIdentifier>{6d711e18-56a1-43d4-a193-0bbccff69ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\Player States">
+      <UniqueIdentifier>{d937a507-ce6a-4230-b6ff-6cb8e852e477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\Player States\PlayerUnconsciousState">
+      <UniqueIdentifier>{a1ec8f1c-b53e-4c22-98e8-d942099402b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\Player States\PlayerRespawnState">
+      <UniqueIdentifier>{fa8ec0a7-b454-48af-bd6e-92b5b26b0220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\Player States\PlayerConsciousState">
+      <UniqueIdentifier>{9a57bf1d-d183-49e4-9a62-3e695b6b061f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Player\Player States\PlayerImmuneState">
+      <UniqueIdentifier>{d6de6ff4-280b-41df-a17a-7f4ba5888c22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -260,16 +260,16 @@
       <Filter>Brawlhalla\Player\RespawnCourier</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerConsciousState.cpp">
-      <Filter>Brawlhalla\Player\PlayerStates\PlayerConsciousState</Filter>
+      <Filter>Brawlhalla\Player\Player States\PlayerConsciousState</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerUnconsciousState.cpp">
-      <Filter>Brawlhalla\Player\PlayerStates\PlayerUnconsciousState</Filter>
+      <Filter>Brawlhalla\Player\Player States\PlayerUnconsciousState</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerRespawnState.cpp">
-      <Filter>Brawlhalla\Player\PlayerStates\PlayerRespawnState</Filter>
+      <Filter>Brawlhalla\Player\Player States\PlayerRespawnState</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerImmuneState.cpp">
-      <Filter>Brawlhalla\Player\PlayerStates\PlayerImmuneState</Filter>
+      <Filter>Brawlhalla\Player\Player States\PlayerImmuneState</Filter>
     </ClCompile>
     <ClCompile Include="Source\boss.cpp">
       <Filter>Brawlhalla\Boss</Filter>
@@ -385,16 +385,16 @@
       <Filter>Brawlhalla\Player\RespawnCourier</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerConsciousState.h">
-      <Filter>Brawlhalla\Player\PlayerStates\PlayerConsciousState</Filter>
+      <Filter>Brawlhalla\Player\Player States\PlayerConsciousState</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerUnconsciousState.h">
-      <Filter>Brawlhalla\Player\PlayerStates\PlayerUnconsciousState</Filter>
+      <Filter>Brawlhalla\Player\Player States\PlayerUnconsciousState</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerRespawnState.h">
-      <Filter>Brawlhalla\Player\PlayerStates\PlayerRespawnState</Filter>
+      <Filter>Brawlhalla\Player\Player States\PlayerRespawnState</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerImmuneState.h">
-      <Filter>Brawlhalla\Player\PlayerStates\PlayerImmuneState</Filter>
+      <Filter>Brawlhalla\Player\Player States\PlayerImmuneState</Filter>
     </ClInclude>
     <ClInclude Include="Source\boss.h">
       <Filter>Brawlhalla\Boss</Filter>
