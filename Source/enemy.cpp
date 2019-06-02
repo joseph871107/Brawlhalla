@@ -48,7 +48,7 @@ bool Enemy::ChaseTarget(CPoint point, int width, int height)
 	}
 	//
 	bool tri = true;
-	int offset = (int)(BITMAP_SIZE * _difficulty * 10);
+	int offset = (int)(_size * _difficulty * 10);
 	if (GetCor(0) > point.x + width && min->GetCor(0) + 60 < GetCor(0)) {	// Go left
 		OnKeyDown(keys[3]);
 		tri = false;
@@ -119,20 +119,20 @@ void Enemy::SetAnimation()
 	vector<CPoint> uf = vector<CPoint>{ CPoint(0, 4), CPoint(0, 5), CPoint(0, 6) }; // bmps of unconsciously flying
 	vector<CPoint> dg = vector<CPoint>{ CPoint(4, 0), CPoint(4, 1), CPoint(4, 2), CPoint(4, 3) }; // bmps of dodging
 	/// Comment for future devs: I duplicate the bitmaps for longer animation duration, which is dirty, should be improved
-	AddCAnimationWithSprite(&ani, &julian_l0, &r, BITMAP_SIZE); //ani[0] Run Left
-	AddCAnimationWithSprite(&ani, &julian_r0, &r, BITMAP_SIZE); //ani[1] Run Right
-	AddCAnimationWithSprite(&ani, &julian_l0, &j, BITMAP_SIZE, 5, false); //ani[2] Jump Left
-	AddCAnimationWithSprite(&ani, &julian_r0, &j, BITMAP_SIZE, 5, false); //ani[3] Jump Right
-	AddCAnimationWithSprite(&ani, &julian_l0, &s, BITMAP_SIZE); //ani[4] Stand (Idle) Left
-	AddCAnimationWithSprite(&ani, &julian_r0, &s, BITMAP_SIZE); //ani[5] Stand (Idle) Right
-	AddCAnimationWithSprite(&ani, &julian_r0, &l, BITMAP_SIZE); //ani[6] Lean Left
-	AddCAnimationWithSprite(&ani, &julian_l0, &l, BITMAP_SIZE); //ani[7] Lean Right
-	AddCAnimationWithSprite(&ani, &julian_l0, &lf, BITMAP_SIZE); //ani[8] Landing Falling Left
-	AddCAnimationWithSprite(&ani, &julian_r0, &lf, BITMAP_SIZE); //ani[9] Landing Falling Right
-	AddCAnimationWithSprite(&ani, &julian_r1, &uf, BITMAP_SIZE); //ani[10] Unconsciously Flying Left
-	AddCAnimationWithSprite(&ani, &julian_l1, &uf, BITMAP_SIZE); //ani[11] Unconsciously Flying Right
-	AddCAnimationWithSprite(&ani, &julian_l0, &dg, BITMAP_SIZE, 15); //ani[12] Dodging Left
-	AddCAnimationWithSprite(&ani, &julian_r0, &dg, BITMAP_SIZE, 15); //ani[13] Dodging Right
+	AddCAnimationWithSprite(&ani, &julian_l0, &r, _size); //ani[0] Run Left
+	AddCAnimationWithSprite(&ani, &julian_r0, &r, _size); //ani[1] Run Right
+	AddCAnimationWithSprite(&ani, &julian_l0, &j, _size, 5, false); //ani[2] Jump Left
+	AddCAnimationWithSprite(&ani, &julian_r0, &j, _size, 5, false); //ani[3] Jump Right
+	AddCAnimationWithSprite(&ani, &julian_l0, &s, _size); //ani[4] Stand (Idle) Left
+	AddCAnimationWithSprite(&ani, &julian_r0, &s, _size); //ani[5] Stand (Idle) Right
+	AddCAnimationWithSprite(&ani, &julian_r0, &l, _size); //ani[6] Lean Left
+	AddCAnimationWithSprite(&ani, &julian_l0, &l, _size); //ani[7] Lean Right
+	AddCAnimationWithSprite(&ani, &julian_l0, &lf, _size); //ani[8] Landing Falling Left
+	AddCAnimationWithSprite(&ani, &julian_r0, &lf, _size); //ani[9] Landing Falling Right
+	AddCAnimationWithSprite(&ani, &julian_r1, &uf, _size); //ani[10] Unconsciously Flying Left
+	AddCAnimationWithSprite(&ani, &julian_l1, &uf, _size); //ani[11] Unconsciously Flying Right
+	AddCAnimationWithSprite(&ani, &julian_l0, &dg, _size, 15); //ani[12] Dodging Left
+	AddCAnimationWithSprite(&ani, &julian_r0, &dg, _size, 15); //ani[13] Dodging Right
 	*/
 	//-----------------ANIMATION BY WEAPONS-----------------//
 	_aniByWpn = vector<vector<CAnimation>>();
@@ -167,34 +167,34 @@ void Enemy::SetAnimation()
 	uf = vector<CPoint>{ CPoint(0, 4), CPoint(0, 5), CPoint(0, 6) }; // bmps of unconsciously flying
 	dg = vector<CPoint>{ CPoint(4, 0), CPoint(4, 1), CPoint(4, 2), CPoint(4, 3) }; // bmps of dodging
 	vector<CAnimation> tempAniByWpn = vector<CAnimation>();
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &s, BITMAP_SIZE); //ani[0] Stand (Idle) Left with sword
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &s, BITMAP_SIZE); //ani[1] Stand (Idle) Right with sword
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l1, &gma, BITMAP_SIZE, 5, false); //ani[4] On-Ground-Moving Attack Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r1, &gma, BITMAP_SIZE, 5, false); //ani[5] On-Ground-Moving Attack Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l2, &sa, BITMAP_SIZE, 3, false); //ani[6] Slide Attack Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r2, &sa, BITMAP_SIZE, 3, false); //ani[7] Slide Attack Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l2, &aa, BITMAP_SIZE, 5, false); //ani[8] Air Attack Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r2, &aa, BITMAP_SIZE, 5, false); //ani[9] Air Attack Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l1, &ama, BITMAP_SIZE, 7, false); //ani[10] On-Air-Moving Attack Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r1, &ama, BITMAP_SIZE, 7, false); //ani[11] On-Air-Moving Attack Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &ada, BITMAP_SIZE, 3, false); //ani[12] On-Air-Down Attack Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l2, &sd, BITMAP_SIZE, 5, false); //ani[14] Draw sword Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r2, &sd, BITMAP_SIZE, 5, false); //ani[15] Draw sword Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &r, BITMAP_SIZE); //ani[16] Run Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &r, BITMAP_SIZE); //ani[17] Run Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &j, BITMAP_SIZE, 5, false); //ani[18] Jump Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &j, BITMAP_SIZE, 5, false); //ani[19] Jump Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &l, BITMAP_SIZE); //ani[20] Lean Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &l, BITMAP_SIZE); //ani[21] Lean Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &lf, BITMAP_SIZE); //ani[22] Landing Falling Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &lf, BITMAP_SIZE); //ani[23] Landing Falling Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r1, &uf, BITMAP_SIZE); //ani[24] Unconsciously Flying Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l1, &uf, BITMAP_SIZE); //ani[25] Unconsciously Flying Right
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &dg, BITMAP_SIZE, 15); //ani[26] Dodging Left
-	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &dg, BITMAP_SIZE, 15); //ani[27] Dodging Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &s, _size); //ani[0] Stand (Idle) Left with sword
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &s, _size); //ani[1] Stand (Idle) Right with sword
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &a, _size, 5, false); //ani[2] Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &a, _size, 5, false); //ani[3] Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l1, &gma, _size, 5, false); //ani[4] On-Ground-Moving Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r1, &gma, _size, 5, false); //ani[5] On-Ground-Moving Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l2, &sa, _size, 3, false); //ani[6] Slide Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r2, &sa, _size, 3, false); //ani[7] Slide Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l2, &aa, _size, 5, false); //ani[8] Air Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r2, &aa, _size, 5, false); //ani[9] Air Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l1, &ama, _size, 7, false); //ani[10] On-Air-Moving Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r1, &ama, _size, 7, false); //ani[11] On-Air-Moving Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &ada, _size, 3, false); //ani[12] On-Air-Down Attack Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &ada, _size, 3, false); //ani[13] On-Air-Down Attack Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l2, &sd, _size, 5, false); //ani[14] Draw sword Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r2, &sd, _size, 5, false); //ani[15] Draw sword Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &r, _size); //ani[16] Run Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &r, _size); //ani[17] Run Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &j, _size, 5, false); //ani[18] Jump Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &j, _size, 5, false); //ani[19] Jump Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &l, _size); //ani[20] Lean Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &l, _size); //ani[21] Lean Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &lf, _size); //ani[22] Landing Falling Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &lf, _size); //ani[23] Landing Falling Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r1, &uf, _size); //ani[24] Unconsciously Flying Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l1, &uf, _size); //ani[25] Unconsciously Flying Right
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_l0, &dg, _size, 15); //ani[26] Dodging Left
+	AddCAnimationWithSprite(&tempAniByWpn, &julian_r0, &dg, _size, 15); //ani[27] Dodging Right
 	_aniByWpn.push_back(tempAniByWpn);
 	// ~
 	// ~ Weapon 1

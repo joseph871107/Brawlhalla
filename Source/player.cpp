@@ -30,14 +30,13 @@ const double Player::EDGE_SLIDING_ACCELERATION = 0.1;
 const double Player::MOVE_ACCELERATION = 0.5;
 const double Player::MAX_MOVE_VELOCITY = 10;
 const double Player::LANDING_ACCELERATION = 5;
-const double Player::INITIAL_VELOCITY = 20;
+const double Player::INITIAL_VELOCITY = 15;
 const double Player::STOP_ACCELERATION = 1;
+
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MAX_JUMP_COUNT = 2;
 const int GND_ATTACK_MOVEMENT_UNIT = 12;
 const double COLLISION_ERRORS = 1.0;
-const int INITIAL_TAKEN_DAMAGE = 10;
-const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 3;
 const int MAX_ATTACK_AFFECTION_FRAMES = 150; // 5 secs
 const int RESPAWN_DISTANCE_ABOVE_GROUND = 100;
 const int RESPAWN_MOVEMENT_OFFSET_MAGNITUDE = 10;
@@ -91,8 +90,8 @@ void Player::Initialize(BattleSystem* battleSystemPtrValue, vector<Ground*> grou
     _x = random(g->GetCor(0), g->GetCor(2) - GetWidth());		// Randomly set x coordinate within Ground's width
     _y = g->GetCor(1) - GetHeight();
     //
-    _width = (int)(_collision_box.Width() * BITMAP_SIZE);
-    _height = (int)(_collision_box.Height() * BITMAP_SIZE);
+    _width = (int)(_collision_box.Width() * _size);
+    _height = (int)(_collision_box.Height() * _size);
 
     //
     if (!keysValue.size())
@@ -246,19 +245,8 @@ void Player::DoReturnHomeRespawnCourier()
     _respawnCourier.SetXY(currentX - 10, currentY - 10);
 }
 
-void Player::OnMoveGameLogic()
+void Player::EvaluateDeadAndRespawn()
 {
-    /*	~ Remark:
-    	~ This function is responsible for the game logic of the player,
-    	~ including his positioning and the way he interacts with other
-    	~ objects (such as grounds, other players, etc.)
-    */
-
-    //-----------------PRIOR COMMON SECTION-----------------//
-    /*	~	DEAD & RESPAWN
-    	~	Remark: When the player is out of life, the player's 'OnMove()' and 'OnShow()' will
-    	~	no longer being called by the 'BattleSystem'
-    */
     if (!_isDead && IsOutMapBorder())
         DoDead();
 
@@ -269,6 +257,21 @@ void Player::OnMoveGameLogic()
         else // If the dead explosion effect is finished, then respawn the player
             DoRespawn();
     }
+}
+
+void Player::OnMoveGameLogic()
+{
+    /*	~ Remark:
+    	~ This function is responsible for the game logic of the player,
+    	~ including his positioning and the way he interacts with other
+    	~ objects (such as grounds, other players, etc.)
+    */
+    //-----------------PRIOR COMMON SECTION-----------------//
+    /*	~	DEAD & RESPAWN
+    	~	Remark: When the player is out of life, the player's 'OnMove()' and 'OnShow()' will
+    	~	no longer being called by the 'BattleSystem'
+    */
+    this->EvaluateDeadAndRespawn();
 
     //-----------------STATE SECTION-----------------//
     switch (_state)
@@ -353,7 +356,7 @@ void Player::OnShow()
     // Play current audio
     PlayAudioByState();
     // Set the camera for showing name tag
-    CPoint cam = camera->GetXY(DoubleToInteger(_x - 4 * BITMAP_SIZE), DoubleToInteger(_y + _collision_box.Height() * BITMAP_SIZE));
+    CPoint cam = camera->GetXY(DoubleToInteger(_x - 4 * _size), DoubleToInteger(_y + _collision_box.Height() * _size));
     // Show the name tag
     CString playerName;
     playerName.SetString(_name);
@@ -449,11 +452,12 @@ void Player::InitializeUnconsciousState(bool beingAttackedDirection)
     _unconsciousAniDir = beingAttackedDirection;
 }
 
-void Player::BeenAttacked(Vector2 displacementVector, bool beingAttackedDirection)
+void Player::BeenAttacked(Vector2 displaymentVector, bool beingAttackedDirection)
 {
-    int displaceX = displacementVector.GetX();
-    int displaceY = displacementVector.GetY();
+    int displaceX = displaymentVector.GetX();
+    int displaceY = displaymentVector.GetY();
 
+    // y-coordinate
     if (displaceY < 0)
     {
         InitiateOffsetUp(abs(displaceY));
@@ -464,9 +468,10 @@ void Player::BeenAttacked(Vector2 displacementVector, bool beingAttackedDirectio
     }
     else // displayY == 0
     {
-        InitiateOffsetUp(10);
+        InitiateOffsetUp(10); // Give the player a little lift when being hit
     }
 
+    // x-coordinate
     if (displaceX < 0)
     {
         InitiateOffsetLeft(abs(displaceX));
@@ -504,10 +509,10 @@ int Player::GetCor(int index)
             return _y;
 
         case 2:
-            return _x + (int)(_collision_box.Width() * BITMAP_SIZE);
+            return _x + (int)(_collision_box.Width() * _size);
 
         case 3:
-            return _y + (int)(_collision_box.Height() * BITMAP_SIZE);
+            return _y + (int)(_collision_box.Height() * _size);
 
         default:
             return NULL;
@@ -620,34 +625,34 @@ void Player::SetAnimation()
     dg = vector<CPoint> { CPoint(5, 6), CPoint(5, 7) };
     //
     vector<CAnimation> tempAniByWpn = vector<CAnimation>();
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &s, BITMAP_SIZE); //ani[0] Stand (Idle) Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &s, BITMAP_SIZE); //ani[1] Stand (Idle) Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l1, &gma, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r1, &gma, BITMAP_SIZE, 3, false); //ani[5] On-Ground-Moving Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sa, BITMAP_SIZE, 3, false); //ani[6] Slide Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sa, BITMAP_SIZE, 3, false); //ani[7] Slide Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &aa, BITMAP_SIZE, 3, false); //ani[8] Air Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &aa, BITMAP_SIZE, 3, false); //ani[9] Air Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &ama, BITMAP_SIZE, 3, false); //ani[10] On-Air-Moving Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &ama, BITMAP_SIZE, 3, false); //ani[11] On-Air-Moving Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l1, &ada, BITMAP_SIZE, 3, false); //ani[12] On-Air-Down Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r1, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &r, BITMAP_SIZE); //ani[16] Run Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &r, BITMAP_SIZE); //ani[17] Run Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &j, BITMAP_SIZE, 5, false); //ani[18] Jump Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &j, BITMAP_SIZE, 5, false); //ani[19] Jump Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &l, BITMAP_SIZE); //ani[20] Lean Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &l, BITMAP_SIZE); //ani[21] Lean Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &lf, BITMAP_SIZE); //ani[22] Landing Falling Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &lf, BITMAP_SIZE); //ani[23] Landing Falling Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &uf, BITMAP_SIZE); //ani[24] Unconsciously Flying Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &uf, BITMAP_SIZE); //ani[25] Unconsciously Flying Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &dg, BITMAP_SIZE, 15); //ani[26] Dodging Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &dg, BITMAP_SIZE, 15); //ani[27] Dodging Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &s, _size); //ani[0] Stand (Idle) Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &s, _size); //ani[1] Stand (Idle) Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &a, _size, 5, false); //ani[2] Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &a, _size, 5, false); //ani[3] Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l1, &gma, _size, 3, false); //ani[4] On-Ground-Moving Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r1, &gma, _size, 3, false); //ani[5] On-Ground-Moving Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sa, _size, 3, false); //ani[6] Slide Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sa, _size, 3, false); //ani[7] Slide Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &aa, _size, 3, false); //ani[8] Air Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &aa, _size, 3, false); //ani[9] Air Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &ama, _size, 3, false); //ani[10] On-Air-Moving Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &ama, _size, 3, false); //ani[11] On-Air-Moving Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l1, &ada, _size, 3, false); //ani[12] On-Air-Down Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r1, &ada, _size, 3, false); //ani[13] On-Air-Down Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, _size, 3, false); //ani[14] Draw sword Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, _size, 3, false); //ani[15] Draw sword Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &r, _size); //ani[16] Run Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &r, _size); //ani[17] Run Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &j, _size, 5, false); //ani[18] Jump Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &j, _size, 5, false); //ani[19] Jump Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &l, _size); //ani[20] Lean Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &l, _size); //ani[21] Lean Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &lf, _size); //ani[22] Landing Falling Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &lf, _size); //ani[23] Landing Falling Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &uf, _size); //ani[24] Unconsciously Flying Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &uf, _size); //ani[25] Unconsciously Flying Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l0, &dg, _size, 15); //ani[26] Dodging Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r0, &dg, _size, 15); //ani[27] Dodging Right
     _aniByWpn.push_back(tempAniByWpn);
     /*	~ WEAPON 1
     	~ Sword
@@ -659,34 +664,34 @@ void Player::SetAnimation()
     ama = vector<CPoint> { CPoint(4, 2), CPoint(4, 3), CPoint(4, 4) };
     //
     tempAniByWpn = vector<CAnimation>();
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &s, BITMAP_SIZE); //ani[0] Stand (Idle) Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &s, BITMAP_SIZE); //ani[1] Stand (Idle) Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l3, &a, BITMAP_SIZE, 5, false); //ani[2] Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r3, &a, BITMAP_SIZE, 5, false); //ani[3] Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &gma, BITMAP_SIZE, 3, false); //ani[4] On-Ground-Moving Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &gma, BITMAP_SIZE, 3, false); //ani[5] On-Ground-Moving Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l2, &sa, BITMAP_SIZE, 3, false); //ani[6] Slide Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r2, &sa, BITMAP_SIZE, 3, false); //ani[7] Slide Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l2, &aa, BITMAP_SIZE, 2, false); //ani[8] Air Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r2, &aa, BITMAP_SIZE, 2, false); //ani[9] Air Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l1, &ama, BITMAP_SIZE, 3, false); //ani[10] On-Air-Moving Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r1, &ama, BITMAP_SIZE, 3, false); //ani[11] On-Air-Moving Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l1, &ada, BITMAP_SIZE, 3, false); //ani[12] On-Air-Down Attack Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r1, &ada, BITMAP_SIZE, 3, false); //ani[13] On-Air-Down Attack Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, BITMAP_SIZE, 3, false); //ani[14] Draw sword Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, BITMAP_SIZE, 3, false); //ani[15] Draw sword Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &r, BITMAP_SIZE); //ani[16] Run Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &r, BITMAP_SIZE); //ani[17] Run Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &j, BITMAP_SIZE, 5, false); //ani[18] Jump Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &j, BITMAP_SIZE, 5, false); //ani[19] Jump Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &l, BITMAP_SIZE); //ani[20] Lean Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &l, BITMAP_SIZE); //ani[21] Lean Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &lf, BITMAP_SIZE); //ani[22] Landing Falling Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &lf, BITMAP_SIZE); //ani[23] Landing Falling Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &uf, BITMAP_SIZE); //ani[24] Unconsciously Flying Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &uf, BITMAP_SIZE); //ani[25] Unconsciously Flying Right
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &dg, BITMAP_SIZE, 15); //ani[26] Dodging Left
-    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &dg, BITMAP_SIZE, 15); //ani[27] Dodging Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &s, _size); //ani[0] Stand (Idle) Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &s, _size); //ani[1] Stand (Idle) Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l3, &a, _size, 5, false); //ani[2] Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r3, &a, _size, 5, false); //ani[3] Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &gma, _size, 3, false); //ani[4] On-Ground-Moving Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &gma, _size, 3, false); //ani[5] On-Ground-Moving Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l2, &sa, _size, 3, false); //ani[6] Slide Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r2, &sa, _size, 3, false); //ani[7] Slide Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l2, &aa, _size, 2, false); //ani[8] Air Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r2, &aa, _size, 2, false); //ani[9] Air Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l1, &ama, _size, 3, false); //ani[10] On-Air-Moving Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r1, &ama, _size, 3, false); //ani[11] On-Air-Moving Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l1, &ada, _size, 3, false); //ani[12] On-Air-Down Attack Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r1, &ada, _size, 3, false); //ani[13] On-Air-Down Attack Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_l2, &sd, _size, 3, false); //ani[14] Draw sword Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_r2, &sd, _size, 3, false); //ani[15] Draw sword Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &r, _size); //ani[16] Run Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &r, _size); //ani[17] Run Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &j, _size, 5, false); //ani[18] Jump Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &j, _size, 5, false); //ani[19] Jump Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &l, _size); //ani[20] Lean Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &l, _size); //ani[21] Lean Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &lf, _size); //ani[22] Landing Falling Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &lf, _size); //ani[23] Landing Falling Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &uf, _size); //ani[24] Unconsciously Flying Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &uf, _size); //ani[25] Unconsciously Flying Right
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_l0, &dg, _size, 15); //ani[26] Dodging Left
+    AddCAnimationWithSprite(&tempAniByWpn, &louis_ex_r0, &dg, _size, 15); //ani[27] Dodging Right
     _aniByWpn.push_back(tempAniByWpn);
     /*	~ WEAPON 2
     	~ N/A
@@ -700,7 +705,7 @@ void Player::ShowCurrentAnimation()
     {
         CPoint cam = camera->GetXY(_x, _y);
         _collision_box.SetTopLeft(cam.x, cam.y);		//actual player blocks
-        _collision_box.ShowBitmap(BITMAP_SIZE * camera->GetSize());
+        _collision_box.ShowBitmap(_size * camera->GetSize());
     }
 
     // Calculate and set the position of the player current animation in respect to the collision box's
@@ -710,8 +715,8 @@ void Player::ShowCurrentAnimation()
         (_state == IMMUNE_STATE && _immuneState.GetFrameCounter() % IMMUNE_FLASHING_FRAME == 1)
     )
     {
-        CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * BITMAP_SIZE), _y - (int)(_OFFSET_Y * BITMAP_SIZE));
-        _aniByWpn[_wpnID][_currentAniByWpn].SetSize(BITMAP_SIZE * camera->GetSize());
+        CPoint cam = camera->GetXY(_x - (int)(_OFFSET_X * _size), _y - (int)(_OFFSET_Y * _size));
+        _aniByWpn[_wpnID][_currentAniByWpn].SetSize(_size * camera->GetSize());
         _aniByWpn[_wpnID][_currentAniByWpn].SetTopLeft(cam.x, cam.y);
         _aniByWpn[_wpnID][_currentAniByWpn].OnShow();
     }
@@ -864,13 +869,10 @@ void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
     // Determine the attack "direction", which is a 2D Vector
     Vector2 vectorAttackerToTargetPlayer;
     vectorAttackerToTargetPlayer.SetXY(GetCor(0), GetCor(1), targetPlayer->GetCor(0), targetPlayer->GetCor(1));
-
     // Increment the taken damage of the target player
-    if (targetPlayer->GetPlayerMode() != PLAYER_MODE_BOSS)
-        targetPlayer->_takenDmg += INCREMENT_AMOUNT_OF_TAKEN_DAMAGE;
-
+    targetPlayer->_takenDmg += INCREMENT_AMOUNT_OF_TAKEN_DAMAGE;
     // Set the offset magnitude of the attack 2D Vector
-    int attackOffsetMagnitude = targetPlayer->_takenDmg;
+    int attackOffsetMagnitude = targetPlayer->GetSpecializedTakenDamage();
     // Determine the attack 2D vector
     double multiplier = (vectorAttackerToTargetPlayer.GetLength() == 0 ? attackOffsetMagnitude : attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength()); // Avoid division by 0
     Vector2 targetPlayerDisplacementVector(DoubleToInteger(vectorAttackerToTargetPlayer.GetX() * multiplier),
@@ -878,6 +880,7 @@ void Player::PerformAttack(Player* targetPlayer, bool attackDirection)
     //
     targetPlayer->BeenAttacked(targetPlayerDisplacementVector, attackDirection);
 }
+
 bool Player::HitPlayer(Player* targetPlayer, bool attackDirection)
 {
     int attackerX1 = GetCor(0);
@@ -1233,12 +1236,12 @@ int Player::GetPlayerMode()
 
 void Player::SetSize(double size)
 {
-    BITMAP_SIZE = size;
+    _size = size;
 }
 
 double Player::GetSize()
 {
-    return BITMAP_SIZE;
+    return _size;
 }
 
 void Player::SetRespawn(bool tri)
@@ -1408,6 +1411,11 @@ const int& Player::GetTakenDamage() const
 const int& Player::GetState() const
 {
     return (_state);
+}
+
+int Player::GetSpecializedTakenDamage() const
+{
+    return (_takenDmg);
 }
 
 }

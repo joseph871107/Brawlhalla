@@ -54,8 +54,8 @@ class Player
         void SetSize(double);
         double GetSize();
         vector<Weapon*>* weapons;
-		void SetRespawn(bool tri);
-		void SetAttackList(vector<Player*> list);
+        void SetRespawn(bool tri);
+        void SetAttackList(vector<Player*> list);
 
         //Others - Bill
         const int& GetState() const;
@@ -68,8 +68,9 @@ class Player
         void ResetWeaponID();
         void PerformAttack(Player* targetPlayer, bool attackDirection);
         ExplosionEffect* GetExplosionEffect();
-		void SetState(const int& newState);
+        void SetState(const int& newState);
         void DoLand();
+        virtual int GetSpecializedTakenDamage() const;
 
         // Used by Triggered Animation classes
         void SetTriggeredAnimation(bool newIsTriggeredAni);
@@ -165,7 +166,10 @@ class Player
         static const int TAKEN_DMG_DANGER_HIGH = 35;
         static const int TAKEN_DMG_DANGER_MEDIUM = 20;
         static const int TAKEN_DMG_DANGER_LOW = 0;
-		static const int MAX_IMMUNE_FRAMES = 60; // 2 secs
+        static const int MAX_IMMUNE_FRAMES = 60; // 2 secs
+        // Damages
+        static const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 3;
+        static const int INITIAL_TAKEN_DAMAGE = INCREMENT_AMOUNT_OF_TAKEN_DAMAGE * 3;
 
     protected:
         //-----------------FRIEND CLASSES-----------------//
@@ -214,6 +218,7 @@ class Player
         virtual void InitializeOnRespawn();
         bool StateChanged();
         bool WpnStateChanged();
+        virtual void EvaluateDeadAndRespawn();
 
 
         /// Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
@@ -230,8 +235,8 @@ class Player
         void ResetTriggeredAnimationVariables();
         void SetTriggeredAnimationVariables(int keyCombInt);
         bool IsFinishedTriggeredAnimation();
-		bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
-		Ground* OnGround();
+        bool IsOnGround();				// Return 'true' if the player is on any ground of all grounds
+        Ground* OnGround();
         //
         void SetCurrentAnimation();
         void FinishTriggeredAnimationAnimationLogic();
@@ -251,7 +256,7 @@ class Player
         //-----------------VARIABLES DECLARATIONS-----------------//
         //Required for Game Framework
         int _x, _y;						// position of the collision's box
-        double BITMAP_SIZE = 1;
+        double _size = 1;
         //bool _beInterrupt;
         vector<vector<int>*> bmp_iter;	// used to display current animation state in DEBUG mode
         int _OFFSET_X = 20;
@@ -266,7 +271,7 @@ class Player
 
         //Offsets
         bool _isOffsetLeft, _isOffsetRight;
-		double _horizontalVelocity;
+        double _horizontalVelocity;
 
         //Movements
         bool _isPressingLeft, _isPressingRight, _isPressingDown, _isTriggerPressingLeft;
@@ -287,10 +292,10 @@ class Player
         bool _isHoldingWeapon;
         bool _isTriggerAttack;
         int _takenDmg;
-		// The taken damage will determine how far the target player would fly 'attackOffsetMagnitude', and
-		// how long he would be in the unconscious state '_unconsciousFramesCount'
-		int MAX_LIFE = 3;
-		vector<Player*> _attackList;
+        // The taken damage will determine how far the target player would fly 'attackOffsetMagnitude', and
+        // how long he would be in the unconscious state '_unconsciousFramesCount'
+        int MAX_LIFE = 3;
+        vector<Player*> _attackList;
 
         vector<Player*>* _playersPtr;
         int _identifier;
@@ -387,14 +392,14 @@ class Player
         int _resDestPosX, _resDestPosY;
         double _preDistance; // used in combination with _vectorRespawnMovement
         RespawnCourier _respawnCourier;
-		bool _allowRespawn;
+        bool _allowRespawn;
 
         // State
         int _state;
         PlayerConsciousState _consciousState;
         PlayerUnconsciousState _unconsciousState;
         PlayerRespawnState _respawnState;
-		PlayerImmuneState _immuneState;
+        PlayerImmuneState _immuneState;
 };
 #endif
 }
