@@ -38,6 +38,7 @@ class Weapon : public Object
         bool IsOnGround();
         void DoWeaponBeingThrown();
         void DoWeaponDropbox();
+        Player* GetHitOpponent() const;
         // Unused functions
         void SetState(long state);
         //-----------------VARIABLES DECLARATIONS-----------------//
@@ -45,8 +46,8 @@ class Weapon : public Object
         clock_t start;
         vector<Ground*> _grounds;
         Ground* _ground;
-        vector<Player*> _player;
-        Player* _throwHost;
+        vector<Player*> _players;
+        Player* _throwerPtr;
         bool _throwDir; // throw direction
         long _state;
         //

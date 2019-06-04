@@ -71,6 +71,7 @@ class Player
         void SetState(const int& newState);
         void DoLand();
         virtual int GetSpecializedTakenDamage() const;
+        const vector<Player*>& GetAttackListByGameMode() const;
 
         // Used by Triggered Animation classes
         void SetTriggeredAnimation(bool newIsTriggeredAni);

@@ -51,7 +51,7 @@ void Weapon::Initialize(vector<Ground*> ground, vector<Player*> player)
     _ground = GetRandomGround(&ground);		// Randomly select Ground
     x = random(_ground->GetCor(0), _ground->GetCor(2) - width);		// Randomly set x coordinate within Ground's width
     y = _ground->GetCor(1) - 400;						// Set y with Ground's top adding 400 pixels
-    _player = player;
+    _players = player;
     sbmp = &bmp;
     //
     _width = DoubleToInteger(bmp.Width() * _size);
@@ -64,7 +64,7 @@ void Weapon::Initialize(vector<Ground*> ground, vector<Player*> player)
 
 void Weapon::Throw(bool dir, Player* player)
 {
-    _throwHost = player;
+    _throwerPtr = player;
     _throwDir = dir;
 
     // Set the initial horizontal velocity of the weapon
@@ -83,7 +83,7 @@ void Weapon::Throw(bool dir, Player* player)
 
 Player* Weapon::HitPlayer()
 {
-    for (auto i = _player.begin(); i != _player.end(); i++)
+    for (auto i = _players.begin(); i != _players.end(); i++)
     {
         if ((*i)->GetCor(2) >= x && (*i)->GetCor(0) <= x + width && (*i)->GetCor(3) >= y && (*i)->GetCor(1) <= y + height)
             return *i;
@@ -152,6 +152,23 @@ void Weapon::OnMove()
         DoWeaponDropbox();
 }
 
+Player* Weapon::GetHitOpponent() const
+{
+    vector<Player*> throwerAttackList = _throwerPtr->GetAttackListByGameMode();
+
+    for (auto playerPtr : throwerAttackList)
+        if (
+            playerPtr != _throwerPtr
+            &&
+            playerPtr->GetCor(2) >= x && playerPtr->GetCor(0) <= x + width
+            &&
+            playerPtr->GetCor(3) >= y && playerPtr->GetCor(1) <= y + height
+        )
+            return (playerPtr);
+
+    return nullptr;
+}
+
 void Weapon::DoWeaponBeingThrown()
 {
     static int distance = 0; // weapon flying animation loop interval
@@ -192,12 +209,12 @@ void Weapon::DoWeaponBeingThrown()
             DoBounceOffGround(weaponX1, weaponY1, weaponX2, weaponY2, groundPtr);
     }
 
-    /* WEAPON HITS ENEMY */
-    Player* _hitPlayer = HitPlayer();
+    /* WEAPON HITS OPPONENT */
+    Player* _hitOpponentPtr = GetHitOpponent();
 
-    if (_hitPlayer != nullptr && _hitPlayer != _throwHost)
+    if (_hitOpponentPtr != nullptr) // If hit
     {
-        _throwHost->PerformAttack(_hitPlayer, _throwDir);
+        _throwerPtr->PerformAttack(_hitOpponentPtr, _throwDir);
 
         // Weapon bounces off after hit player
         if (_throwDir) // right

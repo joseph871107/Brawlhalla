@@ -829,7 +829,7 @@ bool Player::IsAttackable(Player* potentialTargetPlayer)
 
 void Player::DoAttack()
 {
-    if (_attackList.size() == 0) // Normal
+    if (_attackList.size() == 0) // Not boss mode
     {
         for (auto eachPlayerPtr : (*_playersPtr))
         {
@@ -911,6 +911,11 @@ bool Player::HitPlayer(Player* targetPlayer, bool attackDirection)
 void Player::SetAttackList(vector<Player*> list)
 {
     _attackList = list;
+}
+
+const vector<Player*>& Player::GetAttackListByGameMode() const
+{
+    return (_attackList.size() == 0 ? (*_playersPtr) : _attackList);
 }
 
 void Player::PlayAudioByState()
