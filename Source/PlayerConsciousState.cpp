@@ -101,7 +101,8 @@ void PlayerConsciousState::OnMoveGameLogic()
     // Secondly, we do the vertical offset (in this case, gravity)
     if (!_playerPtr->IsOnGround())
     {
-        _playerPtr->_verticalVelocity += _playerPtr->_verticalAcceleration;
+        double newVerticalVelocity = _playerPtr->_verticalVelocity + _playerPtr->_verticalAcceleration;
+        _playerPtr->_verticalVelocity = (newVerticalVelocity > Player::MAX_VERTICAL_VELOCITY ? Player::MAX_VERTICAL_VELOCITY : newVerticalVelocity);
         _playerPtr->_y += DoubleToInteger(_playerPtr->_verticalVelocity);
     }
 

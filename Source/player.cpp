@@ -30,8 +30,9 @@ const double Player::EDGE_SLIDING_ACCELERATION = 0.1;
 const double Player::MOVE_ACCELERATION = 0.5;
 const double Player::MAX_MOVE_VELOCITY = 10;
 const double Player::LANDING_ACCELERATION = 5;
-const double Player::INITIAL_VELOCITY = 15;
+const double Player::INITIAL_VELOCITY = 20;
 const double Player::STOP_ACCELERATION = 1;
+const double Player::MAX_VERTICAL_VELOCITY = 30;
 
 //-----------------CONSTANTS DEFINITIONS-----------------//
 const int MAX_JUMP_COUNT = 2;

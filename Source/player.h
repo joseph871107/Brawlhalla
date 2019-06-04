@@ -167,6 +167,7 @@ class Player
         static const int TAKEN_DMG_DANGER_MEDIUM = 20;
         static const int TAKEN_DMG_DANGER_LOW = 0;
         static const int MAX_IMMUNE_FRAMES = 60; // 2 secs
+        static const double MAX_VERTICAL_VELOCITY;
         // Damages
         static const int INCREMENT_AMOUNT_OF_TAKEN_DAMAGE = 3;
         static const int INITIAL_TAKEN_DAMAGE = INCREMENT_AMOUNT_OF_TAKEN_DAMAGE * 3;
