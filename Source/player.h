@@ -178,6 +178,7 @@ class Player
         friend class PlayerConsciousState;
         friend class PlayerUnconsciousState;
         friend class PlayerRespawnState;
+		friend class PlayerImmuneState;
         //-----------------FUNCTIONS DECLARATIONS-----------------//
         void DoThrowWeapon();
         //Animations

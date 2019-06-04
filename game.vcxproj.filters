@@ -17,9 +17,6 @@
     <Filter Include="Brawlhalla\BattleSystem">
       <UniqueIdentifier>{dc6cbd24-8642-41e1-8a14-8122c6ce5015}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\Player">
-      <UniqueIdentifier>{eedfae59-751c-4f3c-9e55-9614b166dac8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Window">
       <UniqueIdentifier>{8a43cae0-5cbc-4c8f-b7bc-84d724010cf6}</UniqueIdentifier>
     </Filter>
@@ -28,9 +25,6 @@
     </Filter>
     <Filter Include="Resource Files\SoundEffect">
       <UniqueIdentifier>{d19df318-3f90-4022-a479-73509e815fed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Window\Camera">
-      <UniqueIdentifier>{985af613-1e23-4389-99d2-c1dbb27a9ad8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Brawlhalla\Basic">
       <UniqueIdentifier>{1d9c79c0-0078-428f-9bb7-8c4ffd4a9d86}</UniqueIdentifier>
@@ -43,24 +37,6 @@
     </Filter>
     <Filter Include="Brawlhalla\Window\UI">
       <UniqueIdentifier>{f46e6c8d-3b0d-44a2-b992-0d6f80a81215}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Map">
-      <UniqueIdentifier>{91b11b4f-1bf2-4c0c-9542-ee1c534e3f7b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\TriggeredAnimation">
-      <UniqueIdentifier>{b21da1f6-fd96-43a6-a2df-2adb57d41fcb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\TriggeredAnimation\Attack on Ground">
-      <UniqueIdentifier>{67f1b096-65ce-4c42-8d75-58522b68c06b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\TriggeredAnimation\Attack on Air">
-      <UniqueIdentifier>{02672f95-6cbd-41b0-a918-79769bc6cbf8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\TriggeredAnimation\Others">
-      <UniqueIdentifier>{c30da535-c1d8-4fd4-af9b-82f605e4b59a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Enemy">
-      <UniqueIdentifier>{427d87f5-bc90-42f6-994a-5b66b01feca3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\Bitmap\Animation">
       <UniqueIdentifier>{fc9b157f-9907-4561-81f4-5f88255d1b29}</UniqueIdentifier>
@@ -80,9 +56,6 @@
     <Filter Include="Resource Files\Bitmap\Animation\Player1\jumpM">
       <UniqueIdentifier>{8790d827-3de7-4b78-ba4f-aa98b676a320}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\Player\RespawnCourier">
-      <UniqueIdentifier>{1e0f1efe-b94a-454a-a42c-d804f85122aa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Basic\Vector2">
       <UniqueIdentifier>{1b5e61f6-30ea-4da1-8759-e9625cb2098d}</UniqueIdentifier>
     </Filter>
@@ -92,29 +65,56 @@
     <Filter Include="Brawlhalla\BattleSystem\UIMessage">
       <UniqueIdentifier>{e8433d73-925b-4d48-97e9-d1c45631648a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Boss">
+      <UniqueIdentifier>{6d711e18-56a1-43d4-a193-0bbccff69ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Enemy">
+      <UniqueIdentifier>{427d87f5-bc90-42f6-994a-5b66b01feca3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player">
+      <UniqueIdentifier>{eedfae59-751c-4f3c-9e55-9614b166dac8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\TriggeredAnimation">
+      <UniqueIdentifier>{b21da1f6-fd96-43a6-a2df-2adb57d41fcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Ground">
+      <UniqueIdentifier>{67f1b096-65ce-4c42-8d75-58522b68c06b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Air">
+      <UniqueIdentifier>{02672f95-6cbd-41b0-a918-79769bc6cbf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\TriggeredAnimation\Others">
+      <UniqueIdentifier>{c30da535-c1d8-4fd4-af9b-82f605e4b59a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\RespawnCourier">
+      <UniqueIdentifier>{1e0f1efe-b94a-454a-a42c-d804f85122aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\Player States">
+      <UniqueIdentifier>{d937a507-ce6a-4230-b6ff-6cb8e852e477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\Player States\PlayerUnconsciousState">
+      <UniqueIdentifier>{a1ec8f1c-b53e-4c22-98e8-d942099402b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\Player States\PlayerRespawnState">
+      <UniqueIdentifier>{fa8ec0a7-b454-48af-bd6e-92b5b26b0220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\Player States\PlayerConsciousState">
+      <UniqueIdentifier>{9a57bf1d-d183-49e4-9a62-3e695b6b061f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\BattleSystem\Player\Player States\PlayerImmuneState">
+      <UniqueIdentifier>{d6de6ff4-280b-41df-a17a-7f4ba5888c22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Camera">
+      <UniqueIdentifier>{985af613-1e23-4389-99d2-c1dbb27a9ad8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brawlhalla\Map">
+      <UniqueIdentifier>{91b11b4f-1bf2-4c0c-9542-ee1c534e3f7b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Brawlhalla\Map\Ground">
       <UniqueIdentifier>{67a04a7c-d01e-45ab-a019-c4ccc3682d5d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Brawlhalla\Map\Weapon">
       <UniqueIdentifier>{418f50f4-226b-4692-b861-52f39d442a2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Boss">
-      <UniqueIdentifier>{6d711e18-56a1-43d4-a193-0bbccff69ecf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\Player States">
-      <UniqueIdentifier>{d937a507-ce6a-4230-b6ff-6cb8e852e477}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\Player States\PlayerUnconsciousState">
-      <UniqueIdentifier>{a1ec8f1c-b53e-4c22-98e8-d942099402b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\Player States\PlayerRespawnState">
-      <UniqueIdentifier>{fa8ec0a7-b454-48af-bd6e-92b5b26b0220}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\Player States\PlayerConsciousState">
-      <UniqueIdentifier>{9a57bf1d-d183-49e4-9a62-3e695b6b061f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Brawlhalla\Player\Player States\PlayerImmuneState">
-      <UniqueIdentifier>{d6de6ff4-280b-41df-a17a-7f4ba5888c22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -185,7 +185,7 @@
       <Filter>Brawlhalla\Basic\Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\player.cpp">
-      <Filter>Brawlhalla\Player</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player</Filter>
     </ClCompile>
     <ClCompile Include="Source\ground.cpp">
       <Filter>Brawlhalla\Map\Ground</Filter>
@@ -200,7 +200,7 @@
       <Filter>Brawlhalla\Window\UI</Filter>
     </ClCompile>
     <ClCompile Include="source\camera.cpp">
-      <Filter>Brawlhalla\Window\Camera</Filter>
+      <Filter>Brawlhalla\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\window.cpp">
       <Filter>Brawlhalla\Window</Filter>
@@ -209,40 +209,40 @@
       <Filter>Brawlhalla\Basic\Vector2</Filter>
     </ClCompile>
     <ClCompile Include="Source\TriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation</Filter>
     </ClCompile>
     <ClCompile Include="Source\AirAttackTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Air</Filter>
     </ClCompile>
     <ClCompile Include="Source\AirLandDownAttackTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Air</Filter>
     </ClCompile>
     <ClCompile Include="Source\AirMoveLeftAttackTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Air</Filter>
     </ClCompile>
     <ClCompile Include="Source\AirMoveRightAttackTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Air</Filter>
     </ClCompile>
     <ClCompile Include="Source\DodgeTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Others</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Others</Filter>
     </ClCompile>
     <ClCompile Include="Source\DrawSwordTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Others</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Others</Filter>
     </ClCompile>
     <ClCompile Include="Source\GroundAttackTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClCompile>
     <ClCompile Include="Source\GroundLandDownAttackTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClCompile>
     <ClCompile Include="Source\GroundMoveLeftAttackTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClCompile>
     <ClCompile Include="Source\GroundMoveRightAttackTriggeredAnimation.cpp">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClCompile>
     <ClCompile Include="Source\enemy.cpp">
-      <Filter>Brawlhalla\Enemy</Filter>
+      <Filter>Brawlhalla\BattleSystem\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\ExplosionEffect.cpp">
       <Filter>Brawlhalla\BattleSystem\ExplosionEffect</Filter>
@@ -251,22 +251,22 @@
       <Filter>Brawlhalla\BattleSystem\UIMessage</Filter>
     </ClCompile>
     <ClCompile Include="Source\RespawnCourier.cpp">
-      <Filter>Brawlhalla\Player\RespawnCourier</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\RespawnCourier</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerConsciousState.cpp">
-      <Filter>Brawlhalla\Player\Player States\PlayerConsciousState</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\Player States\PlayerConsciousState</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerUnconsciousState.cpp">
-      <Filter>Brawlhalla\Player\Player States\PlayerUnconsciousState</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\Player States\PlayerUnconsciousState</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerRespawnState.cpp">
-      <Filter>Brawlhalla\Player\Player States\PlayerRespawnState</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\Player States\PlayerRespawnState</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerImmuneState.cpp">
-      <Filter>Brawlhalla\Player\Player States\PlayerImmuneState</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\Player States\PlayerImmuneState</Filter>
     </ClCompile>
     <ClCompile Include="Source\boss.cpp">
-      <Filter>Brawlhalla\Boss</Filter>
+      <Filter>Brawlhalla\BattleSystem\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\map.cpp">
       <Filter>Brawlhalla\Map</Filter>
@@ -313,7 +313,7 @@
       <Filter>Brawlhalla\Map\Ground</Filter>
     </ClInclude>
     <ClInclude Include="Source\player.h">
-      <Filter>Brawlhalla\Player</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\weapon.h">
       <Filter>Brawlhalla\Map\Weapon</Filter>
@@ -322,7 +322,7 @@
       <Filter>Brawlhalla\Window\UI</Filter>
     </ClInclude>
     <ClInclude Include="source\camera.h">
-      <Filter>Brawlhalla\Window\Camera</Filter>
+      <Filter>Brawlhalla\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\window.h">
       <Filter>Brawlhalla\Window</Filter>
@@ -331,40 +331,40 @@
       <Filter>Brawlhalla\Basic\Vector2</Filter>
     </ClInclude>
     <ClInclude Include="Source\TriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation</Filter>
     </ClInclude>
     <ClInclude Include="Source\AirAttackTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Air</Filter>
     </ClInclude>
     <ClInclude Include="Source\AirLandDownAttackTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Air</Filter>
     </ClInclude>
     <ClInclude Include="Source\AirMoveLeftAttackTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Air</Filter>
     </ClInclude>
     <ClInclude Include="Source\AirMoveRightAttackTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Air</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Air</Filter>
     </ClInclude>
     <ClInclude Include="Source\DodgeTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Others</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Others</Filter>
     </ClInclude>
     <ClInclude Include="Source\DrawSwordTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Others</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Others</Filter>
     </ClInclude>
     <ClInclude Include="Source\GroundAttackTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClInclude>
     <ClInclude Include="Source\GroundLandDownAttackTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClInclude>
     <ClInclude Include="Source\GroundMoveLeftAttackTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClInclude>
     <ClInclude Include="Source\GroundMoveRightAttackTriggeredAnimation.h">
-      <Filter>Brawlhalla\Player\TriggeredAnimation\Attack on Ground</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\TriggeredAnimation\Attack on Ground</Filter>
     </ClInclude>
     <ClInclude Include="Source\enemy.h">
-      <Filter>Brawlhalla\Enemy</Filter>
+      <Filter>Brawlhalla\BattleSystem\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\ExplosionEffect.h">
       <Filter>Brawlhalla\BattleSystem\ExplosionEffect</Filter>
@@ -373,22 +373,22 @@
       <Filter>Brawlhalla\BattleSystem\UIMessage</Filter>
     </ClInclude>
     <ClInclude Include="Source\RespawnCourier.h">
-      <Filter>Brawlhalla\Player\RespawnCourier</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\RespawnCourier</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerConsciousState.h">
-      <Filter>Brawlhalla\Player\Player States\PlayerConsciousState</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\Player States\PlayerConsciousState</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerUnconsciousState.h">
-      <Filter>Brawlhalla\Player\Player States\PlayerUnconsciousState</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\Player States\PlayerUnconsciousState</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerRespawnState.h">
-      <Filter>Brawlhalla\Player\Player States\PlayerRespawnState</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\Player States\PlayerRespawnState</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerImmuneState.h">
-      <Filter>Brawlhalla\Player\Player States\PlayerImmuneState</Filter>
+      <Filter>Brawlhalla\BattleSystem\Player\Player States\PlayerImmuneState</Filter>
     </ClInclude>
     <ClInclude Include="Source\boss.h">
-      <Filter>Brawlhalla\Boss</Filter>
+      <Filter>Brawlhalla\BattleSystem\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\map.h">
       <Filter>Brawlhalla\Map</Filter>
