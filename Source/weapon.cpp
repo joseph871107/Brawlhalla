@@ -64,6 +64,9 @@ void Weapon::Initialize(vector<Ground*> ground, vector<Player*> player)
 
 void Weapon::Throw(bool dir, Player* player)
 {
+	//
+	CAudio::Instance()->Play(AUDIO_SWOOSH); // Throw sound effect
+	// Initialization
     _throwerPtr = player;
     _throwDir = dir;
 
@@ -215,6 +218,7 @@ void Weapon::DoWeaponBeingThrown()
     if (_hitOpponentPtr != nullptr) // If hit
     {
         _throwerPtr->PerformAttack(_hitOpponentPtr, _throwDir);
+		CAudio::Instance()->Play(AUDIO_PUNCH); // Hit sound effect
 
         // Weapon bounces off after hit player
         if (_throwDir) // right
