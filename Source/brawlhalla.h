@@ -2,7 +2,6 @@
 #include "player.h"
 #include "battleSystem.h"
 #include "ui.h"
-#include "fImage.h"
 #include "window.h"
 #define GAME_MODE_PVP 0
 #define GAME_MODE_PVC 1
@@ -80,7 +79,6 @@ class CGameStateRun : public CGameState
         static string GetLegacyString();
         static void SetLegacyString(string newLegacyString);
     private:
-        FImage test;
         BattleSystem battleSystem;
         static string _legacyString;				// used for transferring message to other game state (e.g., CGameStateInit, CGameStateOver)
 };

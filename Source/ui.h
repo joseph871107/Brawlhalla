@@ -1,7 +1,6 @@
 #ifndef UI_H
 #define UI_H
 #include "object.h"
-#include "fImage.h"
 #define BUTTON_OUTSIDE 0
 #define BUTTON_HOVER 1
 #define BUTTON_CLICK 2

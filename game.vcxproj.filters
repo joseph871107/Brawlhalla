@@ -41,9 +41,6 @@
     <Filter Include="Brawlhalla\Basic\GameComFunc">
       <UniqueIdentifier>{95e22aca-2741-44d0-8213-e4a98de43e1e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Brawlhalla\Basic\FImage">
-      <UniqueIdentifier>{e4e80621-2001-439d-b1ef-c56a1fc939da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Brawlhalla\Window\UI">
       <UniqueIdentifier>{f46e6c8d-3b0d-44a2-b992-0d6f80a81215}</UniqueIdentifier>
     </Filter>
@@ -202,9 +199,6 @@
     <ClCompile Include="Source\ui.cpp">
       <Filter>Brawlhalla\Window\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\fimage.cpp">
-      <Filter>Brawlhalla\Basic\FImage</Filter>
-    </ClCompile>
     <ClCompile Include="source\camera.cpp">
       <Filter>Brawlhalla\Window\Camera</Filter>
     </ClCompile>
@@ -326,9 +320,6 @@
     </ClInclude>
     <ClInclude Include="Source\ui.h">
       <Filter>Brawlhalla\Window\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\fImage.h">
-      <Filter>Brawlhalla\Basic\FImage</Filter>
     </ClInclude>
     <ClInclude Include="source\camera.h">
       <Filter>Brawlhalla\Window\Camera</Filter>
