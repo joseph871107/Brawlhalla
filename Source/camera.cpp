@@ -99,6 +99,10 @@ CPoint Camera::GetXY(int tx, int ty)
 {
     return CPoint ((int)((tx - x) * size + SIZE_X / 2 + offsetX), (int)((ty - y) * size + SIZE_Y / 2 + offsetY));
 }
+CPoint Camera::GetReverseXY(int tx, int ty)
+{
+	return CPoint((int)((tx - SIZE_X / 2 - offsetX) / size) + x, (int)((ty - SIZE_Y / 2 + offsetY) / size + y));
+}
 CPoint Camera::GetCameraXY()
 {
     CPoint temp;

@@ -76,6 +76,7 @@ class BattleSystem : public CGameState
         void InitializePlayersOnBeginState(int mode, int enemy, int diff);
         void RemoveFinishedDisplayMessages();
         void ClearUIMessages();
+		void EasterEgg(int set = -1);
         //-----------------VARIABLES DECLARATIONS-----------------//
         int _secPerRound;
         CPoint mousePoint;
@@ -87,11 +88,13 @@ class BattleSystem : public CGameState
         vector<Weapon*>* _weapons;
         Camera camera;
         shared_ptr<Map> map;
-        Window settingWindow;
         vector<ExplosionEffect*> _explosionEffects;
         vector<UIMessage*> _uiMessages;
-        CMovingBitmap takenDmgR, takenDmgY, takenDmgG;
-
+		CMovingBitmap takenDmgR, takenDmgY, takenDmgG;
+		CAnimation chang;
+		bool keyDebounce = true;
+		int comboCounter = 0;
+		int _mode;
 };
 
 }

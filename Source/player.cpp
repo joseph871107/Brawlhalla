@@ -96,7 +96,7 @@ void Player::Initialize(BattleSystem* battleSystemPtrValue, vector<Ground*> grou
 
     //
     if (!keysValue.size())
-        _keys = { KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X };
+        _keys = { KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_V, KEY_X };
     else
         _keys = keysValue;
 
@@ -911,6 +911,16 @@ bool Player::HitPlayer(Player* targetPlayer, bool attackDirection)
 void Player::SetAttackList(vector<Player*> list)
 {
     _attackList = list;
+}
+
+void Player::SetTakenDmg(int dmg)
+{
+	_takenDmg = dmg;
+}
+
+vector<long> Player::GetKeys()
+{
+	return _keys;
 }
 
 const vector<Player*>& Player::GetAttackListByGameMode() const

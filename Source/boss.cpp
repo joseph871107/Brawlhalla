@@ -10,7 +10,7 @@
 namespace game_framework
 {
 //-----------------CONSTANTS DEFINITIONS-----------------//
-const vector<long> keys{ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X };
+const vector<long> keys{ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_V, KEY_X };
 const int KILL_BOSS_HIT_COUNT = 20;
 const int MAX_HEALTH = Player::INITIAL_TAKEN_DAMAGE + Player::INCREMENT_AMOUNT_OF_TAKEN_DAMAGE * KILL_BOSS_HIT_COUNT;
 
@@ -240,6 +240,11 @@ void Boss::EvaluateDeadAndRespawn()
         InitializeOnRespawn();
         _takenDmg = currentTakenDmg;
     }
+}
+
+int Boss::GetHealth()
+{
+	return _health;
 }
 
 }

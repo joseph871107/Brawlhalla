@@ -43,7 +43,6 @@ class CGameStateInit : public CGameState
         Window welcomeWindow;
 		Window startWindow;
 		Window settingWindow;
-		Window aboutWindow;
 		vector<Window*> windows;
         Camera camera;
         static bool _fullscreenEnabled;

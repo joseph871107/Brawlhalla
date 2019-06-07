@@ -9,7 +9,7 @@
 #include "PlayerRespawnState.h"
 #include "PlayerImmuneState.h"
 
-#define _PLAYER_DEBUG false
+#define _PLAYER_DEBUG false	
 //
 #define PLAYER_MODE_PLAYER 0
 #define PLAYER_MODE_ENEMY 1
@@ -55,7 +55,9 @@ class Player
         double GetSize();
         vector<Weapon*>* weapons;
         void SetRespawn(bool tri);
-        void SetAttackList(vector<Player*> list);
+		void SetAttackList(vector<Player*> list);
+		void SetTakenDmg(int dmg);
+		vector<long> GetKeys();
 
         //Others - Bill
         const int& GetState() const;
@@ -72,6 +74,7 @@ class Player
         void DoLand();
         virtual int GetSpecializedTakenDamage() const;
         const vector<Player*>& GetAttackListByGameMode() const;
+		void SetAttacker(Player* const& newAttacker, const int& attackerAffectionFrameCountValue);
 
         // Used by Triggered Animation classes
         void SetTriggeredAnimation(bool newIsTriggeredAni);
@@ -252,7 +255,6 @@ class Player
         void SetCurrentTriggeredAnimationByWeapon();
         void SetCurrentAniByWeapon();
         void InitializeTriggeredAnimations();
-        void SetAttacker(Player* const& newAttacker, const int& attackerAffectionFrameCountValue);
         bool IsAttackable(Player* potentialTargetPlayer);
         void ResetMovementVelocity();
         void DoParseKeyPressed();

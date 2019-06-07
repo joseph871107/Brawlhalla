@@ -44,7 +44,7 @@ int CGameStateInit::_mapSelected = 0;
 vector<shared_ptr<Map>> CGameStateInit::maps;
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g), startWindow(Window(g)), welcomeWindow(Window(g)), settingWindow(Window(g)), aboutWindow(Window(g))
+    : CGameState(g), startWindow(Window(g)), welcomeWindow(Window(g)), settingWindow(Window(g))
 {
     /*camera.SetSize(0.5);
     welcomeWindow.AddCamera(&camera);
@@ -112,22 +112,48 @@ void CGameStateInit::OnInit()
     ui_info4->SetXY(refX, refY + ui_info1->GetHeight());
     welcomeWindow.AddItem(ui_info4);
     //
-	int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() + ui_info4->GetHeight()) / 4;
-    welcomeWindow.Initialize(4, 1);
+	int butW = refX - (SIZE_X - ui_info2->GetCor(2)), butH = (ui_info1->GetHeight() + ui_info4->GetHeight()) / 3;
+    welcomeWindow.Initialize(3, 1);
     welcomeWindow.GetUI()->AddButton("start", refX - butW, refY, RGB(0, 255, 0), IDB_UI_BUTTON1_OUT, IDB_UI_BUTTON1_HOV, IDB_UI_BUTTON1_CLK, 0, 0);
     welcomeWindow.GetUI()->AddButton("settings", refX - butW, refY + butH, RGB(0, 255, 0), IDB_UI_BUTTON2_OUT, IDB_UI_BUTTON2_HOV, IDB_UI_BUTTON2_CLK, 1, 0);
-    welcomeWindow.GetUI()->AddButton("about", refX - butW, refY + butH * 2, RGB(0, 255, 0), IDB_UI_BUTTON3_OUT, IDB_UI_BUTTON3_HOV, IDB_UI_BUTTON3_CLK, 2, 0);
-    welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 3, RGB(0, 255, 0), IDB_UI_BUTTON4_OUT, IDB_UI_BUTTON4_HOV, IDB_UI_BUTTON4_CLK, 3, 0);
+    welcomeWindow.GetUI()->AddButton("exit", refX - butW, refY + butH * 2, RGB(0, 255, 0), IDB_UI_BUTTON3_OUT, IDB_UI_BUTTON3_HOV, IDB_UI_BUTTON3_CLK, 2, 0);
 	windows.push_back(&welcomeWindow);
 	//
-	butW = 350;
-	startWindow.Initialize(2, 3, false, false);
-	startWindow.SetXY((SIZE_X - butW * 3) / 2, 300);
-	startWindow.GetUI()->AddButton("gameMode", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "Game Mode : PvC");
-	startWindow.GetUI()->AddButton("aiNum", butW, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 1, "How many AI : 1");
-	startWindow.GetUI()->AddButton("aiDiff", butW * 2, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 2, "AI Difficulty : Normal");
-	startWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
-	startWindow.GetUI()->AddButton("start", butW * 2, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 2, "START");
+	Object *temp_cheat = new Object();
+	CAnimation *temp = new CAnimation(true, 1, 5);
+	CMovingBitmap but;
+	temp_cheat->LoadBitmap(IDB_UI_INSTR_CHEAT);
+	but.LoadBitmap(IDB_UI_BUTTON0_OUT);
+	butW = 10, butH = 200;
+	temp->AddBitmap(IDB_UI_INSTR_0);
+	temp->AddBitmap(IDB_UI_INSTR_1);
+	temp->AddBitmap(IDB_UI_INSTR_2);
+	temp->AddBitmap(IDB_UI_INSTR_3);
+	temp->AddBitmap(IDB_UI_INSTR_4);
+	temp->AddBitmap(IDB_UI_INSTR_5);
+	temp->AddBitmap(IDB_UI_INSTR_6);
+	temp->AddBitmap(IDB_UI_INSTR_7);
+	temp->AddBitmap(IDB_UI_INSTR_8);
+	temp->AddBitmap(IDB_UI_INSTR_9);
+	temp->AddBitmap(IDB_UI_INSTR_10);
+	temp->SetSize(0.3);
+	temp_cheat->SetSize(0.3);
+	int butWidth = but.Width();
+	refX = (SIZE_X - butW * 4 - butWidth * 5) / 2;
+	butWidth += butW;
+	refY = (SIZE_Y - temp->Height() - butH - 50) / 2;
+	int butRefY = SIZE_Y - refY;
+	temp->SetTopLeft((SIZE_X - temp->Width()) / 2, refY);
+	temp_cheat->SetXY((SIZE_X - temp->Width()) / 2, refY + temp->Height() + 10);
+	startWindow.AddItem(temp_cheat);
+	startWindow.AddAni(temp);
+	startWindow.Initialize(1, 5, false, false);
+	startWindow.SetXY(0, 0);
+	startWindow.GetUI()->AddButton("back", refX, butRefY, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "BACK");
+	startWindow.GetUI()->AddButton("gameMode", refX + butWidth, butRefY, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 1, "Game Mode : PvC");
+	startWindow.GetUI()->AddButton("aiNum", refX + butWidth * 2, butRefY, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 2, "How many AI : 1");
+	startWindow.GetUI()->AddButton("aiDiff", refX + butWidth * 3, butRefY, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 3, "AI Difficulty : Normal");
+	startWindow.GetUI()->AddButton("start", refX + butWidth * 4, butRefY, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 4, "START");
 	windows.push_back(&startWindow);
     //
     butW = 350;
@@ -139,10 +165,6 @@ void CGameStateInit::OnInit()
 	settingWindow.GetUI()->AddButton("back", butW, 200, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 1, 1, "BACK");
 	windows.push_back(&settingWindow);
     //
-    aboutWindow.Initialize(1, 1, false, false);
-    aboutWindow.SetXY(300, 300);
-    aboutWindow.GetUI()->AddButton("back", 0, 0, RGB(0, 255, 0), IDB_UI_BUTTON0_OUT, IDB_UI_BUTTON0_HOV, IDB_UI_BUTTON0_CLK, 0, 0, "BACK");
-	windows.push_back(&aboutWindow);
     ShowInitProgress(20);
 }
 
@@ -281,12 +303,6 @@ void CGameStateInit::OnMove()
 		settingWindow.SetButtonEnable(true);
 		settingWindow.SetVisible(true);
 	}
-	else if (chosenBut == "about")
-	{
-		welcomeWindow.SetButtonEnable(false);
-		aboutWindow.SetButtonEnable(true);
-		aboutWindow.SetVisible(true);
-	}
 	else if (chosenBut == "exit")
 		_closing = true;
 
@@ -358,16 +374,6 @@ void CGameStateInit::OnMove()
             _fullscreenEnabled = false;
         else
             _fullscreenEnabled = true;
-    }
-
-    chosenBut = aboutWindow.GetUI()->ChosenButton();
-
-    if (chosenBut == "back")
-    {
-        welcomeWindow.SetButtonEnable(true);
-        aboutWindow.SetButtonEnable(false);
-        aboutWindow.SetVisible(false);
-        aboutWindow.GetUI()->Reset();
     }
 
     static bool _fullscreenEnabledLast = _fullscreenEnabled;
@@ -458,7 +464,7 @@ void CGameStateOver::OnShow()
 {
     settingWindow.OnShow();
     char str[80];								// Demo 數字對字串的轉換
-    sprintf(str, "Game Over ! (%d)", counter / 30);
+	sprintf(str, "Game Over !");// (%d)", counter / 30);
     int textSize = 50;
     SIZE strSize = GetStringSize(str, textSize);
     OnShowText(str, (SIZE_X - strSize.cx) / 2, 210, textSize);

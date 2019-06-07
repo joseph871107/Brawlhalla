@@ -26,6 +26,7 @@ namespace game_framework
 			delete element;
 		}
 		camera = nullptr;
+		delete ani;
 	}
 
 	void Window::Initialize(int _buttonCol, int _buttonRow, bool buttonEnable, bool visible)
@@ -44,6 +45,11 @@ namespace game_framework
 	{
 		item->AddCamera(camera);
 		items.push_back(item);
+	}
+
+	void Window::AddAni(CAnimation* _ani)
+	{
+		ani = _ani;
 	}
 
 	void Window::SetButtonEnable(bool enable)
@@ -88,6 +94,8 @@ namespace game_framework
 	void Window::OnShow()
 	{
 		if (_visible) {
+			if(ani != nullptr)
+				ani->OnShow();
 			for (auto item : items)
 				item->OnShow(x, y);
 			ui.OnShow(x, y);
@@ -96,6 +104,8 @@ namespace game_framework
 
 	void Window::OnMove()
 	{
+		if (_visible && ani != nullptr)
+			ani->OnMove();
 		if(_buttonEnable)
 			ui.SetButtonState(_lButton, _key, _point);
 		if (camera != nullptr) {

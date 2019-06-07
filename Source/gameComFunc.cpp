@@ -33,7 +33,7 @@ void OnShowText(string msg, int x, int y, int size, COLORREF color, COLORREF bgc
     f.CreatePointFont(size * 8, font);			// 產生 font f; 160表示16 point的字
     fp = pDC->SelectObject(&f);					// 選用 font f
 
-    if (color == bgcolor)
+    if (bgcolor == RGB(256, 256, 256))
         pDC->SetBkMode(TRANSPARENT);
     else
         pDC->SetBkColor(bgcolor);

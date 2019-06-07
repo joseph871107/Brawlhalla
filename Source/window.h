@@ -18,6 +18,7 @@ namespace game_framework
 		~Window();
 		void Initialize(int _buttonCol, int _buttonRow, bool buttonEnable = true, bool visible = true);
 		void AddItem(Object*);
+		void AddAni(CAnimation*);
 		void SetButtonEnable(bool enable);
 		void SetVisible(bool visible);
 		void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
@@ -36,6 +37,7 @@ namespace game_framework
 		bool _buttonEnable;
 		bool _visible;
 		vector<Object*> items;
+		CAnimation *ani = nullptr;
 	};
 }
 

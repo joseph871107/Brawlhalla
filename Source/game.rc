@@ -146,17 +146,35 @@ IDB_UI_BUTTON2_HOV      BITMAP                  "..\\res\\ui\\button\\setting_ho
 
 IDB_UI_BUTTON2_CLK      BITMAP                  "..\\res\\ui\\button\\setting_clk.bmp"
 
-IDB_UI_BUTTON3_OUT      BITMAP                  "..\\res\\ui\\button\\about_out.bmp"
+IDB_UI_BUTTON3_OUT      BITMAP                  "..\\res\\ui\\button\\close_out.bmp"
 
-IDB_UI_BUTTON3_HOV      BITMAP                  "..\\res\\ui\\button\\about_hov.bmp"
+IDB_UI_BUTTON3_HOV      BITMAP                  "..\\res\\ui\\button\\close_hov.bmp"
 
-IDB_UI_BUTTON3_CLK      BITMAP                  "..\\res\\ui\\button\\about_clk.bmp"
+IDB_UI_BUTTON3_CLK      BITMAP                  "..\\res\\ui\\button\\close_clk.bmp"
 
-IDB_UI_BUTTON4_OUT      BITMAP                  "..\\res\\ui\\button\\close_out.bmp"
+IDB_UI_INSTR_0      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_0.bmp"
 
-IDB_UI_BUTTON4_HOV      BITMAP                  "..\\res\\ui\\button\\close_hov.bmp"
+IDB_UI_INSTR_1      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_1.bmp"
 
-IDB_UI_BUTTON4_CLK      BITMAP                  "..\\res\\ui\\button\\close_clk.bmp"
+IDB_UI_INSTR_2      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_2.bmp"
+
+IDB_UI_INSTR_3      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_3.bmp"
+
+IDB_UI_INSTR_4      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_4.bmp"
+
+IDB_UI_INSTR_5      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_5.bmp"
+
+IDB_UI_INSTR_6      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_6.bmp"
+
+IDB_UI_INSTR_7      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_7.bmp"
+
+IDB_UI_INSTR_8      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_8.bmp"
+
+IDB_UI_INSTR_9      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_9.bmp"
+
+IDB_UI_INSTR_10      	BITMAP                  "..\\res\\ui\\instruction\\Instruction_10.bmp"
+
+IDB_UI_INSTR_CHEAT     	BITMAP                  "..\\res\\ui\\instruction\\Instruction_cheat.bmp"
 
 IDR_MAINFRAME           BITMAP                  "..\\res\\Toolbar.bmp"
 
@@ -313,6 +331,10 @@ IDB_TAKEN_DMG_GREEN     BITMAP                  "..\\RES\\TakenDamage\\taken_dmg
 IDB_TAKEN_DMG_RED       BITMAP                  "..\\RES\\TakenDamage\\taken_dmg_red.bmp"
 
 IDB_TAKEN_DMG_YELLOW    BITMAP                  "..\\RES\\TakenDamage\\taken_dmg_yellow.bmp"
+
+IDB_CHANG			    BITMAP                  "..\\RES\\EasterEgg\\chang.bmp"
+
+IDB_CHANG_OPEN			BITMAP                  "..\\RES\\EasterEgg\\chang_OPEN.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////

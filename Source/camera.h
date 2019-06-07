@@ -19,6 +19,7 @@ namespace game_framework
 		void SetGradual(bool);
 		double GetSize();
 		CPoint GetXY(int tx, int ty);
+		CPoint GetReverseXY(int tx, int ty);
 		CPoint GetCameraXY();
 		void Reset();
 	private:

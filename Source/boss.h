@@ -22,7 +22,7 @@ class Boss : public Enemy
         // the unconscious time of the boss
 
         virtual void EvaluateDeadAndRespawn() override;
-
+		int GetHealth();
     private:
         int _health;
 };

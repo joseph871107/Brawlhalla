@@ -122,14 +122,25 @@
 #define IDB_UI_BUTTON3_OUT              2015
 #define IDB_UI_BUTTON3_HOV              2016
 #define IDB_UI_BUTTON3_CLK              2017
-#define IDB_UI_BUTTON4_OUT              2018
-#define IDB_UI_BUTTON4_HOV              2019
-#define IDB_UI_BUTTON4_CLK              2020
+#define IDB_UI_INSTR_0		            2018
+#define IDB_UI_INSTR_1		            2019
+#define IDB_UI_INSTR_2		            2020
+#define IDB_UI_INSTR_3		            2021
+#define IDB_UI_INSTR_4		            2022
+#define IDB_UI_INSTR_5		            2023
+#define IDB_UI_INSTR_6		            2024
+#define IDB_UI_INSTR_7		            2025
+#define IDB_UI_INSTR_8		            2026
+#define IDB_UI_INSTR_9		            2027
+#define IDB_UI_INSTR_10		            2028
+#define IDB_UI_INSTR_CHEAT	            2029
 #define ID_FILE_PAUSE                   32771
 #define ID_TOGGLE_FULLSCREEN            32772
 #define ID_BUTTON_FULLSCREEN            32773
 #define ID_BUTTON_PAUSE                 32774
 #define ID_BUTTON_UNITTEST              32775
+#define IDB_CHANG						69696
+#define IDB_CHANG_OPEN					96969
 
 // Next default values for new objects
 // 

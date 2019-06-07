@@ -9,7 +9,7 @@
 #include "enemy.h"
 namespace game_framework
 {
-const vector<long> keys{ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_F, KEY_X };
+const vector<long> keys{ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_V, KEY_X };
 
 Enemy::Enemy()
 {
