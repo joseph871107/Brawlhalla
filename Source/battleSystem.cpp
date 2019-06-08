@@ -146,7 +146,7 @@ void BattleSystem::InitializePlayersOnBeginState(int mode, int enemy, int diff)
         //
         (*i)->LoadBitmap();
         (*i)->AddCamera(&camera);
-        (*i)->weapons = map->GetDroppingWeapons();
+        (*i)->GetWeaponsPtrByReference() = map->GetDroppingWeapons();
         //
         char str[80];
 
@@ -299,11 +299,13 @@ void BattleSystem::OnMove()							// 移動遊戲元素
         switch (playerPtr->GetPlayerMode())
         {
             case PLAYER_MODE_PLAYER:
-                playerPtr->OnMove();
+                if (!playerPtr->IsOutOfLife())
+                    playerPtr->OnMove();
+
                 break;
 
             case PLAYER_MODE_ENEMY:
-                if (!enemyPause)
+                if (!playerPtr->IsOutOfLife() && !enemyPause)
                     playerPtr->OnMove();
 
                 break;

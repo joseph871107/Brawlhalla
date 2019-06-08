@@ -97,7 +97,7 @@ void Enemy::OnMove()
     static int counter = 0, ptr = 0;
     CPoint targetPos;
 
-    if (!_isHoldingWeapon && weapons->size() > 0)
+    if (!_isHoldingWeapon && _weaponsPtr->size() > 0)
     {
         vector<Weapon*>::iterator tar = WeaponNearby();
 
@@ -105,7 +105,7 @@ void Enemy::OnMove()
         {
             (*tar)->OnKeyDown(KEY_C);
             delete *tar;
-            weapons->erase(tar);
+            _weaponsPtr->erase(tar);
         }
     }
     else
@@ -208,12 +208,12 @@ void Enemy::SetAnimation()
 }
 vector<Weapon*>::iterator Enemy::WeaponNearby()
 {
-    vector<Weapon*>::iterator tar = weapons->begin();
+    vector<Weapon*>::iterator tar = _weaponsPtr->begin();
 
-    if (weapons->size() > 0)
-        tar = weapons->begin();
+    if (_weaponsPtr->size() > 0)
+        tar = _weaponsPtr->begin();
 
-    for (auto weapon = weapons->begin(); weapon != weapons->end(); weapon++)
+    for (auto weapon = _weaponsPtr->begin(); weapon != _weaponsPtr->end(); weapon++)
     {
         Vector2 diffO((*tar)->GetCor(0) - GetCor(0), (*tar)->GetCor(1) - GetCor(1));
         Vector2 diffT((*weapon)->GetCor(0) - GetCor(0), (*weapon)->GetCor(1) - GetCor(1));

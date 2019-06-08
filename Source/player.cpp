@@ -48,17 +48,17 @@ const int RESPAWN_RIGHT_START_POS_Y = 0;
 const int IMMUNE_FLASHING_FRAME = 11 ;
 
 //-----------------FUNCTIONS DEFINITIONS-----------------//
-Player::Player() : _identifier(PLAYER_MODE_PLAYER), _allowRespawn(true) // 我覺得之後應該先不用更改這個constructor，好多喔。。。
-{
-    /* Body intentionally empty */
-}
-
 Player::~Player()
 {
     for (auto elementPtr : _triggeredAnis)
     {
         delete elementPtr;
     }
+}
+
+Player::Player() : _identifier(PLAYER_MODE_PLAYER), _allowRespawn(true)
+{
+    /* Body intentionally empty */
 }
 
 void Player::InitializeTriggeredAnimations()
@@ -1420,6 +1420,11 @@ const int& Player::GetState() const
 int Player::GetSpecializedTakenDamage() const
 {
     return (_takenDmg);
+}
+
+vector<Weapon*>*& Player::GetWeaponsPtrByReference()
+{
+    return (_weaponsPtr);
 }
 
 }
