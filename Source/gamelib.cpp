@@ -405,6 +405,7 @@ void CInteger::SetSize(double size)
 /////////////////////////////////////////////////////////////////////////////
 
 CMovingBitmap CString::_chars[91];
+bool CString::isBmpLoaded = false;
 
 CString::CString() : _size(1.0)
 {

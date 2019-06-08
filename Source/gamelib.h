@@ -314,7 +314,7 @@ class CString
         static CMovingBitmap _chars[91];	// 儲存 a...z & A...Z & symbols 之圖形(bitmap)
         int x, y;							// 顯示的座標
         string _s;
-        bool isBmpLoaded;					// 是否已經載入圖形
+        static bool isBmpLoaded;					// 是否已經載入圖形
         double _size;
 };
 
