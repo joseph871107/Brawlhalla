@@ -11,10 +11,10 @@ namespace game_framework
 	// Window class
 	/////////////////////////////////////////////////////////////////////////////
 
-	class Window : public Object, public CGameState
+	class Window : public Object
 	{
 	public:
-		Window(CGame* g, int _width = SIZE_X, int _height = SIZE_Y);
+		Window(int _width = SIZE_X, int _height = SIZE_Y);
 		~Window();
 		void Initialize(int _buttonCol, int _buttonRow, bool buttonEnable = true, bool visible = true);
 		void AddItem(Object*);

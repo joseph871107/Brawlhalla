@@ -24,16 +24,16 @@ const vector<MapPARM> _mapP
             GroundPARM(400, 400, 0.087, 10, 1, IDB_GROUND2, 0, 900, 900),
 			GroundPARM(0, 300, 0.087, 4, 1, IDB_GROUND2, 0, 900, 900),
 			GroundPARM(1300, 300, 0.087, 4, 1, IDB_GROUND2, 0, 900, 900)),
-    // Grounds of Stair
-    MapPARM("Stair",BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3,
-            GroundPARM(0, 300, 1, 3, 1, IDB_GROUND1),
+			// Grounds of Stair
+	MapPARM("Stair",BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3,
+			GroundPARM(0, 300, 1, 3, 1, IDB_GROUND1),
 			GroundPARM(500, 400, 1, 3, 1, IDB_GROUND1),
 			GroundPARM(1000, 500, 1, 3, 1, IDB_GROUND1)),
-	// Bounces Off Ground Map Test
-	MapPARM("Bounces Test", BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND1), 3,
-			GroundPARM(0, 100, 1, 3, 5, IDB_GROUND1),
-			GroundPARM(300, 500, 1, 10, 1, IDB_GROUND1),
-			GroundPARM(1200, 100, 1, 3, 5, IDB_GROUND1)),
+			// Grounds of Stair
+	MapPARM("Arena Stair",BkPARM(0, 0, 1, 0.15, IDB_BACKGROUND2), 3,
+			GroundPARM(0, 300, 0.087, 3, 1, IDB_GROUND2, 0, 900, 900),
+			GroundPARM(500, 400, 0.087, 3, 1, IDB_GROUND2, 0, 900, 900),
+			GroundPARM(1000, 500, 0.087, 3, 1, IDB_GROUND2, 0, 900, 900)),
 };
 
 // Initialize static variable
@@ -44,7 +44,7 @@ int CGameStateInit::_mapSelected = 0;
 vector<shared_ptr<Map>> CGameStateInit::maps;
 
 CGameStateInit::CGameStateInit(CGame* g)
-    : CGameState(g), startWindow(Window(g)), welcomeWindow(Window(g)), settingWindow(Window(g))
+    : CGameState(g)
 {
     /*camera.SetSize(0.5);
     welcomeWindow.AddCamera(&camera);
@@ -392,7 +392,7 @@ void CGameStateInit::OnMove()
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateOver::CGameStateOver(CGame* g)
-    : CGameState(g), settingWindow(Window(g))
+    : CGameState(g)
 {
 }
 
