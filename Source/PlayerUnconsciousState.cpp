@@ -94,7 +94,7 @@ void PlayerUnconsciousState::OnMoveGameLogic()
     	~ when he gets hit, based on '_takenDmg' - the total damages he has taken.
     */
     int maxUnconsciousFrames = Player::INITIAL_MAX_CONSCIOUS_FRAME;
-	int specializedTakenDamage = _playerPtr->GetSpecializedTakenDamage();
+    int specializedTakenDamage = _playerPtr->GetSpecializedTakenDamage();
 
     if (specializedTakenDamage > maxUnconsciousFrames)
         maxUnconsciousFrames = specializedTakenDamage;

@@ -4,29 +4,29 @@
 
 namespace game_framework
 {
-	/////////////////////////////////////////////////////////////////////////////
-	// Camera class
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+// Camera class
+/////////////////////////////////////////////////////////////////////////////
 
-	class Camera
-	{
-	public:
-		Camera();
-		Camera(int tx, int ty);
-		void SetSize(double);
-		void SetCameraXY(int tx, int ty);
-		void SetCameraOffsetXY(int tx, int ty);
-		void SetGradual(bool);
-		double GetSize();
-		CPoint GetXY(int tx, int ty);
-		CPoint GetReverseXY(int tx, int ty);
-		CPoint GetCameraXY();
-		void Reset();
-	private:
-		int x, y, offsetX, offsetY;
-		double size;
-		bool gradual;
-	};
+class Camera
+{
+    public:
+        Camera();
+        Camera(int tx, int ty);
+        void SetSize(double);
+        void SetCameraXY(int tx, int ty);
+        void SetCameraOffsetXY(int tx, int ty);
+        void SetGradual(bool);
+        double GetSize();
+        CPoint GetXY(int tx, int ty);
+        CPoint GetReverseXY(int tx, int ty);
+        CPoint GetCameraXY();
+        void Reset();
+    private:
+        int x, y, offsetX, offsetY;
+        double size;
+        bool gradual;
+};
 }
 
 #endif //define CAMERA_H

@@ -10,11 +10,6 @@
 namespace game_framework
 {
 /////////////////////////////////////////////////////////////////////////////
-// Constants
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲開頭畫面物件
 // 每個Member function的Implementation都要弄懂
 /////////////////////////////////////////////////////////////////////////////
@@ -41,17 +36,17 @@ class CGameStateInit : public CGameState
         static shared_ptr<Map> GetMap();
     private:
         Window welcomeWindow;
-		Window startWindow;
-		Window settingWindow;
-		vector<Window*> windows;
+        Window startWindow;
+        Window settingWindow;
+        vector<Window*> windows;
         Camera camera;
         static bool _fullscreenEnabled;
         static bool _closing;
         static bool _cameraEnabled;
         static int _mapSelected;
         static vector<shared_ptr<Map>> maps;
-		string GetGameMode(int mode);
-		string GetAiDifficulty(int diff);
+        string GetGameMode(int mode);
+        string GetAiDifficulty(int diff);
 };
 
 /////////////////////////////////////////////////////////////////////////////

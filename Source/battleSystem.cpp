@@ -93,44 +93,49 @@ void BattleSystem::InitializeExplosionEffectsOnBeginState()
 void BattleSystem::InitializePlayersOnBeginState(int mode, int enemy, int diff)
 {
     Player* player;
-	vector<vector<long>> playerKeys ={{KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M}};
-	// Player
-	player = new Player();
-	_players.push_back(player);
-	_mode = mode;
-	if (mode == GAME_MODE_PVP) {
-		// Player2
-		player = new Player();
-		_players.push_back(player);
+    vector<vector<long>> playerKeys = {{KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_COMMA, KEY_PERIOD, KEY_M}};
+    // Player
+    player = new Player();
+    _players.push_back(player);
+    _mode = mode;
 
-		// Initialize keys for player2
-		playerKeys.push_back({ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_V, KEY_X });
-	}
-	else if (mode == GAME_MODE_PVC) {
-		// Enemy
-		for (int i = 0; i < enemy; i++)
-		{
-			player = new Enemy(diff);
-			_players.push_back(player);
-		}
-	}
-	else if (mode == GAME_MODE_BOSS) {
-		// Enemy
-		for (int i = 0; i < enemy; i++)
-		{
-			player = new Enemy(diff);
-			_players.push_back(player);
-		}
-		// Boss
-		player = new Boss(diff);
-		player->SetRespawn(false);
-		for (auto i : _players)
-			i->SetAttackList(vector<Player*>{player});
-		_players.push_back(player);
-	}
+    if (mode == GAME_MODE_PVP)
+    {
+        // Player2
+        player = new Player();
+        _players.push_back(player);
+        // Initialize keys for player2
+        playerKeys.push_back({ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_V, KEY_X });
+    }
+    else if (mode == GAME_MODE_PVC)
+    {
+        // Enemy
+        for (int i = 0; i < enemy; i++)
+        {
+            player = new Enemy(diff);
+            _players.push_back(player);
+        }
+    }
+    else if (mode == GAME_MODE_BOSS)
+    {
+        // Enemy
+        for (int i = 0; i < enemy; i++)
+        {
+            player = new Enemy(diff);
+            _players.push_back(player);
+        }
 
-	for (int i = 0; i < enemy + (mode == GAME_MODE_BOSS ? 1 : 0); i++)
-		playerKeys.push_back({ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_V, KEY_X });
+        // Boss
+        player = new Boss(diff);
+        player->SetRespawn(false);
+
+        for (auto i : _players)
+            i->SetAttackList(vector<Player*> {player});
+        _players.push_back(player);
+    }
+
+    for (int i = 0; i < enemy + (mode == GAME_MODE_BOSS ? 1 : 0); i++)
+        playerKeys.push_back({ KEY_W, KEY_D, KEY_S, KEY_A, KEY_C, KEY_V, KEY_X });
     // Initialize explosion effects for every players
     InitializeExplosionEffectsOnBeginState();
     // Initialize other attributes of the players
@@ -144,19 +149,23 @@ void BattleSystem::InitializePlayersOnBeginState(int mode, int enemy, int diff)
         (*i)->weapons = map->GetDroppingWeapons();
         //
         char str[80];
-		switch ((*i)->GetPlayerMode()) {
-		case PLAYER_MODE_PLAYER:
-			sprintf(str, "Player %d", pNum++);
-			(*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
-			break;
-		case PLAYER_MODE_ENEMY:
-			sprintf(str, "AI %d", eNum++);
-			(*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
-			break;
-		case PLAYER_MODE_BOSS:
-			(*i)->Initialize(this, *_grounds, &_players, "BOSS", playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
-			break;
-		}
+
+        switch ((*i)->GetPlayerMode())
+        {
+            case PLAYER_MODE_PLAYER:
+                sprintf(str, "Player %d", pNum++);
+                (*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+                break;
+
+            case PLAYER_MODE_ENEMY:
+                sprintf(str, "AI %d", eNum++);
+                (*i)->Initialize(this, *_grounds, &_players, (string)str, playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+                break;
+
+            case PLAYER_MODE_BOSS:
+                (*i)->Initialize(this, *_grounds, &_players, "BOSS", playerKeys[i - _players.begin()], _explosionEffects[i - _players.begin()]);
+                break;
+        }
     }
 
     //
@@ -193,8 +202,8 @@ void BattleSystem::OnBeginState(int mode, int enemy, int diff)
     InitializePlayersOnBeginState(mode, enemy, diff);
     // UI Messages
     _uiMessages = vector<UIMessage*>();
-	//
-	EasterEgg(0);
+    //
+    EasterEgg(0);
 }
 
 void BattleSystem::GetExplosionEffectPosition(Player* deadPlayer, int* posXPtr, int* posYPtr)
@@ -287,18 +296,22 @@ void BattleSystem::OnMove()							// 移動遊戲元素
 
     for (auto playerPtr : _players)
     {
-		switch (playerPtr->GetPlayerMode()) {
-		case PLAYER_MODE_PLAYER:
-			playerPtr->OnMove();
-			break;
-		case PLAYER_MODE_ENEMY:
-			if (!enemyPause)
-				playerPtr->OnMove();
-			break;
-		case PLAYER_MODE_BOSS:
-			playerPtr->OnMove();
-			break;
-		}
+        switch (playerPtr->GetPlayerMode())
+        {
+            case PLAYER_MODE_PLAYER:
+                playerPtr->OnMove();
+                break;
+
+            case PLAYER_MODE_ENEMY:
+                if (!enemyPause)
+                    playerPtr->OnMove();
+
+                break;
+
+            case PLAYER_MODE_BOSS:
+                playerPtr->OnMove();
+                break;
+        }
     }
 
     ResizeCamera();
@@ -343,9 +356,9 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
     takenDmgR.LoadBitmap(IDB_TAKEN_DMG_RED, RGB(0, 0, 0));
     takenDmgY.LoadBitmap(IDB_TAKEN_DMG_YELLOW, RGB(0, 0, 0));
     takenDmgG.LoadBitmap(IDB_TAKEN_DMG_GREEN, RGB(0, 0, 0));
-	chang = CAnimation(true);
-	chang.AddBitmap(IDB_CHANG, RGB(0, 0, 0));
-	chang.AddBitmap(IDB_CHANG_OPEN, RGB(0, 0, 0));
+    chang = CAnimation(true);
+    chang.AddBitmap(IDB_CHANG, RGB(0, 0, 0));
+    chang.AddBitmap(IDB_CHANG_OPEN, RGB(0, 0, 0));
     // Explosion Effects
     _explosionEffects = vector<ExplosionEffect*>();
     // Player
@@ -403,35 +416,42 @@ void BattleSystem::OnInit()  								// 遊戲的初值及圖形設定
 
 void BattleSystem::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	map->OnKeyDown(nChar);
+    map->OnKeyDown(nChar);
 
-	for (auto i : _players)
-	{
-		if (i->GetPlayerMode() == PLAYER_MODE_PLAYER)
-			i->OnKeyDown(nChar);
-	}
+    for (auto i : _players)
+    {
+        if (i->GetPlayerMode() == PLAYER_MODE_PLAYER)
+            i->OnKeyDown(nChar);
+    }
 
-	currentKeydown = nChar;
+    currentKeydown = nChar;
+    static string combo = "";
 
-	static string combo = "";
-	if (comboCounter > 10)
-		combo = "";
-	if (keyDebounce) {
-		combo += (nChar == 0x4f ? 'O' : nChar == 0x50 ? 'P' : nChar == 0x55 ? 'U' : (char)nChar);
-		keyDebounce = false;
-		comboCounter = 0;
-	}
-	if (combo == "OOP")
-		EasterEgg(150);
-	if (combo == "PP")
-		enemyPause = !enemyPause;
-	if (combo == "UP")
-		for (auto player : _players)
-			if (player->GetPlayerMode() == PLAYER_MODE_PLAYER) {
-				player->SetSize(5);
-				player->Initialize(this, *_grounds, &_players, player->GetName(), player->GetKeys(), player->GetExplosionEffect());
-			}
-	TRACE("%s\n",combo.c_str());
+    if (comboCounter > 10)
+        combo = "";
+
+    if (keyDebounce)
+    {
+        combo += (nChar == 0x4f ? 'O' : nChar == 0x50 ? 'P' : nChar == 0x55 ? 'U' : (char)nChar);
+        keyDebounce = false;
+        comboCounter = 0;
+    }
+
+    if (combo == "OOP")
+        EasterEgg(150);
+
+    if (combo == "PP")
+        enemyPause = !enemyPause;
+
+    if (combo == "UP")
+        for (auto player : _players)
+            if (player->GetPlayerMode() == PLAYER_MODE_PLAYER)
+            {
+                player->SetSize(5);
+                player->Initialize(this, *_grounds, &_players, player->GetName(), player->GetKeys(), player->GetExplosionEffect());
+            }
+
+    TRACE("%s\n", combo.c_str());
 }
 
 void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -447,7 +467,8 @@ void BattleSystem::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
         if (i->GetPlayerMode() == PLAYER_MODE_PLAYER)
             i->OnKeyUp(nChar);
     }
-	keyDebounce = true;
+
+    keyDebounce = true;
 }
 
 void BattleSystem::OnLButtonDown(UINT nFlags, CPoint point)
@@ -519,51 +540,63 @@ void BattleSystem::ClearUIMessages()
 
 void BattleSystem::EasterEgg(int set)
 {
-	static int counter = 0;
-	static int _set = 0;
-	if (set != -1) {
-		counter = set;
-		_set = set;
-	}
-	if (counter > 0) {
-		double size = (_set - counter) / 5.0;
-		chang.SetSize(size);
-		int centerX = SIZE_X / 2, centerY = SIZE_Y / 2, width = chang.Width(), height = chang.Height();
-		int actWidth = (int)(60 * size), actHeight = (int)(80 * size);
-		CPoint cam = camera.GetReverseXY(centerX, centerY + (int)(26 * size));
-		if (_set - counter > 0) {
-			chang.SetTopLeft(centerX - width / 2, centerY - height / 2);
-			for (auto player : _players) {
-				CPoint tcam = camera.GetXY(player->GetCor(0), player->GetCor(1));
-				int x = tcam.x, y = tcam.y;
-				if (player->GetPlayerMode() != PLAYER_MODE_PLAYER && IsCollide(x, y, x + (int)(player->GetWidth() * camera.GetSize()), y + (int)(player->GetHeight() * camera.GetSize()), centerX - actWidth / 2, centerY - actHeight / 2, centerX + actWidth / 2, centerY + actHeight / 2))
-				{
-					player->SetAttacker(_players[0], 0);
-					// Determine the attack "direction", which is a 2D Vector
-					Vector2 vectorAttackerToTargetPlayer;
-					vectorAttackerToTargetPlayer.SetXY(centerX, centerY, player->GetCor(0), player->GetCor(1));
-					// Increment the taken damage of the target player
-					player->SetTakenDmg(100);
-					// Set the offset magnitude of the attack 2D Vector
-					int attackOffsetMagnitude = player->GetSpecializedTakenDamage();
-					// Determine the attack 2D vector
-					double multiplier = (vectorAttackerToTargetPlayer.GetLength() == 0 ? attackOffsetMagnitude : attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength()); // Avoid division by 0
-					Vector2 targetPlayerDisplacementVector(DoubleToInteger(vectorAttackerToTargetPlayer.GetX() * multiplier),
-						DoubleToInteger(vectorAttackerToTargetPlayer.GetY() * multiplier));
-					//
-					player->BeenAttacked(targetPlayerDisplacementVector, !player->GetDirection());
-				}
-			}
-			chang.OnMove();
-			chang.OnShow();
-			for(int i = 0; i < 5; i++)
-				OnShowText("爽一下啊！", centerX + (int)(random(-100, 100) * size), centerY + (int)(random(-100, 100) * size), (int)(size * 10), RGB(random(0, 255), random(0, 255), random(0, 255)));
-		}
-		if (counter % 3 == 0)
-			counter -= 2;
-		else
-			counter--;
-	}
+    static int counter = 0;
+    static int _set = 0;
+
+    if (set != -1)
+    {
+        counter = set;
+        _set = set;
+    }
+
+    if (counter > 0)
+    {
+        double size = (_set - counter) / 5.0;
+        chang.SetSize(size);
+        int centerX = SIZE_X / 2, centerY = SIZE_Y / 2, width = chang.Width(), height = chang.Height();
+        int actWidth = (int)(60 * size), actHeight = (int)(80 * size);
+        CPoint cam = camera.GetReverseXY(centerX, centerY + (int)(26 * size));
+
+        if (_set - counter > 0)
+        {
+            chang.SetTopLeft(centerX - width / 2, centerY - height / 2);
+
+            for (auto player : _players)
+            {
+                CPoint tcam = camera.GetXY(player->GetCor(0), player->GetCor(1));
+                int x = tcam.x, y = tcam.y;
+
+                if (player->GetPlayerMode() != PLAYER_MODE_PLAYER && IsCollide(x, y, x + (int)(player->GetWidth() * camera.GetSize()), y + (int)(player->GetHeight() * camera.GetSize()), centerX - actWidth / 2, centerY - actHeight / 2, centerX + actWidth / 2, centerY + actHeight / 2))
+                {
+                    player->SetAttacker(_players[0], 0);
+                    // Determine the attack "direction", which is a 2D Vector
+                    Vector2 vectorAttackerToTargetPlayer;
+                    vectorAttackerToTargetPlayer.SetXY(centerX, centerY, player->GetCor(0), player->GetCor(1));
+                    // Increment the taken damage of the target player
+                    player->SetTakenDmg(100);
+                    // Set the offset magnitude of the attack 2D Vector
+                    int attackOffsetMagnitude = player->GetSpecializedTakenDamage();
+                    // Determine the attack 2D vector
+                    double multiplier = (vectorAttackerToTargetPlayer.GetLength() == 0 ? attackOffsetMagnitude : attackOffsetMagnitude / vectorAttackerToTargetPlayer.GetLength()); // Avoid division by 0
+                    Vector2 targetPlayerDisplacementVector(DoubleToInteger(vectorAttackerToTargetPlayer.GetX() * multiplier),
+                                                           DoubleToInteger(vectorAttackerToTargetPlayer.GetY() * multiplier));
+                    //
+                    player->BeenAttacked(targetPlayerDisplacementVector, !player->GetDirection());
+                }
+            }
+
+            chang.OnMove();
+            chang.OnShow();
+
+            for (int i = 0; i < 5; i++)
+                OnShowText("爽一下啊！", centerX + (int)(random(-100, 100) * size), centerY + (int)(random(-100, 100) * size), (int)(size * 10), RGB(random(0, 255), random(0, 255), random(0, 255)));
+        }
+
+        if (counter % 3 == 0)
+            counter -= 2;
+        else
+            counter--;
+    }
 }
 
 void BattleSystem::OnShow()
@@ -579,9 +612,8 @@ void BattleSystem::OnShow()
     integer.SetInteger(now_time % 60);
     integer.SetTopLeft(805, 0);
     integer.ShowBitmap();
-
-	comboCounter++;
-	EasterEgg();
+    comboCounter++;
+    EasterEgg();
 
     // Show player
     for (unsigned int index = 0; index < _players.size(); index++)
@@ -712,24 +744,27 @@ bool BattleSystem::IsFinishedPlayingAllEffects()
     for (auto explosionEffectPtr : _explosionEffects)
         if (explosionEffectPtr->GetIsTrigger())
             return (false);
+
     return (true);
 }
 
 bool BattleSystem::IsGameOver()
 {
     int remainingPlayers = GetNumberOfRemainingPlayers();
-	Boss* boss = nullptr;
-	for (auto player : _players)
-		if (player->GetPlayerMode() == PLAYER_MODE_BOSS)
-			boss = (Boss*)player;
+    Boss* boss = nullptr;
+
+    for (auto player : _players)
+        if (player->GetPlayerMode() == PLAYER_MODE_BOSS)
+            boss = (Boss*)player;
+
     return (
                (IsFinishedPlayingAllEffects() && remainingPlayers == 1) // There is a winner
                ||
                remainingPlayers == 0 // Draw
                ||
                GetCurrentRemainTime() == 0 // Out of time - Draw
-			   ||
-			   (boss != nullptr && boss->GetHealth() <= 0)
+               ||
+               (boss != nullptr && boss->GetHealth() <= 0)
            );
 }
 
@@ -752,10 +787,10 @@ string BattleSystem::GetGameResult()
 
         return (winnerName + " Wins.");
     }
-	else if (_mode == GAME_MODE_BOSS)
-	{
-		return ("Boss Defeated. ");
-	}
+    else if (_mode == GAME_MODE_BOSS)
+    {
+        return ("Boss Defeated. ");
+    }
     else
     {
         return ("Draw.");

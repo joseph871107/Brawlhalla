@@ -304,7 +304,7 @@ class CString
 {
     public:
         CString();
-        string GetString();				// Return the string
+        string GetString();					// Return the string
         void LoadBitmap();					// Load A...Za...z characters
         void SetString(string newS);		// Set string
         void SetTopLeft(int newX, int newY);			// 將動畫的左上角座標移至 (x,y)

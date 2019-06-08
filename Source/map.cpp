@@ -164,9 +164,9 @@ void Map::OnMove()
         droppingWeaponPtr->OnMove();
 
     /* FLYING WEAPONS */
-	// Processing the flying weapons falling out of the map
+    // Processing the flying weapons falling out of the map
     ProcessWeaponsOutOfMap(_flyingWeapons);
-	// Processing the flying weapons expired
+    // Processing the flying weapons expired
     ProcessFlyingWeaponsExpired();
 
     for (auto flyingWeaponPtr : _flyingWeapons)

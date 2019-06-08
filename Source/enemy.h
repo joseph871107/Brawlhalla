@@ -13,12 +13,12 @@ class Enemy : public Player
         Enemy();
         Enemy(int diff);
         void DoAttack(vector<Player*> attackList, vector<Player*>::iterator target);
-		virtual bool ChaseTarget(CPoint point, int width = 0, int height = 0);
+        virtual bool ChaseTarget(CPoint point, int width = 0, int height = 0);
         virtual void OnMove();
-		virtual void SetAnimation();
+        virtual void SetAnimation();
     protected:
-		vector<Weapon*>::iterator WeaponNearby();
-		vector<Player*>::iterator PlayerNearby(vector<Player*> *playerList);
+        vector<Weapon*>::iterator WeaponNearby();
+        vector<Player*>::iterator PlayerNearby(vector<Player*>* playerList);
         int _difficulty;
 };
 #endif

@@ -25,13 +25,13 @@ class GroundAttackTriggeredAnimation : TriggeredAnimation
         GroundAttackTriggeredAnimation& operator=(const GroundAttackTriggeredAnimation& rightObject);
         //Operator overloading function of the assignment operator
 
-		void FinishTriggeredAnimationGameLogic() override;
+        void FinishTriggeredAnimationGameLogic() override;
 
-		void SetTriggeredAnimationVariables() override;
+        void SetTriggeredAnimationVariables() override;
 
-		void InitiateTriggeredAction() override;
+        void InitiateTriggeredAction() override;
 
-		void DoTriggeredAction() override;
+        void DoTriggeredAction() override;
 
     private:
 

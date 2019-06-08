@@ -49,8 +49,7 @@ class Map
         vector<Ground*>* GetGrounds();
         vector<Weapon*>* GetDroppingWeapons();
         void PlayerThrowWeapon(Player* thrower);
-        /// DEBUG: This is a variable, it should not be declared as public
-        Background background;
+        Background background; // TODO: This is a variable, and should not be declared as public (Code from Joseph)
 
 
     private:
@@ -58,8 +57,8 @@ class Map
         void ClearFlyingWeapons();
         void ClearDroppingWeapons();
         void ProcessWeaponsOutOfMap(vector<Weapon*>& weapons);
-		void ProcessFlyingWeaponsExpired();
-		void EvaluatePickingWeaponOnKeyDown(vector<Weapon*>& weapons, const UINT & nChar);
+        void ProcessFlyingWeaponsExpired();
+        void EvaluatePickingWeaponOnKeyDown(vector<Weapon*>& weapons, const UINT& nChar);
         //-----------------VARIABLES DECLARATIONS-----------------//
         clock_t start, lastTime;
         int nextTimeGenerateWeapon, maxWeapons;

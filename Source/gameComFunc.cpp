@@ -237,16 +237,6 @@ void InitializeFile(string type, string file)
     myfile.close();
 }
 
-void InitializeLoadSound()
-{
-    /// DEBUG: Temporary disable for setup deployment
-    //for (auto i = idsList.begin(); i != idsList.end(); i++)
-    //{
-    //	TRACE("---Loading sound effect %s...\n", i->first.c_str());
-    //	CAudio::Instance()->Load(i->second);
-    //}
-}
-
 void InitializeCollideArray(bool trace)
 {
     TRACE("Initializing collide array...\n");

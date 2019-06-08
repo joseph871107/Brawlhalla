@@ -53,34 +53,35 @@ void Camera::SetSize(double s)
 }
 void Camera::SetCameraXY(int tx, int ty)
 {
-	if (gradual)
-	{
-		static int gradientX = tx;
-		static int gradientY = ty;
+    if (gradual)
+    {
+        static int gradientX = tx;
+        static int gradientY = ty;
 
-		if (abs(gradientX - tx) >= COORDINATES_OFFSET)
-		{
-			if (gradientX > tx)
-				gradientX -= COORDINATES_OFFSET;
-			else
-				gradientX += COORDINATES_OFFSET;
-		}
+        if (abs(gradientX - tx) >= COORDINATES_OFFSET)
+        {
+            if (gradientX > tx)
+                gradientX -= COORDINATES_OFFSET;
+            else
+                gradientX += COORDINATES_OFFSET;
+        }
 
-		if (abs(gradientY - ty) >= COORDINATES_OFFSET)
-		{
-			if (gradientY > ty)
-				gradientY -= COORDINATES_OFFSET;
-			else
-				gradientY += COORDINATES_OFFSET;
-		}
+        if (abs(gradientY - ty) >= COORDINATES_OFFSET)
+        {
+            if (gradientY > ty)
+                gradientY -= COORDINATES_OFFSET;
+            else
+                gradientY += COORDINATES_OFFSET;
+        }
 
-		x = gradientX;
-		y = gradientY;
-	}
-	else {
-		x = tx;
-		y = ty;
-	}
+        x = gradientX;
+        y = gradientY;
+    }
+    else
+    {
+        x = tx;
+        y = ty;
+    }
 }
 void Camera::SetCameraOffsetXY(int tx, int ty)
 {
@@ -101,7 +102,7 @@ CPoint Camera::GetXY(int tx, int ty)
 }
 CPoint Camera::GetReverseXY(int tx, int ty)
 {
-	return CPoint((int)((tx - SIZE_X / 2 - offsetX) / size) + x, (int)((ty - SIZE_Y / 2 + offsetY) / size + y));
+    return CPoint((int)((tx - SIZE_X / 2 - offsetX) / size) + x, (int)((ty - SIZE_Y / 2 + offsetY) / size + y));
 }
 CPoint Camera::GetCameraXY()
 {

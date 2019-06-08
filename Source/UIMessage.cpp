@@ -12,10 +12,6 @@ This is the source code file 'TriggeredAnimation.cpp'. This is the implementatio
 
 namespace game_framework
 {
-//-----------------CONSTANTS DEFINITIONS-----------------//
-
-
-//-----------------FUNCTIONS DEFINITIONS-----------------//
 UIMessage::~UIMessage()
 {
     /* Body intentionally empty */

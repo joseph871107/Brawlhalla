@@ -401,9 +401,7 @@ void CInteger::SetSize(double size)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CString: 硂class矗ㄑ陪ボ俱计瓜
-// 1. 璶来眔或㊣(笲ノ)ㄤ贺琌ぃ来祘Α琌ぐ或種
-// 2. 糶笲ノCMovingBitmap祘Α把σ祘Α糶猭
+// CString: A class for displaying English texts
 /////////////////////////////////////////////////////////////////////////////
 
 CMovingBitmap CString::_chars[91];

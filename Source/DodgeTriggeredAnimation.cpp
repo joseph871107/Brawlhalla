@@ -34,12 +34,12 @@ DodgeTriggeredAnimation::DodgeTriggeredAnimation(Player* const& playerPtrValue, 
 
 DodgeTriggeredAnimation& DodgeTriggeredAnimation::operator=(const DodgeTriggeredAnimation& rightObject)
 {
-	if (this != &rightObject)
-	{
-		TriggeredAnimation::operator=(rightObject);
-	}
+    if (this != &rightObject)
+    {
+        TriggeredAnimation::operator=(rightObject);
+    }
 
-	return (*this);
+    return (*this);
 }
 
 void DodgeTriggeredAnimation::FinishTriggeredAnimationGameLogic()

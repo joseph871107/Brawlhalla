@@ -9,7 +9,7 @@
 #include "PlayerRespawnState.h"
 #include "PlayerImmuneState.h"
 
-#define _PLAYER_DEBUG false	
+#define _PLAYER_DEBUG false
 //
 #define PLAYER_MODE_PLAYER 0
 #define PLAYER_MODE_ENEMY 1
@@ -55,9 +55,9 @@ class Player
         double GetSize();
         vector<Weapon*>* weapons;
         void SetRespawn(bool tri);
-		void SetAttackList(vector<Player*> list);
-		void SetTakenDmg(int dmg);
-		vector<long> GetKeys();
+        void SetAttackList(vector<Player*> list);
+        void SetTakenDmg(int dmg);
+        vector<long> GetKeys();
 
         //Others - Bill
         const int& GetState() const;
@@ -74,7 +74,7 @@ class Player
         void DoLand();
         virtual int GetSpecializedTakenDamage() const;
         const vector<Player*>& GetAttackListByGameMode() const;
-		void SetAttacker(Player* const& newAttacker, const int& attackerAffectionFrameCountValue);
+        void SetAttacker(Player* const& newAttacker, const int& attackerAffectionFrameCountValue);
 
         // Used by Triggered Animation classes
         void SetTriggeredAnimation(bool newIsTriggeredAni);
@@ -181,7 +181,7 @@ class Player
         friend class PlayerConsciousState;
         friend class PlayerUnconsciousState;
         friend class PlayerRespawnState;
-		friend class PlayerImmuneState;
+        friend class PlayerImmuneState;
         //-----------------FUNCTIONS DECLARATIONS-----------------//
         void DoThrowWeapon();
         //Animations
@@ -227,7 +227,6 @@ class Player
         virtual void EvaluateDeadAndRespawn();
 
 
-        /// Comment for future devs: Unorganized member functions are declared below. They should be cleaned up in the near future
         //Weapon
         void SetAnimationStateByWeapon(int num);
 
@@ -321,7 +320,6 @@ class Player
         //Camera
         Camera* camera;
 
-        ///Comment for future devs: Unorganized member variables are declared below. They should be cleaned up in the near future
         //Triggered animation concept
         bool _isTriggeredAni;
         // False - these is no triggered animation, the player can perform non-triggered animations

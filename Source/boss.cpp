@@ -114,30 +114,6 @@ void Boss::OnMove()
 void Boss::SetAnimation()
 {
     _OFFSET_Y = 30;
-    /*
-    vector<CPoint> r = vector<CPoint>{ CPoint(2, 6), CPoint(2, 7), CPoint(2, 8) };	// bmps of running
-    vector<CPoint> j = vector<CPoint>{ CPoint(2, 5) };	// bmps of jumping
-    vector<CPoint> s = vector<CPoint>{ CPoint(0, 0), CPoint(0, 1), CPoint(0, 2), CPoint(0, 3) };	// bmps of standing
-    vector<CPoint> l = vector<CPoint>{ CPoint(2, 0) }; // bmps of leaning
-    vector<CPoint> lf = vector<CPoint>{ CPoint(1, 5), CPoint(1, 4) }; // bmps of landing fallin
-    vector<CPoint> uf = vector<CPoint>{ CPoint(0, 4), CPoint(0, 5), CPoint(0, 6) }; // bmps of unconsciously flying
-    vector<CPoint> dg = vector<CPoint>{ CPoint(4, 0), CPoint(4, 1), CPoint(4, 2), CPoint(4, 3) }; // bmps of dodging
-    /// Comment for future devs: I duplicate the bitmaps for longer animation duration, which is dirty, should be improved
-    AddCAnimationWithSprite(&ani, &julian_l0, &r, _size); //ani[0] Run Left
-    AddCAnimationWithSprite(&ani, &julian_r0, &r, _size); //ani[1] Run Right
-    AddCAnimationWithSprite(&ani, &julian_l0, &j, _size, 5, false); //ani[2] Jump Left
-    AddCAnimationWithSprite(&ani, &julian_r0, &j, _size, 5, false); //ani[3] Jump Right
-    AddCAnimationWithSprite(&ani, &julian_l0, &s, _size); //ani[4] Stand (Idle) Left
-    AddCAnimationWithSprite(&ani, &julian_r0, &s, _size); //ani[5] Stand (Idle) Right
-    AddCAnimationWithSprite(&ani, &julian_r0, &l, _size); //ani[6] Lean Left
-    AddCAnimationWithSprite(&ani, &julian_l0, &l, _size); //ani[7] Lean Right
-    AddCAnimationWithSprite(&ani, &julian_l0, &lf, _size); //ani[8] Landing Falling Left
-    AddCAnimationWithSprite(&ani, &julian_r0, &lf, _size); //ani[9] Landing Falling Right
-    AddCAnimationWithSprite(&ani, &julian_r1, &uf, _size); //ani[10] Unconsciously Flying Left
-    AddCAnimationWithSprite(&ani, &julian_l1, &uf, _size); //ani[11] Unconsciously Flying Right
-    AddCAnimationWithSprite(&ani, &julian_l0, &dg, _size, 15); //ani[12] Dodging Left
-    AddCAnimationWithSprite(&ani, &julian_r0, &dg, _size, 15); //ani[13] Dodging Right
-    */
     //-----------------ANIMATION BY WEAPONS-----------------//
     _aniByWpn = vector<vector<CAnimation>>();
     vector<CPoint> s;	// bmps of standing
@@ -218,8 +194,8 @@ void Boss::OnShow()
     bossHealth.SetSize(camera->GetSize() / 2);
     bossHealth.SetTopLeft(cam.x + 40, cam.y);
     bossHealth.ShowBitmap();
-    /// Comment for future devs: If I move the call to the base class up, the code is fcked up and I don't know why
     /* BASE CLASS */
+    // TODO: If the call to the base class moves up, the program is fucked up and Bill does not know why
     Player::OnShow();
 }
 
@@ -244,7 +220,7 @@ void Boss::EvaluateDeadAndRespawn()
 
 int Boss::GetHealth()
 {
-	return _health;
+    return _health;
 }
 
 }

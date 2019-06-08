@@ -25,8 +25,8 @@ class PlayerImmuneState : public PlayerConsciousState
         PlayerImmuneState& operator=(const PlayerImmuneState& rightObject);
         //Operator overloading function of the assignment operator
 
-		void OnMoveGameLogic();
-		const int & GetFrameCounter() const;
+        void OnMoveGameLogic();
+        const int& GetFrameCounter() const;
 
     private:
         int _frameCounter;

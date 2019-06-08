@@ -223,7 +223,6 @@ void Player::OnMoveAnimationLogic()
     /*	~ RESET JUMP ANIMATION
     	~ Reset the jump animation for the player
     */
-    /// Comment for future devs: Reset jump animation is not well placed here and should be re-accomodate in the near future
     if (IsOnGround() || IsOnEdge() || (_isTriggerJump && _jumpCount > 0))
         ResetAnimations(ANI_WPN_ID_JUMP_LEFT); // Reset the jump animation so that it keeps displaying while the player is jumping regardless of reaching its final bitmap
 
@@ -299,7 +298,6 @@ void Player::OnMoveGameLogic()
     }
 
     /* MOVE RESPAWN COURIER OUT OF THE MAP */
-    /// Comment for future devs: It's a little bit dirty to put the code here
     if (_state != RESPAWN_STATE)
         DoReturnHomeRespawnCourier();
 
@@ -379,7 +377,6 @@ void Player::OnKeyDown(const UINT& nChar)
     }
     else if (nChar == _keys[2]) // Down
     {
-        /// Comment for future devs: Later use to slip down from certain terrain
         _isPressingDown = true;
     }
     else if (nChar == _keys[3]) // Left
@@ -409,8 +406,7 @@ void Player::DoThrowWeapon()
 {
     _battleSystemPtr->GetReferenceMap()->PlayerThrowWeapon(this);
     SetHoldWeapon(false);
-    /// Comment for future devs: ¼Ú¶§ wrote the line below, but I don't understand why reseting the weapon ID is required
-    ResetWeaponID();
+    ResetWeaponID(); // TODO: Josept wrote this line, but Bill does not understand why resetting the weapon ID is necessary
 }
 
 
@@ -915,12 +911,12 @@ void Player::SetAttackList(vector<Player*> list)
 
 void Player::SetTakenDmg(int dmg)
 {
-	_takenDmg = dmg;
+    _takenDmg = dmg;
 }
 
 vector<long> Player::GetKeys()
 {
-	return _keys;
+    return _keys;
 }
 
 const vector<Player*>& Player::GetAttackListByGameMode() const
@@ -1202,10 +1198,6 @@ void Player::SetCurrentNonTriggeredAnimationByWeapon()
             break;
 
         case UNCONSCIOUS_STATE:
-
-            /// Comment for future devs: This special case overrides the others
-            /// where the player is unconscious should be separated as another
-            /// animation vector, not being put in 'ani'
             if (_unconsciousAniDir)
                 SetAnimationStateByWeapon(ANI_WPN_ID_UNCONSCIOUS_FLYING_RIGHT);
             else
@@ -1214,10 +1206,6 @@ void Player::SetCurrentNonTriggeredAnimationByWeapon()
             break;
 
         case RESPAWN_STATE:
-
-            /// Comment for future devs: This special case overrides the others
-            /// where the player is in respawn state should be separated as another
-            /// animation vector, not being put in 'ani'
             if (_dir)
                 SetAnimationStateByWeapon(ANI_WPN_ID_STAND_RIGHT);
             else

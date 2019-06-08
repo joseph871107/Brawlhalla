@@ -85,7 +85,6 @@ extern map<int, ColArray> cArray;
 void InitializeAll(bool = false, string = "Source\\resource.h", string = "Source\\game.rc");	// 初始化點陣圖運算資源
 void InitializeNum(string = "IDB", string = "Source\\resource.h");								// 初始化"resource.h"中的資源編號
 void InitializeFile(string = "BITMAP", string = "Source\\game.rc");								// 初始化"game.rc"中點陣圖的路徑
-void InitializeLoadSound();																		// 初始化聲音資源
 void InitializeCollideArray(bool = false);														// 初始化點陣圖的布林碰撞矩陣
 
 /////////////////////////

@@ -16,19 +16,19 @@ Object::Object()
 {
     x = y = width = height = 0;
     _size = 1.0;
-	camera = nullptr;
+    camera = nullptr;
 }
 
 Object::Object(double s)
 {
     x = y = width = height = 0;
     _size = s;
-	camera = nullptr;
+    camera = nullptr;
 }
 
 CPoint Object::GetXY()
 {
-	return CPoint(x, y);
+    return CPoint(x, y);
 }
 
 bool Object::HitRectangle(int tx1, int ty1, int tx2, int ty2)
@@ -37,9 +37,9 @@ bool Object::HitRectangle(int tx1, int ty1, int tx2, int ty2)
     return (tx2 >= x1 && tx1 <= x2 && ty2 >= y1 && ty1 <= y2);
 }
 
-void Object::AddCamera(Camera * cam)
+void Object::AddCamera(Camera* cam)
 {
-	camera = cam;
+    camera = cam;
 }
 
 int Object::GetCor(int index)
@@ -65,41 +65,41 @@ int Object::GetCor(int index)
 
 int Object::GetWidth()
 {
-	return (int)(width * _size);
+    return (int)(width * _size);
 }
 
 int Object::GetHeight()
 {
-	return (int)(height * _size);
+    return (int)(height * _size);
 }
 
 double Object::GetSize()
 {
-	return _size;
+    return _size;
 }
 
 void Object::LoadBitmap(int resource)
 {
-	bmp.LoadBitmap(resource);
-	width = bmp.Width();
-	height = bmp.Height();
-	loaded++;
+    bmp.LoadBitmap(resource);
+    width = bmp.Width();
+    height = bmp.Height();
+    loaded++;
 }
 
 void Object::LoadBitmap(int resource, COLORREF color)
 {
     bmp.LoadBitmap(resource, color);
-	width = bmp.Width();
-	height = bmp.Height();
-	loaded++;
+    width = bmp.Width();
+    height = bmp.Height();
+    loaded++;
 }
 
-void Object::LoadBitmap(char * resource, RECT rect, COLORREF color)
+void Object::LoadBitmap(char* resource, RECT rect, COLORREF color)
 {
-	bmp.LoadBitmap(resource, rect, color);
-	width = bmp.Width();
-	height = bmp.Height();
-	loaded++;
+    bmp.LoadBitmap(resource, rect, color);
+    width = bmp.Width();
+    height = bmp.Height();
+    loaded++;
 }
 
 void Object::SetXY(int nx, int ny)
@@ -115,17 +115,21 @@ void Object::SetSize(double s)
 
 void Object::OnShow(int offsetX, int offsetY)
 {
-	int _x = x + offsetX, _y = y + offsetY;
-	double size = _size;
-	if (camera != nullptr) {
-		CPoint cam = camera->GetXY(x, y);
-		_x = cam.x;
-		_y = cam.y;
-		size = _size * camera->GetSize();
-	}
-	bmp.SetTopLeft(_x, _y);
-	if(loaded > 0)
-		bmp.ShowBitmap(size);
+    int _x = x + offsetX, _y = y + offsetY;
+    double size = _size;
+
+    if (camera != nullptr)
+    {
+        CPoint cam = camera->GetXY(x, y);
+        _x = cam.x;
+        _y = cam.y;
+        size = _size * camera->GetSize();
+    }
+
+    bmp.SetTopLeft(_x, _y);
+
+    if (loaded > 0)
+        bmp.ShowBitmap(size);
 }
 
 void Object::OnMove()

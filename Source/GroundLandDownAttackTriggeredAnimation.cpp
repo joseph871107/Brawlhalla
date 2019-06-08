@@ -66,12 +66,13 @@ void GroundLandDownAttackTriggeredAnimation::DoTriggeredAction()
 {
     _playerPtr->DoAttack();
 
-	if (_playerPtr->GetCurrentAniByWeaponNum() > 4) {
-		if (_playerPtr->GetTriggeredAnimationDirection())
-			_playerPtr->InitiateOffsetRight(15);
-		else
-			_playerPtr->InitiateOffsetLeft(15);
-	}
+    if (_playerPtr->GetCurrentAniByWeaponNum() > 4)
+    {
+        if (_playerPtr->GetTriggeredAnimationDirection())
+            _playerPtr->InitiateOffsetRight(15);
+        else
+            _playerPtr->InitiateOffsetLeft(15);
+    }
 }
 
 }

@@ -23,20 +23,20 @@ class UIMessage
         UIMessage& operator=(const UIMessage& rightObject);
         //Operator overloading function of the assignment operator
 
-		const string& GetMessage() const;
-		const int& GetX() const;
-		const int& GetY() const;
-		const int& GetCurrentFrame() const;
-		const int& GetMaxFrame() const;
-		void Initialize(const string& messageValue, const int& xValue, const int& yValue, const int& maxFrameValue);
+        const string& GetMessage() const;
+        const int& GetX() const;
+        const int& GetY() const;
+        const int& GetCurrentFrame() const;
+        const int& GetMaxFrame() const;
+        void Initialize(const string& messageValue, const int& xValue, const int& yValue, const int& maxFrameValue);
 
-		void IncrementCurrentFrame();
+        void IncrementCurrentFrame();
 
     private:
-		string _message;
-		int _x, _y;
-		int _currentFrame;
-		int _maxFrame;
+        string _message;
+        int _x, _y;
+        int _currentFrame;
+        int _maxFrame;
 };
 #endif
 }

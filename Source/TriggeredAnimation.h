@@ -25,13 +25,13 @@ class TriggeredAnimation
         TriggeredAnimation& operator=(const TriggeredAnimation& rightObject);
         //Operator overloading function of the assignment operator
 
-		const int& GetKeyID() const;
+        const int& GetKeyID() const;
 
         virtual void FinishTriggeredAnimationGameLogic() = 0;
 
         virtual void SetTriggeredAnimationVariables();
 
-		virtual void InitiateTriggeredAction() = 0;
+        virtual void InitiateTriggeredAction() = 0;
 
         virtual void DoTriggeredAction() = 0;
 
