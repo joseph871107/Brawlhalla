@@ -231,6 +231,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="MinimizedClassDiagram.cd" />
     <None Include="res\player11.bin" />
     <None Include="RES\continue.bmp" />
     <None Include="Res\corner.bmp" />

@@ -1,0 +1,361 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="game_framework::AirAttackTriggeredAnimation" Collapsed="true">
+    <Position X="2" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIEAAAAAAgCAAAAAAAAAAAAAAAABgAAACAAA=</HashCode>
+      <FileName>Source\AirAttackTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::AirLandDownAttackTriggeredAnimation" Collapsed="true">
+    <Position X="9" Y="1.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIEAAAAAAgAAAAAAAAAEAACAAAABgAAAAAAA=</HashCode>
+      <FileName>Source\AirLandDownAttackTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::AirMoveLeftAttackTriggeredAnimation" Collapsed="true">
+    <Position X="16.75" Y="1.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIEAAAAAAgAAAAAAAAAEAAAAAAABggAAAAAA=</HashCode>
+      <FileName>Source\AirMoveLeftAttackTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::AirMoveRightAttackTriggeredAnimation" Collapsed="true">
+    <Position X="20.25" Y="1.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAIEAAAAAAgIAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Source\AirMoveRightAttackTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CAudio" Collapsed="true">
+    <Position X="39.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgoAAAAAAQIAAQIAAAAAQRAAACAIAA4AIAAAiAAAA=</HashCode>
+      <FileName>Source\audio.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::UIMessage" Collapsed="true">
+    <Position X="37.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QCAAAAAIAAQAUQAQAAAAAAAAAAAAAEgAcAAkAAAAAAA=</HashCode>
+      <FileName>Source\battleSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::BattleSystem" Collapsed="true">
+    <Position X="7.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQUSGUBAAiiQoIAAAgGQUABIYBYAQkSAIgQIAAiUIgA=</HashCode>
+      <FileName>Source\battleSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Boss" Collapsed="true">
+    <Position X="0.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAQAAAAAEAAQAAQAAAAAAAAAAAAAAAAAIAACAkAAA=</HashCode>
+      <FileName>Source\boss.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGameStateInit" Collapsed="true">
+    <Position X="0.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AJQAAAAABgCAAAACAAAEQADAARIAAgQBAAAABKAcAAI=</HashCode>
+      <FileName>Source\brawlhalla.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGameStateRun" Collapsed="true">
+    <Position X="3" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAAAACAACAAAAAQAABAABIAIgQAAgAAAAAUAAE=</HashCode>
+      <FileName>Source\brawlhalla.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGameStateOver" Collapsed="true">
+    <Position X="5.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAACAAAAAAAAAQABAABJAAgUAAAAAAAAUAAA=</HashCode>
+      <FileName>Source\brawlhalla.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Camera" Collapsed="true">
+    <Position X="37.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAACAAASAAAQBADAAMAIAAAAAIAAAAAAAABgBAAAAAA=</HashCode>
+      <FileName>source\camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::DodgeTriggeredAnimation" Collapsed="true">
+    <Position X="24" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIEAAAgAAgAAAAAAAAAQAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Source\DodgeTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::DrawSwordTriggeredAnimation" Collapsed="true">
+    <Position X="27" Y="1.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIEAAAAAAiAAAAAAAAAgAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Source\DrawSwordTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Enemy" Collapsed="true">
+    <Position X="0.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAgAAAAAAAAAEAAAAAAAAAAAAAAAAgAIAAAQgAAA=</HashCode>
+      <FileName>Source\enemy.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::ExplosionEffect" Collapsed="true">
+    <Position X="43" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>DIwAAAAIEASAAAAAAAAAIAQBIAAAACAAAgAgGAoEIAQ=</HashCode>
+      <FileName>Source\ExplosionEffect.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Ground" Collapsed="true">
+    <Position X="0.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAIACAAAQAIEIBEgBQBAAQAEAAAQAAggIAAEAAEMAA=</HashCode>
+      <FileName>Source\gameComFunc.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CRAnimation" Collapsed="true">
+    <Position X="6.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAA=</HashCode>
+      <FileName>Source\gameComFunc.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CSpecialEffect" Collapsed="true">
+    <Position X="39.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAACAAgAAAAAAAAACAIAAIAAAAAAAAIAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CDDraw" Collapsed="true">
+    <Position X="41.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAIkAAQABkEB1ICAAEAATQAAAACEAQABBKCACaJQA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CMovingBitmap" Collapsed="true">
+    <Position X="37.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAABAKAAAAAEYCAAAIIAAACAAAAACAAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CAnimation" Collapsed="true">
+    <Position X="6.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAABAAABBIAAIiIAUAKAgAIAgAoOAhgAAEEoAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CInteger" Collapsed="true">
+    <Position X="44.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAACAAJBAAAAIAEQAAAABAAAAEABgAAKIAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CString" Collapsed="true">
+    <Position X="41.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAEAIBEQAAIEAAAAAAABkAAKAAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGame" Collapsed="true">
+    <Position X="43" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACgBACEQAgBAABAwADAABpAgAQAQAIgAAAwAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGameState" Collapsed="true">
+    <Position X="4" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAAAgAAECAAAAAAABAAABAABIAAgQIAAAAAAIUAEA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::GroundPARM" Collapsed="true">
+    <Position X="44.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAACAAAAAAABAIARAAAAAAAAAAAAAAIAAAAIAAAA=</HashCode>
+      <FileName>Source\ground.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::GroundAttackTriggeredAnimation" Collapsed="true">
+    <Position X="30.25" Y="1.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAKEAAAAAAgAAAAAAAAAAAAAAAAAJgAAAAAAA=</HashCode>
+      <FileName>Source\GroundAttackTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::GroundLandDownAttackTriggeredAnimation" Collapsed="true">
+    <Position X="33.5" Y="1.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIEAAAAAAiQAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Source\GroundLandDownAttackTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::GroundMoveLeftAttackTriggeredAnimation" Collapsed="true">
+    <Position X="5" Y="1.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAIEAAAAAAgAAAAAAAAAAAAAAAAABhAAAAAAA=</HashCode>
+      <FileName>Source\GroundMoveLeftAttackTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::GroundMoveRightAttackTriggeredAnimation" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAIEAAAAAAgAAgAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Source\GroundMoveRightAttackTriggeredAnimation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Map" Collapsed="true">
+    <Position X="37.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAAgAEAhACQACgAAASAlCAABIQAgQAJACIEAEEIAA=</HashCode>
+      <FileName>Source\map.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Object" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAACAgAAAAahQAAIAARAEAAAACAAAABgEEMEAAA=</HashCode>
+      <FileName>Source\object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Background" Collapsed="true">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Source\object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::TriggeredAnimation" Collapsed="true">
+    <Position X="18.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAIEAAAEAAgAAAAAAAAAIAAAAAQABgACAAAAA=</HashCode>
+      <FileName>Source\player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Player" Collapsed="true">
+    <Position X="0.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>69f+bF1Z7k+t9X+7uS8rq2TUmBZeQjZve/H19WZ/rTM=</HashCode>
+      <FileName>Source\player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::PlayerConsciousState" Collapsed="true">
+    <Position X="3.5" Y="9.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>QACIAAAAIBgCAAABgQAAJAABAAJAAAAogCAgSQAAAAA=</HashCode>
+      <FileName>Source\player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::PlayerUnconsciousState" Collapsed="true">
+    <Position X="41.5" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAIAAEAAJAAAAAAAAgACAAAAA=</HashCode>
+      <FileName>Source\player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::PlayerRespawnState" Collapsed="true">
+    <Position X="39.5" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAEAAAAAAAAAAIAAAAAJAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Source\player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::PlayerImmuneState" Collapsed="true">
+    <Position X="3.5" Y="10.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAACAAAAAAIAAAAAAAAAAAAAAwAAAgAAA=</HashCode>
+      <FileName>Source\player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::RespawnCourier" Collapsed="true">
+    <Position X="43.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgIAAQEAQAAAiAAAAQEAAAAACAA4AAgAEoEAAA=</HashCode>
+      <FileName>Source\RespawnCourier.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::UI_Button" Collapsed="true">
+    <Position X="9.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgCABFAAEAAABADAgAKQAAYQAAAEECAEAABAVAAEBAQ=</HashCode>
+      <FileName>Source\ui.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::UI" Collapsed="true">
+    <Position X="45.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAABATAAAEAAAAIAAIJAGACBAEAEIBEEAA=</HashCode>
+      <FileName>Source\ui.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Vector2" Collapsed="true">
+    <Position X="39.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAIAAQBAAAABAAAAAAAAAAAACAAYAAgAAAAAAA=</HashCode>
+      <FileName>Source\Vector2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Weapon" Collapsed="true">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQABAAoAAighUMhAAMAGQQUABIQAAiiKQAQAAQEgAA=</HashCode>
+      <FileName>Source\weapon.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Window" Collapsed="true">
+    <Position X="5.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAACAAAACIEQCAAAmAABBAgRIBAAAAAAAACAAUAAQ=</HashCode>
+      <FileName>Source\window.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="game_framework::ColArray" Collapsed="true">
+    <Position X="39.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAUAQAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Source\gameComFunc.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="game_framework::ColBmp" Collapsed="true">
+    <Position X="41.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAUAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Source\gameComFunc.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="game_framework::MapPARM" Collapsed="true">
+    <Position X="43" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAABgAAA=</HashCode>
+      <FileName>Source\map.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="game_framework::BkPARM" Collapsed="true">
+    <Position X="37.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAQAIABAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Source\object.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="game_framework::AUDIO_ID" Collapsed="true">
+    <Position X="37.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAgAAAAAAEAAQAAAAAgAAAAEIEAAAAAAAA=</HashCode>
+      <FileName>Source\gameComFunc.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

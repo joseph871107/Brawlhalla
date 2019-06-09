@@ -152,6 +152,7 @@
       <Filter>Resource Files\Bitmap</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
+    <None Include="MinimizedClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\audio.cpp">
