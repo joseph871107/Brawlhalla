@@ -38,5 +38,3 @@ class AirMoveLeftAttackTriggeredAnimation : TriggeredAnimation
 };
 #endif
 }
-
-
