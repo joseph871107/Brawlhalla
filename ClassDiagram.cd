@@ -2,13 +2,6 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="game_framework::CAudio" Collapsed="true">
     <Position X="72.5" Y="6.25" Width="1.5" />
-    <NestedTypes>
-      <Class Name="game_framework::CAudio::Info" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Source\audio.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAgoAAAAAAQIAAQIAAAAAQRAAACAIAA4AIAAAiAAAA=</HashCode>
       <FileName>Source\audio.h</FileName>
